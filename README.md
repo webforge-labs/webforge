@@ -1,11 +1,11 @@
-# webforge
-a content management framework for easy to build and individual content management systems
+# Webforge
+a content management framework for easy to build and individual content management systems.
 
 [![Build Status](https://secure.travis-ci.org/pscheit/webforge.png)](http://travis-ci.org/pscheit/webforge)
 
-webforge aims to be a framework for consumers and developers at the same time. It helps you build your own individual cms for the needs of your customer. And helps your customer to still gain the benefits of a ready to use cms.
+Webforge aims to be a framework for consumers and developers at the same time. It helps developers to build their own individual cms for the needs of their customers. The customer gains all benefits of a ready-to-use cms without losing the opportunity to create new features.
 
-webforge is a rename from Psc - CMS, which has a much larger codebase. But the code needs a lot of restructoring and refactoring, so that I decided to better do it step by step.
+Webforge is a rename from Psc - CMS, which has a much larger codebase. But the code needs a lot of restructuring and refactoring, so that I decided to do it step by step.
 
 ## installation
 Use [http://getcomposer.org](Composer) to install the framework.
@@ -24,9 +24,9 @@ It's optional to configure the host-config for Psc - CMS. This might change in f
   - step by step integration from psc-cms into this repo
   - build better modules out from psc-cms
   - write better and english documentation for these modules
-  - [http://wiki.ps-webforge.com/psc-cms:start#refactoring-roadmap](Refactor a lot)
+  - [Refactor a lot](http://wiki.ps-webforge.com/psc-cms:start#refactoring-roadmap)
   - search for contributors and people with interest
 
 ##resources
-[http://wiki.ps-webforge.com/psc-cms:start](Psc-CMS (old name) Documentation in German)
+[Psc-CMS (the old name) - Documentation in german](http://wiki.ps-webforge.com/psc-cms:start)
 
