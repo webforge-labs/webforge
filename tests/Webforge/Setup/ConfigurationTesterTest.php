@@ -70,6 +70,26 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
     $this->assertDefects(0);
   }
   
+  public function testToStringReturnsOKResultFormatted() {
+    $this->t->INI('register_globals', FALSE); // defects = 0
+    $this->t->INI('display_errors', TRUE);   // defects = 0
+    
+    $msg = (string) $this->t;
+    
+    $this->assertContains('OK (2 checks)', $msg);
+  }
+
+  public function testToStringReturnsFailureResultFormatted() {
+    $this->t->INI('register_globals', FALSE); // defects = 0
+    $this->t->INI('display_errors', FALSE);   // defects = 1
+    
+    $msg = (string) $this->t;
+    
+    $this->assertContains('DEFECTS DETECTED', $msg);
+    $this->assertContains('checks: 2', $msg);
+    $this->assertContains('defects: 1', $msg);
+  }
+  
   protected function assertZeroDefects() {
     return $this->assertDefects(0);
   }

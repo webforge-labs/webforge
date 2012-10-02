@@ -28,6 +28,7 @@ $t->INI('post_max_size','2M');
 You can use the ConfigurationTester to test your webserver (or other remotes) PHP-ini values:
 ```php
 use Webforge\Setup\ConfigurationTester;
+use Webforge\Setup\RemoteConfigurationRetriever;
 
 $t = new ConfigurationTester(new RemoteConfigurationRetriever('http://localhost:80/dump-inis.php'));
 ```

@@ -39,8 +39,22 @@ class IniConfigurationDefect extends ConfigurationDefect {
   }
   
   public function __toString() {
-    return sprintf('[ini]: failed that %s expected: %s is %s actual: %s (normalized: %s %3$s %s)', $this->name, $this->expectedValue, $this->operator, $this->actualValue, $this->normalizedExpectedValue, $this->normalizedActualValue);
+    return sprintf('[ini]: failed that %s expected: %s is %s actual: %s (normalized: %s %3$s %s)',
+                   $this->name,
+                   $this->valueToString($this->expectedValue),
+                   $this->operator,
+                   $this->valueToString($this->actualValue),
+                   $this->valueToString($this->normalizedExpectedValue),
+                   $this->valueToString($this->normalizedActualValue)
+                  );
     //return sprintf('[ini]: failed that %s expected: %s is %s actual: %s', $this->name, $this->expectedValue, $this->operator, $this->actualValue);
+  }
+  
+  protected function valueToString($value) {
+    if (is_bool($value)) {
+      return $value ? '(boolean) true' : '(boolean) false';
+    }
+    return (string) $value;
   }
   
   /**

@@ -2,6 +2,8 @@
 
 namespace Webforge\Setup;
 
+use Psc\A;
+
 /**
  * 
  */
@@ -111,7 +113,7 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
     } else {
       $string .= sprintf("DEFECTS DETECTED!\nchecks: %d, defects: %d\n", count($this->checks), count($this->defects));
       $string .= "\n";
-      $string .= \Webforge\A::join($this->defects, "%s\n");
+      $string .= A::join($this->defects, "%s\n");
     }
     return $string;
   }
