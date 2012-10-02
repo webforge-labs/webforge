@@ -21,7 +21,7 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
    */
   protected $retriever;
   
-  public function __construct(IniValueNormalizer $normalizer = NULL, ConfigurationRetriever $retriever = NULL) {
+  public function __construct(ConfigurationRetriever $retriever = NULL, IniValueNormalizer $normalizer = NULL) {
     $this->setNormalizer($normalizer ?: new IniValueNormalizer());
     $this->setRetriever($retriever ?: new LocalConfigurationRetriever());
   }

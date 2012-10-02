@@ -15,7 +15,7 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
     $this->chainClass = 'Webforge\Setup\ConfigurationTester';
     parent::setUp();
     $this->retriever = $this->getMock('Webforge\Setup\ConfigurationRetriever', array('retrieveIni'));
-    $this->t = new ConfigurationTester(NULL, $this->retriever);
+    $this->t = new ConfigurationTester($this->retriever);
     
     $fakeIni = array(
       'mbstring.internal_encoding'=>'jp18',

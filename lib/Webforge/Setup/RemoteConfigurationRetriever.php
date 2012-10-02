@@ -31,8 +31,9 @@ class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implement
   protected $jsonConverter;
   
   /**
-   * Die URL des Scripts welches ausführt:
-   * 
+   * The URL to the php dump-script
+   *
+   * the script shoud run the following code:
    * <?php
    * print json_encode(ini_get_all());
    * ?>
