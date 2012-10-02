@@ -2,7 +2,7 @@
 
 namespace Webforge\CMS\Navigation;
 
-class NestedSetConverter {
+class NestedSetConverter extends \Psc\SimpleObject {
 
   /**
    * Wandelt einen NestedSet flat-Array in eine verschachtelte HTML-Liste um

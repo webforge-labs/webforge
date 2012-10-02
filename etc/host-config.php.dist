@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * This file is part of the Configuration for Psc CMS (vendor/psc-cms.phar.gz)
+ *
+ * put this file somewhere on your local machine as host-config.php
+ * set the environment variable PSC_CMS to the directory including this file (dont forget the trailing slash)
+ *
+ * for example:
+ * set PSC_CMS=/var/local/psc-cms-bin/
+ *
+ * /var/local/psc-cms-bin/host-config.php
+ */
+ 
+/* General */
+$conf['host'] = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n');
+$conf['production'] = TRUE;
+ 
+/* Project Paths */
+//$conf['projects']['root'] = '/var/local/www/';
+ 
+/* Environment */
+$conf['defaults']['system']['timezone'] = 'Europe/Berlin';
+$conf['defaults']['system']['chmod'] = 0644;
+$conf['defaults']['i18n']['language'] = 'de';
+ 
+/* Mail */
+$conf['defaults']['mail']['smtp']['user'] = 'mail@ps-webforge.net';
+$conf['defaults']['mail']['smtp']['password'] = 'xxxxx';
+$conf['defaults']['debug']['errorRecipient']['mail'] = NULL; // mail errors to this address
+ 
+/* CMS / HTTP */
+$conf['defaults']['js']['url'] = '/js/';
+?>
