@@ -13,7 +13,7 @@ $t->INI('post_max_size',1024, '<');
 
 print $t;
 
-$t = new ConfigurationTester(new RemoteConfigurationRetriever('http://psc-cms.laptop.ps-webforge.net/dump-inis.php'));
+$t = new ConfigurationTester(new RemoteConfigurationRetriever('http://localhost:80/dump-inis.php'));
 $t->INI('display_errors', FALSE);
 
 if (count($t->getDefects()) > 0) {
