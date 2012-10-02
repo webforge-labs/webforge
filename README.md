@@ -7,6 +7,19 @@ webforge aims to be a framework for consumers and developers at the same time. I
 
 webforge is a rename from Psc - CMS, which has a much larger codebase. But the code needs a lot of restructoring and refactoring, so that I decided to better do it step by step.
 
+## installation
+Use [http://getcomposer.org](Composer) to install the framework.
+```
+php composer.phar install
+```
+
+to run the tests use:
+```
+phpunit
+```
+
+It's optional to configure the host-config for Psc - CMS. This might change in future, but it is already planned to move the whole autoloading to composer (which is not the case for Psc\* classes)
+
 ## roadmap
   - step by step integration from psc-cms into this repo
   - build better modules out from psc-cms
