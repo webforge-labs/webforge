@@ -1,0 +1,58 @@
+{
+    "hash": "53da11ba58afbdb33bade2246e247afb",
+    "packages": [
+        {
+            "name": "webforge/testdata-repository",
+            "version": "0.1.2-alpha",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pscheit/webforge-testdata-repository.git",
+                "reference": "0.1.2-alpha"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/pscheit/webforge-testdata-repository/zipball/0.1.2-alpha",
+                "reference": "0.1.2-alpha",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "time": "2012-09-28 14:37:36",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Webforge": [
+                        "lib/",
+                        "tests/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp Scheit",
+                    "email": "p.scheit@ps-webforge.com"
+                }
+            ],
+            "description": "A repository for data that you can use to fill your unit tests.",
+            "homepage": "http://github.com/pscheit/webforge-testdata-repository",
+            "keywords": [
+                "data",
+                "unit test",
+                "testdata"
+            ]
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "webforge/testdata-repository": 15
+    }
+}

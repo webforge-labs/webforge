@@ -1,0 +1,9 @@
+language: php
+php:
+  - 5.3
+  
+script: phpunit
+
+notifications:
+  irc: "irc.freenode.org#webforge"
+  mail: p.scheit@ps-webforge.com

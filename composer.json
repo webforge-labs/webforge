@@ -1,0 +1,21 @@
+{
+  "name": "webforge/webforge",
+  "type": "library",
+  "description": "a content management framework for easy to build and individual content management systems",
+  "keywords": ["cmf", "framework", "cms"],
+  "homepage": "http://github.com/pscheit/webforge",
+  "license": "LGPL",
+  "authors": [
+    {"name": "Philipp Scheit", "email": "p.scheit@ps-webforge.com"}
+  ],
+  "require": {
+    "php": ">=5.3.2",
+    "ext-mbstring": "*",
+    
+    "webforge/testdata-repository": "*@alpha"
+  },
+  "autoload": {
+    "psr-0": {"Webforge": ["lib/", "tests/"]},
+    "files": ["vendor/psc-cms.phar.gz"]
+  }
+}
