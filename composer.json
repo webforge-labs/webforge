@@ -12,10 +12,10 @@
     "php": ">=5.3.2",
     "ext-mbstring": "*",
     
+    "pscheit/psc-cms": "*",
     "webforge/testdata-repository": "*@alpha"
   },
   "autoload": {
-    "psr-0": {"Webforge": ["lib/", "tests/"]},
-    "files": ["vendor/psc-cms.phar.gz"]
+    "psr-0": {"Webforge": ["lib/", "tests/"]}
   }
 }
