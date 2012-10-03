@@ -1,5 +1,5 @@
 {
-    "hash": "c76cc995cbe283c987e73ad2aa5f80be",
+    "hash": "57d1a98dab76a88136388d13db45d849",
     "packages": [
         {
             "name": "pscheit/psc-cms",
@@ -44,24 +44,24 @@
         },
         {
             "name": "webforge/testdata-repository",
-            "version": "0.1.2-alpha",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/webforge-testdata-repository.git",
-                "reference": "0.1.2-alpha"
+                "reference": "1fd34c31fe81fc82b82224b2ab125a7505740178"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/webforge-testdata-repository/zipball/0.1.2-alpha",
-                "reference": "0.1.2-alpha",
+                "url": "https://github.com/pscheit/webforge-testdata-repository/zipball/1fd34c31fe81fc82b82224b2ab125a7505740178",
+                "reference": "1fd34c31fe81fc82b82224b2ab125a7505740178",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "2012-09-28 14:37:36",
+            "time": "1349258946",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Webforge": [
@@ -94,6 +94,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "webforge/testdata-repository": 15
+        "webforge/testdata-repository": 20
     }
 }

@@ -15,6 +15,9 @@
     "pscheit/psc-cms": "*",
     "webforge/testdata-repository": "*@alpha"
   },
+  "require-dev": {
+    "webforge/testdata-repository": "@dev"
+  },
   "autoload": {
     "psr-0": {"Webforge": ["lib/", "tests/"]}
   }
