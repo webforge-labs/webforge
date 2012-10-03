@@ -16,7 +16,6 @@
     "webforge/testdata-repository": "*@alpha"
   },
   "autoload": {
-    "psr-0": {"Webforge": ["lib/", "tests/"]},
-    "files": ["vendor/pscheit/psc-cms/bin/psc-cms.phar.gz"]
+    "psr-0": {"Webforge": ["lib/", "tests/"]}
   }
 }
