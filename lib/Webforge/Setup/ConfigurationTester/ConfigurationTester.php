@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup;
+namespace Webforge\Setup\ConfigurationTester;
 
 use Psc\A;
 
