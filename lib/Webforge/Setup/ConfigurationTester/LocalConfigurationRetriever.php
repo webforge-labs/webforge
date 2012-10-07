@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup;
+namespace Webforge\Setup\ConfigurationTester;
 
 class LocalConfigurationRetriever extends \Webforge\Common\BaseObject implements ConfigurationRetriever {
   

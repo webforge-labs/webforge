@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup;
+namespace Webforge\Setup\ConfigurationTester;
 
 use Psc\A;
 
@@ -12,9 +12,9 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
   protected $t, $retriever;
   
   public function setUp() {
-    $this->chainClass = 'Webforge\Setup\ConfigurationTester';
+    $this->chainClass = 'Webforge\Setup\ConfigurationTester\ConfigurationTester';
     parent::setUp();
-    $this->retriever = $this->getMock('Webforge\Setup\ConfigurationRetriever', array('retrieveIni'));
+    $this->retriever = $this->getMock('Webforge\Setup\ConfigurationTester\ConfigurationRetriever', array('retrieveIni'));
     $this->t = new ConfigurationTester($this->retriever);
     
     $fakeIni = array(
@@ -42,7 +42,7 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
     
     $defects = $this->t->getDefects();
     $this->assertCount(1, $defects);
-    $this->assertInstanceOf('Webforge\Setup\IniConfigurationDefect', $iniDefect = $defects[0]);
+    $this->assertInstanceOf('Webforge\Setup\ConfigurationTester\IniConfigurationDefect', $iniDefect = $defects[0]);
     $this->assertEquals('jp18', $iniDefect->getActualValue());
     $this->assertEquals('utf-8', $iniDefect->getExpectedValue());
   }
