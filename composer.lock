@@ -48,18 +48,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/webforge-testdata-repository.git",
-                "reference": "fb68629337e516491232f7e9056bde7b0a80b743"
+                "reference": "1fd34c31fe81fc82b82224b2ab125a7505740178"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/webforge-testdata-repository/zipball/fb68629337e516491232f7e9056bde7b0a80b743",
-                "reference": "fb68629337e516491232f7e9056bde7b0a80b743",
+                "url": "https://github.com/pscheit/webforge-testdata-repository/zipball/1fd34c31fe81fc82b82224b2ab125a7505740178",
+                "reference": "1fd34c31fe81fc82b82224b2ab125a7505740178",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "1349365721",
+            "time": "1349258946",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -88,9 +88,7 @@
             ]
         }
     ],
-    "packages-dev": [
-
-    ],
+    "packages-dev": null,
     "aliases": [
 
     ],

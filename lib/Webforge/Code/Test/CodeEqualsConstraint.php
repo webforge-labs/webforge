@@ -16,6 +16,8 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
    */
   protected $code;
   
+  protected $normalizedCode, $normalizedOtherCode;
+  
   public function __construct($code) {
     $this->code = $code;
   }
@@ -30,7 +32,7 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
     * @return bool
     */
   public function matches($other) {
-    return $this->normalizeCode($other) === $this->normalizeCode($this->code);
+    return ($this->normalizedCode = $this->normalizeCode($other)) === ($this->normalizedOtherCode = $this->normalizeCode($this->code));
   }
   
   /**
@@ -83,7 +85,15 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
   
   public function toString() {
     // @TODO more verbose find non equal line and display?
-    return 'has equivalent PHP code with <expectedCode>';
+    $string = 'is equivalent PHP code to expected Code';
+    
+    if (isset($this->normalizedCode)) {
+      $string .= "\n";
+      $string .= $this->normalizedCode."\n";
+      $string .= $this->normalizedOtherCode."\n";
+    }
+    
+    return $string;
   }
 }
 ?>

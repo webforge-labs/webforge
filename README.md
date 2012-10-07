@@ -8,7 +8,7 @@ Webforge aims to be a framework for consumers and developers at the same time. I
 Webforge is a rename from Psc - CMS, which has a much larger codebase. But the code needs a lot of restructuring and refactoring, so that I decided to do it step by step.
 
 ## installation
-Use [http://getcomposer.org](Composer) to install the framework.
+Use [Composer](http://getcomposer.org) to install the framework.
 ```
 php composer.phar install
 ```
