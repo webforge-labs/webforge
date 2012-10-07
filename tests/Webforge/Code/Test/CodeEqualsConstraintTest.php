@@ -79,7 +79,6 @@ class CodeEqualsConstraintTest extends \Psc\Code\Test\Base {
       'f ("");'
     );
     
-
     $tests[] = array(
 <<<'PHP'
 abstract class TestClass {

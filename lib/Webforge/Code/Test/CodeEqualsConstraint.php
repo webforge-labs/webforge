@@ -89,8 +89,8 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
     
     if (isset($this->normalizedCode)) {
       $string .= "\n";
-      $string .= $this->normalizedCode."\n";
       $string .= $this->normalizedOtherCode."\n";
+      $string .= $this->normalizedCode."\n";
     }
     
     return $string;
