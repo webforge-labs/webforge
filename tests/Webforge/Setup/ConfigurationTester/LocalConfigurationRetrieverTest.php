@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup;
+namespace Webforge\Setup\ConfigurationTester;
 
 /**
  * @group class:Webforge\Setup\LocalConfigurationRetriever
