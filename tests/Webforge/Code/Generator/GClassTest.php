@@ -3,6 +3,14 @@
 namespace Webforge\Code\Generator;
 
 class GClassTest extends \Webforge\Code\Test\Base {
+  
+  protected $gClass;
+  
+  public function setUp() {
+    $this->gClass = new GClass(get_class($this));
+    parent::setUp();
+  }
+  
 
   public function testConstructIsRobustToWrongPrefixSlashes() {
     $gClass = GClass::create('XML\Object');
@@ -41,6 +49,32 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $fqn = GClass::create('\LParameter');
     $this->assertEquals(NULL, $fqn->getNamespace());
     $this->assertEquals('LParameter', $fqn->getName());
-  }  
+  }
+  
+  public function testImportsCanBeAddedAndRemoved() {
+    // most of this is tested in imports
+    $this->gClass->addImport(new GClass('Other\UsedClass'));
+    $this->assertTrue($this->gClass->hasImport('UsedClass'));
+    
+    $this->gClass->removeImport(new GClass('Other\UsedClass'));
+    $this->assertFalse($this->gClass->hasImport('UsedClass'));
+  }
+  
+  public function testPropertyHintsAreImported() {
+    $this->markTestIncomplete('Blocker: properties in psc-cms do not have a type(!) change this');
+  }
+
+  public function testMethodParameterHintsAreImported() {
+    $this->markTestIncomplete('TODO: this is not implemented yet');
+  }
+
+  public function testInterfacesClassesAreImported() {
+    $this->markTestIncomplete('todo: interfaces should be importet');
+  }
+
+  public function testParentClassIsImported() {
+    // should the parent
+    $this->markTestIncomplete('parentClass should be imported');
+  }
 }
 ?>

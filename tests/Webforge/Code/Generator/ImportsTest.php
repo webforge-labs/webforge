@@ -45,9 +45,48 @@ class ImportsTest extends \Webforge\Code\Test\Base {
   /**
    * @depends testAddingAnExistingsAliasIsNotAllowed
    */
-  public function testAddingAnExistingsAliasCanBeRemoved() {
+  public function testAddingAnExistingAliasWorks_IfItsRemovedBefore() {
     $this->imports->remove('DoctrineHelper');
     $this->imports->add(GClass::create(get_class($this)), 'DoctrineHelper');
+  }
+  
+  public function testRemoveByAliasRemovesTheImport() {
+    $this->imports->remove('DoctrineHelper');
+    $this->assertFalse($this->imports->have('DoctrineHelper'));
+  }
+
+  public function testRemoveByGClassRemovesTheImport_too() {
+    $this->imports->remove($gClass = GClass::create('Psc\Doctrine\Helper'));
+    $this->assertFalse($this->imports->have($gClass), 'gClass as instance should be removed, but isnt');
+    $this->assertFalse($this->imports->have('DoctrineHelper'), 'gClass DoctrineHelper as alias should be removed, but isnt');
+    
+    $this->imports->remove('Mapping', 'import cannot be removed with implicit alias');
+    $this->assertFalse($this->imports->have('Mapping'));
+  }
+  
+  public function testClonedImportsAreEqual() {
+    $imports = clone $this->imports;
+    $this->assertEquals(
+      $imports->toArray(),
+      $this->imports->toArray()
+    );
+  }
+  
+  public function testImportsCanBeMergedFromImportsFromGClass() {
+    $classImports = new Imports(array('Webforge'=>new GClass('Webforge\Doctrine\Annotations'),
+                                      new GClass('stdClass')
+                                      )
+                               );
+    
+    $gClass = $this->getMock('GClass', array('getImports', 'toArray'));
+    $gClass->expects($this->once())->method('getImports')->will($this->returnValue($classImports));
+    
+    $this->imports->mergeFromClass($gClass);
+    
+    $this->assertArrayEquals(array('Mapping', 'DoctrineHelper', 'Webforge', 'stdClass'),
+                             array_keys($this->imports->toArray()),
+                             'imports are not correctly merged from gClass'
+                            );
   }
 }
 ?>

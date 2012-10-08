@@ -14,6 +14,10 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
    */
   protected $code;
   
+  /**
+   * Caches for the toString()-Method to debug
+   * @var string
+   */
   protected $normalizedCode, $normalizedOtherCode;
   
   public function __construct($code) {
@@ -36,6 +40,7 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
   /**
    * Normalizes the code (removes whitespace from code)
    *
+   * for better operability: ensure that $code is syntax checked
    * @return array tokenstream
    */
   public function normalizeCode($code) {
@@ -47,9 +52,13 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
     }
     
     // symfonys strip comments is really wrong here (because it hardly replaces \n+ with ' ', which is wrong in the inner of strings)
+    /*
+      this loop removes ALL whitespace and adds the mandatory (where mandatory is defined as code style)
+      for better diffs here should be rules added for every token
+       
+      because ALL whitespace is stripped, this method does not detect some missing-whitespace-edge cases (does it?)
+    */
     
-    // this loop removes ALL whitespace and adds the mandatory (where mandatory is defined as code style)
-    // for better diffs, this could be indented some time
     $php = '';
     $indent = 0;
     $newline = FALSE;
@@ -110,11 +119,18 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
         case T_ABSTRACT:
         case T_PROTECTED:
         case T_FUNCTION:
+        case T_BOOL_CAST:
+        case T_CASE:
           $php .= $tokenValue.' ';
           break;
         
         // space after & before
+        case T_CONCAT_EQUAL:
         case T_IMPLEMENTS:
+        case T_BOOLEAN_AND:
+        case T_BOOLEAN_OR:
+        case T_DOUBLE_ARROW:
+        case T_DIV_EQUAL:
           $php .= ' '.$tokenValue.' ';
           break;
           

@@ -6,7 +6,16 @@ use Psc\String AS S;
 
 class GClass extends \Psc\Code\Generate\GClass {
   
+  /**
+   * The personal imports of the GClass
+   * 
+   * @var Webforge\Code\Generator\Imports
+   */
+  protected $ownImports;
+  
   public function __construct($class = NULL)  {
+    $this->ownImports = new Imports();
+    
     if ($class instanceof ReflectionClass) {
       $this->elevate($class);
     } elseif ($class instanceof GClass) {
@@ -92,6 +101,49 @@ class GClass extends \Psc\Code\Generate\GClass {
       $this->namespace = NULL;
       $this->setName($fqn);
     }
+  }
+  
+  /**
+   * Adds an import to the Class
+   *
+   * in case the class is written with a ClassWriter, these classes will be added to the file as a "use" statement
+   * @throws Exception when the alias (implicit or explicit) is already used (see Imports::add())
+   * @param string $alias if not given the name of the class is used
+   */
+  public function addImport(GClass $gClass, $alias = NULL) {
+    $this->ownImports->add($gClass, $alias);
+    return $this;
+  }
+  
+  /**
+   * @return bool
+   */
+  public function hasImport($aliasOrGClass) {
+    return $this->ownImports->have($aliasOrGClass);
+  }
+
+  /**
+   * Removes an Import from the Class
+   *
+   * @param string $alias case insensitive
+   */
+  public function removeImport($alias) {
+    $this->ownImports->remove($alias);
+    return $this;
+  }
+  
+  
+  /**
+   * Returns the Imports which are used in the code of the class
+   *
+   * These are all needed exports to make the code compile
+   * 
+   * @return Webforge\Code\Generate\Imports
+   */
+  public function getImports() {
+    // @TODO extract from properties, methods, interfaces
+    
+    return $this->ownImports;
   }
   
   /**

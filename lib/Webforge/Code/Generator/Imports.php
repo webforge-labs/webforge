@@ -29,6 +29,24 @@ class Imports implements IteratorAggregate, Countable {
       $this->add($gClass, $alias);
     }
   }
+
+  public function php($contextNamespace) {
+    $use = NULL;
+    foreach ($this->classes as $alias => $import) {
+      // is it needed to import the class?
+      if ($import->getNamespace() === NULL || $import->getNamespace() !== $contextNamespace) {
+        $use .= 'use ';  
+        if ($alias === $import->getClassName()) {
+          $use .= $import->getFQN();
+        } else {
+          $use .= $import->getFQN().' AS '.$alias;
+        }
+  
+        $use .= PHP_EOL;
+      }
+    }
+    return $use;
+  }
   
   /**
    * Adds an Import
@@ -56,11 +74,47 @@ class Imports implements IteratorAggregate, Countable {
    * @chainable
    */
   public function remove($aliasOrGClass) {
-    $alias = $aliasOrGClass instanceof GClass ? $aliasOrGClass->getName() : $aliasOrGClass;
+    if ($aliasOrGClass instanceof GClass) {
+      $gClass = $aliasOrGClass;
+      $alias = $aliasOrGClass->getName();
+    } else {
+      $gClass = NULL;
+      $alias = $aliasOrGClass;
+    }
     
-    if (array_key_exists($alias, $this->classes)) {
-      unset($this->classes[$alias]);
-      unset($this->aliases[mb_strtolower($alias)]);
+    if (array_key_exists($loweralias = mb_strtolower($alias), $this->aliases)) {
+      unset($this->classes[ $this->aliases[$loweralias] ]);
+      unset($this->aliases[$loweralias]);
+    } elseif (isset($gClass)) {
+      foreach ($this->classes as $alias => $otherGClass) {
+        if ($otherGClass->equals($gClass)) {
+          unset($this->aliases[mb_strtolower($alias)]);
+          unset($this->classes[$alias]);
+          break;
+        }
+      }
+    }
+    
+    return $this;
+  }
+  
+  /**
+   * @return bool
+   */
+  public function have($aliasOrGClass) {
+    $alias = $aliasOrGClass instanceof GClass ? $aliasOrGClass->getName() : $aliasOrGClass;
+    return array_key_exists(mb_strtolower($alias), $this->aliases);
+  }
+  
+  
+  /**
+   * Merges all Imports from a GClass to this imports
+   *
+   * @chainable
+   */
+  public function mergeFromClass(GClass $gClass) {
+    foreach ($gClass->getImports()->toArray() as $alias => $import) {
+      $this->add($import, $alias);
     }
     
     return $this;
@@ -73,6 +127,17 @@ class Imports implements IteratorAggregate, Countable {
    */
   public function getIterator() {
     return new ArrayIterator($this->classes);
+  }
+  
+  /**
+   * Convert to array
+   *
+   * the keys of the array are the aliases (case sensitive, as given in add)
+   * the values are the gclasses
+   * @return array string $alias => GClass $gClass
+   */
+  public function toArray() {
+    return $this->classes;
   }
   
   /**
