@@ -12,11 +12,10 @@
     "php": ">=5.3.2",
     "ext-mbstring": "*",
     
-    "pscheit/psc-cms": "*",
-    "webforge/testdata-repository": "*@alpha"
+    "pscheit/psc-cms": "*"
   },
   "require-dev": {
-    "webforge/testdata-repository": "@dev"
+    "webforge/testdata-repository": "dev-master"
   },
   "autoload": {
     "psr-0": {"Webforge": ["lib/", "tests/"]}
