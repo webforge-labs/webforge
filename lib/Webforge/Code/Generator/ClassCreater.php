@@ -33,6 +33,8 @@ class ClassCreater {
   public function create(GClass $gClass) {
     $file = $this->mapper->getFile($gClass->getFQN());
     
+    $gClass->createAbstractMethodStubs();
+    
     $this->writer->write($gClass, $file);
     
     return $file;

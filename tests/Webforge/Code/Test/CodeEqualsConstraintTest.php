@@ -23,10 +23,11 @@ class CodeEqualsConstraintTest extends \Psc\Code\Test\Base {
     
     $this->assertEquals($shouldMatch,
                         $constraint->matches($actualCode),
+                        
                         "\n".
-                        $constraint->normalizeCode($actualCode).
+                        \Psc\String::eolVisible($constraint->normalizeCode($actualCode)).
                         "\n".
-                        $constraint->normalizeCode($expectedCode)
+                        \Psc\String::eolVisible($constraint->normalizeCode($expectedCode))
                        );
   }
   
@@ -79,6 +80,10 @@ class CodeEqualsConstraintTest extends \Psc\Code\Test\Base {
       'f ("");'
     );
     
+    $tests[] = array(
+      "(expression)\n{ call();",
+      "(expression) {\n  call();"
+    );
 
     $tests[] = array(
 <<<'PHP'

@@ -59,7 +59,7 @@ PHP;
 
 namespace Webforge\Code\Generator\Fixtures;
 
-clases MyGPSLocateableClass implements \Webforge\TestData\PHPClasses\GPSLocateable {
+class MyGPSLocateableClass implements \Webforge\TestData\PHPClasses\GPSLocateable {
 
   public function getLongitude() {
     

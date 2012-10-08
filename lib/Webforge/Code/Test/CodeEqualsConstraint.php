@@ -7,8 +7,6 @@ use Psc\System\File;
 
 class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
   
-  const T_EOL = 'T_EOL'; 
-
   /**
    * Der PHP Code
    * 
@@ -41,43 +39,90 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
    * @return array tokenstream
    */
   public function normalizeCode($code) {
+    $code = trim($code);
+    $code = \Psc\String::fixEOL($code);
+    
     if (mb_strpos($code, '<?php') === FALSE) { // we will not constraint that <?php is at the start
       $code = '<?php '.$code;
     }
     
     // symfonys strip comments is really wrong here (because it hardly replaces \n+ with ' ', which is wrong in the inner of strings)
     
-    // unfortunately php_strip_whitespace operates on files (sadly)
-    $tmp = File::createTemporary();
-    $tmp->writeContents($code);
-    
-    $code = php_strip_whitespace((string) $tmp);
-    $tmp->delete();
-    
-    // unfortunately this does not clean everything:
-    // ($argumentList) {
-    // ($argumentList){
-    // they should be considered equivalent
-    
+    // this loop removes ALL whitespace and adds the mandatory (where mandatory is defined as code style)
+    // for better diffs, this could be indented some time
     $php = '';
+    $indent = 0;
+    $newline = FALSE;
     $prevTokenType = NULL;
     foreach (token_get_all($code) as $token) {
       if (is_array($token)) {
-        if ($token[0] === T_WHITESPACE) {
-          
-          // around blocks and after statements, the whitespace is optional
-          if ($prevTokenType === '}' || $prevTokenType === '{' || $prevTokenType === ';')
-            continue;
-          
-        } else {
-          $php .= $token[1];
-        }
-        
-        $prevTokenType = $token[0];
+        list($tokenType, $tokenValue) = $token;
       } else {
-        $php .= $token;
-        $prevTokenType = $token;
+        $tokenValue = $tokenType = $token;
       }
+
+      switch ($tokenType) {
+        // skip all whitespace
+        case T_WHITESPACE:
+        case T_COMMENT:
+          continue(2);
+          break;
+
+        // inc indent
+        case '{':
+          $indent++;
+          break;
+        
+        // dec indent
+        case '}':
+          $indent = max(0, $indent-1);
+          break;
+      }
+      
+      if ($newline) {
+        $php .= str_repeat('  ', $indent);
+        $newline = FALSE;
+      }
+      
+      switch ($tokenType) {
+        // space before, line end
+        case '{':
+          $php .= ' '.$tokenValue."\n";
+          $newline = TRUE;
+          break;
+        
+        // line end
+        case T_OPEN_TAG:
+        case '}':
+        case ';':
+          $php .= $tokenValue."\n";
+          $newline = TRUE;
+          break;
+        
+        // space after
+        case T_NEW:
+        case T_OPEN_TAG:
+        case T_NAMESPACE:
+        case T_OPEN_TAG:
+        case T_IF:
+        case T_CLASS:
+        case T_PUBLIC:
+        case T_ABSTRACT:
+        case T_PROTECTED:
+        case T_FUNCTION:
+          $php .= $tokenValue.' ';
+          break;
+        
+        // space after & before
+        case T_IMPLEMENTS:
+          $php .= ' '.$tokenValue.' ';
+          break;
+          
+        // no addidtional whitespace
+        default:
+          $php .= $tokenValue;
+          break;
+      }      
     }
     
     return $php;
@@ -89,8 +134,10 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
     
     if (isset($this->normalizedCode)) {
       $string .= "\n";
-      $string .= $this->normalizedCode."\n";
-      $string .= $this->normalizedOtherCode."\n";
+      $string .= \PHPUnit_Util_Diff::diff(
+        $this->normalizedCode,
+        $this->normalizedOtherCode
+      );
     }
     
     return $string;
