@@ -16,16 +16,16 @@ class IniConfigurationDefectTest extends \Psc\Code\Test\Base {
       $name = 'post_max_size',
       '10M', 10*1024*1024,
       '2M', 2*1024*1024,
-      '='
+      '=='
     );
   }
   
   public function testToStringHasAVerboseMessage() {
     $msg = (string) $this->iniConfigurationDefect;
     
-    $this->assertContains('[ini]: failed that post_max_size', $msg);
-    $this->assertContains('expected: 10M', $msg);
-    $this->assertContains('actual: 2M', $msg);
+    $this->assertContains('[ini]: it\'s wrong that post_max_size', $msg);
+    $this->assertContains('10M', $msg);
+    $this->assertContains('2M', $msg);
   }
 }
 ?>

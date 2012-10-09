@@ -51,7 +51,8 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
     $this->t->INI('post_max_size',2*1024*1024);
     $this->t->INI('post_max_size','2M');
     $this->t->INI('post_max_size','2M', '>=');
-    $this->t->INI('post_max_size',1024, '<');
+    $this->t->INI('post_max_size', 1024, '>'); // post_max_size > 1024 => true
+    $this->t->INI('post_max_size', '3M', '<');
     
     $this->assertZeroDefects();
   }

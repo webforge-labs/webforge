@@ -63,9 +63,10 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
   public function INI($iniName, $iniValue, $operator = '==') {
     $this->checks[] = array($iniName, $iniValue, $operator);
     if (
+      // e.g. post_max_size (2M) > 8M => false
       $this->satisfy($operator,
-                     $normalizedExpected = $this->normalizeIniValue($iniValue, $iniName),
-                     $normalizedActual = $this->normalizeIniValue($actualValue = $this->retriever->retrieveIni($iniName), $iniName)
+                     $normalizedActual = $this->normalizeIniValue($actualValue = $this->retriever->retrieveIni($iniName), $iniName),
+                     $normalizedExpected = $this->normalizeIniValue($iniValue, $iniName)
                      )
     ) {
       return TRUE;
