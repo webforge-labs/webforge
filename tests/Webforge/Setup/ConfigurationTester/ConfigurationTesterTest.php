@@ -46,6 +46,14 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
     $this->assertEquals('jp18', $iniDefect->getActualValue());
     $this->assertEquals('utf-8', $iniDefect->getExpectedValue());
   }
+
+  public function testIniValuesAreSkippedIfForExtensionSkipp() {
+    $this->t->skipExtension('mbstring');
+    
+    $this->t->INI('mbstring.internal_encoding', 'utf-8'); // this is normally wrong
+    
+    $this->assertZeroDefects();
+  }
   
   public function testMegabytesGetNormalizedAndCanBeComparedToBytes() {
     $this->t->INI('post_max_size',2*1024*1024);

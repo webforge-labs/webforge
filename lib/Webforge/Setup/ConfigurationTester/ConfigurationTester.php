@@ -10,6 +10,13 @@ use Psc\Preg;
  */
 class ConfigurationTester extends \Webforge\Common\BaseObject {
   
+  /**
+   * Die Extension dessen IniValues nicht gecheckt werden sollen
+   *
+   * @var array
+   */
+  protected $skipExtensions = array();
+  
   protected $defects = array();
   
   protected $checks = array();
@@ -62,6 +69,12 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
   
   public function INI($iniName, $iniValue, $operator = '==') {
     $this->checks[] = array($iniName, $iniValue, $operator);
+    
+    if ($this->shouldBeSkipped($iniName)) {
+      // gatherMessage would be cool
+      return TRUE;
+    }
+    
     if (
       // e.g. post_max_size (2M) > 8M => false
       $this->satisfy($operator,
@@ -74,6 +87,15 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
       $this->gatherDefect(new IniConfigurationDefect($iniName, $iniValue, $normalizedExpected, $actualValue, $normalizedActual, $operator));
       return FALSE;
     }
+  }
+  
+  public function shouldBeSkipped($iniName) {
+    list($extension) = explode('.', $iniName, 2);
+    if ($extension && in_array($extension, $this->skipExtensions)) {
+      return TRUE;
+    }
+    
+    return FALSE;
   }
   
   protected function satisfy($operator, $one, $other = NULL) {
@@ -107,6 +129,17 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
   
   protected function gatherDefect(ConfigurationDefect $defect) {
     $this->defects[] = $defect;
+  }
+  
+  
+  /**
+   * Does not validate INI-Values from this extension
+   *
+   * @param string $extensionName (lowercase)
+   */
+  public function skipExtension($extensionName) {
+    $this->skipExtensions[] = $extensionName;
+    return $this;
   }
   
   /**
