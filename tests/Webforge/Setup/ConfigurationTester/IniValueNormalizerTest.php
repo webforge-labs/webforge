@@ -39,7 +39,17 @@ class IniValueNormalizerTest extends \Psc\Code\Test\Base {
     $n('0', '0', 'register_globals');
     $n(0, 0, 'register_globals');
     
+    $n('E_ALL | E_STRICT', E_ALL | E_STRICT, 'error_reporting');
+    
     return $tests;
+  }
+  
+  /**
+   * @expectedException InvalidArgumentException
+   * @expectedExceptionMessage Parse Error
+   */
+  public function testErrorReportingNormalizationFailure() {
+    $this->iniValueNormalizer->normalize('E_ALL | "blubb"', 'error_reporting');
   }
 }
 ?>
