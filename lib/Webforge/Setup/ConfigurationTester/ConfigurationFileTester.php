@@ -86,5 +86,10 @@ class ConfigurationFileTester {
   public function getConfigurationTester() {
     return $this->tester;
   }
+  
+  public function skipExtension($name) {
+    $this->getConfigurationTester()->skipExtension($name);
+    return $this;
+  }
 }
 ?>
