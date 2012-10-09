@@ -4,6 +4,7 @@ namespace Webforge\Setup\ConfigurationTester;
 
 use Psc\URL\RequestDispatcher;
 use Psc\JS\JSONConverter;
+use Psc\JS\JSONParsingException;
 
 /**
  * 
@@ -60,7 +61,11 @@ class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implement
       $this->dispatcher->createRequest('GET', $this->url)
     );
     
-    $json = $this->jsonConverter->parse($response->getRaw());
+    try {
+      $json = $this->jsonConverter->parse($response->getRaw());
+    } catch (JSONParsingException $e) {
+      throw new \RuntimeException("RemoteConfigurationRetrieving failed. The returned JSON from URL %s was not valid:\n%s\n", $this->url, $response->getRaw(), 0, $e);
+    }
     
     // handles true and not true second parameter from ini_get_all
     $this->inis = array();
@@ -86,6 +91,10 @@ class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implement
    */
   public function getUrl() {
     return $this->url;
+  }
+  
+  public function __toString() {
+    return 'RemoteConfigurationRetriever ('.$this->url.')';
   }
 }
 ?>

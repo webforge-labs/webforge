@@ -14,7 +14,7 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
   public function setUp() {
     $this->chainClass = 'Webforge\Setup\ConfigurationTester\ConfigurationTester';
     parent::setUp();
-    $this->retriever = $this->getMock('Webforge\Setup\ConfigurationTester\ConfigurationRetriever', array('retrieveIni'));
+    $this->retriever = $this->getMock('Webforge\Setup\ConfigurationTester\ConfigurationRetriever', array('retrieveIni', '__toString'));
     $this->t = new ConfigurationTester($this->retriever);
     
     $fakeIni = array(

@@ -142,6 +142,7 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
    */
   public function __toString() {
     $string = "webforge Setup - ConfigurationTester by Psc.\n";
+    $string .= (string) $this->retriever."\n";
     $string .= "\n";
     if (count($this->defects) === 0) {
       $string .= sprintf('OK (%d checks)', count($this->checks));

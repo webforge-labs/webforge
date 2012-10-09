@@ -13,5 +13,9 @@ class LocalConfigurationRetriever extends \Webforge\Common\BaseObject implements
   public function retrieveIni($iniName) {
     return ini_get($iniName);
   }
+
+  public function __toString() {
+    return 'LocalConfigurationRetriever';
+  }
 }
 ?>
