@@ -1,0 +1,90 @@
+<?php
+
+namespace Webforge\Setup\ConfigurationTester;
+
+use Psc\System\File;
+use Psc\JS\JSONConverter;
+
+/**
+ * Reads the INI-Configuration out of a file and tests this values
+ *
+ * an example .json:
+ *
+
+{
+  "post_max_size": ">= 20M",
+  "upload_max_filesize": ">= 20M",
+  
+  "date.timezone": "Europe/Berlin",
+  
+  "error_reporting": "E_ALL | E_STRICT",
+  
+  "mbstring.internal_encoding": "UTF-8",
+
+  "suhosin.log.syslog": true,
+  "suhosin.log.syslog.facility": 9,
+  "suhosin.log.syslog.priority": 1
+}
+
+ */
+class ConfigurationFileTester {
+  
+  const REMOTE = 'remote';
+  const LOCAL = 'local';
+  
+  /**
+   * @var Webforge\Setup\ConfigurationTester\ConfigurationTester
+   */
+  protected $tester;
+  
+  /**
+   * @var Psc\System\File
+   */
+  protected $jsonFile;
+
+  /**
+   * @var Psc\JS\JSONConverter
+   */
+  protected $converter;
+  
+  public function __construct(File $jsonFile, ConfigurationTester $tester = NULL, JSONConverter $converter = NULL) {
+    $this->jsonFile = $jsonFile;
+    $this->tester = $tester ?: new ConfigurationTester();
+    $this->converter = $converter ?: new JSONConverter();
+  }
+  
+  /**
+   * @param string $type local remote
+   */
+  public static function create(File $jsonFile, $type = 'local', $remoteUrl = NULL) {
+    if ($type === self::REMOTE) {
+      if (!isset($remoteUrl)) {
+        // @TOOD get global?
+        throw new \InvalidArgumentException('if type is remote, it is expected to give the remoteUrl to create as #3 argument');
+      }
+      
+      $retriever = new RemoteConfigurationRetriever($remoteUrl);
+    } else {
+      $retriever = new LocalConfigurationRetriever();
+    }
+    
+    $tester = new ConfigurationTester($retriever);
+    
+    return new static($jsonFile, $tester);
+  }
+  
+  /**
+   * @return Webforge\Setup\ConfigurationTester\ConfigurationTester
+   */
+  public function process() {
+    $json = $this->converter->parse($this->jsonFile->getContents());
+    
+    $this->tester->INIs((array) $json);
+    return $this->tester;
+  }
+  
+  public function getConfigurationTester() {
+    return $this->tester;
+  }
+}
+?>

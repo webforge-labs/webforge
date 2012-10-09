@@ -90,6 +90,27 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
     $this->assertContains('defects: 1', $msg);
   }
   
+  /**
+   * @dataProvider provideExpandIniValues
+   */
+  public function testIniValueExpanding($expectedOperator, $expectedValue, $iniValue) {
+    list ($actualOperator, $actualValue) = $this->t->expandIniValue($iniValue);
+    
+    $msg = 'for iniValue: '.$iniValue;
+    $this->assertEquals($expectedOperator, $actualOperator, $msg);
+    $this->assertEquals($expectedValue, $actualValue, $msg);
+  }
+  
+  public static function provideExpandIniValues() {
+    $tests = array();
+    
+    $tests[] = array('>=', '20M', '>= 20M');
+    $tests[] = array('==', 'true', '== true'); // this will break
+    $tests[] = array('==', '9', '9');
+    
+    return $tests;
+  }
+  
   protected function assertZeroDefects() {
     return $this->assertDefects(0);
   }

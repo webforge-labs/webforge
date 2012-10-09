@@ -3,6 +3,7 @@
 namespace Webforge\Setup\ConfigurationTester;
 
 use Psc\A;
+use Psc\Preg;
 
 /**
  * 
@@ -28,12 +29,35 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
     $this->setRetriever($retriever ?: new LocalConfigurationRetriever());
   }
   
+  /**
+   * parses an Array of INI Values
+   *
+   * 
+   */
   public function INIs(Array $iniValues) {
     foreach ($iniValues as $iniName => $iniValue) {
-      if (!$this->testINI($iniName, $iniValue)) {
-        return FALSE;
-      }
+      list($operator, $iniValue) = $this->expandIniValue($iniValue);
+      $this->INI($iniName, $iniValue, $operator);
+    
     }
+  }
+  
+  /**
+   * Parses an iniValue for an optional parameter
+   *
+   * @param string $iniValue [operator] value
+   * @return list($operator, $iniValue)
+   */
+  public function expandIniValue($iniValue, $operator = '==') {
+    $operators = array('==', 'equal', '!=', '>=', '=>', '<=', '=<', '<', '>');
+    
+    $rx = '/^('.implode('|',$operators).')\s*(.*?)$/';
+    $m = array();
+    if (Preg::match($iniValue, $rx, $m) > 0) {
+      list($m, $operator, $iniValue) = $m;
+    }
+    
+    return array($operator, $iniValue);
   }
   
   public function INI($iniName, $iniValue, $operator = '==') {
@@ -52,6 +76,7 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
   }
   
   protected function satisfy($operator, $one, $other = NULL) {
+    // add here + add to operators in expandIniValue
     switch($operator) {
       case '==':
       case 'equal':
@@ -83,8 +108,18 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
     $this->defects[] = $defect;
   }
   
+  /**
+   * @return array ConfigurationDefects
+   */
   public function getDefects() {
     return $this->defects;
+  }
+  
+  /**
+   * @return bool
+   */
+  public function hasDefects() {
+    return count($this->defects) > 0;
   }
   
   /**
@@ -103,7 +138,7 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
   }
   
   /**
-   * Das wäre natürlich schöner auszulagern, aber gut
+   * @TODO refactor to a configurationTester <-> String Object
    */
   public function __toString() {
     $string = "webforge Setup - ConfigurationTester by Psc.\n";

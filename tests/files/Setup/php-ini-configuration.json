@@ -1,0 +1,6 @@
+{
+  "mbstring.internal_encoding": "!= utf-8",
+  "post_max_size": ">= 2M",
+  "display_errors": "On",
+  "register_globals": false
+}

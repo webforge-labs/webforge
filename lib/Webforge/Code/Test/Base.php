@@ -3,6 +3,7 @@
 namespace Webforge\Code\Test;
 
 use Psc\Code\Code;
+use Psc\System\Dir;
 
 /**
  * Changes to the PHPUnit-API:
@@ -12,6 +13,11 @@ use Psc\Code\Code;
  * - add assertArrayEquals() as a short coming for equals() with $canonicalize = true
  */
 class Base extends \Psc\Code\Test\Base {
+
+  /**
+   * @var Psc\System\Dir
+   */
+  protected $testFilesDirectory;
     
   /**
    * Asserts that actualCode is equivalent to expectedCode (as PHP Code)
@@ -27,6 +33,26 @@ class Base extends \Psc\Code\Test\Base {
   
   public static function codeEqualTo($code) {
     return new CodeEqualsConstraint($code);
+  }
+  
+  /**
+   * @return Psc\System\Dir
+   */
+  public function getTestDirectory($sub = '/') {
+    if (!isset($this->testFilesDirectory)) {
+      // @TODO change hardcoding
+      $this->testFilesDirectory = new Dir(
+                                  __DIR__.DIRECTORY_SEPARATOR.
+                                  '..'.DIRECTORY_SEPARATOR. //  Code
+                                  '..'.DIRECTORY_SEPARATOR. //  Webforge
+                                  '..'.DIRECTORY_SEPARATOR. //  lib
+                                  '..'.DIRECTORY_SEPARATOR. //  root
+                                  'tests'.DIRECTORY_SEPARATOR.
+                                  'files'.DIRECTORY_SEPARATOR
+                                );
+    }
+    
+    return $this->testFilesDirectory->sub($sub);
   }
   
   
