@@ -18,4 +18,6 @@ if (!class_exists('Psc\PSC', FALSE)) {
   require_once __DIR__.$ds.'vendor'.$ds.'pscheit'.$ds.'psc-cms'.$ds.'bin'.$ds.'psc-cms.phar.gz';
 }
 
+return new \Psc\System\Dir(__DIR__.DIRECTORY_SEPARATOR);
+
 ?>
