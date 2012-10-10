@@ -8,7 +8,7 @@ namespace Webforge\Setup\ConfigurationTester;
 class RemoteConfigurationRetrieverTest extends \Psc\Code\Test\Base {
   
   protected $retriever;
-  protected $dispatcher, $iniResponse;
+  protected $dispatcher, $iniResponse, $jsonConverter;
   
   public function setUp() {
     $this->chainClass = 'Webforge\Setup\RemoteConfigurationRetriever';
@@ -30,9 +30,24 @@ class RemoteConfigurationRetrieverTest extends \Psc\Code\Test\Base {
       $this->assertEquals($iniValue, $this->retriever->retrieveIni($iniName), 'iniValue for '.$iniName.' is not correct');
     }
   }
+  
+  public function testJSONEncodingFailureThrowsBetterException() {
+    $this->dispatcher = $this->doublesManager->RequestDispatcher()
+      ->expectReturnsResponseOnDispatch($this->iniResponse, $this->once())
+      ->build();
+      
+    $this->jsonConverter = $this->getMock('Psc\JS\JSONConverter', array('parse'));
+    $this->jsonConverter->expects($this->once())->method('parse')
+                        ->will($this->throwException(new \Psc\JS\JSONParsingException('cannot parse JSON its mailformed')));
+    
+    $this->createRetriever();
+    
+    $this->setExpectedException('RuntimeException');
+    $this->retriever->retrieveIni('error_reporting');
+  }
 
   protected function createRetriever() {
-    $this->retriever = new RemoteConfigurationRetriever('/is/faked/test.php', $this->dispatcher);
+    $this->retriever = new RemoteConfigurationRetriever('/is/faked/test.php', $this->dispatcher, $this->jsonConverter);
   }
 }
 ?>
