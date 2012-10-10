@@ -2,6 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
+use Psc\Code\Generate\ClassWritingException;
 use Psc\System\File;
 
 /**
@@ -14,6 +15,8 @@ use Psc\System\File;
  */
 class ClassWriter {
   
+  const OVERWRITE = TRUE;
+  
   /**
    * @var Webforge\Code\Generator\Imports
    */
@@ -23,7 +26,14 @@ class ClassWriter {
     $this->imports = new Imports();
   }
   
-  public function write(GClass $gClass, File $file) {
+  public function write(GClass $gClass, File $file, $overwrite = FALSE) {
+    if ($file->exists() && $overwrite !== self::OVERWRITE) {
+      throw new ClassWritingException(
+        sprintf('The file %s already exists. To overwrite set the overwrite parameter.', $file),
+        ClassWritingException::OVERWRITE_NOT_SET
+      );
+    }
+    
     $file->writeContents($this->generatePHP($gClass));
     return $this;
   }

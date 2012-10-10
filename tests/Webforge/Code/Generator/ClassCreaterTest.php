@@ -100,7 +100,9 @@ PHP;
   }
   
   public function initTemporaryFile() {
-    return $this->file = File::createTemporary();
+    $this->file = File::createTemporary();
+    $this->file->delete();
+    return $this->file;
   }
   
   public function tearDown() {

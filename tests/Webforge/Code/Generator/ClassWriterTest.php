@@ -12,7 +12,7 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
   public function setUp() {
     $this->classWriter = new ClassWriter();
     
-    $this->file = $this->getMock('Psc\System\File', array('writeContents'), array('tmp'));
+    $this->file = $this->getMock('Psc\System\File', array('writeContents','exists'), array('tmp'));
     $this->classWithImports = new GClass('Webforge\Code\Generator\Fixtures\MyGPSLocateableClass');
     $this->classWithImports->addImport(new GClass('Other\UsedClass'));
     
@@ -54,9 +54,24 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
     $this->assertEquals($expectedImports, $this->classWriter->getImports()->toArray());
   }
   
+  public function testClassWriterDoesNotOverwriteExistingFiles() {
+    $this->expectFileExists(TRUE);
+    
+    $this->setExpectedException('Psc\Code\Generate\ClassWritingException');
+    
+    $this->classWriter->write($this->classWithImports, $this->file);
+  }
+  
   protected function expectThatWrittenCode($constraint, $times = NULL) {
+    $this->expectFileExists(FALSE);
     $this->file->expects($times ?: $this->once())->method('writeContents')
               ->with($constraint)->will($this->returnValue(233));
+  }
+
+  protected function expectFileExists($bool = FALSE, $times = NULL) {
+    $this->file->expects($times ?: $this->once())->method('exists')
+              ->will($this->returnValue($bool));
+
   }
 }
 ?>

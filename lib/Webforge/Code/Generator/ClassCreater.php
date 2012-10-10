@@ -4,6 +4,8 @@ namespace Webforge\Code\Generator;
 
 class ClassCreater {
   
+  const OVERWRITE = ClassWriter::OVERWRITE;
+  
   /**
    * @var Webforge\Code\Generator\ClassFileMapper
    */
@@ -30,12 +32,12 @@ class ClassCreater {
    * @param GClass $gClass
    * @return Psc\System\File
    */
-  public function create(GClass $gClass) {
+  public function create(GClass $gClass, $overwrite = FALSE) {
     $file = $this->mapper->getFile($gClass->getFQN());
     
     $gClass->createAbstractMethodStubs();
     
-    $this->writer->write($gClass, $file);
+    $this->writer->write($gClass, $file, $overwrite);
     
     return $file;
   }
