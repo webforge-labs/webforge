@@ -93,6 +93,15 @@ class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implement
     return $this->url;
   }
   
+  /**
+   * @param string $user
+   * @param string $password
+   */
+  public function setAuthentication($user, $password) {
+    $this->getDispatcher()->setAuthentication($user, $password);
+    return $this;
+  }
+  
   public function __toString() {
     return 'RemoteConfigurationRetriever ('.$this->url.')';
   }

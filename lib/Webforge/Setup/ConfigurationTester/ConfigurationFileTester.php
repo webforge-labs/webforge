@@ -83,6 +83,16 @@ class ConfigurationFileTester {
     return $this->tester;
   }
   
+  /**
+   * Sets the Credentials for Authentication when a remote ConfigurationRetriever is used
+   */
+  public function setAuthentication($user, $password) {
+    if ($this->tester->getRetriever() instanceof RemoteConfigurationRetriever) {
+      $this->tester->getRetriever()->setAuthentication($user, $password);
+    }
+    return $this;
+  }
+  
   public function getConfigurationTester() {
     return $this->tester;
   }
