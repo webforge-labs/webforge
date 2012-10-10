@@ -100,8 +100,8 @@ PHP;
   }
   
   public function initTemporaryFile() {
-    $this->file = File::createTemporary();
-    $this->file->delete();
+    $this->file = File::createTemporary(); // create the file
+    $this->file->delete();                 // delete it, so that we simulate the behaviour of file exists correctly
     return $this->file;
   }
   
