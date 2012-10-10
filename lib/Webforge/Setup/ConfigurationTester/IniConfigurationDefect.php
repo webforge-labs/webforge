@@ -40,12 +40,12 @@ class IniConfigurationDefect extends ConfigurationDefect {
   
   public function __toString() {
     return sprintf('[ini]: it\'s wrong that %s( %s ) is %s %s (normalized: %s %s %s)',
-                   $this->name,
+                   $this->getName(),
                    $this->valueToString($this->actualValue),
-                   $this->operator,
+                   $this->getOperator(),
                    $this->valueToString($this->expectedValue),
                    $this->valueToString($this->normalizedActualValue),
-                   $this->operator,
+                   $this->getOperator(),
                    $this->valueToString($this->normalizedExpectedValue)
                   );
     //return sprintf('[ini]: failed that %s expected: %s is %s actual: %s', $this->name, $this->expectedValue, $this->operator, $this->actualValue);

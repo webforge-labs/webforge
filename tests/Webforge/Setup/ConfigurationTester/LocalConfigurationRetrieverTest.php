@@ -19,5 +19,9 @@ class LocalConfigurationRetrieverTest extends \Psc\Code\Test\Base {
     $this->localConfigurationRetriever->retrieveIni('post_max_size', ini_get('post_max_size'));
     $this->localConfigurationRetriever->retrieveIni('include_path', ini_get('include_path'));
   }
+  
+  public function testToStringIsNotEmpty() {
+    $this->assertNotEmpty((string) $this->localConfigurationRetriever);
+  }
 }
 ?>

@@ -31,6 +31,16 @@ class RemoteConfigurationRetrieverTest extends \Psc\Code\Test\Base {
     }
   }
   
+  public function testAuthenticationSetting() {
+    $this->dispatcher = $this->doublesManager->RequestDispatcher()
+      ->expectAuthenticationIsSetTo('user','pw', $this->once())
+      ->build();
+    
+    $this->createRetriever();
+    
+    $this->retriever->setAuthentication('user','pw');
+  }
+  
   public function testJSONEncodingFailureThrowsBetterException() {
     $this->dispatcher = $this->doublesManager->RequestDispatcher()
       ->expectReturnsResponseOnDispatch($this->iniResponse, $this->once())
@@ -48,6 +58,11 @@ class RemoteConfigurationRetrieverTest extends \Psc\Code\Test\Base {
 
   protected function createRetriever() {
     $this->retriever = new RemoteConfigurationRetriever('/is/faked/test.php', $this->dispatcher, $this->jsonConverter);
+  }
+
+  public function testToStringIsNotEmpty() {
+    $this->createRetriever();
+    $this->assertNotEmpty((string) $this->retriever);
   }
 }
 ?>

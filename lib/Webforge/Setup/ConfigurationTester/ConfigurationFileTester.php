@@ -97,9 +97,11 @@ class ConfigurationFileTester {
     return $this->tester;
   }
   
+  // @codeCoverageIgnoreStart
   public function skipExtension($name) {
     $this->getConfigurationTester()->skipExtension($name);
     return $this;
   }
+  // @codeCoverageIgnoreEnd
 }
 ?>

@@ -36,13 +36,13 @@ class Imports implements IteratorAggregate, Countable {
       // is it needed to import the class?
       if ($import->getNamespace() === NULL || $import->getNamespace() !== $contextNamespace) {
         $use .= 'use ';  
-        if ($alias === $import->getClassName()) {
+        if ($alias === $import->getName()) {
           $use .= $import->getFQN();
         } else {
           $use .= $import->getFQN().' AS '.$alias;
         }
   
-        $use .= PHP_EOL;
+        $use .= ';'.PHP_EOL;
       }
     }
     return $use;

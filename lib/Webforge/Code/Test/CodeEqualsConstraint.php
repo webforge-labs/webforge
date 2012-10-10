@@ -121,6 +121,7 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
         case T_FUNCTION:
         case T_BOOL_CAST:
         case T_CASE:
+        case T_USE;
           $php .= $tokenValue.' ';
           break;
         

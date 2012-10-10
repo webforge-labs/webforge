@@ -136,5 +136,14 @@ PHP
     
     return $tests;
   }
+  
+  public function testToStringOutputContainsSomething() {
+    $constraint = new CodeEqualsConstraint('echo "the exepected code";');
+    $this->assertNotEmpty($constraint->toString());
+
+    $constraint = new CodeEqualsConstraint('echo "the exepected code";');
+    $constraint->matches('echo "the other code"');
+    $this->assertNotEmpty($constraint->toString());
+  }
 }
 ?>

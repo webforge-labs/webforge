@@ -88,5 +88,28 @@ class ImportsTest extends \Webforge\Code\Test\Base {
                              'imports are not correctly merged from gClass'
                             );
   }
+  
+  
+  public function testImportsToPHPWithAlias() {
+    $imports = new Imports(
+      array('CodeGenerator'=>new GClass('Psc\Code\Generator'))
+    );
+    
+    $this->assertCodeEquals(
+      'use Psc\Code\Generator AS CodeGenerator;',
+      $imports->php('Psc\Code\Generator')
+    );
+  }
+
+  public function testImportsToPHPWithoutAlias() {
+    $imports = new Imports(
+      array(new GClass('Psc\Code\Generator'))
+    );
+    
+    $this->assertCodeEquals(
+      'use Psc\Code\Generator;',
+      $imports->php('Psc\Code\Generator')
+    );
+  }
 }
 ?>

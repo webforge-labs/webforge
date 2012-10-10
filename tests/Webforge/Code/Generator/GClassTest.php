@@ -22,7 +22,16 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->assertEquals('XML', $gClass->getNamespace());
     $this->assertEquals('Object',$gClass->getName());
     $this->assertEquals('XML\Object',$gClass->getFQN());
+  }
+  
+  public function testThatParentCanBeSet() {
+    $gClass = GClass::create('Psc\Code\SpecificGenerator');
     
+    $this->assertInstanceOf('Webforge\Code\Generator\GClass',
+                            $gClass->setParent($parent = GClass::create('Psc\Code\Generator'))
+                           );
+    
+    $this->assertSame($parent, $gClass->getParent());
   }
   
   public function testNamespaceCanBeeReplacedThroughSet() {

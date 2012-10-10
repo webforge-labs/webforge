@@ -61,8 +61,14 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
     $this->t->INI('post_max_size','2M', '>=');
     $this->t->INI('post_max_size', 1024, '>'); // post_max_size > 1024 => true
     $this->t->INI('post_max_size', '3M', '<');
+    $this->t->INI('post_max_size', '3M', '<=');
     
     $this->assertZeroDefects();
+  }
+  
+  public function testThatNotAllOperatorsAreAllowed() {
+    $this->setExpectedException('InvalidArgumentException');
+    $this->t->INI('register_globals', 'wurst', '===');
   }
   
   public function testBooleansGetNormalized() {
@@ -118,6 +124,11 @@ class ConfigurationTesterTest extends \Psc\Code\Test\Base {
     $tests[] = array('==', '9', '9');
     
     return $tests;
+  }
+  
+  public function testHasDefectsIsFalseForZeroDefects() {
+    $this->assertCount(0, $this->t->getDefects());
+    $this->assertFalse($this->t->hasDefects());
   }
   
   protected function assertZeroDefects() {

@@ -58,6 +58,12 @@ class ConfigurationFileTesterTest extends \Webforge\Code\Test\Base {
                             $fileTester->getConfigurationTester()->getRetriever()
                             );
   }
+  
+  public function testCreateForRemoteWithoutURL() {
+    $this->setExpectedException('InvalidArgumentException');
+    $fileTester = ConfigurationFileTester::create($this->jsonFile, ConfigurationFileTester::REMOTE);
+  }
+
 
   public function testAuthenticationSetting() {
     $retriever = $this->getMock('RemoteConfigurationRetriever', array('setAuthentication'), array('/fake/url'));

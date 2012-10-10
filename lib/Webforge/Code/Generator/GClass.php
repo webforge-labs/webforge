@@ -13,6 +13,11 @@ class GClass extends \Psc\Code\Generate\GClass {
    */
   protected $ownImports;
   
+  /**
+   * @var Webforge\Code\Generator\GClass
+   */
+  protected $parentClass;
+  
   public function __construct($class = NULL)  {
     $this->ownImports = new Imports();
     
@@ -37,11 +42,6 @@ class GClass extends \Psc\Code\Generate\GClass {
     }
     
     return $gClass;
-  }
-  
-  public function setParent(GClass $parent) {
-    $this->parentClass = $parent;
-    return $this;
   }
   
   /**
@@ -152,7 +152,23 @@ class GClass extends \Psc\Code\Generate\GClass {
   public function __toString() {
     return $this->getFQN();
   }
+
+  /**
+   * @param Webforge\Code\Generator\GClass $parent
+   */
+  public function setParent(GClass $parent) {
+    $this->parentClass = $parent;
+    return $this;
+  }
   
+  /**
+   * @return Webforge\Code\Generator\GClass
+   */
+  public function getParent() {
+    return $this->parentClass;
+  }
+  
+  // dont use this anymore
   public function getClassName() {
     //throw new \Psc\DeprecatedException('getClassName() is deprecated. Use getName instead');
     return $this->name;

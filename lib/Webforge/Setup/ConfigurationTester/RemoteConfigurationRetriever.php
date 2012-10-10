@@ -84,6 +84,7 @@ class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implement
 
   }
   
+  // @codeCoverageIgnoreStart
   /**
    * @return array
    */
@@ -97,6 +98,7 @@ class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implement
   public function getUrl() {
     return $this->url;
   }
+  // @codeCoverageIgnoreEnd
   
   /**
    * @param string $user
@@ -107,8 +109,15 @@ class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implement
     return $this;
   }
   
+  /**
+   * @return Psc\URL\RequestDispatcher
+   */
+  public function getDispatcher() {
+    return $this->dispatcher;
+  }
+  
   public function __toString() {
-    return 'RemoteConfigurationRetriever ('.$this->url.')';
+    return 'Remote Configuration ('.$this->url.')';
   }
 }
 ?>

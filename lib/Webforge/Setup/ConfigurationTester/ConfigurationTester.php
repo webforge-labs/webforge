@@ -157,21 +157,6 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
   }
   
   /**
-   * @param Webforge\Setup\IniValueNormalizer $normalizer
-   */
-  public function setNormalizer(IniValueNormalizer $normalizer) {
-    $this->normalizer = $normalizer;
-    return $this;
-  }
-  
-  /**
-   * @return Webforge\Setup\IniValueNormalizer
-   */
-  public function getNormalizer() {
-    return $this->normalizer;
-  }
-  
-  /**
    * @TODO refactor to a configurationTester <-> String Object
    */
   public function __toString() {
@@ -188,6 +173,7 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
     return $string;
   }
   
+  // @codeCoverageIgnoreStart
   /**
    * @param Webforge\Setup\ConfigurationRetriever $retriever
    */
@@ -202,5 +188,21 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
   public function getRetriever() {
     return $this->retriever;
   }
+
+  /**
+   * @param Webforge\Setup\IniValueNormalizer $normalizer
+   */
+  public function setNormalizer(IniValueNormalizer $normalizer) {
+    $this->normalizer = $normalizer;
+    return $this;
+  }
+  
+  /**
+   * @return Webforge\Setup\IniValueNormalizer
+   */
+  public function getNormalizer() {
+    return $this->normalizer;
+  }
+  // @codeCoverageIgnoreEnd
 }
 ?>

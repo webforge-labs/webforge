@@ -59,7 +59,8 @@ class ClassWriter {
     $this->imports->add($gClass, $alias);
     return $this;
   }
-  
+
+  // @codeCoverageIgnoreStart
   /**
    * Removes an Import, that should be added to every written file
    *
@@ -78,12 +79,14 @@ class ClassWriter {
     $this->imports = $imports;
     return $this;
   }
-
+  // @codeCoverageIgnoreEnd  
+  
   /**
    * @return Webforge\Code\Generator\Imports
    */
   public function getImports() {
     return $this->imports;
   }
+  
 }
 ?>

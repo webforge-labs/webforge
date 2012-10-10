@@ -15,7 +15,7 @@ class LocalConfigurationRetriever extends \Webforge\Common\BaseObject implements
   }
 
   public function __toString() {
-    return 'LocalConfigurationRetriever';
+    return 'Local Configuration';
   }
 }
 ?>

@@ -38,6 +38,7 @@ class IniValueNormalizerTest extends \Psc\Code\Test\Base {
     $n('2B', '2B', 'post_max_size');
     $n('0', '0', 'register_globals');
     $n(0, 0, 'register_globals');
+    $n('20kb', 20 * 1024, 'post_max_size');
     
     $n('E_ALL | E_STRICT', E_ALL | E_STRICT, 'error_reporting');
     
