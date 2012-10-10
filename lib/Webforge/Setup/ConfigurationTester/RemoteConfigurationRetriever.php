@@ -64,7 +64,12 @@ class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implement
     try {
       $json = $this->jsonConverter->parse($response->getRaw());
     } catch (JSONParsingException $e) {
-      throw new \RuntimeException("RemoteConfigurationRetrieving failed. The returned JSON from URL %s was not valid:\n%s\n", $this->url, $response->getRaw(), 0, $e);
+      throw new \RuntimeException(
+        sprintf("RemoteConfigurationRetrieving failed. The returned JSON from URL %s was not valid:\n%s\n",
+                $this->url, $response->getRaw()),
+        0,
+        $e
+      );
     }
     
     // handles true and not true second parameter from ini_get_all
