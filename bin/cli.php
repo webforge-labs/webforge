@@ -8,7 +8,7 @@ use Psc\System\File;
 use Psc\System\Dir;
 use Psc\System\Console\CommandsIncluder;
 
-$base = require __DIR__.DIRECTORY_SEPARATOR.'..'.'bootstrap.php';
+$base = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'bootstrap.php';
 
 $includer = new CommandsIncluder($base->sub('lib/')->getFile('inc.commands.php'));
 

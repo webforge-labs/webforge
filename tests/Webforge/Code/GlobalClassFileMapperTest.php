@@ -24,10 +24,17 @@ class GlobalClassFileMapperTest extends \Webforge\Code\Test\Base {
     $this->mapper->getFile('');
   }
   
-  public function testAcceptanceForThisTestClass_whichIsAutoloadableByAnComposerProject_whichIsASpecialCaseBecauseItsATest() {
+  public function testAcceptanceForThisExistingTestClass_whichIsAutoloadableByAnComposerProject_whichIsASpecialCaseBecauseItsATest() {
     $file = $this->mapper->getFile(get_class($this));
     
     $this->assertEquals((string) __FILE__, (string) $file);
+  }
+  
+  public function testAcceptanceForANewClass_whichIsAutloadableByAnComposerProject() {
+    $file = $this->mapper->getFile('Webforge\Test\NewClass');
+    
+    $this->assertInstanceOf('Psc\System\File', $file);
+    $this->assertNotFileExists($file);
   }
 }
 ?>

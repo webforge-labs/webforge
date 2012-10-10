@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Bootstrap and Autoload whole application
  *
@@ -19,5 +18,4 @@ if (!class_exists('Psc\PSC', FALSE)) {
 }
 
 return new \Psc\System\Dir(__DIR__.DIRECTORY_SEPARATOR);
-
 ?>

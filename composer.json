@@ -12,7 +12,8 @@
     "php": ">=5.3.2",
     "ext-mbstring": "*",
     
-    "pscheit/psc-cms": "*"
+    "pscheit/psc-cms": "*",
+    "symfony/console": "2.1.*"
   },
   "require-dev": {
     "webforge/testdata-repository": "dev-master"
