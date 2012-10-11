@@ -50,6 +50,7 @@ class Base extends \Psc\Code\Test\Base {
                                   'tests'.DIRECTORY_SEPARATOR.
                                   'files'.DIRECTORY_SEPARATOR
                                 );
+      $this->testFilesDirectory->resolvePath(); // make abs
     }
     
     return $this->testFilesDirectory->sub($sub);

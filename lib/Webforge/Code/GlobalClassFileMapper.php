@@ -4,9 +4,12 @@ namespace Webforge\Code;
 
 use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Code\Generator\GClass;
+use Webforge\Setup\Package\Registry AS PackageRegistry;
+use Webforge\Code\ClassNotFoundException;
 use Psc\System\File;
 use Psc\System\Dir;
 use ComposerAutoloaderInit;
+use Webforge\Setup\Package\PackageNotFoundException;
 
 /**
  * The Global Class File Mapper finds the corrosponding file in a project on the local machine
@@ -27,6 +30,13 @@ class GlobalClassFileMapper implements ClassFileMapper {
   
   const WITH_RESOLVING    = 0x000001;
   const WITH_INCLUDE_PATH = 0x000002;
+  
+  /**
+   * A Registry for Packages installed on the host (e.g.)
+   * 
+   * @var Webforge\Setup\Package\Registry
+   */
+  protected $packageRegistry;
 
   /**
    * @return GClass
@@ -38,7 +48,7 @@ class GlobalClassFileMapper implements ClassFileMapper {
   public function getFile($fqn) {
     $fqn = $this->normalizeClassFQN($fqn);
     
-    if (($file = $this->findWithComposerAutoLoader($fqn)) != NULL) {
+    if (($file = $this->findWithRegistry($fqn)) != NULL) {
       return $file;
     }
     
@@ -46,21 +56,27 @@ class GlobalClassFileMapper implements ClassFileMapper {
   }
   
   /**
-   * Uses the Composer AutoLoader to find the file
-   *
    * @return Psc\System\File|NULL
    */
-  public function findWithComposerAutoLoader($fqn) {
-    if (class_exists('ComposerAutoloaderInit', $autoload = FALSE)) {
-      $loader = ComposerAutoloaderInit::getLoader();
-      
-      // maybe the loader can find the class for us?
-      $file = $loader->findFile($fqn);
-      
-      if ($file) {
-        return $this->validateFile(new File($file), self::WITH_RESOLVING);
+  public function findWithRegistry($fqn) {
+    if (isset($this->packageRegistry)) {
+      try {
+        $package = $this->packageRegistry->findByFQN($fqn);
+      } catch(PackageNotFoundException $e) {
+        return NULL;
       }
-    } // else: we could launch our own ComposerAutoLoader if the vendor is not required yet?
+      
+      $autoLoad = $package->getAutoLoadInfo();
+      if (isset($autoLoad) && ($file = $autoLoad->getFile($fqn, $package->getRootDirectory()))) {
+        return $this->validateFile($file, self::WITH_RESOLVING);
+      } else {
+        $e = ClassNotFoundException::fromFQN($fqn);
+        $e->appendMessage(sprintf('. AutoLoading from package: %s is not defined. Cannot resolve to file.', $package));
+        throw $e;
+      }
+    }
+    
+    return NULL;
   }
   
   protected function validateFile(File $file, $flags = 0x0000) {
@@ -83,6 +99,22 @@ class GlobalClassFileMapper implements ClassFileMapper {
     }
     
     return $fqn;
+  }
+  
+  /**
+   * @param Webforge\Setup\Package\Registry $packageRegistry
+   * @chainable
+   */
+  public function setPackageRegistry(PackageRegistry $packageRegistry) {
+    $this->packageRegistry = $packageRegistry;
+    return $this;
+  }
+
+  /**
+   * @return Webforge\Setup\Package\Registry
+   */
+  public function getPackageRegistry() {
+    return $this->packageRegistry;
   }
 }
 ?>
