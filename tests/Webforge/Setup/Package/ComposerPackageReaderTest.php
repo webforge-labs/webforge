@@ -29,5 +29,12 @@ class ComposerPackageReaderTest extends \Webforge\Code\Test\Base {
       'Prefixes from AutoLoadInfo for ACME is damaged'
     );
   }
+  
+  /**
+   * @expectedException Psc\Exception
+   */
+  public function testFromDirectoryWithoutJSONFileFails() {
+    $this->reader->fromDirectory($this->getTestDirectory('sub/packages/Blank'));
+  }
 }
 ?>

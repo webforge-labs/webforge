@@ -18,5 +18,12 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Webforge\Setup\Package\Package', $acmePackage);
     $this->assertEquals('acme/intranet-application', $acmePackage->getSlug());
   }
+  
+  /**
+   * @expectedException Webforge\Setup\Package\PackageNotFoundException
+   */
+  public function testNonFindablePrefixFQNThrowsException() {
+    $this->registry->findByFQN('BananenbaumisnotdefinedPrefix');
+  }
 }
 ?>

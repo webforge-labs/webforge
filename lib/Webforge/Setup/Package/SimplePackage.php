@@ -29,28 +29,10 @@ class SimplePackage implements Package {
   }
   
   /**
-   * @param string $slug
-   * @chainable
-   */
-  public function setSlug($slug) {
-    $this->slug = $slug;
-    return $this;
-  }
-
-  /**
    * @return string
    */
   public function getSlug() {
     return $this->slug;
-  }
-
-  /**
-   * @param Psc\System\Dir $rootDirectory
-   * @chainable
-   */
-  public function setRootDirectory(Dir $rootDirectory) {
-    $this->rootDirectory = $rootDirectory;
-    return $this;
   }
 
   /**
@@ -67,6 +49,7 @@ class SimplePackage implements Package {
     return $this->autoLoadInfo;
   }
   
+  // @codeCoverageIgnoreStart
   /**
    * @param Psc\Setup\AutoLoadInfo $info
    */
@@ -75,8 +58,29 @@ class SimplePackage implements Package {
     return $this;
   }
   
+
+  /**
+   * @param Psc\System\Dir $rootDirectory
+   * @chainable
+   */
+  public function setRootDirectory(Dir $rootDirectory) {
+    $this->rootDirectory = $rootDirectory;
+    return $this;
+  }
+
+
+  /**
+   * @param string $slug
+   * @chainable
+   */
+  public function setSlug($slug) {
+    $this->slug = $slug;
+    return $this;
+  }
+
   public function __toString() {
     return $this->getSlug();
   }
+  // @codeCoverageIgnoreEnd
 }
 ?>
