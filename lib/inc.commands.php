@@ -42,7 +42,7 @@ $createCommand('create-class',
       $gClass->addInterface(new GClass($interface));
     }
     
-    $file = $creater->create($gClass);
+    $file = $creater->create($gClass, $input->getOption('overwrite') ? ClassCreater::OVERWRITE : FALSE);
     
     $command->info('wrote Class '.$gClass.' to file: '.$file);
     return 0;

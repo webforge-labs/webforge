@@ -30,7 +30,7 @@ class Imports implements IteratorAggregate, Countable {
     }
   }
 
-  public function php($contextNamespace) {
+  public function php($contextNamespace, $eol = "\n") {
     $use = NULL;
     foreach ($this->classes as $alias => $import) {
       // is it needed to import the class?
@@ -42,7 +42,7 @@ class Imports implements IteratorAggregate, Countable {
           $use .= $import->getFQN().' AS '.$alias;
         }
   
-        $use .= ';'.PHP_EOL;
+        $use .= ';'.$eol;
       }
     }
     return $use;

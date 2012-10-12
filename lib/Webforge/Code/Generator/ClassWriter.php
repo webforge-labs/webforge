@@ -38,13 +38,13 @@ class ClassWriter {
     return $this;
   }
   
-  protected function generatePHP(GClass $gClass) {
-    $php = '<?php'.PHP_EOL;
-    $php .= PHP_EOL;
+  protected function generatePHP(GClass $gClass, $eol = "\n") {
+    $php = '<?php'.$eol;
+    $php .= $eol;
     
     if (($namespace = $gClass->getNamespace()) != NULL) {
-      $php .= 'namespace '.$namespace.';'.PHP_EOL;
-      $php .= PHP_EOL;
+      $php .= 'namespace '.$namespace.';'.$eol;
+      $php .= $eol;
     }
     
     $imports = clone $this->imports;
@@ -52,11 +52,12 @@ class ClassWriter {
     
     if ($use = $imports->php($namespace)) {
       $php .= $use;
-      $php .= PHP_EOL;
+      $php .= $eol;
     }
     
     $php .= $gClass->php();
     
+    $php .= $eol;
     $php .= '?>';
     return $php;
   }
