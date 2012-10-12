@@ -84,12 +84,19 @@ class ApplicationStorage {
   /**
    * @return string
    */
-  public function getDirectory() {
+  public function getDirectory($subDir = '/') {
     if (!isset($this->directory)) {
       $this->directory = $this->initDirectory();
     }
     
-    return $this->directory;
+    return $this->directory->sub($subDir);
+  }
+  
+  /**
+   * @return File
+   */
+  public function getFile($url) {
+    return File::createFromURL($url, $this->getDirectory());
   }
 
   /**

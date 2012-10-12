@@ -1,0 +1,4 @@
+{
+  "webforge/webforge": {"path": "/fake/path/to/Webforge"},
+  "acme/intranet-application": "/fake/path/to/ACME"  
+}

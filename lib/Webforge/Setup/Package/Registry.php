@@ -7,8 +7,17 @@ use Webforge\Code\Generator\GClass;
 
 class Registry {
   
+  /**
+   * @var Webforge\Setup\Package\ComposerPackageReader
+   */
+  protected $composerPackageReader;
+  
   protected $packages = array();
   protected $prefixes = array();
+  
+  public function __construct(ComposerPackageReader $reader = NULL) {
+    $this->composerPackageReader = $reader;
+  }
   
   public function findByFQN($fqn) {
     $gClass = new GClass($fqn);
@@ -60,13 +69,36 @@ class Registry {
    * Adds a composer package from a directory
    */
    public function addComposerPackageFromDirectory(Dir $dir) {
-    /* i think it's a good idea to refactor it out to another class, but i can't find the name yet */
-    $reader = new ComposerPackageReader();
-    $package = $reader->fromDirectory($dir);
+    $package = $this->getComposerPackageReader()->fromDirectory($dir);
     
     $this->addPackage($package);
     
     return $package;
   }
+  
+  /**
+   * @return Webforge\Setup\Package\ComposerPackageReader
+   */
+  public function getComposerPackageReader() {
+    if (!isset($this->composerPackageReader)) {
+      $this->composerPackageReader = new ComposerPackageReader();
+    }
+    return $this->composerPackageReader;
+  }
+  
+  // @codeCoverageIgnoreStart
+
+  /**
+   * @return Packages[]
+   */
+  public function getPackages() {
+    return $this->packages;
+  }
+  
+  public function setComposerPackageReader(ComposerPackageReader $reader) {
+    $this->composerPackageReader = $reader;
+    return $this;
+  }
+  // @codeCoverageIgnoreEnd
 }
 ?>

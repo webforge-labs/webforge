@@ -21,6 +21,23 @@ class ApplicationStorageTest extends \Webforge\Code\Test\Base {
     $this->assertTrue($dir->isWriteable(), $dir.' from application storage cannot be written');
   }
   
+  public function testApplicationStorageGetsAfile() {
+    $file = $this->storage->getFile('configs/webforge.json');
+    
+    $this->assertInstanceOf('Psc\System\File', $file);
+    $this->assertEquals(
+      (string) $this->storage->getDirectory()->sub('configs/')->getFile('webforge.json'),
+      (string) $file
+    );    
+  }
+  
+  public function testGetDirectoryCanReturnSubs() {
+    $this->assertEquals(
+      (string) $this->storage->getDirectory()->sub('configs/'),
+      (string) $this->storage->getDirectory('configs/')
+    );
+  }
+  
   /**
    * @dataProvider badNames
    * @expectedException InvalidArgumentException
