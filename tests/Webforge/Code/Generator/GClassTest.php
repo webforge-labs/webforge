@@ -8,9 +8,10 @@ class GClassTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
     $this->gClass = new GClass(get_class($this));
+    
+    $this->exportable = new GClass('Exportable');
     parent::setUp();
   }
-  
 
   public function testConstructIsRobustToWrongPrefixSlashes() {
     $gClass = GClass::create('XML\Object');
@@ -34,7 +35,7 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->assertSame($parent, $gClass->getParent());
   }
   
-  public function testNamespaceCanBeeReplacedThroughSet() {
+  public function testNamespaceCanBeReplacedThroughSet() {
     $gClass = GClass::create('XML\Object');
     $gClass->setNamespace('Javascript');
     $this->assertEquals('Javascript', $gClass->getNamespace());
@@ -69,7 +70,7 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->assertFalse($this->gClass->hasImport('UsedClass'));
   }
   
-  public function testPropertyHintsAreImported() {
+  public function testPropertyTypesAsHintsForClassesAreImported() {
     $this->markTestIncomplete('Blocker: properties in psc-cms do not have a type(!) change this');
   }
 
@@ -84,6 +85,51 @@ class GClassTest extends \Webforge\Code\Test\Base {
   public function testParentClassIsImported() {
     // should the parent
     $this->markTestIncomplete('parentClass should be imported');
+  }
+
+  public function testNewInstance() {
+    $gClass = new GClass('Psc\Exception');
+    $exception = $gClass->newInstance(array('just a test error'));
+    
+    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertEquals('just a test error', $exception->getMessage());
+  }
+  
+  public function testGetReflection() {
+    $this->assertInstanceOf('ReflectionClass', $this->gClass->getReflection());
+  }
+  
+  public function testNewInstanceWithoutConstructor() {
+    $gClass = new GClass('MyConstructorThrowsExceptionClass');
+    $gClass->setNamespace(__NAMESPACE__);
+    $instance = $gClass->newInstance(array(), GClass::WITHOUT_CONSTRUCTOR);
+    
+    $this->assertInstanceOf($gClass->getFQN(), $instance);
+    $this->assertTrue($instance->checkProperty);
+  }
+
+  public function testNewClassInstance() {
+    $exception = GClass::newClassInstance('Psc\Exception', array('just a test error'));
+    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertEquals('just a test error', $exception->getMessage());
+
+    $exception = GClass::newClassInstance($gClass = new GClass('Psc\Exception'), array('just a test error'));
+    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertEquals('just a test error', $exception->getMessage());
+
+    $exception = GClass::newClassInstance($gClass->getReflection(), array('just a test error'));
+    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertEquals('just a test error', $exception->getMessage());
+  }
+  
+}
+
+class MyConstructorThrowsExceptionClass {
+  
+  public $checkProperty = TRUE;
+  
+  public function __construct() {
+    throw new \Psc\Exception('this should not be called');
   }
 }
 ?>

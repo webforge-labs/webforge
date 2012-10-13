@@ -24,7 +24,7 @@ use ReflectionMethod;
  * it is technical possible to set PUBLIC, PRIVATE, PROTECTED at the same time.
  * But it does not make sense...
  */
-class GModifiersObject extends GObject {
+abstract class GModifiersObject extends GObject {
   
   const MODIFIER_STATIC = ReflectionProperty::IS_STATIC;
   const MODIFIER_ABSTRACT = ReflectionMethod::IS_ABSTRACT;

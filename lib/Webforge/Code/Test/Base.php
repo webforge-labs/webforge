@@ -4,6 +4,7 @@ namespace Webforge\Code\Test;
 
 use Psc\Code\Code;
 use Psc\System\Dir;
+use Webforge\Code\Generator\GClass;
 
 /**
  * Changes to the PHPUnit-API:
@@ -33,6 +34,14 @@ class Base extends \Psc\Code\Test\Base {
   
   public static function codeEqualTo($code) {
     return new CodeEqualsConstraint($code);
+  }
+  
+  
+  /**
+   * @return Webforge\Code\Test\GClassTester
+   */
+  protected function testGClass(GClass $gClass) {
+    return new GClassTester($gClass, $this);
   }
   
   /**
