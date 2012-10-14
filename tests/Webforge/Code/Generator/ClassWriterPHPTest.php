@@ -29,7 +29,6 @@ PHP;
     $this->assertEquals($phpCode, $this->classWriter->writeGClass($gClass, $namespace = NULL, "\n"));
   }
   
-  
   public function testWriteGClass_ExtendsIsWrittenAsClassNameWhenInSameCONTEXTNamespace() {
     $gClass = GClass::create('ACME\Types\Type')->setParent(new GClass('ACME\Types\BaseType'));
     
@@ -39,7 +38,7 @@ class Type extends BaseType {
 }
 PHP;
     
-    $this->assertEquals($phpCode, $this->classWriter->writeGClass($gClass, $namespace = 'ACME\Types',"\n"));
+    $this->assertCodeEquals($phpCode, $this->classWriter->writeGClass($gClass, $namespace = 'ACME\Types',"\n"));
   }
 
   public function testWriteGClass_ExtendsIsWrittenAsFullIfNotSameCONTEXTNamespace() {
@@ -51,7 +50,51 @@ class Console extends \Webforge\System\Console {
 }
 PHP;
     
-    $this->assertEquals($phpCode, $this->classWriter->writeGClass($gClass, $namespace = 'ACME', "\n"));
+    $this->assertCodeEquals($phpCode, $this->classWriter->writeGClass($gClass, $namespace = 'ACME', "\n"));
+  }
+  
+  public function testGClassHasModifiers() {
+    $gClass = GClass::create('ACME\Console')->setAbstract(TRUE);
+    
+    $phpCode = 'abstract class Console {}';
+    $this->assertCodeEquals($phpCode, $this->classWriter->writeGClass($gClass, $namespace = 'ACME'));
+  }
+  
+  public function testWritesGMethodWithParameters() {
+    $method = GMethod::create('someAction', array(GParameter::create('xValue', new GClass('PointValue')),
+                                                  GParameter::create('yValue', new GClass('PointValue')),
+                                                  GParameter::create('info', $this->getType('Array'))
+                                                    ->setDefault(array('x','y'))
+                                                  )
+                              );
+    $phpCode = <<<'PHP'
+public function someAction(PointValue $xValue, PointValue $yValue, Array $info = array('x', 'y')) {
+}
+PHP;
+    
+    $this->assertCodeEquals($phpCode, $this->classWriter->writeMethod($method));
+  }
+  
+  public function testWritesInterfaces() {
+    $if = GInterface::create('ACME\Exportable');
+    
+    $phpCode = 'interface Exportable {}';
+    $this->assertCodeEquals($phpCode, $this->classWriter->writeGClass($if, $namespace = 'ACME'));
+  }
+
+  public function testWritesInterfaceMethodsAsMethodWithoutBody() {
+    $if = GInterface::create('ACME\Exportable');
+    $if->createMethod('export');
+    
+    $phpCode =
+<<<'PHP'
+interface Exportable {
+
+  public function export();
+}
+PHP;
+
+    $this->assertCodeEquals($phpCode, $this->classWriter->writeGClass($if, $namespace = 'ACME'));
   }
 }
 ?>

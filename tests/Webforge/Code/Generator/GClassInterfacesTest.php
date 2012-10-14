@@ -56,5 +56,12 @@ class GClassInterfacesTest extends \Webforge\Code\Test\Base {
     
     $this->assertEquals(array(), $this->gClass->getInterfaces());
   }
+  
+  public function testSetInterfacesReplaces() {
+    $this->gClass->addInterface($this->exportable);
+    
+    $this->gClass->setInterfaces(array($this->locateable));
+    $this->assertEquals(array($this->locateable), $this->gClass->getInterfaces());
+  }
 }
 ?>

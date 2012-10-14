@@ -2,6 +2,8 @@
 
 namespace Webforge\Code\Generator;
 
+use Psc\Code\Generate\DocBlock;
+
 class GObjectTest extends \Webforge\Code\Test\Base {
   
   protected $o;

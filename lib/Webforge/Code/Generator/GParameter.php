@@ -5,6 +5,7 @@ namespace Webforge\Code\Generator;
 use Psc\Data\Type\Type;
 use Psc\Data\Type\MixedType;
 use Psc\Data\Type\ObjectType;
+use Psc\Data\Type\ArrayType;
 
 /**
  * Models a GParameter for a GFunction / GMethod
@@ -32,13 +33,6 @@ class GParameter extends GObject {
    * @var Psc\Data\Type\Type
    */
   protected $type;
-  
-  /**
-   * Is the parameter hint an array?
-   * 
-   * @var bool
-   */
-  protected $array;
   
   /**
    * The Default value of the Paramter
@@ -123,10 +117,11 @@ class GParameter extends GObject {
   }
 
   /**
+   * Is the parameter hint a array?
    * @return bool
    */
   public function isArray() {
-    return $this->array;
+    return $this->type instanceof ArrayType;
   }
   
   /**

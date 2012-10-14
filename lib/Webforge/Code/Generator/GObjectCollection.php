@@ -104,31 +104,55 @@ class GObjectCollection {
     if (array_key_exists($key, $this->objects)) {
       $oldOrder = array_search($key, $this->order);
       
-      if ($oldOrder != $order) {
+      if ($oldOrder != $order || $order === self::END) {
         // its not that easy as removing and inserting into the $this->order array
         // i always thought doubly linked lists would help with that but spls php does not
         A::insert($this->order, $key, $order);
 
         /*
-         * 
-          $order = 2;
           $oldOrder = 0;
+          <
+          $order = 2;
       
           array(1,2,3,1)
           => remove $oldOrder
         */
 
         /*
-         * setOrder('object 3', 0)
-          $order = 0;
+          setOrder('object 3', 0)
           $oldOrder = 2;
+          <
+          $order = 0;
+          
       
           array(3,1,2,3)
           => remove $oldOrder+1
         */
+
+        /*
+          array('object 2', 'object 1')
+          ->setOrder('object 2', 1)
+          $oldOrder = 0;
+          <
+          $order = 1;
       
+          array('object 2', 'object 2', 'object 1')
+          => remove $oldOrder
+        */
+
+        /*
+          array('object 2', 'object 1')
+          ->setOrder('object 2', END)
+          $oldOrder = 0;
+          <
+          $order = END (2);
+      
+          array('object 2', 'object 1', 'object 2')
+          => remove $oldOrder
+        */
+        
         // now key is twice in the list, but we like to remove the old one (by $order)
-        array_splice($this->order, $oldOrder > $order ? $oldOrder+1 : $order, 1);
+        array_splice($this->order, $order === self::END || $oldOrder < $order ? $oldOrder : $oldOrder+1, 1);
         
         $this->ordered = NULL;
       }

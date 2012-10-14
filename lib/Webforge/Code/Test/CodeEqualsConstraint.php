@@ -115,6 +115,7 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
         case T_OPEN_TAG:
         case T_IF:
         case T_CLASS:
+        case T_INTERFACE:
         case T_PUBLIC:
         case T_ABSTRACT:
         case T_PROTECTED:

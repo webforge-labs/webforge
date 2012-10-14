@@ -56,5 +56,24 @@ class GClassConstantsTest extends \Webforge\Code\Test\Base {
     
     $this->assertEquals(array(), $this->gClass->getConstants());
   }
+  
+  public function testConstantCanBeGetByName() {
+    $this->gClass->addConstant($this->append);
+    $this->assertSame($this->append, $this->gClass->getConstant('APPEND'));
+  }
+
+  public function testConstantCanBeGetByIndex() {
+    $this->gClass->addConstant($this->append);
+    $this->gClass->addConstant($this->prepend);
+    
+    $this->assertSame($this->prepend, $this->gClass->getConstant(1));
+  }
+  
+  public function testSetConstantsReplacesConstants() {
+    $this->gClass->addConstant($this->append);
+    
+    $this->gClass->setConstants(array($this->prepend));
+    $this->assertGCollectionEquals(array('PREPEND'), $this->gClass->getConstants());
+  }
 }
 ?>

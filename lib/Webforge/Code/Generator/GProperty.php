@@ -4,6 +4,7 @@ namespace Webforge\Code\Generator;
 
 use Psc\Data\Type\Type;
 use Psc\Data\Type\MixedType;
+use Psc\Data\Type\ObjectType;
 
 /**
  * a GProperty models a property of a GClass
@@ -64,7 +65,7 @@ class GProperty extends GModifiersObject {
   public static function create($name, $type = NULL, $defaultValue = self::UNDEFINED, $modifiers = self::MODIFIER_PROTECTED) {
     if (isset($type)) {
       if ($type instanceof GClass) {
-        $type = new ObjectType($type);
+        $type = new ObjectType(new \Psc\Code\Generate\GClass($type->getFQN())); // bc compability, unfortunately
       } elseif (!($type instanceof Type)) {
         $type = Type::create($type);
       }

@@ -38,7 +38,6 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
       'ACME\IntranetApplication\Main'
     );
     
-    xdebug_break();
     $actualFile = $this->mapper->getFile('ACME\IntranetApplication\Main');
     
     $expectedFile = $this->getFixtureFile('ACME', array('lib', 'ACME', 'IntranetApplication'), 'Main.php');

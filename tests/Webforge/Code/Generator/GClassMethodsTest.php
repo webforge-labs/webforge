@@ -37,7 +37,7 @@ class GClassMethodsTest extends \Webforge\Code\Test\Base {
     $this->assertTrue($gClass->hasMethod('someMethod'), 'gClass chained should have someMethod');
   }
 
-  public function testCreateAddsANewMethod() {
+  public function testCreateAddsANewMethodtoGClass() {
     $getX = $this->gClass->createMethod('getX');
     
     $this->assertTrue($this->gClass->hasMethod($getX));
@@ -70,6 +70,36 @@ class GClassMethodsTest extends \Webforge\Code\Test\Base {
     $this->assertArrayEquals(array($this->getGeometry, $this->getScale, $this->getX, $this->getY),
                              $gClass->getAllMethods()
                             );
+  }
+  
+  public function testAMethodCanBeRemoved() {
+    $gClass = new GClass('Point');
+    $gClass->addMethod($this->getX);
+    
+    $this->assertTrue($gClass->hasMethod('getX'));
+    $gClass->removeMethod('getX');
+    
+    $this->assertFalse($gClass->hasMethod('getX'));
+  }
+  
+  public function testTheConstructorCanBeMovedToTop() {
+    $gClass = new GClass('Point');
+    $gClass->addMethod($this->getX);
+    
+    $cons = $gClass->createMethod('__construct');
+    $this->assertEquals(array($this->getX, $cons), $gClass->getMethods());
+    
+    $gClass->setMethodOrder($cons, 0);
+    
+    $this->assertEquals(array($cons, $this->getX), $gClass->getMethods());
+  }
+
+  public function testSetMethods() {
+    $this->gClass->setMethods(array($this->getX, $this->getY));
+    $this->assertCount(2, $this->gClass->getMethods());
+    $this->assertContainsOnlyInstancesOf('Webforge\Code\Generator\GMethod', $this->gClass->getMethods());
+    $this->assertSame($this->gClass, $this->getX->getGClass());
+    $this->assertSame($this->gClass, $this->getY->getGClass());
   }
 }
 ?>

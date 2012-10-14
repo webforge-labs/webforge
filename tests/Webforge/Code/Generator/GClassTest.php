@@ -10,7 +10,30 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->gClass = new GClass(get_class($this));
     
     $this->exportable = new GClass('Exportable');
+    $this->base = new GClass('GeometricBase');
+    $this->serializable = new GInterface('Serializable');
     parent::setUp();
+  }
+  
+  public function testCreateCanHaveParentAsString() {
+    $gClass = GClass::create('ACME\Console', 'Webforge\System\Console');
+    $this->assertInstanceof('Webforge\Code\Generator\GClass', $gClass);
+    $this->assertInstanceof('Webforge\Code\Generator\GClass', $gClass->getParent());
+  }
+  
+  public function testConstructWithOtherGClassClonesTheClass() {
+    $gClass = new GClass('someClass');
+    $other = new GClass($gClass);
+    
+    $this->assertNotSame($gClass, $other);
+  }
+  
+  public function testExistsReturnsIfClassCanBeAutoloaded() {
+    $gClass = new GClass('does\not\exist');
+    $this->assertFalse($gClass->exists());
+    
+    $gClass = new GClass(get_class($this));
+    $this->assertTrue($gClass->exists());
   }
 
   public function testConstructIsRobustToWrongPrefixSlashes() {
@@ -71,20 +94,47 @@ class GClassTest extends \Webforge\Code\Test\Base {
   }
   
   public function testPropertyTypesAsHintsForClassesAreImported() {
-    $this->markTestIncomplete('Blocker: properties in psc-cms do not have a type(!) change this');
+    $gClass = GClass::create('Point')
+      ->createProperty('x', new GClass('PointValue'))
+      ->getGClass();
+    
+    $this->assertGCollectionEquals(array('PointValue'), $gClass->getImports());
   }
 
   public function testMethodParameterHintsAreImported() {
-    $this->markTestIncomplete('TODO: this is not implemented yet');
+    $gClass = GClass::create('Point')
+      ->createMethod('setX', array(GParameter::create('xValue', new GClass('PointValue'))))
+      ->getGClass()
+    ;
+    
+    $this->assertGCollectionEquals(array('PointValue'), $gClass->getImports());
+  }
+  
+  public function testGetInterfaceReturnsTheInterfaceFoundByFQNandIndex() {
+    // allthough this method is a really nonsense..
+    $this->exportable->setNamespace('Webforge\Common');
+    
+    $gClass = GClass::create('Point')
+      ->addInterface($this->exportable);
+    ;
+    
+    $this->assertSame($this->exportable, $gClass->getInterface('Webforge\Common\Exportable'));
+    $this->assertSame($this->exportable, $gClass->getInterface(0));
   }
 
   public function testInterfacesClassesAreImported() {
-    $this->markTestIncomplete('todo: interfaces should be importet');
+    $gClass = GClass::create('Point')
+      ->addInterface($this->exportable)
+    ;
+    
+    $this->assertGCollectionEquals(array('Exportable'), $gClass->getImports());
   }
 
-  public function testParentClassIsImported() {
-    // should the parent
-    $this->markTestIncomplete('parentClass should be imported');
+  public function testParentClassIsNotImported() {
+    $gClass = GClass::create('Point')
+      ->setParent(GClass::create('GeometricBase'));
+      
+    $this->assertGCollectionEquals(array(), $gClass->getImports());
   }
 
   public function testNewInstance() {
@@ -122,6 +172,10 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->assertEquals('just a test error', $exception->getMessage());
   }
   
+  public function testNewClassInstanceThrowsExceptionIfWrongClassParam() {
+    $this->setExpectedException('InvalidArgumentException');
+    GClass::newClassInstance(function() {}, array());
+  }
 }
 
 class MyConstructorThrowsExceptionClass {

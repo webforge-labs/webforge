@@ -29,18 +29,24 @@ class Base extends \Psc\Code\Test\Base {
    * @param string $actualCode complete PHP Code
    */
   public static function assertCodeEquals($actualCode, $expectedCode, $message = '') {
-    self::assertThat($expectedCode, self::codeEqualTo($actualCode), $message);
+    self::assertThat($actualCode, self::codeEqualTo($expectedCode), $message);
   }
   
   public static function codeEqualTo($code) {
     return new CodeEqualsConstraint($code);
   }
-  
+
+  public function assertGCollectionEquals(Array $objectKeys, $collection) {
+    $this->assertArrayEquals(
+      $objectKeys,
+      $this->reduceCollection($collection, 'key')
+    );
+  }
   
   /**
    * @return Webforge\Code\Test\GClassTester
    */
-  protected function testGClass(GClass $gClass) {
+  protected function assertThatGClass(GClass $gClass) {
     return new GClassTester($gClass, $this);
   }
   

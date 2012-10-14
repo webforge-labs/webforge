@@ -4,11 +4,20 @@ namespace Webforge\Code\Generator;
 
 use Psc\String AS S;
 use ReflectionClass;
+use Psc\Data\Type\ObjectType;
+use InvalidArgumentException;
 
 class GClass extends GModifiersObject {
   
   const WITHOUT_CONSTRUCTOR = TRUE;
   const END = GObjectCollection::END;
+  
+  const WITH_OWN                  = 0x000001;
+  const WITH_INTERFACE            = 0x000002;
+  const WITH_PARENTS              = 0x000004;
+  const WITH_PARENTS_INTERFACES   = 0x000008;
+  
+  const FULL_HIERARCHY            = 0x00000F;
 
   /**
    * @var string
@@ -128,22 +137,18 @@ class GClass extends GModifiersObject {
     return new ReflectionClass($this->getFQN());
   }
 
-  ///**
-  // * Creates a new Property and dass it to the class
-  // * 
-  // * @return GProperty
-  // */
-  //public function createProperty($name, $modifiers = GProperty::MODIFIER_PROTECTED, $default = 'undefined') {
-  //  $gProperty = new GProperty($this);
-  //  $gProperty->setName($name);
-  //  $gProperty->setModifiers($modifiers);
-  //  if (func_num_args() == 3) {
-  //    $this->setDefaultValue($gProperty,$default);
-  //  }
-  //  $this->addProperty($gProperty);
-  //  return $gProperty;
-  //}
-  //
+  /**
+   * Creates a new property and adds it to the class
+   *
+   * notice: this is not chainable, you can leave the chain with getGClass()
+   * @return GProperty
+   */
+  public function createProperty($name, $type = NULL, $modifiers = GProperty::MODIFIER_PROTECTED, $default = self::UNDEFINED) {
+    $gProperty = GProperty::create($name, $type, $modifiers, $default);
+    
+    $this->addProperty($gProperty);
+    return $gProperty;
+  }
   
   /**
    * Creates a new Method and adds it to the class
@@ -165,39 +170,34 @@ class GClass extends GModifiersObject {
    * Erstellt Stubs (Prototypen) für alle abstrakten Methoden der Klasse
    */             
   public function createAbstractMethodStubs() {
-    if ($this->isAbstract()) return $this;
+    if ($this->isAbstract() || $this->isInterface()) return $this;
     
-    if (($parent = $this->getParent()) !== NULL) {
-      //$parent->elevateClass();
-      foreach ($parent->getAllMethods() as $method) {
-        if ($method->isAbstract()) {
-          $this->createMethodStub($method);
-        }
-      }
+    foreach ($this->getAllMethods(self::FULL_HIERARCHY & ~self::WITH_OWN) as $method) {
+      //if ($this->needsImplementation($method)) {
+      $this->createMethodStub($method);
+      //} // performance: this will be already checked in createMethodStub 
     }
     
-    foreach ($this->getInterfaces() as $interface) {
-      //$interface->elevateClass();
-      foreach ($interface->getAllMethods() as $method) {
-        $this->createMethodStub($method);
-      }
-    }
     return $this;
+  }
+
+  /**
+   * Returns if the method needs implementation in this class
+   * @return bool
+   */
+  protected function needsImplementation(Gmethod $method) {
+    return $method->isAbstract() || $method->isInInterface() || $this->hasMethod($method->getName());
   }
   
   /**
    * Erstellt einen Stub für eine gegebene abstrakte Methode
    */
   public function createMethodStub(GMethod $method) {
-    // method is not abstract (thats strange)
-    if (!$method->isAbstract()) return $this;
-    
-    // no need to implement
-    if ($this->hasMethod($method->getName()) && !$method->isAbstract()) return $this;
+    if (!$this->needsImplementation($method)) return $this;
     
     $cMethod = clone $method;
     $cMethod->setAbstract(FALSE);
-    $cMethod->setGClass($this);
+    
     return $this->addMethod($cMethod);
   }
   
@@ -270,6 +270,13 @@ class GClass extends GModifiersObject {
   }
   
   /**
+   * @return bool
+   */
+  public function isInterface() {
+    return $this instanceof GInterface;
+  }
+  
+  /**
    * @chainable
    */
   public function addInterface(GClass $interface, $position = self::END) {
@@ -281,7 +288,7 @@ class GClass extends GModifiersObject {
    * @return GClass
    */
   public function getInterface($fqnOrIndex) {
-    return $this->interfaces->get($fqnorIndex);
+    return $this->interfaces->get($fqnOrIndex);
   }
   
   /**
@@ -302,7 +309,7 @@ class GClass extends GModifiersObject {
   /**
    * @chainable
    */
-  public function setInterfaceOrder(GClass $interface, $position) {
+  public function setInterfaceOrder($interface, $position) {
     $this->interfaces->setOrder($interface, $position);
     return $this;
   }
@@ -314,6 +321,28 @@ class GClass extends GModifiersObject {
     return $this->interfaces->toArray();
   }
 
+  /**
+   * Returns the interfaces from the class and from all parents
+   * @return array
+   */
+  public function getAllInterfaces($types = self::FULL_HIERARCHY) {
+    if ($types & self::WITH_OWN) {
+      $interfaces = clone $this->interfaces;
+    } else {
+      $interfaces = new GObjectCollection(array());
+    }
+    
+    if (($types & self::WITH_PARENTS) && ($parent = $this->getParent()) != NULL) {
+      $parentTypes = $types | self::WITH_OWN;
+      foreach ($parent->getAllInterfaces($parentTypes) as $interface) {
+        if (!$interfaces->has($interface)) {
+          $interfaces->add($interface);
+        }
+      }
+    }
+    
+    return $interfaces->toArray();
+  }
   
   /**
    * @param array
@@ -334,8 +363,8 @@ class GClass extends GModifiersObject {
   /**
    * @return GClass
    */
-  public function getConstant($fqnOrIndex) {
-    return $this->constants->get($fqnorIndex);
+  public function getConstant($nameOrIndex) {
+    return $this->constants->get($nameOrIndex);
   }
   
   /**
@@ -356,8 +385,8 @@ class GClass extends GModifiersObject {
   /**
    * @chainable
    */
-  public function setConstantOrder(GConstant $interface, $position) {
-    $this->constants->setOrder($interface, $position);
+  public function setConstantOrder(GConstant $constant, $position) {
+    $this->constants->setOrder($constant, $position);
     return $this;
   }
   
@@ -379,38 +408,39 @@ class GClass extends GModifiersObject {
   /**
    * @chainable
    */
-  public function addProperty(GProperty $interface, $position = self::END) {
-    $this->properties->add($interface, $position);
+  public function addProperty(GProperty $property, $position = self::END) {
+    $this->properties->add($property, $position);
+    $property->setGClass($this);
     return $this;
   }
   
   /**
    * @return GClass
    */
-  public function getProperty($fqnOrIndex) {
-    return $this->properties->get($fqnorIndex);
+  public function getProperty($nameOrIndex) {
+    return $this->properties->get($nameOrIndex);
   }
   
   /**
    * @return bool
    */
-  public function hasProperty($fqnOrClass) {
-    return $this->properties->has($fqnOrClass);
+  public function hasProperty($nameOrClass) {
+    return $this->properties->has($nameOrClass);
   }
   
   /**
    * @chainable
    */
-  public function removeProperty($fqnOrClass) {
-    $this->properties->remove($fqnOrClass);
+  public function removeProperty($nameOrClass) {
+    $this->properties->remove($nameOrClass);
     return $this;
   }
   
   /**
    * @chainable
    */
-  public function setPropertyOrder(GProperty $interface, $position) {
-    $this->properties->setOrder($interface, $position);
+  public function setPropertyOrder($property, $position) {
+    $this->properties->setOrder($property, $position);
     return $this;
   }
   
@@ -422,18 +452,47 @@ class GClass extends GModifiersObject {
   }
 
   /**
+   * Returns the properties of the class and the properties of all parents
+   *
+   * @return array
+   */
+  public function getAllProperties($types = self::FULL_HIERARCHY) {
+    if ($types & self::WITH_OWN) {
+      $properties = clone $this->properties;
+    } else {
+      $properties = new GObjectCollection(array());
+    }
+    
+    if ($types & self::WITH_PARENTS && $this->getParent() != NULL) {
+      // treat duplicates (aka: overriden properties):
+      $parentTypes = $types | self::WITH_OWN;
+      foreach ($this->getParent()->getAllProperties($parentTypes) as $property) {
+        if (!$properties->has($property)) {
+          $properties->add($property);
+        }
+      }
+    }
+    
+    return $properties->toArray();
+  }
+
+  /**
    * @return array
    */
   public function setProperties(Array $properties) {
-    $this->properties = new GObjectCollection($properties);
+    $this->properties = new GObjectCollection(array());
+    foreach ($properties as $property) {
+      $this->addProperty($property);
+    }
     return $this;
   }
 
     /**
    * @chainable
    */
-  public function addMethod(GMethod $interface, $position = self::END) {
-    $this->methods->add($interface, $position);
+  public function addMethod(GMethod $method, $position = self::END) {
+    $this->methods->add($method, $position);
+    $method->setGClass($this);
     return $this;
   }
   
@@ -445,6 +504,8 @@ class GClass extends GModifiersObject {
   }
   
   /**
+   *
+   * notice: this tells only if the class has an own method (not the hierarchy)
    * @return bool
    */
   public function hasMethod($fqnOrClass) {
@@ -462,8 +523,8 @@ class GClass extends GModifiersObject {
   /**
    * @chainable
    */
-  public function setMethodOrder(GMethod $interface, $position) {
-    $this->methods->setOrder($interface, $position);
+  public function setMethodOrder($method, $position) {
+    $this->methods->setOrder($method, $position);
     return $this;
   }
   
@@ -476,15 +537,47 @@ class GClass extends GModifiersObject {
   }
   
   /**
+   * @return array
+   */
+  public function setMethods(Array $methods) {
+    $this->methods = new GObjectCollection(array());
+    foreach ($methods as $method) {
+      $this->addMethod($method);
+    }
+    return $this;
+  }
+  
+  /**
    * Returns the methods of the class and the methods of all parents
    *
+   * @param bitmap $types see self::WITH_*
    */
-  public function getAllMethods() {
-    $methods = clone $this->methods;
+  public function getAllMethods($types = self::FULL_HIERARCHY) {
+    if ($types & self::WITH_OWN) {
+      $methods = clone $this->methods;
+    } else {
+      $methods = new GObjectCollection(array());
+    }
     
-    if ($this->getParent() != NULL) {
+    if ($types & self::WITH_PARENTS && $this->getParent() != NULL) {
       // treat duplicates (aka: overriden methods):
-      foreach ($this->getParent()->getAllMethods() as $method) {
+      $parentTypes = $types | self::WITH_OWN;
+      foreach ($this->getParent()->getAllMethods($parentTypes) as $method) {
+        if (!$methods->has($method)) {
+          $methods->add($method);
+        }
+      }
+    }
+
+    $interfaceTypes = 0x000000;
+    if ($types & self::WITH_INTERFACE) $interfaceTypes |= self::WITH_OWN;
+    if ($types & self::WITH_PARENTS_INTERFACES) $interfaceTypes |= self::WITH_PARENTS;
+    
+    foreach ($this->getAllInterfaces($interfaceTypes) as $interface) {
+      //$interface->elevateClass();
+      // return only own interface methods, because we already have all interfaces from wohle hierarchy
+      // or without parents, if we dont like to have the parents interfaces
+      foreach ($interface->getMethods() as $method) { 
         if (!$methods->has($method)) {
           $methods->add($method);
         }
@@ -532,9 +625,28 @@ class GClass extends GModifiersObject {
    * @return Webforge\Code\Generate\Imports
    */
   public function getImports() {
-    // @TODO extract from properties, methods, interfaces
+    $imports = clone $this->ownImports;
     
-    return $this->ownImports;
+    // props
+    foreach ($this->getProperties() as $property) {
+      if ($property->getType() instanceof ObjectType) {
+        $imports->add(new GClass($property->getType()->getClassFQN())); // translate back
+      }
+    }
+    
+    foreach ($this->getMethods() as $method) {
+      foreach ($method->getParameters() as $parameter) {
+        if ($parameter->getType() instanceof ObjectType) {
+          $imports->add(new GClass($parameter->getType()->getClassFQN())); // translate back
+        }
+      }
+    }
+    
+    foreach ($this->getInterfaces() as $interface) {
+      $imports->add($interface);
+    }
+    
+    return $imports;
   }
   
   /**

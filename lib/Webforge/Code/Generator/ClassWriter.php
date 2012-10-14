@@ -7,6 +7,7 @@ use Psc\System\File;
 use Webforge\Common\String as S;
 use Psc\Code\Generate\DocBlock;
 use Psc\A;
+use Psc\Code\Generate\CodeWriter;
 
 /**
  * Writes a Class in Code (PHP)
@@ -24,6 +25,11 @@ class ClassWriter {
    * @var Webforge\Code\Generator\Imports
    */
   protected $imports;
+  
+  /**
+   * @var Psc\Code\Generate\CodeWriter
+   */
+  protected $codeWriter;
   
   public function __construct() {
     $this->imports = new Imports();
@@ -84,7 +90,11 @@ class ClassWriter {
     $php .= $this->writeModifiers($gClass->getModifiers());
     
     /* Class */
-    $php .= 'class '.$gClass->getName().' ';
+    if ($gClass->isInterface()) {
+      $php .= 'interface '.$gClass->getName().' ';
+    } else {
+      $php .= 'class '.$gClass->getName().' ';
+    }
     
     /* Extends */
     if (($parent = $gClass->getParent()) != NULL) {
@@ -101,7 +111,7 @@ class ClassWriter {
     /* Interfaces */
     if (count($gClass->getInterfaces()) > 0) {
       $php .= 'implements ';
-      $php .= A::implode($this->getInterfaces(), ', ', function (GClass $iClass) use ($namespace) {
+      $php .= A::implode($gClass->getInterfaces(), ', ', function (GClass $iClass) use ($namespace) {
         if ($iClass->getNamespace() === $namespace) {
           return $iClass->getName();
         } else {
@@ -141,118 +151,119 @@ class ClassWriter {
    * after } is no LF
    * @return string
    */
-  public function writeMethod(GMethod $method, $baseIndent = 0) {
-    $cr = "\n";
+  public function writeMethod(GMethod $method, $baseIndent = 0, $eol = "\n") {
+    $php = NULL;
     
-    $php = $this->phpDocBlock($baseIndent);
+    if ($method->hasDocBlock()) {
+      $php = $this->writeDocBlock($method->getDocBlock(), $baseIndent, $eol);
+    }
     
     // vor die modifier muss das indent
-    $php .= str_repeat(' ',$baseIndent);
+    $php .= str_repeat(' ', $baseIndent);
     
+    $php .= $this->writeModifiers($method->getModifiers());
     
-    $php .= parent::php($baseIndent); 
+    $php .= $this->writeGFunction($method, $baseIndent, $eol);
     
     return $php;
   }
-  //public function phpSignature($baseIndent = 0) {
-  //  return parent::phpSignature(0); // damit hier vor function nicht indent eingefügt wird (der muss vor unsere modifier)
-  //}
-  //
-  //public function phpBody($baseIndent = 0) {
-  //  if ($this->isAbstract()) {
-  //    return ';';
-  //  } else {
-  //    return parent::phpBody($baseIndent);
-  //  }
-  //}
 
   /**
-   * Gibt den PHPCode für die Funktion zurück
+   * returns PHPCode for a GFunction/GMethod
    *
    * nach der } ist kein LF
    */
-  public function writeFunction($baseIndent = 0) {
+  public function writeGFunction($function, $baseIndent = 0, $eol = "\n") {
     $php = NULL;
-    $cr = "\n";
     
-    $php .= $this->phpSignature($baseIndent);
-    $php .= $this->phpBody($baseIndent);
-  
+    $php .= $this->writeFunctionSignature($function, $baseIndent, $eol);
+    
+    if ($function->isAbstract() || $function->isInInterface()) {
+      $php .= ';';
+    } else {
+      $php .= $this->writeFunctionBody($function->getBody(), $baseIndent, $eol);
+    }
+    
     return $php;
   }
   
-  protected function phpSignature($baseIndent = 0) {
+  /**
+   * Writes a function body
+   *
+   * the function body is from { to }
+   * @return string
+   */
+  public function writeFunctionBody(GFunctionBody $body = NULL, $baseIndent = 0, $eol = "\n") {
     $php = NULL;
-    $cr = "\n";
     
-    $php .= 'function '.$this->getName().'(';
-    $php .= A::implode($this->getParameters(), ', ', function ($parameter) {
-      return $parameter->php();
-    });
-    $php .= ')';
+    $phpBody = $body ? $body->php($baseIndent+2, $eol) : '';
 
-    return S::indent($php,$baseIndent,$cr); // sollte eigentlich ein Einzeiler sein, aber wer weiß
+    $php .= ' {';
+    //if ($this->cbraceComment != NULL) { // inline comment wie dieser
+      //$php .= ' '.$this->cbraceComment;
+    //}
+    $php .= $eol;
+    $php .= $phpBody; 
+    $php .= S::indent('}', $baseIndent, $eol);
+    
+    return $php;
+  }
+
+  
+  protected function writeFunctionSignature($function, $baseIndent = 0, $eol = "\n") {
+    $php = 'function '.$function->getName().$this->writeParameters($function->getParameters(), $baseIndent, $eol);
+
+    return S::indent($php, $baseIndent, $eol);
   }
   
-  public function getParametersString() {
+  public function writeParameters(Array $parameters) {
+    $that = $this;
+    
     $php = '(';
-    $php .= A::implode($this->getParameters(), ', ', function ($parameter) {
-      return $parameter->php();
+    $php .= A::implode($parameters, ', ', function ($parameter) use ($that) {
+      return $that->writeParameter($parameter);
     });
     $php .= ')';
-    return $php;
-  }
-  
-  protected function phpBody($baseIndent = 0) {
-    $php = NULL;
-    $cr = "\n";
-    
-    // das hier zuerst ausführen, damit möglicherweise cbraceComment noch durchrs extracten gesetzt wird
-    $body = $this->getBody($baseIndent+2,$cr); // Body direkt + 2 einrücken
-
-    $php .= ' {'; // das nicht einrücken, weil das direkt hinter der signatur steht
-    if ($this->cbraceComment != NULL) { // inline comment wie dieser
-      $php .= ' '.$this->cbraceComment;
-    }
-    $php .= $cr;  // jetzt beginnt der eigentlich body
-    
-    $php .= $body; 
-    $php .= S::indent('}',$baseIndent,$cr); // das auf Base einrücken
     
     return $php;
   }
   
-  public function writeGParameter($useFQNHints = FALSE) {
+  public function writeParameter(GParameter $parameter) {
     $php = NULL;
     
-    // Type Hint oder Array
-    if ($this->isArray()) {
-      $php .= 'Array ';
-    } elseif (($c = $this->getHint()) != NULL) {
-      if ($useFQNHints) {
-        $php .= $c->getName().' ';
-      } else {
-        $php .= $c->getClassName().' ';
-        // @TODO das hier macht aus den FQNs immer was ohne \ am Anfang,
-        // und hat nie den Namespace dabei
-        // wir müssen dann die imports so anpassen, dass das auch hinhaut ...
-      }
-    }
+    // Type Hint
+    $php .= $parameter->getHint();
     
     // name
-    $php .= ($this->isReference() ? '&' : NULL).'$'.$this->name;
+    $php .= ($parameter->isReference() ? '&' : '').'$'.$parameter->getName();
     
-    // optional
-    if ($this->isOptional()) {
+    // optional (default)
+    if ($parameter->hasDefault()) {
       $php .= ' = ';
-      if (is_array($this->default) && count($this->default) == 0) {
+      
+      $default = $parameter->getDefault();
+      if (is_array($this) && count($this) == 0) {
         $php .= 'array()';
       } else {
-        $php .= $this->exportArgumentValue($this->default); // das sieht scheise aus
+        $php .= $this->writeArgumentValue($default); // das sieht scheise aus
       }
     }
     
     return $php;
+  }
+
+  public function writeArgumentValue($value) {
+    if (is_array($value) && A::getType($value) === 'numeric') {
+      return $this->getCodeWriter()->exportList($value);
+    } elseif (is_array($value)) {
+      return $this->getCodeWriter()->exportKeyList($value);
+    } else {
+      try {
+        return $this->getCodeWriter()->exportBaseTypeValue($value);
+      } catch (\Psc\Code\Generate\BadExportTypeException $e) {
+        throw new \RuntimeException('In Argumenten oder Properties können nur Skalare DefaultValues stehen. Die value muss im Constructor stehen.', 0, $e);
+      }
+    }
   }
   
   /**
@@ -317,6 +328,14 @@ class ClassWriter {
    */
   public function getImports() {
     return $this->imports;
+  }
+  
+  public function getCodeWriter() {
+    if (!isset($this->codeWriter)) {
+      $this->codeWriter = new CodeWriter;
+    }
+    
+    return $this->codeWriter;
   }
 }
 ?>

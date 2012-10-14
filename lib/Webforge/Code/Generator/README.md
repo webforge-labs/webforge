@@ -17,6 +17,10 @@ So care should be taken for classes that modify GClasses, always remember, that 
 This leads to some complications, when you try to modify classes that have parents which cannot be elevated.
 Remember that the GClass should not be tied to a specific programming language, allthough it abstracts only object oriented classes.
 
+### Traversing / Querying
+You can get Methods / Properties / Constants etc always by its name. You can get Interfaces by its FQN. Always use the `getSingular()`-Methods for this. For other methods like `getMethods` or `getProperties` there is one limitation: Those function always return the explicit items from the GClass. For example `getMethods()` will not return the methods from the full class hierarchy, and only the created or elevated ones. If you want to have all Methods from Hierarchy use the `getAlLMethods`, it allows you to pick certain methods of the GClass-Hierarchy.
+This limitation affects the way `hasSingular` works, as well. `hasMethod` will return only true if the method is in the collection returned by `getMethods()`.
+
 ### Modification
 Its easy to create methods / properties / constants in the GClass. Use the create* methods for this. They are a shortcoming for constructring a new method or property and adding it to the class. The underlying GObjectCollection lets you sort the properties, methods, etc. Sorting is only relevant when the class is written back to source.
 

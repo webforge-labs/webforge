@@ -12,6 +12,8 @@ class GObjectCollectionTest extends \Webforge\Code\Test\Base {
     $this->o2 = new TestObject('object 2');
     $this->o3 = new TestObject('object 3');
     
+    $this->o9 = new TestObject('object 9');
+    
     $this->c = new GObjectCollection(array($this->o1));
   }
   
@@ -36,8 +38,22 @@ class GObjectCollectionTest extends \Webforge\Code\Test\Base {
     $this->assertContent(array($this->o1, $this->o2, $this->o3));
   }
   
-  public function testGFromCollectionByKey() {
+  public function testGetFromCollectionByKey() {
     $this->assertSame($this->o1, $this->c->get('object 1'));
+  }
+  
+  /**
+   * @expectedException RuntimeException
+   */
+  public function testGetFromCollectionThrowsExceptionWhenDoesNotExist() {
+    $this->c->get('object 9');
+  }
+
+  /**
+   * @expectedException RuntimeException
+   */
+  public function testGetFromCollectionThrowsExceptionWhenDoesNotExistByIndex() {
+    $this->c->get(6);
   }
 
   public function testGetFromCollectionByIndex() {
@@ -68,9 +84,22 @@ class GObjectCollectionTest extends \Webforge\Code\Test\Base {
     $this->c->add($this->o2);
     $this->c->add($this->o3);
     
-    xdebug_break();
     $this->c->setOrder($this->o3, 0);
     $this->assertContent(array($this->o3, $this->o1, $this->o2));
+  }
+
+  public function testSetOrderWithOnlyTwoObjects_Move1ToPosition2() {
+    $this->c = new GObjectCollection(array($this->o2, $this->o1));
+    
+    $this->c->setOrder($this->o1, 0);
+    $this->assertContent(array($this->o1, $this->o2));
+  }
+  
+  public function testSetOrderWithOnlyTwoObjects_Move2ToPositionEnd() {
+    $this->c = new GObjectCollection(array($this->o2, $this->o1));
+    
+    $this->c->setOrder($this->o2, GObjectCollection::END);
+    $this->assertContent(array($this->o1, $this->o2));
   }
   
   protected function assertContent(Array $array) {

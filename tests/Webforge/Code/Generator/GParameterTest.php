@@ -32,6 +32,10 @@ class GParameterTest extends \Webforge\Code\Test\Base {
     $this->assertEquals('array', mb_strtolower($arrayParam->getHint()));
   }
   
+  public function testisArrayIsTrueForCreatedWithArrayHintProperty() {
+    $this->assertTrue(GParameter::create('coordinates', 'array')->isArray());
+  }
+  
   public function testParamIsOptionalIfItHasADefaultValue() {
     $this->assertTrue($this->defParam->isOptional());
   }
@@ -45,10 +49,39 @@ class GParameterTest extends \Webforge\Code\Test\Base {
     $this->assertFalse($param->hasDefault(), 'hasDefault is not false after setting to undefined ');
     $this->assertFalse($param->isOptional(), 'isOptional is not false after setting to undefined');
   }
+  
+  public function testDefaultValueCanBeRemoved() {
+    $param = new GParameter('meanDefault', $this->createType('String'), NULL);
+    $param->removeDefault();
+    
+    $this->assertFalse($param->hasDefault());
+  }
+  
+  public function testParametersNameCanBeChanged() {
+    $param = new GParameter('paramA');
+    $this->assertEquals('paramA', $param->getName());
+    $param->setName('paramB');
+    $this->assertEquals('paramB', $param->getName());
+  }
 
   public function testItCanBeTestedIfTheTypeIsExplicitOrNot() {
     $this->assertTrue($this->classParam->hasExplicitType());
     $this->assertFalse($this->unknownParam->hasExplicitType());
+  }
+
+  public function testCreateCreatesApropertyWithType() {
+    $param = GParameter::create('xValue', $this->getType('Integer'));
+    
+    $this->assertInstanceOf('Webforge\Code\Generator\GParameter', $param);
+    $this->assertInstanceOf('Psc\Data\Type\IntegerType', $param->getType());
+  }
+
+  public function testCreateCreatesApropertyWithTypeAsGClassToobjectType() {
+    $param = GParameter::create('xValue', new GClass('PointValue'));
+    
+    $this->assertInstanceOf('Webforge\Code\Generator\GParameter', $param);
+    $this->assertInstanceOf('Psc\Data\Type\ObjectType', $param->getType());
+    $this->assertEquals('PointValue', $param->getType()->getClassFQN());
   }
 }
 ?>

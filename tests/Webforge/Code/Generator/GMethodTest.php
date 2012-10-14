@@ -17,6 +17,10 @@ class GMethodTest extends \Webforge\Code\Test\Base {
     $this->z = new GParameter('z');
   }
   
+  public function testBodyMustBeAGFunctionBody() {
+    $gMethod = new GMethod('setX', array(), new GFunctionBody());
+  }
+  
   public function testGetParametersReturnsTheArrayOfParameters() {
     $this->assertEquals(array(), $this->setX->getParameters());
     $this->assertEquals(array($this->y), $this->setY->getParameters());
@@ -45,6 +49,18 @@ class GMethodTest extends \Webforge\Code\Test\Base {
     $this->assertSame($this->y, $this->setXY->getParameter(1));
   }
   
+  public function testParameterCanBeRecievedByNameWithSepFunction() {
+    $this->assertSame($this->x, $this->setXY->getParameterByName('x'));
+  }
+  
+  public function testReturnsReference_TellsIfReferenceisSet() {
+    $ref = GMethod::create('returnRef')->setReturnsReference(TRUE);
+    $val = GMethod::create('returnValue')->setReturnsReference(FALSE);
+    
+    $this->assertTrue($ref->returnsReference());
+    $this->assertFalse($val->returnsReference());
+  }
+  
   public function testHasReturns_IfMethodHasParameterByName() {
     $this->assertFalse($this->setX->hasParameter('x')); // see setup: x is not added to setX
     $this->assertTrue($this->setY->hasParameter('y'));
@@ -68,6 +84,20 @@ class GMethodTest extends \Webforge\Code\Test\Base {
     ;
       
     $this->assertEquals(array($this->x, $this->y, $this->z), $xyz->getParameters());
+  }
+  
+  public function testIsInInterface() {
+    $this->assertTrue(
+      GInterface::create('interf')
+        ->createMethod('someAction')
+          ->isInInterface()
+    );
+
+    $this->assertFalse(
+      GClass::create('ConcreteClass')
+        ->createMethod('someAction')
+          ->isInInterface()
+    );
   }
 }
 ?>
