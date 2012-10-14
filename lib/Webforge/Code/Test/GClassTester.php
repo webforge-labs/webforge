@@ -87,7 +87,6 @@ class GClassTester {
     return $this;
   }
 
-
   public function hasInterface($gClass) {
     if (!($gClass instanceof GClass)) {
       $gClass = new GClass($gClass);

@@ -21,7 +21,7 @@ use Psc\System\File;
 $createCommand('create-class',
   array(
     $arg('fqn', 'The full qualified name of the class'),
-    $arg('parent', 'The full qualified name of the parent class'),
+    $arg('parent', 'The full qualified name of the parent class', FALSE),
     $arg('interface', 'The full qualified names of one or more interfaces', FALSE, $multiple = TRUE),
     $flag('overwrite', NULL, 'If set the class will be created, regardless if the file already exists')
   ),

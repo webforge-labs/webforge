@@ -5,12 +5,13 @@ namespace Webforge\Code\Generator;
 class ImportsTest extends \Webforge\Code\Test\Base {
   
   protected $imports;
+  protected $mapping, $helper;
   
   public function setUp() {
     $this->imports = new Imports(
       Array(
-        GClass::create('Doctrine\ORM\Mapping'),
-        'DoctrineHelper'=>GClass::create('Psc\Doctrine\Helper')
+        $this->mapping = GClass::create('Doctrine\ORM\Mapping'),
+        'DoctrineHelper'=>$this->helper = GClass::create('Psc\Doctrine\Helper')
       )
     );
   }
@@ -50,9 +51,23 @@ class ImportsTest extends \Webforge\Code\Test\Base {
     $this->imports->add(GClass::create(get_class($this)), 'DoctrineHelper');
   }
   
+  public function testAddingAnEmptyGClassIsNotAllowed() {
+    $this->setExpectedException('InvalidArgumentException');
+    $this->imports->add(new GClass());
+  }
+  
+  public function testGetAliasReturnsAlias_() {
+    $this->assertEquals('Mapping', $this->imports->getAlias($this->mapping));
+    $this->assertEquals('DoctrineHelper', $this->imports->getAlias($this->helper));
+  }
+  
   public function testRemoveByAliasRemovesTheImport() {
     $this->imports->remove('DoctrineHelper');
     $this->assertFalse($this->imports->have('DoctrineHelper'));
+  }
+  
+  public function haveReturnsTrueForClassThatIsAliased() {
+    $this->assertTrue($this->imports->have($this->helper));
   }
 
   public function testRemoveByGClassRemovesTheImport_too() {

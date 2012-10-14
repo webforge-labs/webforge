@@ -56,7 +56,10 @@ class Imports implements IteratorAggregate, Countable {
    * @param string $alias sets an explicit alias. (the implicit is always the classname)
    */
   public function add(GClass $import, $alias = NULL) {
-    if (!isset($alias)) $alias = $import->getName();
+    if (empty($alias)) $alias = $import->getName();
+    if (empty($alias)) {
+      throw new \InvalidArgumentException('GClass: '.$import.' must have a FQN.');
+    }
     
     if (array_key_exists($lowerAlias = mb_strtolower($alias), $this->aliases)) {
       throw new \Psc\Exception('Alias: '.$alias.' is already used by Class '.$this->classes[ $this->aliases[$lowerAlias] ]);
@@ -106,6 +109,29 @@ class Imports implements IteratorAggregate, Countable {
     return array_key_exists(mb_strtolower($alias), $this->aliases);
   }
   
+  /**
+   * @return string|NULL
+   */
+  public function getAlias(GClass $gClass) {
+    foreach ($this->classes as $alias => $aliasedGClass) {
+      if ($aliasedGClass->equals($gClass)) {
+        return $alias;
+      }
+    }
+    return NULL;
+  }
+  
+  /**
+   * @return GClass
+   * @throws RuntimeException if alias is not in imports
+   */
+  public function get($alias) {
+    if (array_key_exists($lowerAlias = mb_strtolower($alias), $this->aliases)) {
+      return $this->classes[ $this->aliases[$lowerAlias] ];
+    }
+    
+    throw new \RuntimeException(sprintf("The import with alias '%s' cannot be found", $alias));
+  }
   
   /**
    * Merges all Imports from a GClass to this imports
