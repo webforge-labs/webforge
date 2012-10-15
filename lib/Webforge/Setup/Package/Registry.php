@@ -28,7 +28,7 @@ class Registry {
         return $this->resolveToOne($packages, $fqn);
       }
     }
-    
+
     throw PackageNotFoundException::fromSearch(array('fqn'=>$fqn));
   }
   
@@ -38,7 +38,7 @@ class Registry {
     }
     
     // no algorithm yet:
-    throw new \Psc\Exception(sprintf("Multiple Packages found for '%s'. This cannot be solved.", $fqn));
+    throw new \Psc\Exception(sprintf("Multiple Packages found for '%s'. This cannot be solved, yet.", $fqn));
   }
   
   /**
@@ -52,8 +52,10 @@ class Registry {
   
   protected function indexPackage(Package $package) {
     if ($package->getAutoLoadInfo() != NULL) {
+      $newPrefix = FALSE;
       foreach ($package->getAutoLoadInfo()->getPrefixes() as $prefix => $paths) {
         if (!isset($this->prefixes[$prefix])) {
+          $newPrefix = TRUE;
           $this->prefixes[$prefix] = array($package);
         } else {
           $this->prefixes[$prefix] = array_merge(
@@ -61,6 +63,10 @@ class Registry {
             array($package)
           );
         }
+      }
+      
+      if ($newPrefix) {
+        krsort($this->prefixes);
       }
     }
   }
@@ -93,6 +99,10 @@ class Registry {
    */
   public function getPackages() {
     return $this->packages;
+  }
+  
+  public function getPrefixes() {
+    return $this->prefixes;
   }
   
   public function setComposerPackageReader(ComposerPackageReader $reader) {

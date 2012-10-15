@@ -23,8 +23,8 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
   
   protected $gClass;
   
-  public function __construct() {
-    $this->gClass = new GClass;
+  public function __construct(GClass $gClass = NULL) {
+    $this->gClass = $gClass ?: new GClass;
   }
   
   public function leaveNode(PHPParser_Node $node) {

@@ -11,9 +11,11 @@ class ClassCreaterTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
     $this->classFileMapper = $this->getMockForAbstractClass('ClassFileMapper');
+    $this->classElevator = $this->getMock('ClassElevator', array(), array(), '', FALSE);
+    
     //$this->classWriter = $this->getMock('ClassWriter', array('write'));
     $this->classWriter = new ClassWriter();
-    $this->classCreater = new ClassCreater($this->classFileMapper, $this->classWriter);
+    $this->classCreater = new ClassCreater($this->classFileMapper, $this->classWriter, $this->classElevator);
   }
   
   public function testClassCreaterWritesAnEmptyClassPerDefault() {
@@ -42,15 +44,26 @@ PHP;
     $this->assertThatFileCodeEquals($file, $php);
   }
 
-  public function testClassCreaterCreatesStubsForInterfaces() {
+  public function testClassCreaterCreatesStubsForInterfacesAcceptance() {
     $this->expectClassMapping(
       'Webforge\Code\Generator\Fixtures\MyGPSLocateableClass',
-      $this->once()
+
+      //$this->logicalOr($this->equalTo('Webforge\Code\Generator\Fixtures\MyGPSLocateableClass'),
+                       //$this->equalTo('Webforge\TestData\PHPClasses\GPSLocateable')
+                      //),
+      $this->exactly(1)// one for writing from the writer, one from reading from the reader
+    );
+    
+    $container = new \Webforge\Framework\Container();
+    $container->setClassWriter($this->classWriter);
+    
+    $this->classCreater->setClassElevator(
+      $container->getClassElevator() // this then uses the globalClassFileMapper from container
     );
 
     $file = $this->classCreater->create(
       GClass::create('Webforge\Code\Generator\Fixtures\MyGPSLocateableClass')
-        ->addInterface(new GClass('Webforge\TestData\PHPClasses\GPSLocateable'))
+        ->addInterface(new GInterface('Webforge\TestData\PHPClasses\GPSLocateable'))
     );
     
     $php =
@@ -88,8 +101,14 @@ PHP;
   protected function expectClassMapping($fqn, $constraint = NULL) {
     $this->classFileMapper
       ->expects($constraint ?: $this->once())->method('getFile')
-      ->with($this->equalTo($fqn))
+      ->with(is_string($fqn) ? $this->equalTo($fqn) : $fqn)
       ->will($this->returnCallback(array($this, 'initTemporaryFile')));
+  }
+
+  protected function expectParentElevation($constraint = NULL) {
+    $this->classFileMapper
+      ->expects($constraint ?: $this->once())->method('elevateParent')
+      ->will($this->returnCallback(new GClass()));
   }
 
   protected function expectClassisWritten() {
@@ -100,8 +119,10 @@ PHP;
   }
   
   public function initTemporaryFile() {
-    $this->file = File::createTemporary(); // create the file
-    $this->file->delete();                 // delete it, so that we simulate the behaviour of file exists correctly
+    if (!isset($this->file)) {
+      $this->file = File::createTemporary(); // create the file
+      $this->file->delete();                 // delete it, so that we simulate the behaviour of file exists correctly
+    }
     return $this->file;
   }
   

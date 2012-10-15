@@ -18,7 +18,7 @@
   },
   "require-dev": {
     "webforge/testdata-repository": "dev-master",
-     "phpmd/phpmd": "1.4.0"
+    "phpmd/phpmd": "1.4.0"
   },
   "autoload": {
     "psr-0": {"Webforge": ["lib", "tests"]}

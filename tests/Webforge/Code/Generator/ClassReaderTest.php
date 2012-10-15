@@ -43,6 +43,18 @@ PHP
     $this->assertTrue($imports->have('S'), 'imports do not have S as Alias. Parsed are: '.implode(',', array_keys($imports->toArray())));
     $this->assertEquals('Webforge\Common\String', $imports->get('S')->getFQN());
   }
+
+  public function testReadIntoReturnsTheSameClassFromArgument() {
+    $php = $this->inClass('public function export() {}');
+    $this->expectFileHasContents($php);
+    
+    $gClass = new GClass('does not matter');
+    $rGClass = $this->classReader->readInto($this->file, $gClass);
+    
+    $this->assertSame($rGClass, $gClass);
+    $this->assertThatGClass($gClass)->hasMethod('export');
+  }
+  
   
   public function testClassReaderThrowsRuntimeExIfPHPIsMalformed() {
     $this->php = '<?php a parse error ?>';

@@ -17,6 +17,8 @@ class GClass extends GModifiersObject {
   const WITH_PARENTS              = 0x000004;
   const WITH_PARENTS_INTERFACES   = 0x000008;
   
+  const WITH_EXTENDS              = 0x000010;
+  
   const FULL_HIERARCHY            = 0x00000F;
 
   /**
@@ -186,7 +188,7 @@ class GClass extends GModifiersObject {
    * @return bool
    */
   protected function needsImplementation(Gmethod $method) {
-    return $method->isAbstract() || $method->isInInterface() || $this->hasMethod($method->getName());
+    return ($method->isAbstract() || $method->isInInterface()) && !$this->hasMethod($method->getName());
   }
   
   /**
@@ -624,7 +626,7 @@ class GClass extends GModifiersObject {
    * 
    * @return Webforge\Code\Generate\Imports
    */
-  public function getImports() {
+  public function getImports($types = 0x000000) {
     $imports = clone $this->ownImports;
     
     // props
@@ -634,6 +636,7 @@ class GClass extends GModifiersObject {
       }
     }
     
+    // methods
     foreach ($this->getMethods() as $method) {
       foreach ($method->getParameters() as $parameter) {
         if ($parameter->getType() instanceof ObjectType) {
@@ -642,8 +645,15 @@ class GClass extends GModifiersObject {
       }
     }
     
-    foreach ($this->getInterfaces() as $interface) {
-      $imports->add($interface);
+    if ($types & self::WITH_EXTENDS && $this->parentClass != NULL) {
+      $imports->add($this->parentClass);
+    }
+    
+    // interfaces
+    if ($types & self::WITH_INTERFACE) {
+      foreach ($this->getInterfaces() as $interface) {
+        $imports->add($interface);
+      }
     }
     
     return $imports;

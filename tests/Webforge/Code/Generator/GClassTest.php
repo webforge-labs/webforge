@@ -122,14 +122,22 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->assertSame($this->exportable, $gClass->getInterface(0));
   }
 
-  public function testInterfacesClassesAreImported() {
+  public function testInterfacesClassesAreImportedWhenFlagIsset() {
     $gClass = GClass::create('Point')
       ->addInterface($this->exportable)
     ;
     
-    $this->assertGCollectionEquals(array('Exportable'), $gClass->getImports());
+    $this->assertGCollectionEquals(array('Exportable'), $gClass->getImports(GClass::WITH_INTERFACE));
   }
-
+  
+  public function testInterfacesClassesAreNotImportedPerDefault() {
+    $gClass = GClass::create('Point')
+      ->addInterface($this->exportable)
+    ;
+    
+    $this->assertGCollectionEquals(array(), $gClass->getImports());
+  }
+  
   public function testParentClassIsNotImported() {
     $gClass = GClass::create('Point')
       ->setParent(GClass::create('GeometricBase'));

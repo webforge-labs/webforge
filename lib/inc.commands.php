@@ -28,8 +28,9 @@ $createCommand('create-class',
   function ($input, $output, $command) {
     $container = new FrameworkContainer();
     
-    $creater = new ClassCreater($container->getGlobalClassFileMapper(),
-                                $container->getClassWriter()
+    $creater = new ClassCreater($container->getClassFileMapper(),
+                                $container->getClassWriter(),
+                                $container->getClassElevator()
                                );
     
     $gClass = new GClass($input->getArgument('fqn'));

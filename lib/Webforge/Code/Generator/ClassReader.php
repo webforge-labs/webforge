@@ -14,6 +14,11 @@ class ClassReader {
   public $stmts;
   
   /**
+   * @var Webforge\Code\Generator\NodeVisitor
+   */
+  protected $nodeVisitor;
+  
+  /**
    * @return GClass
    */
   public function read(File $file) {
@@ -23,7 +28,7 @@ class ClassReader {
     
     $traverser = new PHPParser_NodeTraverser;
     $traverser->addVisitor(new PHPParser_NodeVisitor_NameResolver); // we will need resolved names
-    $traverser->addVisitor($visitor = new NodeVisitor());
+    $traverser->addVisitor($visitor = $this->createNodeVisitor());
 
     try {
       $this->stmts = $parser->parse($code);
@@ -35,6 +40,24 @@ class ClassReader {
     }
     
     return $visitor->getGClass();
+  }
+  
+  public function readInto(File $file, GClass $gClass) {
+    $this->nodeVisitor = new NodeVisitor($gClass);
+    
+    $ret = $this->read($file);
+    
+    $this->nodeVisitor = NULL;
+    
+    return $ret;
+  }
+  
+  public function createNodeVisitor() {
+    if (isset($this->nodeVisitor)) {
+      return $this->nodeVisitor;
+    }
+    
+    return new NodeVisitor();
   }
 }
 ?>
