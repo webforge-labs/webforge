@@ -5,6 +5,7 @@ namespace Webforge\Code\Test;
 use Webforge\Code\Generator\GClass;
 use Webforge\Code\Generator\GProperty;
 use Webforge\Code\Generator\GMethod;
+use Webforge\Code\Generator\GModifiersObject;
 
 class GClassTester {
   
@@ -62,12 +63,19 @@ class GClassTester {
   }
 
   public function hasProperty($name) {
-    $this->test->assertTrue($this->gClass->hasProperty($name),$this->msg("hasProperty '%s'", $name));
+    $this->test->assertTrue(
+      $this->gClass->hasProperty($name),
+      $this->msg(
+        "hasProperty '%s'. Properties avaible are:\n%s",
+        $name, $this->debugProperties()
+      )
+    );
+    
     $this->lastGet = $this->gClass->getProperty($name);
     
     return $this;
   }
-  
+
   public function hasNotProperty($name) {
     $this->test->assertFalse($this->gClass->hasProperty($name),$this->msg("hasNotProperty '%s'", $name));
     return $this;
@@ -78,6 +86,48 @@ class GClassTester {
                              $this->gClass->hasOwnProperty($name),$this->msg("hasNotOwnProperty '%s'", $name)
                              );
     return $this;
+  }
+
+  public function hasConstant($name) {
+    $this->test->assertTrue(
+      $this->gClass->hasConstant($name),
+      $this->msg(
+        "hasConstant '%s'. Constants avaible are:\n%s",
+        $name, $this->debugConstants()
+      )
+    );
+    
+    $this->lastGet = $this->gClass->getConstant($name);
+    
+    return $this;
+  }
+  
+  /**
+   * @return string
+   */
+  protected function debugConstants() {
+    return json_encode(
+      array_map(
+        function ($prop) {
+          return $prop->getName();
+        },
+        $this->gClass->getConstants()
+      )
+    );
+  }
+  
+  /**
+   * @return string
+   */
+  protected function debugProperties() {
+    return json_encode(
+      array_map(
+        function ($prop) {
+          return $prop->getName();
+        },
+        $this->gClass->getProperties()
+      )
+    );
   }
 
   public function hasOwnProperty($name) {
@@ -102,6 +152,67 @@ class GClassTester {
     }
     
     $this->test->assertFalse($this->gClass->hasInterface($gClass),$this->msg("hasNotInterface '%s'", $gClass->getFQN()));
+    return $this;
+  }
+  
+  public function isStatic() {
+    return $this->hasModifier(GModifiersObject::MODIFIER_STATIC, 'static');
+  }
+
+  public function isFinal() {
+    return $this->hasModifier(GModifiersObject::MODIFIER_FINAL, 'final');
+  }
+
+  public function isAbstract() {
+    return $this->hasModifier(GModifiersObject::MODIFIER_ABSTRACT, 'abstract');
+  }
+
+  public function isPublic() {
+    return $this->hasModifier(GModifiersObject::MODIFIER_PUBLIC, 'public');
+  }
+
+  public function isProtected() {
+    return $this->hasModifier(GModifiersObject::MODIFIER_PROTECTED, 'protected');
+  }
+
+  public function isPrivate() {
+    return $this->hasModifier(GModifiersObject::MODIFIER_PRIVATE, 'private');
+  }
+    
+  public function hasModifier($modifier, $modifierName) {
+    if ($this->lastGet instanceof GMethod) {
+      $this->test->assertTrue(
+        (bool) ($this->lastGet->getModifiers() & $modifier),
+        $this->msg("method '%s' is %s", $this->lastGet->getName(), $modifierName)
+      );
+    } elseif ($this->lastGet instanceof GProperty) {
+      $this->test->assertTrue(
+        (bool) ($this->lastGet->getModifiers() & $modifier),
+        $this->msg("property '%s' is %s", $this->lastGet->getName(), $modifierName)
+      );
+    } else {
+      $this->test->assertTrue(
+        (bool) ($this->gClass->getModifiers() & $modifier),
+        $this->msg("is %s", $modifierName)
+      );
+    }
+    return $this;
+  }
+
+  /**
+   * Asserts the type of a property/constant
+   */
+  public function isType($typeFQN) {
+    if ($this->lastGet instanceof GProperty) {
+      $this->test->assertInstanceOf(
+        $typeFQN,
+        $this->lastGet->getType(),
+        $this->msg("property '%s' is of type %s", $this->lastGet->getName(), $typeFQN)
+      );
+    } else {
+      throw new \RuntimeException('lastGet is not a Property/Constant. Other GObjects do not have a type');
+    }
+    
     return $this;
   }
   

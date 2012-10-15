@@ -153,6 +153,19 @@ class GClass extends GModifiersObject {
   }
   
   /**
+   * Creates a new constant and adds it to the class
+   *
+   * notice: this is not chainable, you can leave the chain with getGClass()
+   * @return Gconstant
+   */
+  public function createConstant($name, $type = NULL, $modifiers = GConstant::MODIFIER_PROTECTED, $default = self::UNDEFINED) {
+    $gConstant = GConstant::create($name, $type, $modifiers, $default);
+    
+    $this->addConstant($gConstant);
+    return $gConstant;
+  }
+  
+  /**
    * Creates a new Method and adds it to the class
    *
    * notice: this returns a gMethod and is not chainable
@@ -357,8 +370,9 @@ class GClass extends GModifiersObject {
   /**
    * @chainable
    */
-  public function addConstant(GConstant $interface, $position = self::END) {
-    $this->constants->add($interface, $position);
+  public function addConstant(GConstant $constant, $position = self::END) {
+    $this->constants->add($constant, $position);
+    $constant->setGClass($this);
     return $this;
   }
   
@@ -403,7 +417,10 @@ class GClass extends GModifiersObject {
    * @param array
    */
   public function setConstants(Array $constants) {
-    $this->constants = new GObjectCollection($constants);
+    $this->constants = new GObjectCollection(array());
+    foreach ($constants as $constant) {
+      $this->addConstant($constant);
+    }
     return $this;
   }
 
