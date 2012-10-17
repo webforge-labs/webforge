@@ -2,10 +2,44 @@
 
 namespace Webforge\Code\Generator;
 
+use PHPParser_Parser;
+use PHPParser_Lexer;
+use Psc\A;
+
 class GFunctionBody {
   
-  public function php($baseIndent = 0, $eol = "\n") {
+  /**
+   * PHPParser stmts
+   * 
+   * @var array
+   */
+  protected $stmts;
+  
+  public function __construct(Array $stmts = array()) {
+    $this->stmts = $stmts;
+  }
+  
+  public static function create($body) {
+    $stmts = array();
     
+    if (is_array($body)) {
+      $body = A::join($body, "%s\n");
+    }
+    
+    if (is_string($body)) {
+      $parser = new PHPParser_Parser(new PHPParser_Lexer);
+      $stmts = $parser->parse('<?php '.$body);
+    }
+    
+    $gBody = new GFunctionBody($stmts);
+    
+    return $gBody;
+  }
+  
+  public function php($baseIndent = 0, $eol = "\n") {
+    $printer = new PrettyPrinter();
+    
+    return $printer->prettyPrint($this->stmts);
   }
 
   /**

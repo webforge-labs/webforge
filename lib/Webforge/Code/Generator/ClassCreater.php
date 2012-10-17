@@ -2,6 +2,8 @@
 
 namespace Webforge\Code\Generator;
 
+use Webforge\Code\ClassFileNotFoundException;
+
 class ClassCreater {
   
   const OVERWRITE = ClassWriter::OVERWRITE;
@@ -41,8 +43,18 @@ class ClassCreater {
   public function create(GClass $gClass, $overwrite = FALSE) {
     $file = $this->mapper->getFile($gClass->getFQN());
     
-    $this->elevator->elevateParent($gClass);
-    $this->elevator->elevateInterfaces($gClass);
+    try {
+      $this->elevator->elevateParent($gClass);
+    } catch (ClassFileNotFoundException $e) {
+      
+    }
+    
+    try {
+      $this->elevator->elevateInterfaces($gClass);
+    } catch (ClassFileNotFoundException $e) {
+      
+    }
+
     
     $gClass->createAbstractMethodStubs();
     
