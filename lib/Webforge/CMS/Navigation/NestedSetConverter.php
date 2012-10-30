@@ -6,7 +6,8 @@ class NestedSetConverter extends \Psc\SimpleObject {
 
   /**
    * Convertes a NestedSet flat-Array into a nested HTML-List (ul, li)
-   * 
+   *
+   * @param Webforge\CMS\Navigation\Node[] $tree
    * @return string
    */
   public function toHTMLList(Array $tree) {
@@ -16,12 +17,12 @@ class NestedSetConverter extends \Psc\SimpleObject {
       $node = array_shift($tree);
 
       // Level down? (the node is in a new list of children)
-      if ($node['depth'] > $depth) {
+      if ($node->getDepth() > $depth) {
         $html .= '<ul>';
       
       // Level up? (the node is on an upper level after a list of childen)
-      } elseif ($node['depth'] < $depth) {
-        $html .= str_repeat("</li></ul>", $depth - $node['depth']);
+      } elseif ($node->getDepth() < $depth) {
+        $html .= str_repeat("</li></ul>", $depth - $node->getDepth());
         $html .= '</li>';
       
       // same Level
@@ -30,9 +31,9 @@ class NestedSetConverter extends \Psc\SimpleObject {
       }
       
       // add the new node
-      $html .= '<li><a>'.$node['title'].'</a>';
+      $html .= '<li>'.$node->getNodeHTML();
       
-      $depth = $node['depth'];
+      $depth = $node->getDepth();
     }
     
     // close from last iteration
@@ -42,20 +43,16 @@ class NestedSetConverter extends \Psc\SimpleObject {
   
   /**
    * Convert from parentPointerArray (every node should have a parent key) to the flat NestedSet array
-   * 
-   * @return array ein nested Set flat-array, so wie er parameter für toHTMLList ist
+   *
+   * Every reference to its parent in $ppTree must be already defined correctly (getParent() must return NULL for no parent or object<Node>)
+   * @param array Webforge\CMS\Navigation\Node[] $ppTree
+   * @return array a nested Set flat-array, in the same form as the parameter for toHTMLList
    */
   public function fromParentPointer(Array $ppTree) {
     $tree = array();
     
-    $nodes = array();
-    // cast objects to id (to have object references, not arrays without references), and index with title
-    foreach ($ppTree as $key=>$node) {
-      $node = (object) $node;
-      $nodes[$node->title] = $node;
-      $ppTree[$key] = $node;
-    }
-
+    if (count($ppTree) === 0) return $tree;
+    
     /*
      * We use a very intuitive algorithm here:
      *
@@ -74,35 +71,34 @@ class NestedSetConverter extends \Psc\SimpleObject {
     $cnt = 0;
     $prevNode = NULL;
     foreach ($ppTree as $node) {
-      $node->parent = $node->parent !== NULL ? $nodes[$node->parent] : NULL;
-      
       // root?
       if (!isset($prevNode)) {
-        $node->lft = ++$cnt;
+        $node->setLft(++$cnt);
       
       // downwards?
-      } elseif ($node->parent->title === $prevNode->title) {
-        $node->lft = ++$cnt;
+      } elseif ($prevNode->equalsNode($node->getParent())) {
+        $node->setLft(++$cnt);
         
       // sidwards?
-      } elseif ($node->parent->title === $prevNode->parent->title) {
-        $prevNode->rgt = ++$cnt;
-        $node->lft = ++$cnt;
+      } elseif ($node->getParent() === NULL && $prevNode->getParent() === NULL ||  // both are a root node
+                $node->getParent() !== NULL && $node->getParent()->equalsNode($prevNode->getParent())) {
+        $prevNode->setRgt(++$cnt);
+        $node->setLft(++$cnt);
       
       // upwards? notice: this can be more than one step and: has to be checked after downwards
-      } elseif($node->parent->title !== $prevNode->parent->title) {
-        $prevNode->rgt = ++$cnt; // set right for last sibling
+      } elseif($node->getParent() !== NULL && !$node->getParent()->equalsNode($prevNode->getParent())) {
+        $prevNode->setRgt(++$cnt); // set right for last sibling
         
         // move up the path until we got to our parent (dont number that) and give right values for parent nodes on its way
         // we dont number our parent, because we dont know if we have other siblings on that level
         $walkupNode = $prevNode;
-        while ($walkupNode->parent !== NULL && $walkupNode->parent->title !== $node->parent->title) {
+        while ($walkupNode->getParent() !== NULL && !$walkupNode->getParent()->equalsNode($node->getParent())) {
           // normally it would never hit root, because root is traversed only at the last iteration
-          $walkupNode = $walkupNode->parent;
-          $walkupNode->rgt = ++$cnt;
+          $walkupNode = $walkupNode->getParent();
+          $walkupNode->setRgt(++$cnt);
         }
         
-        $node->lft = ++$cnt;
+        $node->setLft(++$cnt);
       }
       
       
@@ -120,22 +116,9 @@ class NestedSetConverter extends \Psc\SimpleObject {
     // move upwards until root and number (everyone)
     $walkupNode = $prevNode;
     do {
-      $walkupNode->rgt = ++$cnt;
-      $walkupNode = $walkupNode->parent;
+      $walkupNode->setRgt(++$cnt);
+      $walkupNode = $walkupNode->getParent();
     } while ($walkupNode !== NULL);
-    
-    // convert back ...
-    foreach ($tree as $key=>$node) {
-      $tree[$key] = array(
-        'title'=>$node->title,
-        'lft'=>$node->lft,
-        'rgt'=>isset($node->rgt) ? $node->rgt : NULL // this is of course not allowed, but otherwise tests wont fail        
-      );
-      
-      if (isset($node->depth)) {
-        $tree[$key]['depth'] = $node->depth;
-      }
-    }
     
     return $tree;
   }
