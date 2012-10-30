@@ -29,8 +29,19 @@ class GFunctionBodyPrettyPrintTest extends \Webforge\Code\Test\Base {
     $php = function ($phpCode) use (&$tests) {
       $tests[] = array($phpCode);
     };
+
+    $php(<<<'PHP'
+$myVar = 8; // 0-based
+$otherVar = 9; // 1-based
+PHP
+    );
+
     
-    $php("\$this->x = 'comment';");
+    $php(
+        "if (true) {\n"
+      . "  //just a comment\n"
+      . "}"
+    );
 
     //5.1:  if then else
     $php(
@@ -89,7 +100,7 @@ PHP
     $php(
 <<<'PHP'
 for ($i = 0; $i < 10; $i++) {
-    $comment = 'for body';
+    // body
 }
 PHP
     );
