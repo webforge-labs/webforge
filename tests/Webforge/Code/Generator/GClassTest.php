@@ -8,9 +8,33 @@ class GClassTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
     $this->gClass = new GClass(get_class($this));
+    
+    $this->exportable = new GClass('Exportable');
+    $this->base = new GClass('GeometricBase');
+    $this->serializable = new GInterface('Serializable');
     parent::setUp();
   }
   
+  public function testCreateCanHaveParentAsString() {
+    $gClass = GClass::create('ACME\Console', 'Webforge\System\Console');
+    $this->assertInstanceof('Webforge\Code\Generator\GClass', $gClass);
+    $this->assertInstanceof('Webforge\Code\Generator\GClass', $gClass->getParent());
+  }
+  
+  public function testConstructWithOtherGClassClonesTheClass() {
+    $gClass = new GClass('someClass');
+    $other = new GClass($gClass);
+    
+    $this->assertNotSame($gClass, $other);
+  }
+  
+  public function testExistsReturnsIfClassCanBeAutoloaded() {
+    $gClass = new GClass('does\not\exist');
+    $this->assertFalse($gClass->exists());
+    
+    $gClass = new GClass(get_class($this));
+    $this->assertTrue($gClass->exists());
+  }
 
   public function testConstructIsRobustToWrongPrefixSlashes() {
     $gClass = GClass::create('XML\Object');
@@ -34,7 +58,7 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->assertSame($parent, $gClass->getParent());
   }
   
-  public function testNamespaceCanBeeReplacedThroughSet() {
+  public function testNamespaceCanBeReplacedThroughSet() {
     $gClass = GClass::create('XML\Object');
     $gClass->setNamespace('Javascript');
     $this->assertEquals('Javascript', $gClass->getNamespace());
@@ -69,21 +93,105 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->assertFalse($this->gClass->hasImport('UsedClass'));
   }
   
-  public function testPropertyHintsAreImported() {
-    $this->markTestIncomplete('Blocker: properties in psc-cms do not have a type(!) change this');
+  public function testPropertyTypesAsHintsForClassesAreImported() {
+    $gClass = GClass::create('Point')
+      ->createProperty('x', new GClass('PointValue'))
+      ->getGClass();
+    
+    $this->assertGCollectionEquals(array('PointValue'), $gClass->getImports());
   }
 
   public function testMethodParameterHintsAreImported() {
-    $this->markTestIncomplete('TODO: this is not implemented yet');
+    $gClass = GClass::create('Point')
+      ->createMethod('setX', array(GParameter::create('xValue', new GClass('PointValue'))))
+      ->getGClass()
+    ;
+    
+    $this->assertGCollectionEquals(array('PointValue'), $gClass->getImports());
+  }
+  
+  public function testGetInterfaceReturnsTheInterfaceFoundByFQNandIndex() {
+    // allthough this method is a really nonsense..
+    $this->exportable->setNamespace('Webforge\Common');
+    
+    $gClass = GClass::create('Point')
+      ->addInterface($this->exportable);
+    ;
+    
+    $this->assertSame($this->exportable, $gClass->getInterface('Webforge\Common\Exportable'));
+    $this->assertSame($this->exportable, $gClass->getInterface(0));
   }
 
-  public function testInterfacesClassesAreImported() {
-    $this->markTestIncomplete('todo: interfaces should be importet');
+  public function testInterfacesClassesAreImportedWhenFlagIsset() {
+    $gClass = GClass::create('Point')
+      ->addInterface($this->exportable)
+    ;
+    
+    $this->assertGCollectionEquals(array('Exportable'), $gClass->getImports(GClass::WITH_INTERFACE));
+  }
+  
+  public function testInterfacesClassesAreNotImportedPerDefault() {
+    $gClass = GClass::create('Point')
+      ->addInterface($this->exportable)
+    ;
+    
+    $this->assertGCollectionEquals(array(), $gClass->getImports());
+  }
+  
+  public function testParentClassIsNotImported() {
+    $gClass = GClass::create('Point')
+      ->setParent(GClass::create('GeometricBase'));
+      
+    $this->assertGCollectionEquals(array(), $gClass->getImports());
   }
 
-  public function testParentClassIsImported() {
-    // should the parent
-    $this->markTestIncomplete('parentClass should be imported');
+  public function testNewInstance() {
+    $gClass = new GClass('Psc\Exception');
+    $exception = $gClass->newInstance(array('just a test error'));
+    
+    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertEquals('just a test error', $exception->getMessage());
+  }
+  
+  public function testGetReflection() {
+    $this->assertInstanceOf('ReflectionClass', $this->gClass->getReflection());
+  }
+  
+  public function testNewInstanceWithoutConstructor() {
+    $gClass = new GClass('MyConstructorThrowsExceptionClass');
+    $gClass->setNamespace(__NAMESPACE__);
+    $instance = $gClass->newInstance(array(), GClass::WITHOUT_CONSTRUCTOR);
+    
+    $this->assertInstanceOf($gClass->getFQN(), $instance);
+    $this->assertTrue($instance->checkProperty);
+  }
+
+  public function testNewClassInstance() {
+    $exception = GClass::newClassInstance('Psc\Exception', array('just a test error'));
+    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertEquals('just a test error', $exception->getMessage());
+
+    $exception = GClass::newClassInstance($gClass = new GClass('Psc\Exception'), array('just a test error'));
+    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertEquals('just a test error', $exception->getMessage());
+
+    $exception = GClass::newClassInstance($gClass->getReflection(), array('just a test error'));
+    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertEquals('just a test error', $exception->getMessage());
+  }
+  
+  public function testNewClassInstanceThrowsExceptionIfWrongClassParam() {
+    $this->setExpectedException('InvalidArgumentException');
+    GClass::newClassInstance(function() {}, array());
+  }
+}
+
+class MyConstructorThrowsExceptionClass {
+  
+  public $checkProperty = TRUE;
+  
+  public function __construct() {
+    throw new \Psc\Exception('this should not be called');
   }
 }
 ?>

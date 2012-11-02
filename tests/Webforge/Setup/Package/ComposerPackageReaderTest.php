@@ -24,7 +24,7 @@ class ComposerPackageReaderTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Webforge\Setup\Package\Package', $package);
     $this->assertInstanceOf('Webforge\Setup\AutoLoadInfo', $autoLoad = $package->getAutoLoadInfo());
     $this->assertEquals(
-      array('ACME'=>array('lib/')),
+      array('ACME\IntranetApplication'=>array('lib/')),
       $autoLoad->getPrefixes(),
       'Prefixes from AutoLoadInfo for ACME is damaged'
     );

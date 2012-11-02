@@ -28,7 +28,9 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     
     $prop('applicationStorage', 'Webforge\Setup\ApplicationStorage');
     $prop('classWriter', 'Webforge\Code\Generator\ClassWriter');
-    $prop('globalClassFileMapper', 'Webforge\Code\GlobalClassFileMapper');
+    $prop('classReader', 'Webforge\Code\Generator\ClassReader');
+    $prop('classElevator', 'Webforge\Code\Generator\ClassElevator');
+    $prop('classFileMapper', 'Webforge\Code\GlobalClassFileMapper');
     $prop('packageRegistry', 'Webforge\Setup\Package\Registry');
     $prop('composerPackageReader', 'Webforge\Setup\Package\ComposerPackageReader');
     
@@ -39,8 +41,13 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $this->assertEquals($this->container->getApplicationStorageName(), $this->container->getApplicationStorage()->getName());
   }
   
-  public function testGlobalClassFileMapperHasRegistry() {
-    $this->assertSame($this->container->getPackageRegistry(), $this->container->getGlobalClassFileMapper()->getPackageRegistry());
+  public function testClassFileMapperHasRegistry() {
+    $this->assertSame($this->container->getPackageRegistry(), $this->container->getClassFileMapper()->getPackageRegistry());
+  }
+  
+  public function testClassElevatorHasReaderAndMapper() {
+    $this->assertSame($this->container->getClassReader(), $this->container->getClassElevator()->getClassReader());
+    $this->assertSame($this->container->getClassFileMapper(), $this->container->getClassElevator()->getClassFileMapper());
   }
   
   public function testPackageRegistryGetsPackagesAddedFromConfigFileInApplicationStoragePackagesConfigJSON() {

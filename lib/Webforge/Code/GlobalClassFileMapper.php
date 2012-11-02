@@ -45,6 +45,9 @@ class GlobalClassFileMapper implements ClassFileMapper {
     throw new \Psc\Code\NotImplementedException('not yet');
   }
   
+  /**
+   * @return Psc\System\File
+   */
   public function getFile($fqn) {
     $fqn = $this->normalizeClassFQN($fqn);
     

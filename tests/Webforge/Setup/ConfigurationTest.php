@@ -13,7 +13,8 @@ class ConfigurationTest extends \Webforge\Code\Test\Base {
       'webforge.staging'=>true,
       'webforge.dev'=>false,
       'webforge.location'=>'D:\www\ka',
-      'doctrine.entities'=>array('user','project','customer')
+      'doctrine.entities'=>array('user','project','customer'),
+      'root'=>'thv'
     );
     
     $this->configuration = new Configuration($conf);
@@ -22,6 +23,7 @@ class ConfigurationTest extends \Webforge\Code\Test\Base {
   public function testGetReturnsTheValueForTheKey() {
     $this->assertEquals('D:\www\ka', $this->configuration->get('webforge.location'));
     $this->assertEquals(array('user','project','customer'), $this->configuration->get('doctrine.entities'));
+    $this->assertEquals('thv', $this->configuration->get('root'));
   }
 
   /**

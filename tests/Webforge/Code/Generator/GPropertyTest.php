@@ -53,5 +53,25 @@ class GPropertyTest extends \Webforge\Code\Test\Base {
     $this->assertFalse($this->property->hasDefaultValue());
     $this->assertEquals(GProperty::UNDEFINED, $this->property->getDefaultValue());
   }
+  
+  public function testCreateCreatesApropertyWithType() {
+    $property = GProperty::create('x', $this->getType('Integer'));
+    
+    $this->assertInstanceOf('Webforge\Code\Generator\GProperty', $property);
+    $this->assertInstanceOf('Psc\Data\Type\IntegerType', $property->getType());
+  }
+
+  public function testCreateCreatesApropertyWithTypeAsGClassToobjectType() {
+    $property = GProperty::create('x', new GClass('PointValue'));
+    
+    $this->assertInstanceOf('Webforge\Code\Generator\GProperty', $property);
+    $this->assertInstanceOf('Psc\Data\Type\ObjectType', $property->getType());
+    $this->assertEquals('PointValue', $property->getType()->getClassFQN());
+  }
+  
+  public function testCreateCreatesApropertyArrayType() {
+    $property = GProperty::create('coordinates', 'Array');
+    $this->assertInstanceOf('Psc\Data\Type\ArrayType', $property->getType());
+  }
 }
 ?>

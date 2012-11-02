@@ -4,7 +4,10 @@ namespace Webforge\Framework;
 
 use Webforge\Setup\ApplicationStorage;
 use Webforge\Code\Generator\ClassWriter;
+use Webforge\Code\Generator\ClassReader;
+use Webforge\Code\Generator\ClassElevator;
 use Webforge\Code\GlobalClassFileMapper;
+use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Setup\Package\Registry AS PackageRegistry;
 use Webforge\Setup\Package\ComposerPackageReader;
 
@@ -32,11 +35,21 @@ class Container {
    * @var Webforge\Code\Generator\ClassWriter
    */
   protected $classWriter;
+
+  /**
+   * @var Webforge\Code\Generator\ClassReader
+   */
+  protected $classReader;
+
+  /**
+   * @var Webforge\Code\Generator\ClassElevator
+   */
+  protected $classElevator;
   
   /**
    * @var Webforge\Code\GlobalClassFileMapper
    */
-  protected $globalClassFileMapper;
+  protected $classFileMapper;
 
   /**
    * A Registry for Packages installed on the host (e.g.)
@@ -79,6 +92,29 @@ class Container {
   }
 
   /**
+   * @return Webforge\Code\Generator\ClassReader
+   */
+  public function getClassReader() {
+    if (!isset($this->classReader)) {
+      $this->classReader = new ClassReader();
+    }
+    return $this->classReader;
+  }
+
+  /**
+   * @return Webforge\Code\Generator\ClassElevator
+   */
+  public function getClassElevator() {
+    if (!isset($this->classElevator)) {
+      $this->classElevator = new ClassElevator(
+        $this->getClassFileMapper(),
+        $this->getClassReader()
+      );
+    }
+    return $this->classElevator;
+  }
+
+  /**
    * @return Webforge\Setup\ApplicationStorage
    */
   public function getApplicationStorage() {
@@ -90,15 +126,15 @@ class Container {
   }
   
   /**
-   * @return Webforge\Code\GlobalClassFileMapper
+   * @return Webforge\Code\ClassFileMapper
    */
-  public function getGlobalClassFileMapper() {
-    if (!isset($this->globalClassFileMapper)) {
-      $this->globalClassFileMapper = new GlobalClassFileMapper();
-      $this->globalClassFileMapper->setPackageRegistry($this->getPackageRegistry());
+  public function getClassFileMapper() {
+    if (!isset($this->classFileMapper)) {
+      $this->classFileMapper = new GlobalClassFileMapper();
+      $this->classFileMapper->setPackageRegistry($this->getPackageRegistry());
     }
     
-    return $this->globalClassFileMapper;
+    return $this->classFileMapper;
   }
 
   /**
@@ -133,11 +169,11 @@ class Container {
   }
 
   /**
-   * @param Webforge\Code\GlobalClassFileMapper $globalClassFileMapper
+   * @param Webforge\Code\ClassFileMapper $classFileMapper
    * @chainable
    */
-  public function setGlobalClassFileMapper(GlobalClassFileMapper $globalClassFileMapper) {
-    $this->globalClassFileMapper = $globalClassFileMapper;
+  public function setClassFileMapper(ClassFileMapper $classFileMapper) {
+    $this->classFileMapper = $classFileMapper;
     return $this;
   }
 
@@ -147,6 +183,24 @@ class Container {
    */
   public function setClassWriter(ClassWriter $classWriter) {
     $this->classWriter = $classWriter;
+    return $this;
+  }
+
+  /**
+   * @param Webforge\Code\Generator\ClassReader $classReader
+   * @chainable
+   */
+  public function setClassReader(ClassReader $classReader) {
+    $this->classReader = $classReader;
+    return $this;
+  }
+
+  /**
+   * @param Webforge\Code\Generator\ClassElevator $classElevator
+   * @chainable
+   */
+  public function setClassElevator(ClassElevator $classElevator) {
+    $this->classElevator = $classElevator;
     return $this;
   }
 

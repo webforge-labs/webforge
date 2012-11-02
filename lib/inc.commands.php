@@ -4,6 +4,7 @@ use Webforge\Code\Generator\ClassCreater;
 use Webforge\Code\Generator\ClassWriter;
 use Webforge\Code\GlobalClassFileMapper;
 use Webforge\Code\Generator\GClass;
+use Webforge\Code\Generator\GInterface;
 use Webforge\Framework\Container AS FrameworkContainer;
 
 use \Psc\JS\JSONConverter;
@@ -28,8 +29,9 @@ $createCommand('create-class',
   function ($input, $output, $command) {
     $container = new FrameworkContainer();
     
-    $creater = new ClassCreater($container->getGlobalClassFileMapper(),
-                                $container->getClassWriter()
+    $creater = new ClassCreater($container->getClassFileMapper(),
+                                $container->getClassWriter(),
+                                $container->getClassElevator()
                                );
     
     $gClass = new GClass($input->getArgument('fqn'));
@@ -39,7 +41,7 @@ $createCommand('create-class',
     }
     
     foreach ($input->getArgument('interface') as $interface) {
-      $gClass->addInterface(new GClass($interface));
+      $gClass->addInterface(new GInterface($interface));
     }
     
     $file = $creater->create($gClass, $input->getOption('overwrite') ? ClassCreater::OVERWRITE : FALSE);

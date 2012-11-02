@@ -3,8 +3,58 @@
 namespace Webforge\Code\Generator;
 
 use Psc\String AS S;
+use ReflectionClass;
+use Psc\Data\Type\ObjectType;
+use InvalidArgumentException;
 
-class GClass extends \Psc\Code\Generate\GClass {
+class GClass extends GModifiersObject {
+  
+  const WITHOUT_CONSTRUCTOR = TRUE;
+  const END = GObjectCollection::END;
+  
+  const WITH_OWN                  = 0x000001;
+  const WITH_INTERFACE            = 0x000002;
+  const WITH_PARENTS              = 0x000004;
+  const WITH_PARENTS_INTERFACES   = 0x000008;
+  
+  const WITH_EXTENDS              = 0x000010;
+  
+  const FULL_HIERARCHY            = 0x00000F;
+
+  /**
+   * @var string
+   */
+  protected $name;
+
+  /**
+   * @var string
+   */
+  protected $namespace;
+
+  /**
+   * @var Webforge\Code\Generator\GClass
+   */
+  protected $parentClass;
+
+  /**
+   * @var GObjectCollection(Webforge\Code\Generator\GClass)
+   */
+  protected $interfaces;
+
+  /**
+   * @var GObjectCollection(Webforge\Code\Generator\GProperty)
+   */
+  protected $properties;
+
+    /**
+   * @var GObjectCollection(Webforge\Code\Generator\GMethod)
+   */
+  protected $methods;
+
+  /**
+   * @var GObjectCollection(Webforge\Code\Generator\GConstant)
+   */
+  protected $constants;
   
   /**
    * The personal imports of the GClass
@@ -13,23 +63,24 @@ class GClass extends \Psc\Code\Generate\GClass {
    */
   protected $ownImports;
   
-  /**
-   * @var Webforge\Code\Generator\GClass
-   */
-  protected $parentClass;
   
   public function __construct($class = NULL)  {
     $this->ownImports = new Imports();
+    $this->interfaces = new GObjectCollection(array());
+    $this->methods = new GObjectCollection(array());
+    $this->properties = new GObjectCollection(array());
+    $this->constants = new GObjectCollection(array());
     
-    if ($class instanceof ReflectionClass) {
-      $this->elevate($class);
-    } elseif ($class instanceof GClass) {
+    if ($class instanceof GClass) {
       $this->setFQN($class->getFQN());
     } elseif (is_string($class)) {
       $this->setFQN($class);
     }
   }
   
+  /**
+   * @return Webforge\Code\Generator\GClass
+   */
   public static function create($fqn, $parentClass = NULL) {
     $gClass = new static($fqn);
     
@@ -42,6 +93,127 @@ class GClass extends \Psc\Code\Generate\GClass {
     }
     
     return $gClass;
+  }
+
+  /**
+   * @return Object<{$this->getFQN()}>
+   */
+  public static function newClassInstance($class, Array $params = array()) {
+    if ($class instanceof GClass) {
+      return $class->newInstance($params);
+      
+    } elseif ($class instanceof ReflectionClass) {
+      $refl = $class;
+
+    } elseif (is_string($class)) {
+      $refl = new ReflectionClass($class);
+      
+    } else {
+      throw new InvalidArgumentException('class kann nur string,gclass oder reflectionclass sein');
+    }
+    
+    return $refl->newInstanceArgs($params);
+  }
+  
+  /**
+   * @return Object<{$this->getFQN()}>
+   */
+  public function newInstance(Array $params = array(), $dontCallConstructor = FALSE) {
+    
+    if ($dontCallConstructor) {
+      // Creates a new instance of the mapped class, without invoking the constructor.
+      if (!isset($this->prototype)) {
+        $this->prototype = unserialize(sprintf('O:%d:"%s":0:{}', mb_strlen($this->getFQN()), $this->getFQN()));
+      }
+      
+      return clone $this->prototype;
+    }
+    
+    return $this->getReflection()->newInstanceArgs($params);
+  }
+  
+  /**
+   * @return ReflectionClass
+   */
+  public function getReflection() {
+    return new ReflectionClass($this->getFQN());
+  }
+
+  /**
+   * Creates a new property and adds it to the class
+   *
+   * notice: this is not chainable, you can leave the chain with getGClass()
+   * @return GProperty
+   */
+  public function createProperty($name, $type = NULL, $modifiers = GProperty::MODIFIER_PROTECTED, $default = self::UNDEFINED) {
+    $gProperty = GProperty::create($name, $type, $modifiers, $default);
+    
+    $this->addProperty($gProperty);
+    return $gProperty;
+  }
+  
+  /**
+   * Creates a new constant and adds it to the class
+   *
+   * notice: this is not chainable, you can leave the chain with getGClass()
+   * @return Gconstant
+   */
+  public function createConstant($name, $type = NULL, $modifiers = GConstant::MODIFIER_PROTECTED, $default = self::UNDEFINED) {
+    $gConstant = GConstant::create($name, $type, $modifiers, $default);
+    
+    $this->addConstant($gConstant);
+    return $gConstant;
+  }
+  
+  /**
+   * Creates a new Method and adds it to the class
+   *
+   * notice: this returns a gMethod and is not chainable
+   * but you can "leave" the chain with getGClass()
+   * @return GMethod
+   */
+  public function createMethod($name, $params = array(), $body = NULL, $modifiers = GMethod::MODIFIER_PUBLIC) {
+    $method = new GMethod($name, $params, $body, $modifiers);
+    $method->setGClass($this);
+    
+    $this->addMethod($method);
+    
+    return $method;
+  }
+
+  /**
+   * Erstellt Stubs (Prototypen) für alle abstrakten Methoden der Klasse
+   */             
+  public function createAbstractMethodStubs() {
+    if ($this->isAbstract() || $this->isInterface()) return $this;
+    
+    foreach ($this->getAllMethods(self::FULL_HIERARCHY & ~self::WITH_OWN) as $method) {
+      //if ($this->needsImplementation($method)) {
+      $this->createMethodStub($method);
+      //} // performance: this will be already checked in createMethodStub 
+    }
+    
+    return $this;
+  }
+
+  /**
+   * Returns if the method needs implementation in this class
+   * @return bool
+   */
+  protected function needsImplementation(Gmethod $method) {
+    return ($method->isAbstract() || $method->isInInterface()) && !$this->hasMethod($method->getName());
+  }
+  
+  /**
+   * Erstellt einen Stub für eine gegebene abstrakte Methode
+   */
+  public function createMethodStub(GMethod $method) {
+    if (!$this->needsImplementation($method)) return $this;
+    
+    $cMethod = clone $method;
+    $cMethod->setAbstract(FALSE);
+    
+    return $this->addMethod($cMethod);
   }
   
   /**
@@ -92,7 +264,16 @@ class GClass extends \Psc\Code\Generate\GClass {
   public function getFQN() {
     return $this->namespace.$this->name;
   }
-
+  
+  public function getKey() {
+    return $this->getFQN();
+  }
+  
+  /**
+   * Replaces the Namespace and Name of the Class
+   *
+   * @param string $fqn no \ before
+   */
   public function setFQN($fqn) {
     if (FALSE !== ($pos = mb_strrpos($fqn,'\\'))) {
       $this->namespace = ltrim(mb_substr($fqn, 0, $pos+1), '\\'); // +1 to add the trailing slash, see setNamespace
@@ -103,6 +284,328 @@ class GClass extends \Psc\Code\Generate\GClass {
     }
   }
   
+  /**
+   * @return bool
+   */
+  public function isInterface() {
+    return $this instanceof GInterface;
+  }
+  
+  /**
+   * @chainable
+   */
+  public function addInterface(GClass $interface, $position = self::END) {
+    $this->interfaces->add($interface, $position);
+    return $this;
+  }
+  
+  /**
+   * @return GClass
+   */
+  public function getInterface($fqnOrIndex) {
+    return $this->interfaces->get($fqnOrIndex);
+  }
+  
+  /**
+   * @return bool
+   */
+  public function hasInterface($fqnOrClass) {
+    return $this->interfaces->has($fqnOrClass);
+  }
+  
+  /**
+   * @chainable
+   */
+  public function removeInterface($fqnOrClass) {
+    $this->interfaces->remove($fqnOrClass);
+    return $this;
+  }
+  
+  /**
+   * @chainable
+   */
+  public function setInterfaceOrder($interface, $position) {
+    $this->interfaces->setOrder($interface, $position);
+    return $this;
+  }
+  
+  /**
+   * @return array
+   */
+  public function getInterfaces() {
+    return $this->interfaces->toArray();
+  }
+
+  /**
+   * Returns the interfaces from the class and from all parents
+   * @return array
+   */
+  public function getAllInterfaces($types = self::FULL_HIERARCHY) {
+    if ($types & self::WITH_OWN) {
+      $interfaces = clone $this->interfaces;
+    } else {
+      $interfaces = new GObjectCollection(array());
+    }
+    
+    if (($types & self::WITH_PARENTS) && ($parent = $this->getParent()) != NULL) {
+      $parentTypes = $types | self::WITH_OWN;
+      foreach ($parent->getAllInterfaces($parentTypes) as $interface) {
+        if (!$interfaces->has($interface)) {
+          $interfaces->add($interface);
+        }
+      }
+    }
+    
+    return $interfaces->toArray();
+  }
+  
+  /**
+   * @param array
+   */
+  public function setInterfaces(Array $interfaces) {
+    $this->interfaces = new GObjectCollection($interfaces);
+    return $this;
+  }
+
+  /**
+   * @chainable
+   */
+  public function addConstant(GConstant $constant, $position = self::END) {
+    $this->constants->add($constant, $position);
+    $constant->setGClass($this);
+    return $this;
+  }
+  
+  /**
+   * @return GClass
+   */
+  public function getConstant($nameOrIndex) {
+    return $this->constants->get($nameOrIndex);
+  }
+  
+  /**
+   * @return bool
+   */
+  public function hasConstant($fqnOrClass) {
+    return $this->constants->has($fqnOrClass);
+  }
+  
+  /**
+   * @chainable
+   */
+  public function removeConstant($fqnOrClass) {
+    $this->constants->remove($fqnOrClass);
+    return $this;
+  }
+  
+  /**
+   * @chainable
+   */
+  public function setConstantOrder(GConstant $constant, $position) {
+    $this->constants->setOrder($constant, $position);
+    return $this;
+  }
+  
+  /**
+   * @return array
+   */
+  public function getConstants() {
+    return $this->constants->toArray();
+  }
+
+  /**
+   * @param array
+   */
+  public function setConstants(Array $constants) {
+    $this->constants = new GObjectCollection(array());
+    foreach ($constants as $constant) {
+      $this->addConstant($constant);
+    }
+    return $this;
+  }
+
+  /**
+   * @chainable
+   */
+  public function addProperty(GProperty $property, $position = self::END) {
+    $this->properties->add($property, $position);
+    $property->setGClass($this);
+    return $this;
+  }
+  
+  /**
+   * @return GClass
+   */
+  public function getProperty($nameOrIndex) {
+    return $this->properties->get($nameOrIndex);
+  }
+  
+  /**
+   * @return bool
+   */
+  public function hasProperty($nameOrClass) {
+    return $this->properties->has($nameOrClass);
+  }
+  
+  /**
+   * @chainable
+   */
+  public function removeProperty($nameOrClass) {
+    $this->properties->remove($nameOrClass);
+    return $this;
+  }
+  
+  /**
+   * @chainable
+   */
+  public function setPropertyOrder($property, $position) {
+    $this->properties->setOrder($property, $position);
+    return $this;
+  }
+  
+  /**
+   * @return array
+   */
+  public function getProperties() {
+    return $this->properties->toArray();
+  }
+
+  /**
+   * Returns the properties of the class and the properties of all parents
+   *
+   * @return array
+   */
+  public function getAllProperties($types = self::FULL_HIERARCHY) {
+    if ($types & self::WITH_OWN) {
+      $properties = clone $this->properties;
+    } else {
+      $properties = new GObjectCollection(array());
+    }
+    
+    if ($types & self::WITH_PARENTS && $this->getParent() != NULL) {
+      // treat duplicates (aka: overriden properties):
+      $parentTypes = $types | self::WITH_OWN;
+      foreach ($this->getParent()->getAllProperties($parentTypes) as $property) {
+        if (!$properties->has($property)) {
+          $properties->add($property);
+        }
+      }
+    }
+    
+    return $properties->toArray();
+  }
+
+  /**
+   * @return array
+   */
+  public function setProperties(Array $properties) {
+    $this->properties = new GObjectCollection(array());
+    foreach ($properties as $property) {
+      $this->addProperty($property);
+    }
+    return $this;
+  }
+
+    /**
+   * @chainable
+   */
+  public function addMethod(GMethod $method, $position = self::END) {
+    $this->methods->add($method, $position);
+    $method->setGClass($this);
+    return $this;
+  }
+  
+  /**
+   * @return GClass
+   */
+  public function getMethod($fqnOrIndex) {
+    return $this->methods->get($fqnOrIndex);
+  }
+  
+  /**
+   *
+   * notice: this tells only if the class has an own method (not the hierarchy)
+   * @return bool
+   */
+  public function hasMethod($fqnOrClass) {
+    return $this->methods->has($fqnOrClass);
+  }
+  
+  /**
+   * @chainable
+   */
+  public function removeMethod($fqnOrClass) {
+    $this->methods->remove($fqnOrClass);
+    return $this;
+  }
+  
+  /**
+   * @chainable
+   */
+  public function setMethodOrder($method, $position) {
+    $this->methods->setOrder($method, $position);
+    return $this;
+  }
+  
+  /**
+   * Returns the (own) methods of the class
+   * @return array
+   */
+  public function getMethods() {
+    return $this->methods->toArray();
+  }
+  
+  /**
+   * @return array
+   */
+  public function setMethods(Array $methods) {
+    $this->methods = new GObjectCollection(array());
+    foreach ($methods as $method) {
+      $this->addMethod($method);
+    }
+    return $this;
+  }
+  
+  /**
+   * Returns the methods of the class and the methods of all parents
+   *
+   * @param bitmap $types see self::WITH_*
+   */
+  public function getAllMethods($types = self::FULL_HIERARCHY) {
+    if ($types & self::WITH_OWN) {
+      $methods = clone $this->methods;
+    } else {
+      $methods = new GObjectCollection(array());
+    }
+    
+    if ($types & self::WITH_PARENTS && $this->getParent() != NULL) {
+      // treat duplicates (aka: overriden methods):
+      $parentTypes = $types | self::WITH_OWN;
+      foreach ($this->getParent()->getAllMethods($parentTypes) as $method) {
+        if (!$methods->has($method)) {
+          $methods->add($method);
+        }
+      }
+    }
+
+    $interfaceTypes = 0x000000;
+    if ($types & self::WITH_INTERFACE) $interfaceTypes |= self::WITH_OWN;
+    if ($types & self::WITH_PARENTS_INTERFACES) $interfaceTypes |= self::WITH_PARENTS;
+    
+    foreach ($this->getAllInterfaces($interfaceTypes) as $interface) {
+      //$interface->elevateClass();
+      // return only own interface methods, because we already have all interfaces from wohle hierarchy
+      // or without parents, if we dont like to have the parents interfaces
+      foreach ($interface->getMethods() as $method) { 
+        if (!$methods->has($method)) {
+          $methods->add($method);
+        }
+      }
+    }
+    
+    return $methods->toArray();
+  }
+
   /**
    * Adds an import to the Class
    *
@@ -140,10 +643,37 @@ class GClass extends \Psc\Code\Generate\GClass {
    * 
    * @return Webforge\Code\Generate\Imports
    */
-  public function getImports() {
-    // @TODO extract from properties, methods, interfaces
+  public function getImports($types = 0x000000) {
+    $imports = clone $this->ownImports;
     
-    return $this->ownImports;
+    // props
+    foreach ($this->getProperties() as $property) {
+      if ($property->getType() instanceof ObjectType) {
+        $imports->add(new GClass($property->getType()->getClassFQN())); // translate back
+      }
+    }
+    
+    // methods
+    foreach ($this->getMethods() as $method) {
+      foreach ($method->getParameters() as $parameter) {
+        if ($parameter->getType() instanceof ObjectType) {
+          $imports->add(new GClass($parameter->getType()->getClassFQN())); // translate back
+        }
+      }
+    }
+    
+    if ($types & self::WITH_EXTENDS && $this->parentClass != NULL) {
+      $imports->add($this->parentClass);
+    }
+    
+    // interfaces
+    if ($types & self::WITH_INTERFACE) {
+      foreach ($this->getInterfaces() as $interface) {
+        $imports->add($interface);
+      }
+    }
+    
+    return $imports;
   }
   
   /**
@@ -168,10 +698,18 @@ class GClass extends \Psc\Code\Generate\GClass {
     return $this->parentClass;
   }
   
-  // dont use this anymore
-  public function getClassName() {
-    //throw new \Psc\DeprecatedException('getClassName() is deprecated. Use getName instead');
-    return $this->name;
+  /**
+   * @return bool
+   */
+  public function equals(GClass $otherClass) {
+    return $this->getFQN() === $otherClass->getFQN();
+  }
+  
+  /**
+   * @return bool
+   */
+  public function exists($autoload = TRUE) {
+    return class_exists($this->getFQN(), $autoload);
   }
 }
 ?>

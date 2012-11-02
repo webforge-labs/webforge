@@ -4,6 +4,10 @@ namespace Webforge\Code\Generator;
 
 use Psc\Code\Generate\ClassWritingException;
 use Psc\System\File;
+use Webforge\Common\String as S;
+use Psc\Code\Generate\DocBlock;
+use Psc\A;
+use Psc\Code\Generate\CodeWriter;
 
 /**
  * Writes a Class in Code (PHP)
@@ -22,6 +26,11 @@ class ClassWriter {
    */
   protected $imports;
   
+  /**
+   * @var Psc\Code\Generate\CodeWriter
+   */
+  protected $codeWriter;
+  
   public function __construct() {
     $this->imports = new Imports();
   }
@@ -34,11 +43,11 @@ class ClassWriter {
       );
     }
     
-    $file->writeContents($this->generatePHP($gClass));
+    $file->writeContents($this->writeGClassFile($gClass));
     return $this;
   }
   
-  protected function generatePHP(GClass $gClass, $eol = "\n") {
+  public function writeGClassFile(GClass $gClass, $eol = "\n") {
     $php = '<?php'.$eol;
     $php .= $eol;
     
@@ -55,10 +64,232 @@ class ClassWriter {
       $php .= $eol;
     }
     
-    $php .= $gClass->php();
+    $php .= $this->writeGClass($gClass, $namespace, $eol);
     
     $php .= $eol;
     $php .= '?>';
+    return $php;
+  }
+  
+  /**
+   * returns the Class as PHP Code (without imports (use), without namespace decl)
+   *
+   * indentation is fixed: 2 whitespaces
+   * @return string the code with docblock from class { to }
+   */
+  public function writeGClass(GClass $gClass, $namespace, $eol = "\n") {
+    $that = $this;
+    
+    $php = NULL;
+    
+    /* DocBlock */
+    if ($gClass->hasDocBlock())
+      $php .= $this->writeDocBlock($gClass->getDocBlock(), 0);
+    
+    /* Modifiers */
+    $php .= $this->writeModifiers($gClass->getModifiers());
+    
+    /* Class */
+    if ($gClass->isInterface()) {
+      $php .= 'interface '.$gClass->getName().' ';
+    } else {
+      $php .= 'class '.$gClass->getName().' ';
+    }
+    
+    /* Extends */
+    if (($parent = $gClass->getParent()) != NULL) {
+      // its important to use the contextNamespace here, because $namespace can be !== $gClass->getNamespace()
+      if ($parent->getNamespace() === $namespace) {
+        $php .= 'extends '.$parent->getName(); // don't prefix with namespace
+      } else {
+        // should it add to use, or use \FQN in extends?
+        $php .= 'extends '.'\\'.$parent->getFQN();
+      }
+      $php .= ' ';
+    }
+    
+    /* Interfaces */
+    if (count($gClass->getInterfaces()) > 0) {
+      $php .= 'implements ';
+      $php .= A::implode($gClass->getInterfaces(), ', ', function (GClass $iClass) use ($namespace) {
+        if ($iClass->getNamespace() === $namespace) {
+          return $iClass->getName();
+        } else {
+          return '\\'.$iClass->getFQN();
+        }
+      });
+      $php .= ' ';
+    }
+    
+    $php .= '{'.$eol;
+    
+    /* those other methods make the margin with line breaks to top and to their left.*/
+    
+    /* Constants */
+    $php .= A::joinc($gClass->getConstants(), '  '.$eol.'%s;'.$eol, function ($constant) use ($that) {
+      return $that->writeConstant($constant, 2);
+    });
+    
+    /* Properties */
+    $php .= A::joinc($gClass->getProperties(), '  '.$eol.'%s;'.$eol, function ($property) use ($that) {
+      return $that->writeProperty($property, 2);
+    });
+
+    /* Methods */
+    $php .= A::joinc($gClass->getMethods(), '  '.$eol.'%s'.$eol, function ($method) use ($that) {
+      return $that->writeMethod($method, 2); 
+    });
+    
+    $php .= '}';
+    
+    return $php;
+  }
+
+  /**
+   * returns the PHP Code for a GMethod
+   *
+   * after } is no LF
+   * @return string
+   */
+  public function writeMethod(GMethod $method, $baseIndent = 0, $eol = "\n") {
+    $php = NULL;
+    
+    if ($method->hasDocBlock()) {
+      $php = $this->writeDocBlock($method->getDocBlock(), $baseIndent, $eol);
+    }
+    
+    // vor die modifier muss das indent
+    $php .= str_repeat(' ', $baseIndent);
+    
+    $php .= $this->writeModifiers($method->getModifiers());
+    
+    $php .= $this->writeGFunction($method, $baseIndent, $eol);
+    
+    return $php;
+  }
+
+  /**
+   * returns PHPCode for a GFunction/GMethod
+   *
+   * nach der } ist kein LF
+   */
+  public function writeGFunction($function, $baseIndent = 0, $eol = "\n") {
+    $php = NULL;
+    
+    $php .= $this->writeFunctionSignature($function, $baseIndent, $eol);
+    
+    if ($function->isAbstract() || $function->isInInterface()) {
+      $php .= ';';
+    } else {
+      $php .= $this->writeFunctionBody($function->getBody(), $baseIndent, $eol);
+    }
+    
+    return $php;
+  }
+  
+  /**
+   * Writes a function body
+   *
+   * the function body is from { to }
+   * @return string
+   */
+  public function writeFunctionBody(GFunctionBody $body = NULL, $baseIndent = 0, $eol = "\n") {
+    $php = NULL;
+    
+    $phpBody = $body ? $body->php($baseIndent+2, $eol) : '';
+
+    $php .= ' {';
+    //if ($this->cbraceComment != NULL) { // inline comment wie dieser
+      //$php .= ' '.$this->cbraceComment;
+    //}
+    $php .= $eol;
+    $php .= $phpBody; 
+    $php .= S::indent('}', $baseIndent, $eol);
+    
+    return $php;
+  }
+
+  
+  protected function writeFunctionSignature($function, $baseIndent = 0, $eol = "\n") {
+    $php = 'function '.$function->getName().$this->writeParameters($function->getParameters(), $baseIndent, $eol);
+
+    return S::indent($php, $baseIndent, $eol);
+  }
+  
+  public function writeParameters(Array $parameters) {
+    $that = $this;
+    
+    $php = '(';
+    $php .= A::implode($parameters, ', ', function ($parameter) use ($that) {
+      return $that->writeParameter($parameter);
+    });
+    $php .= ')';
+    
+    return $php;
+  }
+  
+  public function writeParameter(GParameter $parameter) {
+    $php = NULL;
+    
+    // Type Hint
+    $php .= $parameter->getHint();
+    
+    // name
+    $php .= ($parameter->isReference() ? '&' : '').'$'.$parameter->getName();
+    
+    // optional (default)
+    if ($parameter->hasDefault()) {
+      $php .= ' = ';
+      
+      $default = $parameter->getDefault();
+      if (is_array($this) && count($this) == 0) {
+        $php .= 'array()';
+      } else {
+        $php .= $this->writeArgumentValue($default); // das sieht scheise aus
+      }
+    }
+    
+    return $php;
+  }
+
+  public function writeArgumentValue($value) {
+    if (is_array($value) && A::getType($value) === 'numeric') {
+      return $this->getCodeWriter()->exportList($value);
+    } elseif (is_array($value)) {
+      return $this->getCodeWriter()->exportKeyList($value);
+    } else {
+      try {
+        return $this->getCodeWriter()->exportBaseTypeValue($value);
+      } catch (\Psc\Code\Generate\BadExportTypeException $e) {
+        throw new \RuntimeException('In Argumenten oder Properties können nur Skalare DefaultValues stehen. Die value muss im Constructor stehen.', 0, $e);
+      }
+    }
+  }
+  
+  /**
+   * @return string
+   */
+  public function writeDocBlock(DocBlock $docBlock, $baseIndent = 0) {
+    return S::indent($docBlock->toString(), $baseIndent);
+  }
+  
+  /**
+   * @return string with whitespace after the last modifier
+   */
+  public function writeModifiers($bitmap) {
+    $ms = array(GModifiersObject::MODIFIER_ABSTRACT => 'abstract',
+                GModifiersObject::MODIFIER_PUBLIC => 'public',
+                GModifiersObject::MODIFIER_PRIVATE => 'private',
+                GModifiersObject::MODIFIER_PROTECTED => 'protected',
+                GModifiersObject::MODIFIER_STATIC => 'static',
+                GModifiersObject::MODIFIER_FINAL => 'final'
+               );
+    
+    $php = NULL;
+    foreach ($ms as $const => $modifier) {
+      if (($const & $bitmap) == $const)
+        $php .= $modifier.' ';
+    }
     return $php;
   }
   
@@ -99,5 +330,12 @@ class ClassWriter {
     return $this->imports;
   }
   
+  public function getCodeWriter() {
+    if (!isset($this->codeWriter)) {
+      $this->codeWriter = new CodeWriter;
+    }
+    
+    return $this->codeWriter;
+  }
 }
 ?>

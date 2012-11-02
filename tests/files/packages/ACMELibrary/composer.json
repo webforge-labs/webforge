@@ -1,0 +1,16 @@
+{
+    "name": "acme/library",
+    "description": "this package is mainly constructed to have a multiple packages conflict with the ACME\\IntranetApplication Namespace",
+    "authors": [
+        {
+            "name": "p.scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-0": {"ACME": ["lib"]}
+    }
+}
