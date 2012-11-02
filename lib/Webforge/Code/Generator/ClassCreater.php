@@ -35,6 +35,8 @@ class ClassCreater {
   public function create(GClass $gClass, $overwrite = FALSE) {
     $file = $this->mapper->getFile($gClass->getFQN());
     
+    $file->getDirectory()->create();
+    
     $gClass->createAbstractMethodStubs();
     
     $this->writer->write($gClass, $file, $overwrite);
