@@ -53,7 +53,7 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
     $this->registry->expects($times ?: $this->once())->method('findByFQN')
                    ->will(
                       $this->throwException(
-                        PackageNotFoundException::fromSearch(array('fqn'=>'searched for unkown fqn (not set in test)'))
+                        PackageNotFoundException::fromSearch(array('fqn'=>'searched for unkown fqn (not set in test)'), array('somePrefix','someOtherPrefix'))
                       )
                     );
   }

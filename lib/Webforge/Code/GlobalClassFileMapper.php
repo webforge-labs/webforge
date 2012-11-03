@@ -66,7 +66,8 @@ class GlobalClassFileMapper implements ClassFileMapper {
       try {
         $package = $this->packageRegistry->findByFQN($fqn);
       } catch(PackageNotFoundException $e) {
-        return NULL;
+        $e = ClassFileNotFoundException::fromPackageNotFoundException($fqn, $e);
+        throw $e;
       }
       
       $autoLoad = $package->getAutoLoadInfo();

@@ -29,7 +29,7 @@ class Registry {
       }
     }
 
-    throw PackageNotFoundException::fromSearch(array('fqn'=>$fqn));
+    throw PackageNotFoundException::fromSearch(array('fqn'=>$fqn), array_keys($this->prefixes));
   }
   
   protected function resolveToOne(Array $packages, $fqn) {
