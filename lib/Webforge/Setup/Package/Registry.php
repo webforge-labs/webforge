@@ -3,6 +3,7 @@
 namespace Webforge\Setup\Package;
 
 use Psc\System\Dir;
+use Psc\A;
 use Webforge\Code\Generator\GClass;
 
 class Registry {
@@ -38,7 +39,8 @@ class Registry {
     }
     
     // no algorithm yet:
-    throw new \Psc\Exception(sprintf("Multiple Packages found for '%s'. This cannot be solved, yet.", $fqn));
+    throw new \Psc\Exception(sprintf("Multiple Packages found for '%s'. This cannot be solved, yet.\nFound:\n%s",
+                                     $fqn, A::implode($packages, "\n", function ($package) { return $package->getSlug().' '.$package->getRootDirectory(); })));
   }
   
   /**

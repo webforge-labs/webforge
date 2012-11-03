@@ -46,20 +46,21 @@ PHP;
 
   public function testClassCreaterCreatesStubsForInterfacesAcceptance() {
     $this->expectClassMapping(
-      'Webforge\Code\Generator\Fixtures\MyGPSLocateableClass',
-
-      //$this->logicalOr($this->equalTo('Webforge\Code\Generator\Fixtures\MyGPSLocateableClass'),
-                       //$this->equalTo('Webforge\TestData\PHPClasses\GPSLocateable')
-                      //),
-      $this->exactly(1)// one for writing from the writer, one from reading from the reader
+      'Webforge\Code\Generator\Fixtures\MyGPSLocateableClass'
     );
     
-    $container = new \Webforge\Framework\Container();
-    $container->setClassWriter($this->classWriter);
+    $this->classElevator->expects($this->once())->method('elevateInterfaces')
+                        ->will($this->returnCallback(function ($gClass) {
+                          return $gClass->getInterface(0)
+                            ->createMethod('getLongitude')->getGClass()
+                            ->createMethod('getLatitude')->getGClass()
+                          ;
+                        }));
     
     $this->classCreater->setClassElevator(
-      $container->getClassElevator() // this then uses the globalClassFileMapper from container
+      $this->classElevator
     );
+    
 
     $file = $this->classCreater->create(
       GClass::create('Webforge\Code\Generator\Fixtures\MyGPSLocateableClass')

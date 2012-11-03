@@ -4,6 +4,7 @@ namespace Webforge\Code\Generator;
 
 use Webforge\Code\GlobalClassFileMapper;
 use Psc\System\File;
+use Psc\System\Dir;
 
 class ClassElevatorTest extends \Webforge\Code\Test\Base {
 
@@ -11,6 +12,10 @@ class ClassElevatorTest extends \Webforge\Code\Test\Base {
     $this->classReader = $this->getMockBuilder('ClassReader')->disableArgumentCloning()->getMock();
     
     $container = new \Webforge\Framework\Container();
+    $container->getPackageRegistry()
+                  ->addComposerPackageFromDirectory(
+                    Dir::factory(__DIR__.DIRECTORY_SEPARATOR)->sub('../../../../')
+                  );
     
     $this->elevator = new ClassElevator(
       $container->getClassFileMapper(),
