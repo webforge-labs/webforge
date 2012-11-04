@@ -89,6 +89,10 @@ class Container {
         $registry->addComposerPackageFromDirectory(Dir::factoryTS($info->path));
       }
     }
+    
+    if ($registry->findBySlug('webforge/webforge') === NULL) {
+      $registry->addComposerPackageFromDirectory(Dir::factoryTS(__DIR__)->sub('../../../')->resolvePath());
+    }
   }
   
   /**
