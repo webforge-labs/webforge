@@ -3,6 +3,7 @@
 namespace Webforge\Framework;
 
 use Webforge\Setup\Package\SimplePackage;
+use Psc\System\Dir;
 
 class ContainerTest extends \Webforge\Code\Test\Base {
   
@@ -33,6 +34,8 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('classFileMapper', 'Webforge\Code\GlobalClassFileMapper');
     $prop('packageRegistry', 'Webforge\Setup\Package\Registry');
     $prop('composerPackageReader', 'Webforge\Setup\Package\ComposerPackageReader');
+    $prop('partsInstaller', 'Webforge\Setup\Installer\PartsInstaller');
+    $prop('resourceDirectory', 'Psc\System\Dir');
     
     return $props;
   }
@@ -86,6 +89,20 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $this->assertArrayEquals(
       array('webforge/webforge', 'acme/intranet-application'),
       $this->reduceCollection($packages, 'slug')
+    );
+  }
+  
+    
+  public function testPartsInstallerHasSomeParts() {
+    $partsInstaller = $this->container->getPartsInstaller();
+    
+    $this->assertGreaterThan(0, count($partsInstaller->getParts()));
+  }
+  
+  public function testResourceDirectoryIsTheWebforgeResourceDirectory() {
+    $this->assertEquals(
+      (string) Dir::factory(__DIR__.DIRECTORY_SEPARATOR)->sub('../../../resources')->resolvePath(),
+      (string) $this->container->getResourceDirectory()
     );
   }
 }

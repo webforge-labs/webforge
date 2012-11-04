@@ -5,6 +5,7 @@ namespace Webforge\Setup\Package;
 use Psc\System\Dir;
 use Psc\A;
 use Webforge\Code\Generator\GClass;
+use Webforge\Common\String;
 
 class Registry {
   
@@ -31,6 +32,20 @@ class Registry {
     }
 
     throw PackageNotFoundException::fromSearch(array('fqn'=>$fqn), array_keys($this->prefixes));
+  }
+  
+  /**
+   * Returns a package by slug
+   *
+   * the first package with the slug beginning with $slug is returned
+   * @return Package|NULL
+   */
+  public function findBySlug($slug) {
+    foreach ($this->packages as $package) {
+      if (String::startsWith($package->getSlug(), $slug)) {
+        return $package;
+      }
+    }
   }
   
   protected function resolveToOne(Array $packages, $fqn) {

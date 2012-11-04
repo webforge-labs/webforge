@@ -10,6 +10,7 @@ use Webforge\Code\GlobalClassFileMapper;
 use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Setup\Package\Registry AS PackageRegistry;
 use Webforge\Setup\Package\ComposerPackageReader;
+use Webforge\Setup\Installer\PartsInstaller;
 
 use Psc\JS\JSONConverter;
 use Psc\System\Dir;
@@ -62,7 +63,16 @@ class Container {
    * @var Webforge\Setup\Package\ComposerPackageReader
    */
   protected $composerPackageReader;
+
+  /**
+   * @var Webforge\Setup\Installer\PartsInstaller
+   */
+  protected $partsInstaller;
   
+  /**
+   * @var Psc\System\Dir
+   */
+  protected $resourceDirectory;
   
   public function __construct() {
   }
@@ -148,7 +158,7 @@ class Container {
     return $this->packageRegistry;
   }
 
-    /**
+  /**
    * @return Webforge\Setup\Package\ComposerPackageReader
    */
   public function getComposerPackageReader() {
@@ -158,6 +168,34 @@ class Container {
     return $this->composerPackageReader;
   }
 
+  /**
+   * @return Webforge\Setup\Installer\PartsInstaller
+   */
+  public function getPartsInstaller() {
+    if (!isset($this->partsInstaller)) {
+      $this->partsInstaller =
+        new PartsInstaller(
+          Array(
+            new \Webforge\Setup\Installer\CreateCLIPart(),
+            new \Webforge\Setup\Installer\CreateBootstrapPart()
+          ),
+        $this
+      );
+    }
+    
+    return $this->partsInstaller;
+  }
+
+  /**
+   * @return Psc\System\Dir
+   */
+  public function getResourceDirectory() {
+    if (!isset($this->resourceDirectory)) {
+      $this->resourceDirectory = $this->getPackageRegistry()->findBySlug('webforge/webforge')->getRootDirectory()->sub('resources/');
+    }
+    return $this->resourceDirectory;
+  }
+  
   // @codeCoverageIgnoreStart
   /**
    * @param Webforge\Setup\Package\Registry $packageRegistry
@@ -229,10 +267,21 @@ class Container {
     return $this->applicationStorageName;
   }
 
+
   public function setComposerPackageReader(ComposerPackageReader $reader) {
     $this->composerPackageReader = $reader;
     return $this;
   }
+  
+  /**
+   * @param Webforge\Setup\Installer\PartsInstaller $partsInstaller
+   * @chainable
+   */
+  public function setPartsInstaller(PartsInstaller $partsInstaller) {
+    $this->partsInstaller = $partsInstaller;
+    return $this;
+  }
+
   // @codeCoverageIgnoreEnd
 }
 ?>

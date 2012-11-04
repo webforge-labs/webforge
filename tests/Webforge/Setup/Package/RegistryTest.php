@@ -44,5 +44,16 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $acmeLibPackage = $registry->findByFQN('ACME\Common\Util');
     $this->assertEquals('acme/library', $acmeLibPackage->getSlug());
   }
+  
+  public function testFindBySlug() {
+    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/Webforge/'));
+    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+    
+    $this->assertSame(
+      $this->registry->findByFQN('ACME\Common\Util'),
+      $this->registry->findBySlug('acme/library'),
+      'acme library package is expected to be returned'
+    );
+  }
 }
 ?>

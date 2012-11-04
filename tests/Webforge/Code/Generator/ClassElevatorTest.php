@@ -10,15 +10,20 @@ class ClassElevatorTest extends \Webforge\Code\Test\Base {
 
   public function setUp() {
     $this->classReader = $this->getMockBuilder('ClassReader')->disableArgumentCloning()->getMock();
+
+    $this->classFileMapper = $this->getMockBuilder('ClassFileMapper')->disableArgumentCloning()->getMock();
     
+    
+    /*
     $container = new \Webforge\Framework\Container();
     $container->getPackageRegistry()
                   ->addComposerPackageFromDirectory(
                     Dir::factory(__DIR__.DIRECTORY_SEPARATOR)->sub('../../../../')
                   );
+    */
     
     $this->elevator = new ClassElevator(
-      $container->getClassFileMapper(),
+      $this->classFileMapper,
       $this->classReader
     );
     
@@ -26,6 +31,8 @@ class ClassElevatorTest extends \Webforge\Code\Test\Base {
   }
   
   public function testThatElevatorReadsTheClassFromSource() {
+    $this->classFileMapper->expects($this->once())->method('getFile')->will($this->returnValue(new File('none')));
+    
     $this->classReader->expects($this->once())->method('readInto')
                       ->will($this->returnValue($this->gClass));
                       
@@ -33,6 +40,8 @@ class ClassElevatorTest extends \Webforge\Code\Test\Base {
   }
   
   public function testParentElevation() {
+    $this->classFileMapper->expects($this->once())->method('getFile')->will($this->returnValue(new File('none')));
+    
     $child = new GClass('Webforge\Geometric\Point');
     $parent = new GClass('Webforge\Geometric\Base');
     $child->setParent($parent);
@@ -47,6 +56,8 @@ class ClassElevatorTest extends \Webforge\Code\Test\Base {
   }
 
   public function testInterfaceElevation() {
+    $this->classFileMapper->expects($this->once())->method('getFile')->will($this->returnValue(new File('none')));
+    
     $gClass = new GClass('Webforge\Geometric\Point');
     $exportable = new GClass('Webforge\Common\Exportable');
     $gClass->addInterface($exportable);
