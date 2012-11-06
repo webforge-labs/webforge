@@ -69,21 +69,25 @@ class NestedSetConverter extends \Psc\SimpleObject {
      * Runs in O(N*log[2](N)), non recursive
      */
     $cnt = 0;
+    $depth = 0;
     $prevNode = NULL;
     foreach ($ppTree as $node) {
       // first root node?
       if (!isset($prevNode)) {
         $node->setLft(++$cnt);
+        $node->setDepth($depth = 0);
       
       // downwards?
       } elseif ($prevNode->equalsNode($node->getParent())) {
         $node->setLft(++$cnt);
+        $node->setDepth(++$depth);
         
       // sidwards?
       } elseif ($node->getParent() === NULL && $prevNode->getParent() === NULL ||  // both are a root node
                 $node->getParent() !== NULL && $node->getParent()->equalsNode($prevNode->getParent())) {
         $prevNode->setRgt(++$cnt);
         $node->setLft(++$cnt);
+        $node->setDepth($depth);
       
       // upwards? notice: this can be more than one step and: has to be checked after downwards
       } elseif($node->getParent() !== NULL && !$node->getParent()->equalsNode($prevNode->getParent())) {
@@ -96,9 +100,11 @@ class NestedSetConverter extends \Psc\SimpleObject {
           // normally it would never hit root, because root is traversed only at the last iteration
           $walkupNode = $walkupNode->getParent();
           $walkupNode->setRgt(++$cnt);
+          $depth--;
         }
         
         $node->setLft(++$cnt);
+        $node->setDepth($depth);
         
       // upwards to new root?
       } elseif($node->getParent() === NULL && $prevNode->getParent() !== NULL) {
@@ -111,7 +117,7 @@ class NestedSetConverter extends \Psc\SimpleObject {
         }
         $walkupNode->setRgt(++$cnt); // we number the root-sibling to us here, because there are no new nodes in that root
         
-        
+        $node->setDepth($depth = 0);
         $node->setLft(++$cnt); // our own numbering
       }
       

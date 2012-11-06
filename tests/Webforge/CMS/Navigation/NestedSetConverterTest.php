@@ -58,8 +58,7 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
         $arrayNode['parent'] = $nodesByTitle[ $arrayNode['parent'] ];
       }
       
-      $node = new SimpleNode($arrayNode);
-      $nodes[] = $node;
+      $nodes[] = $node = new SimpleNode($arrayNode);
       $nodesByTitle[$node->getTitle()] = $node;
     }
     
