@@ -71,7 +71,7 @@ class NestedSetConverter extends \Psc\SimpleObject {
     $cnt = 0;
     $prevNode = NULL;
     foreach ($ppTree as $node) {
-      // root?
+      // first root node?
       if (!isset($prevNode)) {
         $node->setLft(++$cnt);
       
@@ -87,7 +87,7 @@ class NestedSetConverter extends \Psc\SimpleObject {
       
       // upwards? notice: this can be more than one step and: has to be checked after downwards
       } elseif($node->getParent() !== NULL && !$node->getParent()->equalsNode($prevNode->getParent())) {
-        $prevNode->setRgt(++$cnt); // set right for last sibling
+        $prevNode->setRgt(++$cnt); // set right for last child
         
         // move up the path until we got to our parent (dont number that) and give right values for parent nodes on its way
         // we dont number our parent, because we dont know if we have other siblings on that level
@@ -99,6 +99,20 @@ class NestedSetConverter extends \Psc\SimpleObject {
         }
         
         $node->setLft(++$cnt);
+        
+      // upwards to new root?
+      } elseif($node->getParent() === NULL && $prevNode->getParent() !== NULL) {
+        // we are a root node, and the prevNode is in a root-tree before this tree
+        
+        $walkupNode = $prevNode;
+        while($walkupNode->getParent() !== NULL) {
+          $walkupNode->setRgt(++$cnt); // this is always the last child from an layer
+          $walkupNode = $walkupNode->getParent();
+        }
+        $walkupNode->setRgt(++$cnt); // we number the root-sibling to us here, because there are no new nodes in that root
+        
+        
+        $node->setLft(++$cnt); // our own numbering
       }
       
       

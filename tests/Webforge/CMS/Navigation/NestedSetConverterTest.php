@@ -11,20 +11,32 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
   public function setUp() {
     parent::setUp();
     $this->nestedSetConverter = new NestedSetConverter();
-    $this->food = new \Webforge\TestData\NestedSet\FoodCategories();
   }
   
-  public function testAndCreateTheArrayStructureSnippet() {
-    $this->assertXmlStringEqualsXmlString(
-      $this->food->toHTMLList(),
-      $this->nestedSetConverter->toHTMLList($this->wrap($this->food->toArray()))
+  public static function getFixtures() {
+    return Array(
+      array(new \Webforge\TestData\NestedSet\FoodCategories()),
+      array(new \Webforge\TestData\NestedSet\Consumables()),
     );
   }
   
-  public function testConversionFromParentPointerToNestedSetFlatArray() {
+  /**
+   * @dataProvider getFixtures
+   */
+  public function testAndCreateTheArrayStructureSnippet($fixture) {
+    $this->assertXmlStringEqualsXmlString(
+      $fixture->toHTMLList(),
+      $this->nestedSetConverter->toHTMLList($this->wrap($fixture->toArray()))
+    );
+  }
+  
+  /**
+   * @dataProvider getFixtures
+   */
+  public function testConversionFromParentPointerToNestedSetFlatArray($fixture) {
     $this->assertEquals(
-      $this->food->toArray(),
-      $this->unwrap($this->nestedSetConverter->fromParentPointer($this->wrap($this->food->toParentPointerArray())))
+      $fixture->toArray(),
+      $this->unwrap($this->nestedSetConverter->fromParentPointer($this->wrap($fixture->toParentPointerArray())))
     );
   }
   

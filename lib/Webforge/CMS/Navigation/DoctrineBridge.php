@@ -45,7 +45,6 @@ class DoctrineBridge implements DoctrineEventSubscriber {
    */
   protected $trxLevel = 0;
   
-  
   /**
    * @var Webforge\CMS\Navigation\NestedSetConverter
    */
@@ -109,6 +108,13 @@ class DoctrineBridge implements DoctrineEventSubscriber {
       
     }
     return $this;
+  }
+  
+  /**
+   * @return array
+   */
+  public function getNodes() {
+    return $this->nodes;
   }
   
   /**
