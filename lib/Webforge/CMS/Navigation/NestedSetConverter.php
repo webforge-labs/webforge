@@ -5,13 +5,13 @@ namespace Webforge\CMS\Navigation;
 class NestedSetConverter extends \Psc\SimpleObject {
 
   /**
-   * Convertes a NestedSet flat-Array into a nested HTML-List (ul, li)
+   * Converts a NestedSet flat-Array into a nested HTML-List (ul, li)
    *
    * @param Webforge\CMS\Navigation\Node[] $tree
    * @return string
    */
   public function toHTMLList(Array $tree) {
-    $depth = -1; 
+    $depth = -1;
     $html = '';
     while (!empty($tree)) {
       $node = array_shift($tree);
@@ -141,6 +141,23 @@ class NestedSetConverter extends \Psc\SimpleObject {
     } while ($walkupNode !== NULL);
     
     return $tree;
+  }
+  
+  /**
+   * Converts a NestedSet flat-Array into a human readable text format
+   *
+   * @param Webforge\CMS\Navigation\Node[] $tree
+   * @return string
+   */
+  public function toString(Array $tree) {
+    $text = '';
+    while (!empty($tree)) {
+      $node = array_shift($tree);
+
+      $text .= str_repeat('  ',$node->getDepth()).(string) $node."\n";
+    }
+    
+    return $text;
   }
 }
 ?>

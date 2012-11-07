@@ -31,6 +31,10 @@ class SimpleNode implements Node {
     }
   }
   
+  public function __toString() {
+    return $this->title;
+  }
+  
   public function unwrap() {
     return array (
       'title' => $this->title,

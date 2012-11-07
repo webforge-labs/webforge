@@ -29,6 +29,16 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
       $this->nestedSetConverter->toHTMLList($this->wrap($fixture->toArray()))
     );
   }
+
+  /**
+   * @dataProvider getFixtures
+   */
+  public function testTextConversionFromFlatArrayToString($fixture) {
+    $this->assertEquals(
+      $fixture->toString(),
+      $this->nestedSetConverter->toString($this->wrap($fixture->toArray()))
+    );
+  }
   
   /**
    * @dataProvider getFixtures
