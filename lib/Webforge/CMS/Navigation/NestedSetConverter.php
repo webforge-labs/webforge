@@ -7,7 +7,19 @@ class NestedSetConverter extends \Psc\SimpleObject {
   /**
    * Converts a NestedSet flat-Array into a nested HTML-List (ul, li)
    *
+   * htmlSnippets is an array to inject html (or others) into this function
+   * the keys/values are:
+   *
+   * 'rootOpen' => function ($root) @returns string just the root-open-tag (e.g. <ul id="navigation">)
+   * 'listOpen' => function ($parentNode) @returns string just the open tag for a list of childen (e.g. <ul>)
+   * 'node'     => function ($node) @returns string the open tag of the node (e.g. <li>) AND the represenation of the node (e.g. <a>$node->getTitle()</a>)
+   *
+   * 'rootClose' => string (e.g. </ul>)
+   * 'listClose' => string (e.g. </ul>)
+   * 'nodeClose' => string (e.g. </li>)
+   *
    * @param Webforge\CMS\Navigation\Node[] $tree
+   * @param array $htmlSnippets an array of snippets to inject
    * @return string
    */
   public function toHTMLList(Array $tree, array $htmlSnippets = array()) {
@@ -17,7 +29,7 @@ class NestedSetConverter extends \Psc\SimpleObject {
       array(
         'rootOpen'=>function ($root) { return '<ul>'; },
         'listOpen'=>function ($parentNode) { return '<ul>'; },
-        'nodeOpen'=>function ($node) { return '<li>'.$node->getNodeHTML(); },
+        'node'=>function ($node) { return '<li>'.$node->getNodeHTML(); },
         
         'rootClose'=>'</ul>',
         'listClose'=>'</ul>',
@@ -63,7 +75,7 @@ class NestedSetConverter extends \Psc\SimpleObject {
       }
       
       // add the new node
-      $html .= str_repeat('  ', $indent).$nodeOpen($node);
+      $html .= str_repeat('  ', $indent).$node($node);
       
       $depth = $node->getDepth();
       $prevNode = $node;
