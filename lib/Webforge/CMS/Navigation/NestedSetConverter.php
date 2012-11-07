@@ -29,7 +29,7 @@ class NestedSetConverter extends \Psc\SimpleObject {
       array(
         'rootOpen'=>function ($root) { return '<ul>'; },
         'listOpen'=>function ($parentNode) { return '<ul>'; },
-        'node'=>function ($node) { return '<li>'.$node->getNodeHTML(); },
+        'nodeDecorator'=>function ($node) { return '<li>'.$node->getNodeHTML(); },
         
         'rootClose'=>'</ul>',
         'listClose'=>'</ul>',
@@ -75,7 +75,7 @@ class NestedSetConverter extends \Psc\SimpleObject {
       }
       
       // add the new node
-      $html .= str_repeat('  ', $indent).$node($node);
+      $html .= str_repeat('  ', $indent).$nodeDecorator($node);
       
       $depth = $node->getDepth();
       $prevNode = $node;
