@@ -12,32 +12,49 @@ class NestedSetConverter extends \Psc\SimpleObject {
    */
   public function toHTMLList(Array $tree) {
     $depth = -1;
+    $indent = -1;
     $html = '';
     while (!empty($tree)) {
       $node = array_shift($tree);
 
-      // Level down? (the node is in a new list of children)
+      // open new Level (go down) (the node is the first node of a new list of children)
       if ($node->getDepth() > $depth) {
-        $html .= '<ul>';
+        $html .= sprintf("%s<ul>\n", ($indent !== -1 ? "\n" : '').str_repeat('  ', ++$indent));
+        $indent++;
       
       // Level up? (the node is on an upper level after a list of childen)
       } elseif ($node->getDepth() < $depth) {
-        $html .= str_repeat("</li></ul>", $depth - $node->getDepth());
-        $html .= '</li>';
+        $html .= "</li>\n"; // close last node of layer
+        
+        // close all levels inbetween current node and previous node
+        for ($d = $node->getDepth(); $d < $depth; $d++) {
+          $indent--;
+          $html .= str_repeat('  ', $indent)."</ul>\n";
+          $indent--;
+          $html .= str_repeat('  ', $indent)."</li>\n"; 
+        }
       
       // same Level
       } else {
-        $html .= '</li>'; // close sibling from before
+        $html .= "</li>\n"; // close sibling from before
       }
       
       // add the new node
-      $html .= '<li>'.$node->getNodeHTML();
+      $html .= str_repeat('  ', $indent).'<li>'.$node->getNodeHTML();
       
       $depth = $node->getDepth();
     }
-    
+
     // close from last iteration
-    $html .= str_repeat('</li></ul>', $depth + 1);
+    $html .= "</li>\n";
+    for ($i = 1; $i<=$depth; $i++) {
+      $indent--;
+      $html .= str_repeat('  ', $indent)."</ul>\n"; 
+      $indent--;
+      $html .= str_repeat('  ', $indent)."</li>\n";
+    }
+    $html .= "</ul>";
+    
     return $html;
   }
   

@@ -24,7 +24,8 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
    * @dataProvider getFixtures
    */
   public function testAndCreateTheArrayStructureSnippet($fixture) {
-    $this->assertXmlStringEqualsXmlString(
+    //$this->assertXmlStringEqualsXmlString(
+    $this->assertEquals( // our function is whitespace-safe, so we can use assertEquals instead of XmlStringEquals
       $fixture->toHTMLList(),
       $this->nestedSetConverter->toHTMLList($this->wrap($fixture->toArray()))
     );
