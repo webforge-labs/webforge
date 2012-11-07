@@ -56,9 +56,18 @@ class DoctrineBridge implements DoctrineEventSubscriber {
   }
   
   /**
-   * Starts listening for persisted Nodes
+   * deprecated: use beginTransaction
    */
   public function startTransaction() {
+    return $this->beginTransaction();
+  }
+  
+  /**
+   * Starts listening for persisted Nodes
+   *
+   * to be concise with doctrine this is beginTransaction not startTransaction
+   */
+  public function beginTransaction() {
     $this->em->getEventManager()->addEventSubscriber($this);
     $this->trxLevel++;
     $this->nodes = array();
