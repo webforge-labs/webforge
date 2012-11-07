@@ -10,50 +10,74 @@ class NestedSetConverter extends \Psc\SimpleObject {
    * @param Webforge\CMS\Navigation\Node[] $tree
    * @return string
    */
-  public function toHTMLList(Array $tree) {
+  public function toHTMLList(Array $tree, array $htmlSnippets = array()) {
+    // TODO: whats faster: this or a implementation as a class with 6 methods?
+    // this is of course more flexible than a decorator class
+    $htmlSnippets = array_merge(
+      array(
+        'rootOpen'=>function ($root) { return '<ul>'; },
+        'listOpen'=>function ($parentNode) { return '<ul>'; },
+        'nodeOpen'=>function ($node) { return '<li>'.$node->getNodeHTML(); },
+        
+        'rootClose'=>'</ul>',
+        'listClose'=>'</ul>',
+        'nodeClose'=>'</li>',
+      ),
+      $htmlSnippets
+    );
+    extract($htmlSnippets); // unfortunately we cannot use in code: $htmlSnippets->rootOpen()
+    
     $depth = -1;
     $indent = -1;
+    $prevNode = NULL;
     $html = '';
     while (!empty($tree)) {
       $node = array_shift($tree);
 
       // open new Level (go down) (the node is the first node of a new list of children)
       if ($node->getDepth() > $depth) {
-        $html .= sprintf("%s<ul>\n", ($indent !== -1 ? "\n" : '').str_repeat('  ', ++$indent));
+        $indent++;
+        if ($depth === -1) {
+          $html .= $rootOpen($node)."\n";
+        } else {
+          $html .= "\n".str_repeat('  ', $indent).$listOpen($prevNode)."\n";
+        }
+        
         $indent++;
       
       // Level up? (the node is on an upper level after a list of childen)
       } elseif ($node->getDepth() < $depth) {
-        $html .= "</li>\n"; // close last node of layer
+        $html .= $nodeClose."\n"; // close last node of layer
         
         // close all levels inbetween current node and previous node
         for ($d = $node->getDepth(); $d < $depth; $d++) {
           $indent--;
-          $html .= str_repeat('  ', $indent)."</ul>\n";
+          $html .= str_repeat('  ', $indent).$listClose."\n";
           $indent--;
-          $html .= str_repeat('  ', $indent)."</li>\n"; 
+          $html .= str_repeat('  ', $indent).$nodeClose."\n"; 
         }
       
       // same Level
       } else {
-        $html .= "</li>\n"; // close sibling from before
+        $html .= $nodeClose."\n"; // close sibling from before
       }
       
       // add the new node
-      $html .= str_repeat('  ', $indent).'<li>'.$node->getNodeHTML();
+      $html .= str_repeat('  ', $indent).$nodeOpen($node);
       
       $depth = $node->getDepth();
+      $prevNode = $node;
     }
 
     // close from last iteration
     $html .= "</li>\n";
     for ($i = 1; $i<=$depth; $i++) {
       $indent--;
-      $html .= str_repeat('  ', $indent)."</ul>\n"; 
+      $html .= str_repeat('  ', $indent).$listClose."\n"; 
       $indent--;
-      $html .= str_repeat('  ', $indent)."</li>\n";
+      $html .= str_repeat('  ', $indent).$nodeClose."\n";
     }
-    $html .= "</ul>";
+    $html .= $rootClose;
     
     return $html;
   }
