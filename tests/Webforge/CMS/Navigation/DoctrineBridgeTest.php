@@ -16,30 +16,11 @@ class DoctrineBridgeTest extends \Webforge\Code\Test\Base {
                   ->disableOriginalConstructor()
                   ->getMock();
 
-    $this->evm = $this->getMockBuilder('Doctrine\Common\EventManager')
-                  ->disableOriginalConstructor()
-                  ->getMock();
-    
     $this->food = new \Webforge\TestData\NestedSet\FoodCategories();
-
     $this->bridge = new DoctrineBridge($this->em);
   }
   
-  public function testBridgeIsSubscribingToEntityManager() {
-    $this->assertInstanceof('Doctrine\Common\EventSubscriber', $this->bridge);
-
-    $this->expectBridgeSubscribesToEVMinEM();
-    $this->bridge->startTransaction();
-  }
-  
-  protected function expectBridgeSubscribesToEVMinEM() {
-    $this->evm->expects($this->once())->method('addEventSubscriber')->with($this->identicalTo($this->bridge));
-    $this->em->expects($this->once())->method('getEventManager')->will($this->returnValue($this->evm));
-  }
-  
   public function testGathersEntitiesInTransactionsForConverter() {
-    $this->expectBridgeSubscribesToEVMinEM();
-    
     list ($node1, $node2, $node3) = array_map(
       function ($arrayNode) {
         return new SimpleNode($arrayNode);
@@ -55,13 +36,11 @@ class DoctrineBridgeTest extends \Webforge\Code\Test\Base {
       ));
     $this->bridge->setConverter($converter);
     
+    $this->bridge->beginTransaction();
     
-    $this->bridge->startTransaction();
-    
-    // this is what prePersist() would do (for sake of simplicity, and: we don't want to mock the behaviour from doctrine here)
-    $this->bridge->addNode($node1); 
-    $this->bridge->addNode($node2); 
-    $this->bridge->addNode($node3);
+    $this->bridge->persist($node1); 
+    $this->bridge->persist($node2); 
+    $this->bridge->persist($node3);
     
     $this->bridge->commit();
   }

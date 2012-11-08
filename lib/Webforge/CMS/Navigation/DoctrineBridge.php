@@ -2,14 +2,11 @@
 
 namespace Webforge\CMS\Navigation;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\Common\EventSubscriber AS DoctrineEventSubscriber;
 use Doctrine\ORM\EntityManager;
 
 /**
  * The doctrine bridge helps to adjust the nestedset values a set of gathered navigation nodes
  *
- * the nodes are gathered while persisting into the EntityManager
  * to have a more exlicit and "not so magic" interface we use a transaction metapher for gathering the nodes
  *
  * basically its:
@@ -17,9 +14,9 @@ use Doctrine\ORM\EntityManager;
  * $bridge = new DoctrineBridge(EntityManager $em)
  * $bridge->startTransaction();
  *
- * $em->persist($node1);
- * $em->persist($node2);
- * $em->persist($node3);
+ * $bridge->persist($node1);
+ * $bridge->persist($node2);
+ * $bridge->persist($node3);
  *
  * (...)
  *
@@ -28,7 +25,7 @@ use Doctrine\ORM\EntityManager;
  *
  * the bridge applies all values to the persisted nodes before the EntityManager flushes
  */
-class DoctrineBridge implements DoctrineEventSubscriber {
+class DoctrineBridge {
   
   /**
    * @var Doctrine\ORM\EntityManager
@@ -56,19 +53,12 @@ class DoctrineBridge implements DoctrineEventSubscriber {
   }
   
   /**
-   * deprecated: use beginTransaction
-   */
-  public function startTransaction() {
-    return $this->beginTransaction();
-  }
-  
-  /**
    * Starts listening for persisted Nodes
    *
    * to be concise with doctrine this is beginTransaction not startTransaction
+   * this does not start a transaction on the entityManager!
    */
   public function beginTransaction() {
-    $this->em->getEventManager()->addEventSubscriber($this);
     $this->trxLevel++;
     $this->nodes = array();
     return $this;
@@ -76,6 +66,8 @@ class DoctrineBridge implements DoctrineEventSubscriber {
   
   /**
    * Stopps listening for persisted Nodes and updates the gathered ones
+   *
+   * this does not commit a transaction on the entityManager!
    */
   public function commit() {
     if ($this->trxLevel > 0) {
@@ -83,26 +75,6 @@ class DoctrineBridge implements DoctrineEventSubscriber {
       $this->trxLevel--;
     }
     return $this;
-  }
-  
-  /**
-   */
-  public function getSubscribedEvents() {
-    return array('prePersist');
-  }
-
-  /**
-   * Is called from doctrine on persist
-   *
-   * @param LifecycleEventArgs $args
-   */
-  public function prePersist(LifecycleEventArgs $args) {
-    if ($this->trxLevel > 0) {
-      $node = $args->getEntity();
-      if ($node instanceof Node) {
-        $this->addNode($node);
-      }
-    }
   }
   
   /**
@@ -116,6 +88,17 @@ class DoctrineBridge implements DoctrineEventSubscriber {
       $this->nodes[] = $node;
       
     }
+    return $this;
+  }
+  
+  /**
+   * Adds a node and persists it in the EntityManager
+   *
+   * @chainable
+   */
+  public function persist(Node $node) {
+    $this->em->persist($node);
+    $this->addNode($node);
     return $this;
   }
   
