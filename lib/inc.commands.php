@@ -2,6 +2,7 @@
 
 use Webforge\Code\Generator\ClassCreater;
 use Webforge\Code\Generator\ClassWriter;
+use Webforge\Code\Generator\GFunctionBody;
 use Webforge\Code\GlobalClassFileMapper;
 use Webforge\Code\Generator\GClass;
 use Webforge\Code\Generator\GInterface;
@@ -10,8 +11,10 @@ use Webforge\Framework\Container AS FrameworkContainer;
 
 use Psc\JS\JSONConverter;
 use Psc\System\File;
+use Psc\System\Dir;
 
 $container = new FrameworkContainer();
+$container->initLocalPackageFromDirectory(Dir::factoryTS(getcwd()));
 
 /**
  *
@@ -54,6 +57,42 @@ $createCommand('create-class',
     return 0;
   },
   'Creates a new empty Class stub'
+);
+
+$createCommand('create-test',
+  array(
+    $arg('fqn', 'The full qualified name of the class under test'),
+    $flag('overwrite', NULL, 'If set the test will be created, regardless if the file already exists')
+  ),
+  function ($input, $output, $command) use ($container) {
+    $creater = new ClassCreater($container->getClassFileMapper(),
+                                $container->getClassWriter(),
+                                $container->getClassElevator()
+                               );
+    
+    $gClass = new GClass($input->getArgument('fqn'));
+    $testClass = new GClass($gClass->getFQN().'Test');
+    $testClass->setParent(
+      new GClass('Webforge\Code\Test\Base')
+    );
+    
+    $testClass->createMethod(
+      'setUp',
+      array(),
+      GFunctionBody::create(
+        array(
+          '$this->chainClass = \''.$gClass->getFQN().'\';',
+          'parent::setUp();'
+        )
+      )
+    );
+    
+    $file = $creater->create($testClass, $input->getOption('overwrite') ? ClassCreater::OVERWRITE : FALSE);
+    
+    $command->info('wrote Test '.$gClass.' to file: '.$file);
+    return 0;
+  },
+  'Creates a new empty Unit-Test stub'
 );
 
 $createCommand('register-package',

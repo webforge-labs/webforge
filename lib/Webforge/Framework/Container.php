@@ -18,7 +18,7 @@ use Psc\System\Dir;
 /**
  * This container includes the base classes for the framework
  *
- * 
+ * its related to the webforge core-project
  */
 class Container {
   
@@ -58,6 +58,14 @@ class Container {
    * @var Webforge\Setup\Package\Registry
    */
   protected $packageRegistry;
+  
+  /**
+   * The local package is the package for the current context
+   * 
+   * this is not necessary the package from webforge unless its called from webforge-core
+   * @var Webforge\Setup\Package\Package
+   */
+  protected $localPackage;
   
   /**
    * @var Webforge\Setup\Package\ComposerPackageReader
@@ -181,13 +189,29 @@ class Container {
         new PartsInstaller(
           Array(
             new \Webforge\Setup\Installer\CreateCLIPart(),
-            new \Webforge\Setup\Installer\CreateBootstrapPart()
+            new \Webforge\Setup\Installer\CreateBootstrapPart(),
+            new \Webforge\Setup\Installer\InstallTestSuitePart()
           ),
         $this
       );
     }
     
     return $this->partsInstaller;
+  }
+  
+  /**
+   * @return Webforge\Setup\Package\Package
+   */
+  public function getLocalPackage() {
+    return $this->localPackage;
+  }
+  
+  /**
+   * @chainable
+   */
+  public function initLocalPackageFromDirectory(Dir $dir) {
+    $this->localPackage = $this->getPackageRegistry()->findByDirectory($dir);
+    return $this;
   }
 
   /**

@@ -39,8 +39,28 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
     );
     
     $actualFile = $this->mapper->getFile('ACME\IntranetApplication\Main');
-    
     $expectedFile = $this->getFixtureFile('ACME', array('lib', 'ACME', 'IntranetApplication'), 'Main.php');
+    
+    $this->assertEquals((string) $expectedFile, (string) $actualFile);
+  }
+  
+  public function testAmbiguousAutoloadInfoGetsResolvedToNormalClass() {
+    $this->expectRegistryFindsPackageForFQN(
+      $this->createPackage(
+        'webforge/webforge',
+        'Webforge',
+        Array(
+          'psr-0'=>(object) array(
+            'Webforge'=> array('lib/', 'tests/')
+          )
+        )
+      ),
+      'Webforge\Common\String'
+    );
+    
+    $actualFile = $this->mapper->getFile('Webforge\Common\String');
+    $expectedFile = $this->getFixtureFile('Webforge', array('lib', 'Webforge', 'Common'), 'String.php');
+    
     $this->assertEquals((string) $expectedFile, (string) $actualFile);
   }
   
@@ -58,11 +78,12 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
                     );
   }
   
-  protected function createPackage($slug, $dirName) {
+  protected function createPackage($slug, $dirName, Array $autoLoadInfoSpec = NULL) {
     $package = new SimplePackage($slug,
                                  $this->getPackageDir($dirName),
                                  new AutoLoadInfo(
-                                   Array(
+                                  $autoLoadInfoSpec ?: 
+                                    Array(
                                      'psr-0'=>(object) array(
                                        'ACME'=> array('lib/')
                                       )

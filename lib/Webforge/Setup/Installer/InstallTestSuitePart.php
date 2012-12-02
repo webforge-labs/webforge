@@ -1,0 +1,70 @@
+<?php
+
+namespace Webforge\Setup\Installer;
+
+use Psc\System\Dir;
+use Psc\TPL\TPL;
+use Webforge\Setup\Package\Package;
+
+class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Setup\Package\PackageAware {
+
+  /**
+   * @var Webforge\Setup\Package\Package
+   */
+  protected $package;
+  
+  protected $installPHPUnitLocally = FALSE;
+
+  public function __construct() {
+    parent::__construct('InstallTestSuite');
+    $this->installPHPUnitLocally = FALSE;
+  }
+  
+  public function installTo(Dir $target, Installer $installer) {
+    $resources = $this->container->getResourceDirectory();
+    
+    $tpl = function($name) use ($resources) {
+      return $resources->sub('installTemplates/')->getFile($name);
+    };
+    
+    $installer->write(
+      TPL::miniTemplate(
+        $tpl('phpunit.template.xml')->getContents(),
+        array('packageTitle'=>$this->package->getTitle())
+      ),
+      $target->getFile('phpunit.xml.dist'),
+      Installer::IF_NOT_EXISTS
+    );
+    
+    $tests = $target->sub('tests/')->create();
+    
+    if ($target->getFile('bootstrap.php')) {
+      $installer->warn('bootstrap.php should exist for php unit tests bootstrapping');
+    }
+    
+    //@TODO ENHC: add to composer.json for autoloading
+    
+    if ($this->installPHPUnitLocally) {
+      $installer->execute(
+        sprintf('composer --working-dir=%s --dev require phpunit/phpunit:3.7.x-dev', $target->getQuotedString())
+      );
+    }
+  }
+  
+  /**
+   * @param Webforge\Setup\Package\Package $package
+   * @chainable
+   */
+  public function setPackage(Package $package) {
+    $this->package = $package;
+    return $this;
+  }
+
+  /**
+   * @return Webforge\Setup\Package\Package
+   */
+  public function getPackage() {
+    return $this->package;
+  }
+}
+?>

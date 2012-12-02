@@ -55,5 +55,15 @@ class RegistryTest extends \Webforge\Code\Test\Base {
       'acme library package is expected to be returned'
     );
   }
+  
+  public function testRegistryFindsProjectFromDirectoryWhichIsChildOfAprojectDirectory() {
+    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+    
+    $this->assertSame(
+      $this->registry->findByDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/tests/ACME')),
+      $this->registry->findBySlug('acme/library'),
+      'acme library package is expected to be returned, when find by path'
+    );
+  }
 }
 ?>

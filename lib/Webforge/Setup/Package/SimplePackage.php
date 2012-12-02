@@ -34,12 +34,32 @@ class SimplePackage implements Package {
   public function getSlug() {
     return $this->slug;
   }
+  
+  /**
+   * @return string
+   */
+  public function getTitle() {
+    return ($pos = mb_strrpos($this->slug, '/')) !== FALSE
+            ? ucfirst(mb_substr($this->slug, $pos+1))
+            : $this->slug;
+  }
 
   /**
    * @return Psc\System\Dir
    */
   public function getRootDirectory() {
     return $this->rootDirectory;
+  }
+  
+  /**
+   * @return Psc\System\Dir (cloned)
+   */
+  public function getDirectory($type = self::ROOT) {
+    if ($type === self::ROOT) {
+      return $this->getRootDirectory()->sub('/');
+    } elseif ($type === self::TESTS) {
+      return $this->getRootDirectory()->sub('/tests');
+    }
   }
   
   /**

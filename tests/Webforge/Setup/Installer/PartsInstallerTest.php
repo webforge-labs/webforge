@@ -12,6 +12,7 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
   public function setUp() {
     $this->testDir = Dir::createTemporary();
     $this->container = new \Webforge\Framework\Container();
+    $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     $this->partsInstaller = new PartsInstaller(array(), $this->container);
     
     $this->existingFile = File::createTemporary();
@@ -35,6 +36,13 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
     
     $this->partsInstaller->install($part, $this->testDir);
   }
+
+  public function testPartsInstallerAssignsPackageofLocalProjectForPartsThatArePackageAware() {
+    $part = $this->getMockForAbstractClass('PackageAwareTestPart', array('packageTestPart'));
+    $part->expects($this->once())->method('setPackage')->with($this->isInstanceOf('Webforge\Setup\Package\Package'));
+    
+    $this->partsInstaller->install($part, $this->testDir);
+  }
   
   public function testPartsInstallerTHrowsRuntimeExceptionIfPartWithUnknownNameIsget() {
     $this->setExpectedException('RuntimeException');
@@ -48,10 +56,21 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
     $this->partsInstaller->copy($source, $target = $this->existingFile, Installer::IF_NOT_EXISTS);
   }
   
-/*  public function testPartsInstallerVerbosesCopyActionToOutput() {
+/*
+ *  public function testPartsInstallerVerbosesCopyActionToOutput() {
     $this->partsInstaller->copy($source, $target)
   }
 */
+  
+  public function testPartsInstallerHasAWarningFunction() {
+    $this->partsInstaller->warn('i would install the bootstrap first');
+  }
+  
+  public function testExecuteFunctionDelegatesACommandTotheSystem() {
+    //$this->partsInstaller->warn('i would install the bootstrap first');
+    $this->markTestIncomplete();
+  }
+
   
   public function tearDown() {
     $this->testDir->delete();
@@ -60,6 +79,10 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
 }
 
 abstract class ContainerAwareTestPart extends Part implements \Webforge\Framework\ContainerAware {
+  
+}
+
+abstract class PackageAwareTestPart extends Part implements \Webforge\Setup\Package\PackageAware {
   
 }
 ?>

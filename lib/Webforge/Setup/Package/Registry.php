@@ -48,6 +48,21 @@ class Registry {
     }
   }
   
+  /**
+   * Returns a package by some of its sub directories
+   *
+   * @return Package|NULL
+   */
+  public function findByDirectory(Dir $directoryInPackage) {
+    foreach ($this->packages as $package) {
+      if ($directoryInPackage->isSubdirectoryOf($package->getRootDirectory())
+          || $directoryInPackage->equals($package->getRootDirectory())
+         ) {
+        return $package;
+      }
+    }
+  }
+  
   protected function resolveToOne(Array $packages, $fqn) {
     if (count($packages) == 1) {
       return current($packages);

@@ -105,5 +105,13 @@ class ContainerTest extends \Webforge\Code\Test\Base {
       (string) $this->container->getResourceDirectory()
     );
   }
+  
+  public function testLocalPackageInitFromDirectory() {
+    $this->assertNull($this->container->getLocalPackage());
+    
+    $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
+    
+    $this->testInstanceOfProperty('localPackage', 'Webforge\Setup\Package\Package');
+  }
 }
 ?>

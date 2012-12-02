@@ -6,6 +6,7 @@ use Psc\System\Dir;
 use Psc\System\File;
 use Webforge\Framework\ContainerAware;
 use Webforge\Framework\Container;
+use Webforge\Setup\Package\PackageAware;
 
 /**
  * @todo an output interface to communicate and warn
@@ -21,7 +22,10 @@ class PartsInstaller implements Installer {
    * @var Webforge\Framework\Container;
    */
   protected $container;
-  
+
+  /**
+   * @param $container Container make sure that this container has a localPackage defined
+   */
   public function __construct(Array $parts = array(), Container $container) {
     $this->parts = $parts;
     $this->container = $container;
@@ -31,6 +35,10 @@ class PartsInstaller implements Installer {
     if ($part instanceof ContainerAware) {
       $part->setContainer($this->container);
     }
+
+    if ($part instanceof PackageAware) {
+      $part->setPackage($this->container->getLocalPackage());
+    }
     
     $part->installTo($destination, $this);
   }
@@ -38,7 +46,7 @@ class PartsInstaller implements Installer {
   public function copy($source, $destination, $flags = 0x000000) {
     if ($source instanceof File || $source instanceof Dir) {
       if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
-        // warn?
+        $this->warn('will not overwrite (per request): '.$destination);
         return $this;
       }
       
@@ -46,6 +54,27 @@ class PartsInstaller implements Installer {
     }
     
     return $this;
+  }
+
+  public function write($contents, File $destination, $flags = 0x000000) {
+    if ($destination instanceof File) {
+      if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
+        $this->warn('will not overwrite (per request): '.$destination);
+        return $this;
+      }
+      
+      $destination->writeContents($contents);
+    }
+    
+    return $this;
+  }
+  
+  public function execute($cmd) {
+    // @TODO finish test and use a new System->execute() command with symfony process
+    return system($cmd);
+  }
+  
+  public function warn($msg) {
   }
   
   public function getPart($name) {
