@@ -55,7 +55,7 @@ class PartsInstaller implements Installer {
     
     return $this;
   }
-
+  
   public function write($contents, File $destination, $flags = 0x000000) {
     if ($destination instanceof File) {
       if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
@@ -67,6 +67,20 @@ class PartsInstaller implements Installer {
     }
     
     return $this;
+  }
+  
+  /**
+   * @return Psc\System\Dir
+   */
+  public function getWebforgeResources() {
+    return $this->container->getResourceDirectory();
+  }
+  
+  /**
+   * @return Psc\System\Dir
+   */
+  public function getInstallTemplates() {
+    return $this->getWebforgeResources()->sub('installTemplates/');
   }
   
   public function execute($cmd) {

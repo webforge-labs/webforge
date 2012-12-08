@@ -1,0 +1,15 @@
+Options FollowSymLinks
+
+RewriteEngine On
+RewriteBase /
+
+# css files from psc-cms
+# der Alias /psc-cms muss auf htdocs von psc-cms source zeigen (ohne trailing slash)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} ^/css
+RewriteRule  ^(.*)  /psc-cms/$1 [L,PT]
+
+#api
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} ^/(cms|entities)/.*
+RewriteRule . /api.php [L]

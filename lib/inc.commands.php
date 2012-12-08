@@ -1,6 +1,7 @@
 <?php
 
 use Webforge\Code\Generator\ClassCreater;
+use Webforge\Code\Generator\CreateClassCommand;
 use Webforge\Code\Generator\ClassWriter;
 use Webforge\Code\Generator\GFunctionBody;
 use Webforge\Code\GlobalClassFileMapper;
@@ -12,6 +13,7 @@ use Webforge\Framework\Container AS FrameworkContainer;
 use Psc\JS\JSONConverter;
 use Psc\System\File;
 use Psc\System\Dir;
+use Webforge\Common\String;
 
 $container = new FrameworkContainer();
 $container->initLocalPackageFromDirectory(Dir::factoryTS(getcwd()));
@@ -36,22 +38,18 @@ $createCommand('create-class',
     $flag('overwrite', NULL, 'If set the class will be created, regardless if the file already exists')
   ),
   function ($input, $output, $command) use ($container) {
-    $creater = new ClassCreater($container->getClassFileMapper(),
-                                $container->getClassWriter(),
-                                $container->getClassElevator()
-                               );
-    
-    $gClass = new GClass($input->getArgument('fqn'));
-    
-    if (($parent = $input->getArgument('parent'))) {
-      $gClass->setParent($parent = new GClass($parent));
+    $cmd = CreateClassCommand::fromContainer($container)
+      ->fqn($input->getArgument('fqn'));
+      
+    if ($parent = $input->getArgument('parent')) {
+      $cmd->parent($parent);
     }
     
     foreach ($input->getArgument('interface') as $interface) {
-      $gClass->addInterface(new GInterface($interface));
+      $cmd->addInterface($interface);
     }
     
-    $file = $creater->create($gClass, $input->getOption('overwrite') ? ClassCreater::OVERWRITE : FALSE);
+    $file = $cmd->write($input->getOption('overwrite'));
     
     $command->info('wrote Class '.$gClass.' to file: '.$file);
     return 0;
@@ -162,5 +160,40 @@ $createCommand('install:list-parts',
     return 0;
   },
   'Lists all avaible parts to install'
+);
+
+$createCommand('install:create-part',
+  array(
+    $arg('partName', 'the name of the part (without \'Part\' as suffix)'),
+    $flag('overwrite', NULL, 'If set the part will be created, regardless if the file already exists')
+  ),
+  function ($input, $output, $command) use ($container) {
+    $partName = $input->getArgument('partName');
+    
+    if (String::endsWith($partName, 'Part')) {
+      $partName = mb_substr($partName, 0, -4);
+    }
+    
+    $cmd = CreateClassCommand::fromContainer($container)
+      ->fqn('Webforge\Setup\Installer\\'.$partName.'Part')
+      ->parent('Webforge\Setup\Installer\Part')
+      ->withGClass(
+        function ($gClass) use($partName) {
+          $gClass->createMethod(
+            '__construct',
+            array(),
+            GFunctionBody::create(
+              sprintf("return parent::__construct('%s');", $partName)
+            )
+          );
+       })
+      ->write($input->getOption('overwrite'));
+    
+    $command->info('wrote Part '.$partName.' to file: '.$cmd->getFile());
+    $command->comment('you need to add '.$cmd->getGClass()->getFQN().' to Webforge\Framework\Container::getPartsInstaller() !');
+    
+    return 0;
+  },
+  'Creates a new part in the Installer'
 );
 ?>
