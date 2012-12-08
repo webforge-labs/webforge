@@ -191,7 +191,8 @@ class Container {
             new \Webforge\Setup\Installer\CreateCLIPart(),
             new \Webforge\Setup\Installer\CreateBootstrapPart(),
             new \Webforge\Setup\Installer\InstallTestSuitePart(),
-            new \Webforge\Setup\Installer\WriteHtaccessPart()
+            new \Webforge\Setup\Installer\WriteHtaccessPart(),
+            new \Webforge\Setup\Installer\PscJSBoilerplatePart()
           ),
         $this
       );

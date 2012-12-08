@@ -43,15 +43,19 @@ class PartsInstaller implements Installer {
     $part->installTo($destination, $this);
   }
   
+  /**
+   * @param Dir|File $source
+   * @param Dir|File $destination if $destination is a Dir and $source is a file, the a file with $source->getName() will be copied to $destination
+   */
   public function copy($source, $destination, $flags = 0x000000) {
-    if ($source instanceof File || $source instanceof Dir) {
+    if ($source instanceof File && $destination instanceof File || $source instanceof Dir) {
       if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
         $this->warn('will not overwrite (per request): '.$destination);
         return $this;
       }
-      
-      $source->copy($destination);
     }
+    
+    $source->copy($destination);
     
     return $this;
   }
@@ -89,6 +93,7 @@ class PartsInstaller implements Installer {
   }
   
   public function warn($msg) {
+    print $msg."\n";
   }
   
   public function getPart($name) {

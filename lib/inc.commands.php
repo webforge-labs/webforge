@@ -49,9 +49,9 @@ $createCommand('create-class',
       $cmd->addInterface($interface);
     }
     
-    $file = $cmd->write($input->getOption('overwrite'));
+    $file = $cmd->write($input->getOption('overwrite'))->getFile();
     
-    $command->info('wrote Class '.$gClass.' to file: '.$file);
+    $command->info('wrote Class '.$cmd->getGClass().' to file: '.$file);
     return 0;
   },
   'Creates a new empty Class stub'
@@ -183,7 +183,7 @@ $createCommand('install:create-part',
             '__construct',
             array(),
             GFunctionBody::create(
-              sprintf("return parent::__construct('%s');", $partName)
+              sprintf("    parent::__construct('%s');\n", $partName)
             )
           );
        })
