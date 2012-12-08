@@ -36,6 +36,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('composerPackageReader', 'Webforge\Setup\Package\ComposerPackageReader');
     $prop('partsInstaller', 'Webforge\Setup\Installer\PartsInstaller');
     $prop('resourceDirectory', 'Psc\System\Dir');
+    $prop('cmsBridge', 'Webforge\Framework\PscCMSBridge');
     
     return $props;
   }
@@ -72,12 +73,14 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $reader->expects($this->exactly(2))->method('fromDirectory')
            ->will($this->onConsecutiveCalls(
             new SimplePackage(
-              'webforge/webforge',
+              'webforge',
+              'webforge',
               $this->getTestDirectory('packages/Webforge')
             ),
 
             new SimplePackage(
-              'acme/intranet-application',
+              'intranet-application',
+              'acme',
               $this->getTestDirectory('packages/ACME')
             )
            ));
@@ -88,7 +91,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     
     $this->assertArrayEquals(
       array('webforge/webforge', 'acme/intranet-application'),
-      $this->reduceCollection($packages, 'slug')
+      $this->pluck($packages, 'identifier')
     );
   }
   

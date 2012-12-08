@@ -1,5 +1,10 @@
 # Webforge Code Generator
 
+## TODO
+  
+  - class Writing: Syntax is often wrong (wrong whitespacing)
+  - class Writing: is not pretty
+
 ## GClass
 The GClass (aka GenerateClass) is the core of the Code Generator. It encapsulates a whole class with:
 

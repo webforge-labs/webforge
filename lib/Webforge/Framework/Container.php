@@ -11,6 +11,7 @@ use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Setup\Package\Registry AS PackageRegistry;
 use Webforge\Setup\Package\ComposerPackageReader;
 use Webforge\Setup\Installer\PartsInstaller;
+use Symfony\Component\Console\Output\OutputInterface;
 
 use Psc\JS\JSONConverter;
 use Psc\System\Dir;
@@ -60,6 +61,11 @@ class Container {
   protected $packageRegistry;
   
   /**
+   * @var Webforge\Framework\PscCMSBridge
+   */
+  protected $cmsBridge;
+  
+  /**
    * The local package is the package for the current context
    * 
    * this is not necessary the package from webforge unless its called from webforge-core
@@ -98,7 +104,7 @@ class Container {
       }
     }
     
-    if ($registry->findBySlug('webforge/webforge') === NULL) {
+    if ($registry->findByIdentifier('webforge/webforge') === NULL) {
       $registry->addComposerPackageFromDirectory(Dir::factoryTS(__DIR__)->sub('../../../')->resolvePath());
     }
   }
@@ -183,7 +189,7 @@ class Container {
   /**
    * @return Webforge\Setup\Installer\PartsInstaller
    */
-  public function getPartsInstaller() {
+  public function getPartsInstaller(OutputInterface $output = NULL) {
     if (!isset($this->partsInstaller)) {
       $this->partsInstaller =
         new PartsInstaller(
@@ -194,7 +200,8 @@ class Container {
             new \Webforge\Setup\Installer\WriteHtaccessPart(),
             new \Webforge\Setup\Installer\PscJSBoilerplatePart()
           ),
-        $this
+        $this,
+        $output
       );
     }
     
@@ -221,9 +228,19 @@ class Container {
    */
   public function getResourceDirectory() {
     if (!isset($this->resourceDirectory)) {
-      $this->resourceDirectory = $this->getPackageRegistry()->findBySlug('webforge/webforge')->getRootDirectory()->sub('resources/');
+      $this->resourceDirectory = $this->getPackageRegistry()->findByIdentifier('webforge/webforge')->getRootDirectory()->sub('resources/');
     }
     return $this->resourceDirectory;
+  }
+  
+  /**
+   * @return Webforge\Framework\PscCMSBridge
+   */
+  public function getCMSBridge() {
+    if (!isset($this->cmsBridge)) {
+      $this->cmsBridge = new PscCMSBridge();    
+    }
+    return $this->cmsBridge;
   }
   
   // @codeCoverageIgnoreStart

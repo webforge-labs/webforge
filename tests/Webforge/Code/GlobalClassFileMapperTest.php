@@ -79,7 +79,9 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
   }
   
   protected function createPackage($slug, $dirName, Array $autoLoadInfoSpec = NULL) {
+    list($vendor, $slug) = explode('/', $slug, 2);
     $package = new SimplePackage($slug,
+                                 $vendor,
                                  $this->getPackageDir($dirName),
                                  new AutoLoadInfo(
                                   $autoLoadInfoSpec ?: 

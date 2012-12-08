@@ -18,11 +18,24 @@ interface Package {
   const TESTS = 'tests';
   
   /**
+   * A full identifier for the package
+   *
+   * @return string vendor/slug
+   */
+  public function getIdentifier();
+  
+  /**
    * A nicename for the package
    *
-   * @return string
+   * @return string its only the part packagename in vendor/packagename
    */
   public function getSlug();
+  
+  /**
+   * @return string its only the part vendor in vendor/packagename
+   */
+  public function getVendor();
+  
   
   /**
    * The full title for the package

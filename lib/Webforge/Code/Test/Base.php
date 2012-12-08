@@ -84,5 +84,8 @@ class Base extends \Psc\Code\Test\Base {
     return parent::getMockForAbstractClass($originalClassName, $arguments, $mockClassName, $callOriginalConstructor, $callOriginalClone, $callAutoload, $mockedMethods, $cloneArguments);
   }
   
+  public function pluck($collection, $getter) {
+    return $this->reduceCollection($collection, $getter);
+  }
 }
 ?>

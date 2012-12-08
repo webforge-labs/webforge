@@ -7,6 +7,8 @@ use Psc\System\File;
 use Webforge\Framework\ContainerAware;
 use Webforge\Framework\Container;
 use Webforge\Setup\Package\PackageAware;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * @todo an output interface to communicate and warn
@@ -26,9 +28,10 @@ class PartsInstaller implements Installer {
   /**
    * @param $container Container make sure that this container has a localPackage defined
    */
-  public function __construct(Array $parts = array(), Container $container) {
+  public function __construct(Array $parts = array(), Container $container, OutputInterface $output = NULL) {
     $this->parts = $parts;
     $this->container = $container;
+    $this->output = $output ?: new NullOutput();
   }
   
   public function install(Part $part, Dir $destination) {
@@ -93,7 +96,7 @@ class PartsInstaller implements Installer {
   }
   
   public function warn($msg) {
-    print $msg."\n";
+    return $this->output->writeln($msg);
   }
   
   public function getPart($name) {

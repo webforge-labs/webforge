@@ -17,3 +17,9 @@
   - refactor more file system commands into the installer
   - refactor a "location finder" or similar to resolve dependencies like "webforge resources" or "installer templates" etc
   - allow code expanding for example adding the new class to the install:-create-part when code needs to be injected to the container
+  
+## Parts (TODO)
+  - Install Compiler for Entities
+  - Install CMS (Dir, JSBoilerplate, index.php, api.php)
+  - Install CMS\Main
+  

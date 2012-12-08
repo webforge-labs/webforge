@@ -14,7 +14,7 @@ class ComposerPackageReaderTest extends \Webforge\Code\Test\Base {
     $package = $this->reader->fromDirectory($dir = $this->getTestDirectory()->sub('packages/ACME/'));
     
     $this->assertInstanceOf('Webforge\Setup\Package\Package', $package);
-    $this->assertEquals('acme/intranet-application', $package->getSlug());
+    $this->assertEquals('acme/intranet-application', $package->getIdentifier());
     $this->assertEquals((string) $dir, (string) $package->getRootDirectory());
   }
   

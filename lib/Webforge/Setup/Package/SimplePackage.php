@@ -16,14 +16,20 @@ class SimplePackage implements Package {
    * @var string
    */
   protected $slug;
+  
+  /**
+   * @var string
+   */
+  protected $vendor;
 
   /**
    * @var Webforge\Setup\AutoLoadInfo|NULL
    */
   protected $autoLoadInfo;
   
-  public function __construct($slug, Dir $root, AutoLoadInfo $info = NULL) {
+  public function __construct($slug, $vendor, Dir $root, AutoLoadInfo $info = NULL) {
     $this->slug = $slug;
+    $this->vendor = $vendor;
     $this->rootDirectory = $root;
     $this->autoLoadInfo = $info;
   }
@@ -38,11 +44,24 @@ class SimplePackage implements Package {
   /**
    * @return string
    */
-  public function getTitle() {
-    return ($pos = mb_strrpos($this->slug, '/')) !== FALSE
-            ? ucfirst(mb_substr($this->slug, $pos+1))
-            : $this->slug;
+  public function getVendor() {
+    return $this->vendor;
   }
+
+  /**
+   * @return string vendor/slug
+   */
+  public function getIdentifier() {
+    return $this->vendor.'/'.$this->slug;
+  }
+  
+  /**
+   * @return string
+   */
+  public function getTitle() {
+    return ucfirst($this->slug);
+  }
+  
 
   /**
    * @return Psc\System\Dir

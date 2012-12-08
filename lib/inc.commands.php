@@ -136,7 +136,7 @@ $createCommand('install:part',
     $partName = $input->getArgument('part');
     $location = $command->validateDirectory($input->getArgument('location') ?: '.');
     
-    $partsInstaller = $container->getPartsInstaller();
+    $partsInstaller = $container->getPartsInstaller($output);
     
     $part = $partsInstaller->getPart($partName);
     $command->out('installing '.$part->getName());
