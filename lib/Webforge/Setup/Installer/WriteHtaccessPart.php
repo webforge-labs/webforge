@@ -12,10 +12,11 @@ class WriteHtaccessPart extends Part {
   }
   
   public function installTo(Dir $target, Installer $installer) {
+    $www = $installer->createDir('www/');
     
     $installer->copy(
       $installer->getInstallTemplates()->getFile('www.htaccess.txt'),
-      $target->sub('www/')->create()->getFile('.htaccess')
+      $www->create()->getFile('.htaccess')
     );
   }
 }

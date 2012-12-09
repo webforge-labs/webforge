@@ -13,7 +13,7 @@ class InitConfigurationPart extends Part implements PackageAware {
   }
   
   public function installTo(Dir $target, Installer $installer) {
-    $etc = $target->sub('etc')->create();
+    $etc = $installer->createDir('etc/');
     
     $installer->writeTemplate(
       $installer->getInstallTemplates()->getFile('changelog.template.php'),
@@ -30,7 +30,7 @@ class InitConfigurationPart extends Part implements PackageAware {
       array(
         'db.password'=>S::random(14),
         'defaultLanguage'=>'de',
-        'package.title'=>$this->package->getTitle()
+        'package.title'=>$this->getPackage()->getTitle()
       )
     );
   }

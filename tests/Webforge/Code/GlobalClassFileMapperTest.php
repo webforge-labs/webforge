@@ -24,7 +24,15 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
   public function testThatNonsenseFqnsCantGetFound() {
     $this->expectRegistryFindsNothing();
     $this->setExpectedException('Webforge\Code\ClassFileNotFoundException');
+    
     $this->mapper->getFile('ths\class\has\a\nonsense\name\and\is\not\existent');
+  }
+  
+  public function testGlobalClassFileMapperDoesNotNeedNeessearlyARegistry() {
+    $this->setExpectedException('Webforge\Code\ClassFileNotFoundException');
+    
+    $this->mapper = new GlobalClassFileMapper();
+    $this->mapper->getFile('ths\class\as\anonsense\name');
   }
   
   public function testEmptyFQNsAreBad() {

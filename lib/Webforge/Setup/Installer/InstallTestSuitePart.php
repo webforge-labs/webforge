@@ -21,10 +21,8 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Setup
   }
   
   public function installTo(Dir $target, Installer $installer) {
-    $resources = $this->container->getResourceDirectory();
-    
-    $tpl = function($name) use ($resources) {
-      return $resources->sub('installTemplates/')->getFile($name);
+    $tpl = function($name) use ($installer) {
+      return $installer->getInstallTemplates()->getFile($name);
     };
     
     $installer->write(
@@ -36,7 +34,7 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Setup
       Installer::IF_NOT_EXISTS
     );
     
-    $tests = $target->sub('tests/')->create();
+    $tests = $installer->createDir('tests');
     
     if ($target->getFile('bootstrap.php')) {
       $installer->warn('bootstrap.php should exist for php unit tests bootstrapping');
@@ -49,22 +47,6 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Setup
         sprintf('composer --working-dir=%s --dev require phpunit/phpunit:3.7.x-dev', $target->getQuotedString())
       );
     }
-  }
-  
-  /**
-   * @param Webforge\Setup\Package\Package $package
-   * @chainable
-   */
-  public function setPackage(Package $package) {
-    $this->package = $package;
-    return $this;
-  }
-
-  /**
-   * @return Webforge\Setup\Package\Package
-   */
-  public function getPackage() {
-    return $this->package;
   }
 }
 ?>

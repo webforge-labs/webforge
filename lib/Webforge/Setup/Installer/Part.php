@@ -31,15 +31,6 @@ abstract class Part {
   abstract public function installTo(Dir $target, Installer $installer);
   
   /**
-   * @param string $name
-   * @chainable
-   */
-  public function setName($name) {
-    $this->name = $name;
-    return $this;
-  }
-
-  /**
    * @return string
    */
   public function getName() {

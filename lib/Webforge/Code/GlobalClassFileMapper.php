@@ -31,7 +31,6 @@ use Webforge\Setup\Package\PackageNotFoundException;
 class GlobalClassFileMapper implements ClassFileMapper {
   
   const WITH_RESOLVING    = 0x000001;
-  const WITH_INCLUDE_PATH = 0x000002;
   
   /**
    * A Registry for Packages installed on the host (e.g.)
@@ -126,10 +125,6 @@ class GlobalClassFileMapper implements ClassFileMapper {
   }
   
   protected function validateFile(File $file, $flags = 0x0000) {
-    if ($flags & self::WITH_INCLUDE_PATH && $file->isRelative()) {
-      throw new \Psc\Code\NotImplementedException('YAGNI: composer was smart enough');
-    }
-    
     if ($flags & self::WITH_RESOLVING) {
       $file->resolvePath();
     }

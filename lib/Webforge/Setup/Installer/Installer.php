@@ -24,6 +24,8 @@ interface Installer {
   public function write($contents, File $destination, $flags = 0x000000);
   
   public function writeTemplate(File $template, File $destination, Array $vars = array(), $flags = 0x000000);
+  
+  public function createDir($targetSub);
 
   /**
    * @return Psc\System\Dir

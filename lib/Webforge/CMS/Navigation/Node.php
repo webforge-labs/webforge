@@ -25,9 +25,5 @@ interface Node {
   
   public function setLft($left);
 
-  public function setRoot($root);
-  
-  public function getRoot();
-
 }
 ?>

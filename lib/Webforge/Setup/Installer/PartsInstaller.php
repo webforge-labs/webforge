@@ -25,17 +25,39 @@ class PartsInstaller implements Installer {
    * @var Webforge\Framework\Container;
    */
   protected $container;
+  
+  /**
+   * @var Psc\System\Dir
+   */
+  protected $target;
 
   /**
    * @param $container Container make sure that this container has a localPackage defined
    */
-  public function __construct(Array $parts = array(), Container $container, OutputInterface $output = NULL) {
+  public function __construct(Array $parts, Container $container, OutputInterface $output = NULL) {
     $this->parts = $parts;
     $this->container = $container;
     $this->output = $output ?: new NullOutput();
   }
   
   public function install(Part $part, Dir $destination) {
+    $this->target = $destination;
+    $macro = $this->installPart($part, $destination);
+    
+    return $macro->execute();
+  }
+
+  /**
+   * @return Webforge\Setup\Installer\Macro
+   */
+  public function dryInstall(Part $part, Dir $destination) {
+    $this->target = $destination;
+    $macro = $this->installPart($part, $destination);
+    
+    return $macro;
+  }
+  
+  protected function installPart(Part $part, Dir $destination) {
     if ($part instanceof ContainerAware) {
       $part->setContainer($this->container);
     }
@@ -44,7 +66,14 @@ class PartsInstaller implements Installer {
       $part->setPackage($this->container->getLocalPackage());
     }
     
+    $macro = $this->recordMacro();
     $part->installTo($destination, $this);
+    
+    return $macro;
+  }
+  
+  protected function recordMacro() {
+    return $this->macro = new Macro(array());
   }
   
   /**
@@ -52,42 +81,51 @@ class PartsInstaller implements Installer {
    * @param Dir|File $destination if $destination is a Dir and $source is a file, the a file with $source->getName() will be copied to $destination
    */
   public function copy($source, $destination, $flags = 0x000000) {
-    if ($source instanceof File && $destination instanceof File || $source instanceof Dir) {
-      if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
-        $this->warn('will not overwrite (per request): '.$destination);
-        return $this;
-      }
-    }
     
-    $source->copy($destination);
+    return $this->command(
+      new CopyCmd($source, $destination, $flags)
+    );
+  
+  }
+
+  public function execute($cmd) {
     
-    return $this;
+    return $this->command(
+      new ExecCmd($cmd)
+    );
+    
   }
   
   public function write($contents, File $destination, $flags = 0x000000) {
-    if ($destination instanceof File) {
-      if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
-        $this->warn('will not overwrite (per request): '.$destination);
-        return $this;
-      }
-      
-      $destination->writeContents($contents);
-    }
     
-    return $this;
+    return $this->command(
+      new WriteCmd($contents, $destination, $flags)
+    );
+  
   }
 
   public function writeTemplate(File $template, File $destination, Array $vars = array(), $flags = 0x000000) {
-    if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
-      $this->warn('will not overwrite (per request): '.$destination);
-      return $this;
+    
+    return $this->command(
+      new WriteTemplateCmd($template, $destination, $vars, $flags)
+    );
+  
+  }
+  
+  /**
+   * $directory can be a subdirectory of target (as a string with forward slashes)
+   * @return Psc\System\Dir
+   */
+  public function createDir($directory) {
+    // when modelled command, it should really return the directory here: 
+    
+    if (!($directory instanceof Dir)) {
+      $directory = $this->target->sub($directory);
     }
     
-    $contents = TPL::miniTemplate($template->getContents(), $vars);
+    $directory->create();
     
-    $destination->writeContents($contents);
-    
-    return $this;
+    return $directory;
   }
   
   /**
@@ -103,11 +141,13 @@ class PartsInstaller implements Installer {
   public function getInstallTemplates() {
     return $this->getWebforgeResources()->sub('installTemplates/');
   }
-  
-  public function execute($cmd) {
-    // @TODO finish test and use a new System->execute() command with symfony process
-    return system($cmd);
+
+
+  protected function command(Command $cmd) {
+    $this->macro->addCommand($cmd);
+    return $cmd;
   }
+  
   
   public function warn($msg) {
     return $this->output->writeln($msg);

@@ -11,14 +11,12 @@ class CreateCLIPart extends ContainerAwarePart {
   }
   
   public function installTo(Dir $target, Installer $installer) {
-    $resources = $this->container->getResourceDirectory();
-    
-    $tpl = function($name) use ($resources) {
-      return $resources->sub('installTemplates/')->getFile($name);
+    $tpl = function($name) use ($installer) {
+      return $installer->getInstallTemplates()->getFile($name);
     };
     
-    $bin = $target->sub('bin/')->create();
-    $lib = $target->sub('lib/')->create();
+    $bin = $installer->createDir('bin/');
+    $lib = $installer->createDir('lib/');    
     
     $installer->copy($tpl('cli.template.php'), $bin->getFile('cli.php'), Installer::IF_NOT_EXISTS);
     $installer->copy($tpl('cli.template.bat'), $bin->getFile('cli.bat'), Installer::IF_NOT_EXISTS);
