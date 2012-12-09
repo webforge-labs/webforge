@@ -33,7 +33,7 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
   
   public function testGClassOwnImportsAreWrittenToFile() {
     // the extraction from GClass is tested in import, we use little acceptance here, to ensure classWriter calls merge
-    $this->expectThatWrittenCode($this->stringContains('use'));
+    $this->expectThatWrittenCode($this->stringContains('use Other\UsedClass;'));
     
     $this->classWriter->write($this->classWithImports, $this->file);
   }

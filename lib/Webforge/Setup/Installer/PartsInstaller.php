@@ -9,6 +9,7 @@ use Webforge\Framework\Container;
 use Webforge\Setup\Package\PackageAware;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
+use Psc\TPL\TPL;
 
 /**
  * @todo an output interface to communicate and warn
@@ -72,6 +73,19 @@ class PartsInstaller implements Installer {
       
       $destination->writeContents($contents);
     }
+    
+    return $this;
+  }
+
+  public function writeTemplate(File $template, File $destination, Array $vars = array(), $flags = 0x000000) {
+    if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
+      $this->warn('will not overwrite (per request): '.$destination);
+      return $this;
+    }
+    
+    $contents = TPL::miniTemplate($template->getContents(), $vars);
+    
+    $destination->writeContents($contents);
     
     return $this;
   }

@@ -31,6 +31,16 @@ class ClassWriter {
    */
   protected $codeWriter;
   
+  /**
+   * @var string
+   */
+  protected $namespaceContext;
+  
+  /**
+   * @var Webforge\Code\Generator\Imports
+   */
+  protected $classImports;
+  
   public function __construct() {
     $this->imports = new Imports();
   }
@@ -56,10 +66,10 @@ class ClassWriter {
       $php .= $eol;
     }
     
-    $imports = clone $this->imports;
-    $imports->mergeFromClass($gClass);
+    $this->classImports = clone $this->imports;
+    $this->classImports->mergeFromClass($gClass);
     
-    if ($use = $imports->php($namespace)) {
+    if ($use = $this->classImports->php($namespace)) {
       $php .= $use;
       $php .= $eol;
     }
@@ -79,6 +89,7 @@ class ClassWriter {
    */
   public function writeGClass(GClass $gClass, $namespace, $eol = "\n") {
     $that = $this;
+    $this->namespaceContext = $namespace;
     
     $php = NULL;
     
@@ -162,7 +173,6 @@ class ClassWriter {
     $php .= str_repeat(' ', $baseIndent);
     
     $php .= $this->writeModifiers($method->getModifiers());
-    
     $php .= $this->writeGFunction($method, $baseIndent, $eol);
     
     return $php;
@@ -196,14 +206,14 @@ class ClassWriter {
   public function writeFunctionBody(GFunctionBody $body = NULL, $baseIndent = 0, $eol = "\n") {
     $php = NULL;
     
-    $phpBody = $body ? $body->php($baseIndent+2, $eol) : '';
+    $phpBody = $body ? $body->php($baseIndent+2, $eol).$eol : '';
 
     $php .= ' {';
     //if ($this->cbraceComment != NULL) { // inline comment wie dieser
       //$php .= ' '.$this->cbraceComment;
     //}
     $php .= $eol;
-    $php .= $phpBody; 
+    $php .= $phpBody;
     $php .= S::indent('}', $baseIndent, $eol);
     
     return $php;
@@ -211,28 +221,27 @@ class ClassWriter {
 
   
   protected function writeFunctionSignature($function, $baseIndent = 0, $eol = "\n") {
-    $php = 'function '.$function->getName().$this->writeParameters($function->getParameters(), $baseIndent, $eol);
+    $php = 'function '.$function->getName().$this->writeParameters($function->getParameters(), $this->namespaceContext, $baseIndent, $eol);
 
-    return S::indent($php, $baseIndent, $eol);
+    return $php;
   }
   
-  public function writeParameters(Array $parameters) {
+  public function writeParameters(Array $parameters, $namespace) {
     $that = $this;
     
     $php = '(';
-    $php .= A::implode($parameters, ', ', function ($parameter) use ($that) {
-      return $that->writeParameter($parameter);
+    $php .= A::implode($parameters, ', ', function ($parameter) use ($that, $namespace) {
+      return $that->writeParameter($parameter, $namespace);
     });
     $php .= ')';
     
     return $php;
   }
   
-  public function writeParameter(GParameter $parameter) {
-    $php = NULL;
+  public function writeParameter(GParameter $parameter, $namespace) {
+    $php = '';
     
-    // Type Hint
-    $php .= $parameter->getHint();
+    $php .= $this->writeParameterTypeHint($parameter, $namespace);
     
     // name
     $php .= ($parameter->isReference() ? '&' : '').'$'.$parameter->getName();
@@ -250,6 +259,33 @@ class ClassWriter {
     }
     
     return $php;
+  }
+  
+  /**
+   * @return string with whitespace at the end if hint is set
+   */
+  protected function writeParameterTypeHint(GParameter $parameter, $namespace) {
+    if ($parameter->hasHint()) {
+      
+      if (($import = $parameter->getHintImport()) instanceof GClass) {
+        
+        if (isset($this->classImports) && $this->classImports->have($import)) {
+          $useFQN = FALSE;
+        } elseif ($this->imports->have($import)) {
+          $useFQN = FALSE;
+        } elseif ($import->getNamespace() === $namespace) {
+          $useFQN = FALSE;
+        } else {
+          $useFQN = TRUE;
+        }
+        
+        return $parameter->getHint($useFQN).' ';
+      } else {
+        return $parameter->getHint().' ';
+      }
+    }
+    
+    return '';
   }
 
   public function writeArgumentValue($value) {

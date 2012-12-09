@@ -37,7 +37,7 @@ class GFunctionBody {
   }
   
   public function php($baseIndent = 0, $eol = "\n") {
-    $printer = new PrettyPrinter();
+    $printer = new PrettyPrinter($baseIndent, $eol);
     
     return $printer->prettyPrint($this->stmts);
   }

@@ -198,7 +198,8 @@ class Container {
             new \Webforge\Setup\Installer\CreateBootstrapPart(),
             new \Webforge\Setup\Installer\InstallTestSuitePart(),
             new \Webforge\Setup\Installer\WriteHtaccessPart(),
-            new \Webforge\Setup\Installer\PscJSBoilerplatePart()
+            new \Webforge\Setup\Installer\PscJSBoilerplatePart(),
+            new \Webforge\Setup\Installer\InitConfigurationPart()
           ),
         $this,
         $output

@@ -6,6 +6,7 @@ use Psc\Data\Type\Type;
 use Psc\Data\Type\MixedType;
 use Psc\Data\Type\ObjectType;
 use Psc\Data\Type\ArrayType;
+use Psc\Data\Type\ParameterHintedType;
 
 /**
  * Models a GParameter for a GFunction / GMethod
@@ -86,12 +87,29 @@ class GParameter extends GObject {
   }
 
   /**
-   * Returns the Hint of the Parameter as a String
+   * Returns the Hint of the Parameter (if any)
    *
-   * @return string
+   * @return Webforge\Code\Generator\GClass|string|NULL
    */
-  public function getHint($namespaceContext = NULL) {
-    return ltrim($this->type->getPHPHint($namespaceContext), '\\') ?: NULL;
+  public function getHint($useFQN = TRUE) {
+    if ($this->hasHint()) {
+      return $this->type->getParameterHint($useFQN);
+    }
+  }
+  
+  /**
+   * @return Webforge\Code\Generator\GClass|NULL
+   */
+  public function getHintImport() {
+    if ($this->hasHint() && ($import = $this->type->getParameterHintImport()) instanceof \Psc\Code\Generate\GClass) {
+      return new GClass($import->getFQN());
+    }
+    
+    return NULL;
+  }
+  
+  public function hasHint() {
+    return $this->type instanceof ParameterHintedType;
   }
   
   /**

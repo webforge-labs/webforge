@@ -5,6 +5,7 @@ namespace Webforge\Framework;
 use Webforge\Setup\Package\Package;
 use Psc\CMS\Project;
 use Psc\PSC;
+use Psc\CMS\Configuration;
 
 class PscCMSBridge {
   
