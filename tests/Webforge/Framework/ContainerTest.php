@@ -116,5 +116,14 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     
     $this->testInstanceOfProperty('localPackage', 'Webforge\Setup\Package\Package');
   }
+  
+  public function testContainerReturnsALegacyProjectForPSCCMS() {
+    $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
+    
+    $this->assertInstanceOf('Psc\CMS\Project', $project = $this->container->getLocalProject());
+    $package = $this->container->getLocalPackage();
+    
+    
+  }
 }
 ?>

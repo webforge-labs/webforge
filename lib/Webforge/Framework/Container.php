@@ -72,6 +72,13 @@ class Container {
    * @var Webforge\Setup\Package\Package
    */
   protected $localPackage;
+
+  /**
+   * The local project to the local package (legacy)
+   * 
+   * @var Psc\CMS\Project
+   */
+  protected $localProject;
   
   /**
    * @var Webforge\Setup\Package\ComposerPackageReader
@@ -215,6 +222,17 @@ class Container {
    */
   public function getLocalPackage() {
     return $this->localPackage;
+  }
+  
+  /**
+   * @return Psc\CMS\Project
+   */
+  public function getLocalProject() {
+    if (!isset($this->localProject))  {
+      $this->localProject = $this->getCMSBridge()->createProjectFromPackage($this->getLocalPackage());
+    }
+    
+    return $this->localProject;
   }
   
   /**
