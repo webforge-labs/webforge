@@ -21,6 +21,15 @@ class CopyCmdTest extends \Webforge\Code\Test\Base {
            ->setConstructorArgs(array(__DIR__.DIRECTORY_SEPARATOR.'destination.file'))
            ->disableArgumentCloning()
            ->getMock();
+
+    $this->someDir =
+      $this->getMockBuilder('Psc\System\Dir')
+           ->setMethods(array('copy'))
+           ->setConstructorArgs(array(__DIR__.DIRECTORY_SEPARATOR.'destination.dir/'))
+           ->disableArgumentCloning()
+           ->getMock();
+           
+    $this->someFile = new File(__FILE__);
     
     $this->source = $this->getMock('Psc\System\File', array('copy'), array(__FILE__));
     
@@ -50,6 +59,15 @@ class CopyCmdTest extends \Webforge\Code\Test\Base {
     
     $this->assertContains((string) $this->destination, $copy->describe());
     $this->assertContains((string) $this->source, $copy->describe());
+  }
+  
+  public function testThrowsInvalidArgumentExceptionWhenDirIsCopiedToFile() {
+    $this->someDir->expects($this->never())->method('copy');
+    
+    $this->setExpectedException('InvalidArgumentException');
+    $copy = new CopyCmd($this->someDir, $this->someFile);
+    
+    $copy->execute();
   }
 }
 ?>

@@ -36,6 +36,12 @@ class CopyCmd extends Command {
       }
     }
     
+    if ($this->source instanceof Dir && $this->destination instanceof File) {
+      throw new \InvalidArgumentException(
+        sprintf("Cannot copy a dir to a file. '%s' to '%s'", $this->source, $this->destination)
+      );
+    }
+    
     $this->source->copy($this->destination);
     
     return $this;
