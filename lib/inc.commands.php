@@ -61,7 +61,7 @@ $createCommand('register-package',
     $arg('location', 'the path to the location of the product (relatives are resolved relative to current work directory)'),
     $arg('type', 'the type for the packageReader (only composer, yet)', FALSE)
   ),
-  function ($input, $output, $command) {
+  function ($input, $output, $command) use ($container) {
     $location = $command->validateDirectory($input->getArgument('location'));
     $type = $command->validateEnum($input->getArgument('type') ?: 'composer', array('composer'));
     
