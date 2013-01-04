@@ -6,30 +6,45 @@ class GParameterTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
     $this->classParam = GParameter::create('coordinates', $this->classHint = new GClass('Webforge\Data\Models\Coordinates'));
+    $this->arrayParam = GParameter::create('simpleCoords', 'Array');
     $this->unknownParam = new GParameter('unknown');
-    $this->defParam = new GParameter('enume', $this->createType('String'), 'def');
-  }
-  
-  public function testGparameterDefaultTypeIsMixed() {
-    $this->assertEquals('Mixed', $this->unknownParam->getType()->getName());
-  }
-  
-  public function testReturnsHintAsFQNForClassIfTypeIsClass() {
-    $this->assertEquals($this->classHint->getFQN(), $this->classParam->getHint());
-  }
-
-  public function testReturnsHintAsOnlyClassNameForClassIfTypeIsClass() {
-    $this->assertEquals($this->classHint->getName(), $this->classParam->getHint('Webforge\Data\Models'));
-  }
-  
-  public function testReturnsHintOnlyIfTypeCanBeHinted() {
-    $this->assertNull($this->unknownParam->getHint());
+    $this->stringParam = $this->defParam = new GParameter('enume', $this->createType('String'), 'def');
   }
   
   public function testHintCanBeStringArrayForCreate() {
     $arrayParam = GParameter::create('coordinates', 'array');
     $this->assertInstanceOf('Psc\Data\Type\ArrayType', $arrayParam->getType());
     $this->assertEquals('array', mb_strtolower($arrayParam->getHint()));
+  }
+  
+  public function testGparameterDefaultTypeIsMixed() {
+    $this->assertEquals('Mixed', $this->unknownParam->getType()->getName());
+  }
+  
+  public function testHasHintReturnsIfParameterHasaHint() {
+    $this->assertTrue($this->classParam->hasHint());
+    $this->assertTrue($this->arrayParam->hasHint());
+    
+    $this->assertFalse($this->unknownParam->hasHint());
+    $this->assertFalse($this->stringParam->hasHint());
+  }
+  
+  public function testGetHintImportReturnsGClassIfTypeIsClass() {
+    $this->assertInstanceOf('Webforge\Code\Generator\GClass', $this->classParam->getHintImport());
+    $this->assertEquals($this->classHint->getFQN(), $this->classParam->getHintImport()->getFQN());
+    
+    $this->assertNull($this->arrayParam->getHintImport());
+    $this->assertNull($this->unknownParam->getHintImport());
+    $this->assertNull($this->stringParam->getHintImport());
+  }
+  
+  public function testReturnsStringIfTypeIsNotClass() {
+    $this->assertEquals('Array', $this->arrayParam->getHint());
+  }
+
+  public function testReturnsNullfTypeCannotBeHinted() {
+    $this->assertNull($this->unknownParam->getHint());
+    $this->assertNull($this->stringParam->getHint());
   }
   
   public function testisArrayIsTrueForCreatedWithArrayHintProperty() {

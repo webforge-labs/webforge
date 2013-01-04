@@ -35,14 +35,30 @@ class Registry {
   }
   
   /**
-   * Returns a package by slug
+   * Returns a package by Identifier
    *
-   * the first package with the slug beginning with $slug is returned
+   * the first package with the identifier beginning with $identifier is returned
+   * (but normally packages should be identifier-unique)
    * @return Package|NULL
    */
-  public function findBySlug($slug) {
+  public function findByIdentifier($identifier) {
     foreach ($this->packages as $package) {
-      if (String::startsWith($package->getSlug(), $slug)) {
+      if (String::startsWith($package->getIdentifier(), $identifier)) {
+        return $package;
+      }
+    }
+  }
+  
+  /**
+   * Returns a package by some of its sub directories
+   *
+   * @return Package|NULL
+   */
+  public function findByDirectory(Dir $directoryInPackage) {
+    foreach ($this->packages as $package) {
+      if ($directoryInPackage->isSubdirectoryOf($package->getRootDirectory())
+          || $directoryInPackage->equals($package->getRootDirectory())
+         ) {
         return $package;
       }
     }
@@ -55,7 +71,7 @@ class Registry {
     
     // no algorithm yet:
     throw new \Psc\Exception(sprintf("Multiple Packages found for '%s'. This cannot be solved, yet.\nFound:\n%s",
-                                     $fqn, A::implode($packages, "\n", function ($package) { return $package->getSlug().' '.$package->getRootDirectory(); })));
+                                     $fqn, A::implode($packages, "\n", function ($package) { return $package->getIdentifier().' '.$package->getRootDirectory(); })));
   }
   
   /**
@@ -63,7 +79,7 @@ class Registry {
    */
   public function addPackage(Package $package) {
     $this->indexPackage($package);
-    $this->packages[$package->getSlug()] = $package;
+    $this->packages[$package->getIdentifier()] = $package;
     return $this;
   }
   

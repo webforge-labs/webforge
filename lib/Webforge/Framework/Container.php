@@ -11,6 +11,7 @@ use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Setup\Package\Registry AS PackageRegistry;
 use Webforge\Setup\Package\ComposerPackageReader;
 use Webforge\Setup\Installer\PartsInstaller;
+use Symfony\Component\Console\Output\OutputInterface;
 
 use Psc\JS\JSONConverter;
 use Psc\System\Dir;
@@ -18,7 +19,7 @@ use Psc\System\Dir;
 /**
  * This container includes the base classes for the framework
  *
- * 
+ * its related to the webforge core-project
  */
 class Container {
   
@@ -60,6 +61,26 @@ class Container {
   protected $packageRegistry;
   
   /**
+   * @var Webforge\Framework\PscCMSBridge
+   */
+  protected $cmsBridge;
+  
+  /**
+   * The local package is the package for the current context
+   * 
+   * this is not necessary the package from webforge unless its called from webforge-core
+   * @var Webforge\Setup\Package\Package
+   */
+  protected $localPackage;
+
+  /**
+   * The local project to the local package (legacy)
+   * 
+   * @var Psc\CMS\Project
+   */
+  protected $localProject;
+  
+  /**
    * @var Webforge\Setup\Package\ComposerPackageReader
    */
   protected $composerPackageReader;
@@ -90,7 +111,7 @@ class Container {
       }
     }
     
-    if ($registry->findBySlug('webforge/webforge') === NULL) {
+    if ($registry->findByIdentifier('webforge/webforge') === NULL) {
       $registry->addComposerPackageFromDirectory(Dir::factoryTS(__DIR__)->sub('../../../')->resolvePath());
     }
   }
@@ -175,19 +196,51 @@ class Container {
   /**
    * @return Webforge\Setup\Installer\PartsInstaller
    */
-  public function getPartsInstaller() {
+  public function getPartsInstaller(OutputInterface $output = NULL) {
     if (!isset($this->partsInstaller)) {
       $this->partsInstaller =
         new PartsInstaller(
           Array(
             new \Webforge\Setup\Installer\CreateCLIPart(),
-            new \Webforge\Setup\Installer\CreateBootstrapPart()
+            new \Webforge\Setup\Installer\CreateBootstrapPart(),
+            new \Webforge\Setup\Installer\ApacheConfigurationPart(),
+            new \Webforge\Setup\Installer\InstallTestSuitePart(),
+            new \Webforge\Setup\Installer\WriteHtaccessPart(),
+            new \Webforge\Setup\Installer\PscJSBoilerplatePart(),
+            new \Webforge\Setup\Installer\InitConfigurationPart()
           ),
-        $this
+        $this,
+        $output
       );
     }
     
     return $this->partsInstaller;
+  }
+  
+  /**
+   * @return Webforge\Setup\Package\Package
+   */
+  public function getLocalPackage() {
+    return $this->localPackage;
+  }
+  
+  /**
+   * @return Psc\CMS\Project
+   */
+  public function getLocalProject() {
+    if (!isset($this->localProject))  {
+      $this->localProject = $this->getCMSBridge()->createProjectFromPackage($this->getLocalPackage());
+    }
+    
+    return $this->localProject;
+  }
+  
+  /**
+   * @chainable
+   */
+  public function initLocalPackageFromDirectory(Dir $dir) {
+    $this->localPackage = $this->getPackageRegistry()->findByDirectory($dir);
+    return $this;
   }
 
   /**
@@ -195,9 +248,19 @@ class Container {
    */
   public function getResourceDirectory() {
     if (!isset($this->resourceDirectory)) {
-      $this->resourceDirectory = $this->getPackageRegistry()->findBySlug('webforge/webforge')->getRootDirectory()->sub('resources/');
+      $this->resourceDirectory = $this->getPackageRegistry()->findByIdentifier('webforge/webforge')->getRootDirectory()->sub('resources/');
     }
     return $this->resourceDirectory;
+  }
+  
+  /**
+   * @return Webforge\Framework\PscCMSBridge
+   */
+  public function getCMSBridge() {
+    if (!isset($this->cmsBridge)) {
+      $this->cmsBridge = new PscCMSBridge();    
+    }
+    return $this->cmsBridge;
   }
   
   // @codeCoverageIgnoreStart

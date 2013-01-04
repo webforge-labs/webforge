@@ -68,11 +68,57 @@ PHP;
                                                   )
                               );
     $phpCode = <<<'PHP'
-public function someAction(PointValue $xValue, PointValue $yValue, Array $info = array('x', 'y')) {
+public function someAction(PointValue $xValue, PointValue $yValue, Array $info = array('x','y')) {
 }
 PHP;
     
-    $this->assertCodeEquals($phpCode, $this->classWriter->writeMethod($method));
+    $this->assertEquals($phpCode, $this->classWriter->writeMethod($method));
+  }
+  
+  public function testWritesGMethodBodyNearlyCorrect() {
+    $method = GMethod::create(
+      '__construct',
+      array(),
+      GFunctionBody::create(
+        sprintf("parent::__construct('%s');\n", 'TheName')
+      )
+    );
+    
+    $phpCode = <<<'PHP'
+public function __construct() {
+  parent::__construct('TheName');
+}
+PHP;
+
+    $this->assertEquals($phpCode, $this->classWriter->writeMethod($method));
+  }
+  
+  public function testWritesParameterHintWithoutFQNWhenInNamespaceContext() {
+    $param = GParameter::create('xValue', new GClass('Webforge\Geometric\PointValue'));
+    
+    $phpCode = 'PointValue $xValue';
+    
+    $this->assertEquals($phpCode, $this->classWriter->writeParameter($param, 'Webforge\Geometric'));
+  }
+
+  public function testWritesParameterHintWithoutFQNWhenHintWasImportet() {
+    $param = GParameter::create('xValue', $point = new GClass('Webforge\Geometric\PointValue'));
+    
+    $this->classWriter->addImport($point);
+    
+    $phpCode = 'PointValue $xValue';
+    
+    $this->assertEquals($phpCode, $this->classWriter->writeParameter($param, 'Webforge\Other\Namesp'));
+  }
+  public function testWritesParameterHintWithoutFQNWhenHintWasInGClass() {
+    $param = GParameter::create('yValue', $point = new GClass('Webforge\Geometric\PointValue'));
+    
+    $gClass = new GClass('WithImport');
+    $gClass->createMethod('someActionWithY', array($param));
+    
+    $phpCode = 'someActionWithY(PointValue $yValue)';
+    
+    $this->assertContains($phpCode, $this->classWriter->writeGClassFile($gClass, 'Webforge\Other\Namesp'));
   }
   
   public function testWritesInterfaces() {

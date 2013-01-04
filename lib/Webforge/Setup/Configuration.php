@@ -5,6 +5,10 @@ namespace Webforge\Setup;
 use Psc\DataInput;
 use Psc\DataInputException;
 
+/**
+ *
+ * PscCMSBridge relies that Psc\CMS\Configuration is parent from this class!
+ */
 class Configuration extends \Psc\CMS\Configuration {
   
   /**

@@ -16,7 +16,7 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $acmePackage = $this->registry->findByFQN('ACME\IntranetApplication\Main');
     
     $this->assertInstanceOf('Webforge\Setup\Package\Package', $acmePackage);
-    $this->assertEquals('acme/intranet-application', $acmePackage->getSlug());
+    $this->assertEquals('acme/intranet-application', $acmePackage->getIdentifier());
   }
   
   /**
@@ -39,20 +39,30 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     
     // the library is added here first, because it would devour the namespace from ACME\IntranetApplication if not sorted
     $acmeIntranetPackage = $registry->findByFQN('ACME\IntranetApplication\Main');
-    $this->assertEquals('acme/intranet-application', $acmeIntranetPackage->getSlug());
+    $this->assertEquals('acme/intranet-application', $acmeIntranetPackage->getIdentifier());
 
     $acmeLibPackage = $registry->findByFQN('ACME\Common\Util');
-    $this->assertEquals('acme/library', $acmeLibPackage->getSlug());
+    $this->assertEquals('acme/library', $acmeLibPackage->getIdentifier());
   }
   
-  public function testFindBySlug() {
+  public function testFindByIdentifier() {
     $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/Webforge/'));
     $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
     
     $this->assertSame(
       $this->registry->findByFQN('ACME\Common\Util'),
-      $this->registry->findBySlug('acme/library'),
+      $this->registry->findByIdentifier('acme/library'),
       'acme library package is expected to be returned'
+    );
+  }
+  
+  public function testRegistryFindsProjectFromDirectoryWhichIsChildOfAprojectDirectory() {
+    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+    
+    $this->assertSame(
+      $this->registry->findByDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/tests/ACME')),
+      $this->registry->findByIdentifier('acme/library'),
+      'acme library package is expected to be returned, when find by path'
     );
   }
 }

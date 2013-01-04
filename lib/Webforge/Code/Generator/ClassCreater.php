@@ -4,6 +4,9 @@ namespace Webforge\Code\Generator;
 
 use Webforge\Code\ClassFileNotFoundException;
 
+/**
+ * @TODO create a logger / output interfaces to warn when class elevating does not work
+ */
 class ClassCreater {
   
   const OVERWRITE = ClassWriter::OVERWRITE;
@@ -49,11 +52,15 @@ class ClassCreater {
       $this->elevator->elevateParent($gClass);
     } catch (ClassFileNotFoundException $e) {
       
+    } catch (\ReflectionException $e) {
+      
     }
     
     try {
       $this->elevator->elevateInterfaces($gClass);
     } catch (ClassFileNotFoundException $e) {
+      
+    } catch (\ReflectionException $e) {
       
     }
 

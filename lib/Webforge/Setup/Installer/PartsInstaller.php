@@ -6,6 +6,10 @@ use Psc\System\Dir;
 use Psc\System\File;
 use Webforge\Framework\ContainerAware;
 use Webforge\Framework\Container;
+use Webforge\Setup\Package\PackageAware;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\NullOutput;
+use Psc\TPL\TPL;
 
 /**
  * @todo an output interface to communicate and warn
@@ -22,30 +26,131 @@ class PartsInstaller implements Installer {
    */
   protected $container;
   
-  public function __construct(Array $parts = array(), Container $container) {
+  /**
+   * @var Psc\System\Dir
+   */
+  protected $target;
+
+  /**
+   * @param $container Container make sure that this container has a localPackage defined
+   */
+  public function __construct(Array $parts, Container $container, OutputInterface $output = NULL) {
     $this->parts = $parts;
     $this->container = $container;
+    $this->output = $output ?: new NullOutput();
   }
   
   public function install(Part $part, Dir $destination) {
+    $this->target = $destination;
+    $macro = $this->installPart($part, $destination);
+    
+    return $macro->execute();
+  }
+
+  /**
+   * @return Webforge\Setup\Installer\Macro
+   */
+  public function dryInstall(Part $part, Dir $destination) {
+    $this->target = $destination;
+    $macro = $this->installPart($part, $destination);
+    
+    return $macro;
+  }
+  
+  protected function installPart(Part $part, Dir $destination) {
     if ($part instanceof ContainerAware) {
       $part->setContainer($this->container);
     }
-    
-    $part->installTo($destination, $this);
-  }
-  
-  public function copy($source, $destination, $flags = 0x000000) {
-    if ($source instanceof File || $source instanceof Dir) {
-      if (($flags & self::IF_NOT_EXISTS) && $destination->exists()) {
-        // warn?
-        return $this;
-      }
-      
-      $source->copy($destination);
+
+    if ($part instanceof PackageAware) {
+      $part->setPackage($this->container->getLocalPackage());
     }
     
-    return $this;
+    $macro = $this->recordMacro();
+    $part->installTo($destination, $this);
+    
+    return $macro;
+  }
+  
+  protected function recordMacro() {
+    return $this->macro = new Macro(array());
+  }
+  
+  /**
+   * @param Dir|File $source
+   * @param Dir|File $destination if $destination is a Dir and $source is a file, the a file with $source->getName() will be copied to $destination
+   */
+  public function copy($source, $destination, $flags = 0x000000) {
+    
+    return $this->command(
+      new CopyCmd($source, $destination, $flags)
+    );
+  
+  }
+
+  public function execute($cmd) {
+    
+    return $this->command(
+      new ExecCmd($cmd)
+    );
+    
+  }
+  
+  public function write($contents, File $destination, $flags = 0x000000) {
+    
+    return $this->command(
+      new WriteCmd($contents, $destination, $flags)
+    );
+  
+  }
+
+  public function writeTemplate(File $template, File $destination, Array $vars = array(), $flags = 0x000000) {
+    
+    return $this->command(
+      new WriteTemplateCmd($template, $destination, $vars, $flags)
+    );
+  
+  }
+  
+  /**
+   * $directory can be a subdirectory of target (as a string with forward slashes)
+   * @return Psc\System\Dir
+   */
+  public function createDir($directory) {
+    // when modelled command, it should really return the directory here: 
+    
+    if (!($directory instanceof Dir)) {
+      $directory = $this->target->sub($directory);
+    }
+    
+    $directory->create();
+    
+    return $directory;
+  }
+  
+  /**
+   * @return Psc\System\Dir
+   */
+  public function getWebforgeResources() {
+    return $this->container->getResourceDirectory();
+  }
+  
+  /**
+   * @return Psc\System\Dir
+   */
+  public function getInstallTemplates() {
+    return $this->getWebforgeResources()->sub('installTemplates/');
+  }
+
+
+  protected function command(Command $cmd) {
+    $this->macro->addCommand($cmd);
+    return $cmd;
+  }
+  
+  
+  public function warn($msg) {
+    return $this->output->writeln($msg);
   }
   
   public function getPart($name) {

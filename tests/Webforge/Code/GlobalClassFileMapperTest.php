@@ -24,7 +24,15 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
   public function testThatNonsenseFqnsCantGetFound() {
     $this->expectRegistryFindsNothing();
     $this->setExpectedException('Webforge\Code\ClassFileNotFoundException');
+    
     $this->mapper->getFile('ths\class\has\a\nonsense\name\and\is\not\existent');
+  }
+  
+  public function testGlobalClassFileMapperDoesNotNeedNeessearlyARegistry() {
+    $this->setExpectedException('Webforge\Code\ClassFileNotFoundException');
+    
+    $this->mapper = new GlobalClassFileMapper();
+    $this->mapper->getFile('ths\class\as\anonsense\name');
   }
   
   public function testEmptyFQNsAreBad() {
@@ -39,8 +47,28 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
     );
     
     $actualFile = $this->mapper->getFile('ACME\IntranetApplication\Main');
-    
     $expectedFile = $this->getFixtureFile('ACME', array('lib', 'ACME', 'IntranetApplication'), 'Main.php');
+    
+    $this->assertEquals((string) $expectedFile, (string) $actualFile);
+  }
+  
+  public function testAmbiguousAutoloadInfoGetsResolvedToNormalClass() {
+    $this->expectRegistryFindsPackageForFQN(
+      $this->createPackage(
+        'webforge/webforge',
+        'Webforge',
+        Array(
+          'psr-0'=>(object) array(
+            'Webforge'=> array('lib/', 'tests/')
+          )
+        )
+      ),
+      'Webforge\Common\String'
+    );
+    
+    $actualFile = $this->mapper->getFile('Webforge\Common\String');
+    $expectedFile = $this->getFixtureFile('Webforge', array('lib', 'Webforge', 'Common'), 'String.php');
+    
     $this->assertEquals((string) $expectedFile, (string) $actualFile);
   }
   
@@ -58,11 +86,14 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
                     );
   }
   
-  protected function createPackage($slug, $dirName) {
+  protected function createPackage($slug, $dirName, Array $autoLoadInfoSpec = NULL) {
+    list($vendor, $slug) = explode('/', $slug, 2);
     $package = new SimplePackage($slug,
+                                 $vendor,
                                  $this->getPackageDir($dirName),
                                  new AutoLoadInfo(
-                                   Array(
+                                  $autoLoadInfoSpec ?: 
+                                    Array(
                                      'psr-0'=>(object) array(
                                        'ACME'=> array('lib/')
                                       )

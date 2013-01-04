@@ -4,28 +4,32 @@ namespace Webforge\Setup;
 
 use Psc\System\File;
 use Psc\System\Dir;
+use Psc\A;
 
 class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
-    $this->absLib = new Dir(
+    $this->absoluteLibraryLocation = new Dir(
       (DIRECTORY_SEPARATOR === '\\' ? 'C:\programmes\cygwin\\' : '/')
       .'var/local/www/lib/'
     );
     
     $this->info = new AutoLoadInfo(json_decode('{"psr-0": {"Webforge": ["lib/"]}}'));
-    $this->ambinfo = new AutoLoadInfo(json_decode('{"psr-0": {"Webforge": ["lib/", "tests/"]}}'));
-    $this->absinfo = new AutoLoadInfo(Array(
+    $this->ambiguousInfo = new AutoLoadInfo(json_decode('{"psr-0": {"Webforge": ["lib/", "tests/"]}}'));
+    $this->absoluteInfo = new AutoLoadInfo(Array(
       'psr-0'=>(object) array(
-        'Webforge'=> array((string) $this->absLib)
+        'Webforge'=> array((string) $this->absoluteLibraryLocation)
       )
     ));
   }
   
   public function testGetFileMapsAFQNToAFileRegardlessIfItExists() {
-    $root = $this->getTestDirectory(); // can be any, never mind
+    $root = $this->getTestDirectory();
     
-    $mappedFile = $this->info->getFile('Webforge\Setup\Something', $root);
+    $mappedFiles = $this->info->getFiles('Webforge\Setup\Something', $root);
+    $this->assertCount(1, $mappedFiles);
+    $mappedFile = $mappedFiles[0];
+    $this->assertInstanceOf('Psc\System\File', $mappedFile);
     
     $this->assertEquals(
       (string) $root->sub('lib/Webforge/Setup/')->getFile('Something.php'),
@@ -35,15 +39,32 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
   }
   
   public function testGetFileMapsABSPaths() {
-    $root = $this->getTestDirectory(); // can be any, never mind
+    $resolveRelativesTo = $this->getTestDirectory();
     
-    $mappedFile = $this->absinfo->getFile('Webforge\Setup\Something', $root);
+    $mappedFiles = $this->absoluteInfo->getFiles('Webforge\Setup\Something', $resolveRelativesTo);
+    $this->assertCount(1, $mappedFiles);
+    $mappedFile = $mappedFiles[0];
     $this->assertInstanceOf('Psc\System\File', $mappedFile);
 
     $this->assertEquals(
-      (string) $this->absLib->sub('Webforge/Setup/')->getFile('Something.php'), // this has nothing in common with $root
+      (string) $this->absoluteLibraryLocation->sub('Webforge/Setup/')->getFile('Something.php'),
       (string) $mappedFile,
       'absolute autoloading path is wrong'
+    );
+  }
+  
+  public function testAmbInfoReturnsAllFiles() {
+    $mappedFiles = $this->ambiguousInfo->getFiles('Webforge\Setup\Something', $root = $this->getTestDirectory());
+
+    $this->assertCount(2, $mappedFiles);
+    
+    $this->assertArrayEquals(
+      A::stringify($mappedFiles),
+      A::stringify(Array(
+        $root->sub('tests/Webforge/Setup/')->getFile('Something.php'),
+        $root->sub('lib/Webforge/Setup/')->getFile('Something.php')
+      )),
+      $mappedFiles
     );
   }
 }

@@ -13,9 +13,11 @@ abstract class ContainerAwarePart extends Part implements ContainerAware {
    */
   protected $container;
   
+  // @codeCoverageIgnoreStart
   public function setContainer(Container $container) {
     $this->container = $container;
     return $this;
   }
+  // @codeCoverageIgnoreEnd
 }
 ?>

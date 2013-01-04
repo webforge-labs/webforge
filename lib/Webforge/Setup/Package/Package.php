@@ -14,12 +14,35 @@ use Webforge\Setup\AutoLoadInfo;
  */
 interface Package {
   
+  const ROOT = 'root';
+  const TESTS = 'tests';
+  
+  /**
+   * A full identifier for the package
+   *
+   * @return string vendor/slug
+   */
+  public function getIdentifier();
+  
   /**
    * A nicename for the package
    *
-   * @return string
+   * @return string its only the part packagename in vendor/packagename
    */
   public function getSlug();
+  
+  /**
+   * @return string its only the part vendor in vendor/packagename
+   */
+  public function getVendor();
+  
+  
+  /**
+   * The full title for the package
+   *
+   * @return string
+   */
+  public function getTitle();
   
   /**
    * @param string $slug
@@ -35,6 +58,12 @@ interface Package {
    * @param Dir $directory
    */
   public function setRootDirectory(Dir $directory);
+  
+  /**
+   * @return Dir
+   */
+  public function getDirectory($type = self::ROOT);
+
   
   /**
    * Gives Information for the Paths the Projects loads it classes from

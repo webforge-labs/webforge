@@ -15,7 +15,9 @@ class ComposerPackageReader {
       $converter = new JSONConverter();
       $json = $converter->parse($jsonFile->getContents());
       
-      return new SimplePackage($json->name, $directory, $this->readAutoLoadInfo($json));
+      list($vendor, $slug) = explode('/', $json->name, 2);
+      
+      return new SimplePackage($slug, $vendor, $directory, $this->readAutoLoadInfo($json));
       
     } catch (\Psc\Exception $e) {
       $e->prependMessage(sprintf('Cannot read package from directory %s. ', $directory));

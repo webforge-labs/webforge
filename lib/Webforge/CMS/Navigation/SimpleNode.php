@@ -8,7 +8,7 @@ namespace Webforge\CMS\Navigation;
  */
 class SimpleNode implements Node {
   
-  protected $lft, $rgt, $root, $depth, $title, $parent;
+  protected $lft, $rgt, $depth, $title, $parent;
   
   public function __construct(Array $node) {
     $this->title = $node['title'];
@@ -22,10 +22,6 @@ class SimpleNode implements Node {
     if (isset($node['rgt']))
       $this->rgt = $node['rgt'];
       
-    if (isset($node['root'])) {
-      $this->root = $node['root'];
-    }
-
     if (isset($node['parent'])) {
       $this->parent = $node['parent'];
     }
@@ -41,7 +37,6 @@ class SimpleNode implements Node {
       'rgt' => $this->rgt,
       'lft' => $this->lft,
       'depth' => $this->depth
-      //'root' => $this->root
     );
   }
   
@@ -52,6 +47,8 @@ class SimpleNode implements Node {
   public function equalsNode(Node $other = NULL) {
     return isset($other) && $other->getTitle() === $this->getTitle();
   }
+  
+  // @codeCoverageIgnoreStart
   
   /**
    * @param TestNode $parent
@@ -84,8 +81,6 @@ class SimpleNode implements Node {
   public function getTitle() {
     return $this->title;
   }
-
-
   
   /**
    * @param integer $depth
@@ -103,21 +98,6 @@ class SimpleNode implements Node {
     return $this->depth;
   }
 
-  /**
-   * @param integer $root
-   * @chainable
-   */
-  public function setRoot($root) {
-    $this->root = $root;
-    return $this;
-  }
-
-  /**
-   * @return integer
-   */
-  public function getRoot() {
-    return $this->root;
-  }
 
   /**
    * @param int $rgt
@@ -150,5 +130,7 @@ class SimpleNode implements Node {
   public function getLft() {
     return $this->lft;
   }
+
+  // @codeCoverageIgnoreEnd
 }
 ?>

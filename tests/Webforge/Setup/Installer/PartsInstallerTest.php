@@ -4,62 +4,108 @@ namespace Webforge\Setup\Installer;
 
 use Psc\System\Dir;
 use Psc\System\File;
+use Webforge\Code\Test\ConsoleOutput;
 
 class PartsInstallerTest extends \Webforge\Code\Test\Base {
   
   protected $testDir;
   
   public function setUp() {
-    $this->testDir = Dir::createTemporary();
+    $this->testDir = $this->getMock('Psc\System\Dir');
     $this->container = new \Webforge\Framework\Container();
-    $this->partsInstaller = new PartsInstaller(array(), $this->container);
+    $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
-    $this->existingFile = File::createTemporary();
-    $this->existingFile->writeContents('.');
+    $this->output = new ConsoleOutput();
+    $this->partsInstaller = new PartsInstaller(array(), $this->container, $this->output);
+    
+    $this->mockPart = $this->getMockForAbstractClass('Part', array('MockPart'));
   }
   
-  public function testPartsInstallerCopiesTheTemplatesOfThePartToADefinedTargetDirectory() {
-    $template = File::createTemporary();
-    $template->writeContents('<?php echo "testing"; ?>');
-    
-    $part = new TestPart($template);
-    $this->partsInstaller->install($part, $this->testDir);
-    
-    $this->assertEquals($this->testDir->getFile('testing.php')->getContents(), '<?php echo "testing"; ?>');
-    $template->delete();
-  }
-  
+
   public function testPartsInstallerAssignsContainerForPartsThatAreContainerAware() {
-    $part = $this->getMockForAbstractClass('ContainerAwareTestPart', array('containerTestPart'));
+    $part = $this->getMockBuilder('Webforge\Setup\Installer\ContainerAwarePart')
+                 ->setConstructorArgs(array('containerTestPart'))
+                 ->setMethods(array('setContainer', 'installTo'))
+                 ->getMock();
     $part->expects($this->once())->method('setContainer')->with($this->isInstanceOf('Webforge\Framework\Container'));
     
-    $this->partsInstaller->install($part, $this->testDir);
+    $this->partsInstaller->dryInstall($part, $this->testDir);
   }
-  
+
+  public function testPartsInstallerAssignsPackageofLocalProjectForPartsThatArePackageAware() {
+    $part = $this->getMockBuilder('PackageAwareTestPart')
+              ->setConstructorArgs(array('packageTestPart'))
+              ->setMethods(array('setPackage','getPackage','installTo'))
+              ->getMock();
+    $part->expects($this->once())->method('setPackage')->with($this->isInstanceOf('Webforge\Setup\Package\Package'));
+    
+    $this->partsInstaller->dryInstall($part, $this->testDir);
+  }
+
   public function testPartsInstallerTHrowsRuntimeExceptionIfPartWithUnknownNameIsget() {
     $this->setExpectedException('RuntimeException');
+    $this->partsInstaller->addPart($this->mockPart);
+    
     $this->partsInstaller->getPart('thisisnotinpartsinstaller');
   }
   
-  public function testPartsInstallerCopiesFilesOnlyIfTheyNotExistsWhenFlagIsSet() {
-    $source = $this->getMock('Psc\System\File', array(), array(__FILE__));
-    $source->expects($this->never())->method('copy');
+  public function testGetPartReturnsAPart() {
+    $this->partsInstaller->addPart($this->mockPart);
     
-    $this->partsInstaller->copy($source, $target = $this->existingFile, Installer::IF_NOT_EXISTS);
+    $this->assertSame($this->mockPart, $this->partsInstaller->getPart('MockPart'));
+  }
+
+  public function testPartsInstallerHasAWarningFunctionThatPrintsToOutput() {
+    $this->partsInstaller->warn('i would install the bootstrap first');
+    $this->assertContains('i would install the bootstrap first', $this->output->stream);
   }
   
-/*  public function testPartsInstallerVerbosesCopyActionToOutput() {
-    $this->partsInstaller->copy($source, $target)
+  public function testPartsInstallerCreatesAMacroInDry() {
+    $macro = $this->partsInstaller->dryInstall($this->mockPart, $this->testDir);
+    
+    $this->assertInstanceOf('Webforge\Setup\Installer\Macro', $macro);
   }
-*/
+
+  public function testPartsInstallerDoesNotCallPartInstallToinDry() {
+    $configFile = $this->onInstallCopyConfigFile();
+    
+    $configFile->expects($this->never())->method('copy');
+    
+    $this->dryInstall();
+  }
+
+  public function testPartsInstallerDoesCallPartInstallToInInstall() {
+    $configFile = $this->onInstallCopyConfigFile();
+    
+    $configFile->expects($this->once())->method('copy');
+    
+    $this->partsInstaller->install($this->mockPart, $this->testDir);
+  }
   
-  public function tearDown() {
-    $this->testDir->delete();
-    $this->existingFile->delete();
+  protected function onInstall(\Closure $doInstall) {
+    $this->mockPart->expects($this->once())->method('installTo')->will($this->returnCallback($doInstall));
+  }
+
+  protected function onInstallCopyConfigFile() {
+    $configFile = $this->getMock('Psc\System\File', array(), array('config.template.php'));
+    
+    $this->onInstall(function (Dir $target, Installer $installer) use ($configFile) {
+      $installer->copy($configFile, $target->sub('etc/'));
+    });
+    
+    return $configFile;
+  }
+  
+  protected function dryInstall() {
+    return $this->partsInstaller->dryInstall($this->mockPart, $this->testDir);
+  }
+  
+  protected function assertCmd($name, $command) {
+    $this->assertInstanceOf('Webforge\Setup\Installer\\'.$name.'Cmd', $command);
   }
 }
 
-abstract class ContainerAwareTestPart extends Part implements \Webforge\Framework\ContainerAware {
+abstract class PackageAwareTestPart extends Part implements \Webforge\Setup\Package\PackageAware {
   
 }
 ?>

@@ -5,9 +5,11 @@ namespace Webforge\Code;
 use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Code\Generator\GClass;
 use Webforge\Setup\Package\Registry AS PackageRegistry;
+use Webforge\Setup\Package\Package;
 use Webforge\Code\ClassNotFoundException;
 use Psc\System\File;
 use Psc\System\Dir;
+use Webforge\Common\String as S;
 use ComposerAutoloaderInit;
 use Webforge\Setup\Package\PackageNotFoundException;
 
@@ -29,7 +31,6 @@ use Webforge\Setup\Package\PackageNotFoundException;
 class GlobalClassFileMapper implements ClassFileMapper {
   
   const WITH_RESOLVING    = 0x000001;
-  const WITH_INCLUDE_PATH = 0x000002;
   
   /**
    * A Registry for Packages installed on the host (e.g.)
@@ -65,17 +66,11 @@ class GlobalClassFileMapper implements ClassFileMapper {
     if (isset($this->packageRegistry)) {
       try {
         $package = $this->packageRegistry->findByFQN($fqn);
+        
+        return $this->findWithPackage($fqn, $package);
+        
       } catch(PackageNotFoundException $e) {
         $e = ClassFileNotFoundException::fromPackageNotFoundException($fqn, $e);
-        throw $e;
-      }
-      
-      $autoLoad = $package->getAutoLoadInfo();
-      if (isset($autoLoad) && ($file = $autoLoad->getFile($fqn, $package->getRootDirectory()))) {
-        return $this->validateFile($file, self::WITH_RESOLVING);
-      } else {
-        $e = ClassNotFoundException::fromFQN($fqn);
-        $e->appendMessage(sprintf('. AutoLoading from package: %s is not defined. Cannot resolve to file.', $package));
         throw $e;
       }
     }
@@ -83,11 +78,53 @@ class GlobalClassFileMapper implements ClassFileMapper {
     return NULL;
   }
   
-  protected function validateFile(File $file, $flags = 0x0000) {
-    if ($flags & self::WITH_INCLUDE_PATH && $file->isRelative()) {
-      throw new \Psc\Code\NotImplementedException('YAGNI: composer was smart enough');
+  public function findWithPackage($fqn, Package $package) {
+    $autoLoad = $package->getAutoLoadInfo();
+
+    if (!isset($autoLoad)) {
+      $e = ClassNotFoundException::fromFQN($fqn);
+      $e->appendMessage(sprintf('. AutoLoading from package: %s is not defined. Cannot resolve to file.', $package));
+      throw $e;
     }
     
+    $files = $autoLoad->getFiles($fqn, $package->getRootDirectory());
+  
+    if (count($files) === 0) {
+      $e = ClassNotFoundException::fromFQN($fqn);
+      $e->appendMessage(sprintf(". AutoLoading from package: %s failed. 0 files found.", $package));
+      throw $e;
+    }
+
+    $file = $this->resolveConflictingFiles($files, $fqn, $package);
+
+    return $this->validateFile($file, self::WITH_RESOLVING);
+  }
+
+  protected function resolveConflictingFiles(Array $files, $fqn, Package $package) {
+    if (count($files) === 1) return current($files);
+
+    $testsDir = $package->getDirectory(Package::TESTS);
+    $testFiles = array_filter(
+      $files,
+      function ($file) use ($testsDir) {
+        return $file->getDirectory()->isSubdirectoryOf($testsDir);
+      }
+    );
+
+    if (S::endsWith($fqn, 'Test') && count($testFiles) === 1) {
+      return current($testFiles);
+    }
+    
+    $files = array_diff($files, $testFiles);
+    
+    if (count($files) === 1) return current($files);
+    
+    $e = ClassNotFoundException::fromFQN($fqn);
+    $e->appendMessage(sprintf(". AutoLoading from package: %s failed. Too many Files were found:\n%s", $package, implode("\n", $files)));
+    throw $e;
+  }
+  
+  protected function validateFile(File $file, $flags = 0x0000) {
     if ($flags & self::WITH_RESOLVING) {
       $file->resolvePath();
     }

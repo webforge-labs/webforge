@@ -14,7 +14,7 @@ use Webforge\Code\Generator\GClass;
  * - add assertArrayEquals() as a short coming for equals() with $canonicalize = true
  */
 class Base extends \Psc\Code\Test\Base {
-
+  
   /**
    * @var Psc\System\Dir
    */
@@ -55,16 +55,7 @@ class Base extends \Psc\Code\Test\Base {
    */
   public function getTestDirectory($sub = '/') {
     if (!isset($this->testFilesDirectory)) {
-      // @TODO change hardcoding
-      $this->testFilesDirectory = new Dir(
-                                  __DIR__.DIRECTORY_SEPARATOR.
-                                  '..'.DIRECTORY_SEPARATOR. //  Code
-                                  '..'.DIRECTORY_SEPARATOR. //  Webforge
-                                  '..'.DIRECTORY_SEPARATOR. //  lib
-                                  '..'.DIRECTORY_SEPARATOR. //  root
-                                  'tests'.DIRECTORY_SEPARATOR.
-                                  'files'.DIRECTORY_SEPARATOR
-                                );
+      $this->testFilesDirectory = $GLOBALS['env']['root']->sub('tests/files/');
       $this->testFilesDirectory->resolvePath(); // make abs
     }
     
@@ -93,5 +84,8 @@ class Base extends \Psc\Code\Test\Base {
     return parent::getMockForAbstractClass($originalClassName, $arguments, $mockClassName, $callOriginalConstructor, $callOriginalClone, $callAutoload, $mockedMethods, $cloneArguments);
   }
   
+  public function pluck($collection, $getter) {
+    return $this->reduceCollection($collection, $getter);
+  }
 }
 ?>

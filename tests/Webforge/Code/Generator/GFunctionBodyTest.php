@@ -31,7 +31,7 @@ class GFunctionBodyTest extends \Webforge\Code\Test\Base {
     };
     
     $php(
-        'return $this->x;'
+      'return $this->x;'
     );
 
     $php(

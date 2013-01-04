@@ -11,13 +11,13 @@ class CreateBootstrapPart extends ContainerAwarePart {
   }
   
   public function installTo(Dir $target, Installer $installer) {
-    $resources = $this->container->getResourceDirectory();
     
     $installer->copy(
-      $resources->sub('installTemplates/')->getFile('bootstrap.template.php'),
+      $installer->getInstallTemplates()->getFile('bootstrap.template.php'),
       $target->getFile('bootstrap.php'),
       Installer::IF_NOT_EXISTS
     );
+    
   }
 }
 ?>
