@@ -36,6 +36,7 @@ class PscCMSBridge {
     $paths[PSC::PATH_TPL] = './resources/tpl/';
     $paths[PSC::PATH_TESTDATA] = './tests/files/';
     $paths[PSC::PATH_TESTS] = './tests';
+    $paths[PSC::PATH_CLASS] = './lib/'.$package->getSlug().'/';
     $paths[PSC::PATH_FILES] = './files/';
     $paths[PSC::PATH_BUILD] = './build/';
     
