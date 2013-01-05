@@ -230,6 +230,7 @@ class Container {
   public function getLocalProject() {
     if (!isset($this->localProject))  {
       $this->localProject = $this->getCMSBridge()->createProjectFromPackage($this->getLocalPackage());
+      $this->getCMSBridge()->initLocalConfigurationFor($this->localProject);
     }
     
     return $this->localProject;
