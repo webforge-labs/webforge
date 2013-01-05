@@ -28,12 +28,12 @@ class PscCMSBridge {
   public function createProjectFromPackage(Package $package) {
     $paths = array();
 
-    $paths[PSC::PATH_SRC] = './lib/';
+    $paths[PSC::PATH_SRC] = './application/src/';
     $paths[PSC::PATH_HTDOCS] = './www/';
     $paths[PSC::PATH_BASE] = './';
     $paths[PSC::PATH_CACHE] = './files/cache/';
     $paths[PSC::PATH_BIN] = './bin/';
-    $paths[PSC::PATH_TPL] = './resources/tpl/';
+    $paths[PSC::PATH_TPL] = './application/tpl/';
     $paths[PSC::PATH_TESTDATA] = './tests/files/';
     $paths[PSC::PATH_TESTS] = './tests';
     $paths[PSC::PATH_CLASS] = './lib/'.$package->getSlug().'/';
