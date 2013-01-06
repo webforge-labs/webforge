@@ -52,6 +52,18 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     
     $this->assertInstanceOf('Psc\CMS\Configuration', $project->getConfiguration());
   }
+  
+  public function testBridgeInitsAConfigEvenIfThereIsNoEnvironmentVariableForPscCMSSet() {
+    $env = getenv('PSC_CMS');
+    putenv('PSC_CMS=""');
+    
+    $project = $this->bridge->createProjectFromPackage($this->package);
+    $this->bridge->initLocalConfigurationFor($project);
+    $this->assertInstanceOf('Psc\CMS\Configuration', $project->getConfiguration());
+    
+    putenv('PSC_CMS="'.$env.'"');
+  }
+  
 
   public function testBridgeThrowExceptionIfHostConfigFileisEmpty() {
     $this->bridge->setHostConfigFile($this->getFile('empty.php'));

@@ -89,8 +89,10 @@ class PscCMSBridge {
     $projectsFactory = $projectsFactory ?: $this->getPscProjectsFactory();
     if (isset($projectsFactory)) {
       $this->hostConfig = $projectsFactory->getHostConfig();
+    } elseif ($hostConfigFile = $this->getHostConfigFile()) {
+      $this->hostConfig = $this->readConfigurationFromFile($hostConfigFile);
     } else {
-      $this->hostConfig = $this->readConfigurationFromFile($this->getHostConfigFile());
+      $this->hostConfig = new Configuration(array());
     }
     
     return $this->hostConfig;
@@ -129,7 +131,11 @@ class PscCMSBridge {
   
   protected function getHostConfigFile() {
     if (!isset($this->hostConfigFile)) {
-      $this->hostConfigFile = PSC::getRoot()->getFile('host-config.php');
+      try {
+        $this->hostConfigFile = PSC::getRoot()->getFile('host-config.php');
+      } catch (\Psc\MissingEnvironmentVariableException $e) {
+        
+      }
     }
     
     return $this->hostConfigFile;
