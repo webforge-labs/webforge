@@ -625,7 +625,111 @@
             "homepage": "http://symfony.com"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "name": "pdepend/pdepend",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/pdepend/pdepend.git",
+                "reference": "981b7c9c831dc489523c5034729eba7297fa424e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/pdepend/pdepend/archive/981b7c9c831dc489523c5034729eba7297fa424e.zip",
+                "reference": "981b7c9c831dc489523c5034729eba7297fa424e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.3"
+            },
+            "time": "2012-11-28 11:29:58",
+            "bin": [
+                "src/bin/pdepend"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Official version of pdepend to be handled with Composer"
+        },
+        {
+            "name": "phpmd/phpmd",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/phpmd/phpmd.git",
+                "reference": "1.4.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/phpmd/phpmd/zipball/1.4.0",
+                "reference": "1.4.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "pdepend/pdepend": "*"
+            },
+            "time": "2012-09-07 14:52:24",
+            "bin": [
+                "src/bin/phpmd"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "../../pdepend/pdepend/src/main/php",
+                "src/main/php"
+            ],
+            "description": "Official version of PHPMD handled with Composer."
+        },
+        {
+            "name": "webforge/testdata-repository",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pscheit/webforge-testdata-repository.git",
+                "reference": "0.2.1-alpha"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/pscheit/webforge-testdata-repository/archive/0.2.1-alpha.zip",
+                "reference": "0.2.1-alpha",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "time": "2012-11-07 07:33:07",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Webforge\\TestData": [
+                        "lib/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp Scheit",
+                    "email": "p.scheit@ps-webforge.com"
+                }
+            ],
+            "description": "A repository for data that you can use to fill your unit tests.",
+            "homepage": "http://github.com/pscheit/webforge-testdata-repository",
+            "keywords": [
+                "data",
+                "unit test",
+                "testdata"
+            ]
+        }
+    ],
     "aliases": [
 
     ],
