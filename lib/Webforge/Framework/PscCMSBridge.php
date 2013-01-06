@@ -134,7 +134,6 @@ class PscCMSBridge {
       try {
         $this->hostConfigFile = PSC::getRoot()->getFile('host-config.php');
       } catch (\Psc\MissingEnvironmentVariableException $e) {
-        
       }
     }
     
