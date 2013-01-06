@@ -14,7 +14,8 @@
     
     "symfony/console": "2.1.*",
     "nikic/php-parser": "dev-master",
-    "doctrine/orm": "2.3.*@stable"
+    "doctrine/orm": "2.3.*@stable",
+    "pscheit/psc-cms": "dev-master"
   },
   "require-dev": {
     "webforge/testdata-repository": "dev-master",
