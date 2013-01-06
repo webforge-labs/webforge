@@ -53,6 +53,14 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
     );
   }
   
+  public function testGetMainPrefixAndPathReturnsTheFirstPathAndPrefixFromFirstAutoLoad() {
+    $root = new Dir(__DIR__.DIRECTORY_SEPARATOR);
+    $this->assertEquals(array('Webforge', $root->sub('lib/')), $this->ambiguousInfo->getMainPrefixAndPath($root));
+    
+    $root = $this->absoluteLibraryLocation->up();
+    $this->assertEquals(array('Webforge', $this->absoluteLibraryLocation), $this->absoluteInfo->getMainPrefixAndPath($root));
+  }
+  
   public function testAmbInfoReturnsAllFiles() {
     $mappedFiles = $this->ambiguousInfo->getFiles('Webforge\Setup\Something', $root = $this->getTestDirectory());
 

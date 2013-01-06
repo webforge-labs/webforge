@@ -65,6 +65,21 @@ class AutoLoadInfo {
   }
   
   /**
+   * @return list(string $prefix, $dir)
+   */
+  public function getMainPrefixAndPath(Dir $rootDir) {
+    $prefixesPaths = $this->getPrefixes();
+    $prefixes = array_keys($prefixesPaths);
+    $firstPrefixPaths = array_shift($prefixesPaths);
+    
+    $path = array_shift($firstPrefixPaths);
+    $dir = $path instanceof Dir ? $path : $rootDir->sub($path);
+    
+    return array(array_shift($prefixes), $dir);
+  }
+
+  
+  /**
    * @param Dir $rootDir die relativen Pfade (wenn es welche gibt) werden auf dieses Verzeichnis bezogen
    * @return Files[]|array()
    */

@@ -44,7 +44,7 @@ class PscCMSBridge {
     $paths[PSC::PATH_TPL] = './application/tpl/';
     $paths[PSC::PATH_TESTDATA] = './tests/files/';
     $paths[PSC::PATH_TESTS] = './tests';
-    $paths[PSC::PATH_CLASS] = './lib/'.$package->getSlug().'/';
+    $paths[PSC::PATH_CLASS] = '.'.$this->getPackageClassPath($package)->getUrl($package->getRootDirectory());
     $paths[PSC::PATH_FILES] = './files/';
     $paths[PSC::PATH_BUILD] = './build/';
     
@@ -65,6 +65,12 @@ class PscCMSBridge {
     $project->loadedFromPackage = TRUE;
     
     return $project;
+  }
+  
+  protected function getPackageClassPath(Package $package) {
+    list ($namespace, $dir) = $package->getAutoLoadInfo()->getMainPrefixAndPath($package->getRootDirectory());
+    
+    return $dir->sub($namespace.'/');
   }
   
   public function initLocalConfigurationFor(Project $project) {
