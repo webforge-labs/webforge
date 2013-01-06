@@ -5,6 +5,7 @@ namespace Webforge\Framework;
 use Webforge\Setup\Package\Package;
 use Psc\CMS\Project;
 use Psc\PSC;
+use Psc\CMS\ProjectsFactory;
 use Psc\System\File;
 use Psc\CMS\Configuration as PscConfiguration;
 use Webforge\Setup\Configuration;
@@ -23,9 +24,16 @@ class PscCMSBridge {
   protected $hostConfigFile;
   
   /**
+   * @var Psc\CMS\ProjectsFactory
+   */
+  protected $projectsFactory;
+  
+  /**
    * @return Psc\CMS\Project
    */
   public function createProjectFromPackage(Package $package) {
+    $projectsFactory = $this->getProjectsFactory();
+    
     $paths = array();
 
     $paths[PSC::PATH_SRC] = './application/src/';
@@ -40,14 +48,20 @@ class PscCMSBridge {
     $paths[PSC::PATH_FILES] = './files/';
     $paths[PSC::PATH_BUILD] = './build/';
     
-    $project = new Project(
-      $package->getSlug(),
-      $package->getRootDirectory(),
-      $hostConfig = $this->getHostConfig(),
-      $paths,
-      $mode = Project::MODE_SRC,
-      $staging = FALSE
-    );
+    foreach ($paths as $path => $value) {
+      $projectsFactory->setProjectPath($package->getSlug(), $path, $value);
+    }
+    
+    $project =
+      $projectsFactory->getProjectInstance(
+        $package->getSlug(),
+        $package->getRootDirectory(),
+        $this->getHostConfig(),
+        $paths,
+        $mode = Project::MODE_SRC,
+        $staging = FALSE
+      )
+    ;
     
     return $project;
   }
@@ -57,8 +71,15 @@ class PscCMSBridge {
     return $project;
   }
   
+  protected function getProjectsFactory() {
+    if (!isset($this->projectsFactory)) {
+      $this->projectsFactory = new ProjectsFactory($this->getHostConfig());
+    }
+    return $this->projectsFactory;
+  }
+  
   public function getHostConfig(\Psc\CMS\ProjectsFactory $projectsFactory = NULL) {
-    $projectsFactory = $projectsFactory ?: $this->getProjectsFactory();
+    $projectsFactory = $projectsFactory ?: $this->getPscProjectsFactory();
     if (isset($projectsFactory)) {
       $this->hostConfig = $projectsFactory->getHostConfig();
     } else {
@@ -91,7 +112,7 @@ class PscCMSBridge {
     return new Configuration($conf);
   }
   
-  protected function getProjectsFactory() {
+  protected function getPscProjectsFactory() {
     try {
       return PSC::getProjectsFactory();
     } catch (\Psc\Exception $e) {
