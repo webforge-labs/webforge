@@ -314,7 +314,7 @@
                 "php": ">=5.3.2",
                 "ext-mbstring": "*",
                 "doctrine/orm": "2.3.*@stable",
-                "imagine/imagine": "0.3.*",
+                "imagine/Imagine": "0.3.*",
                 "swiftmailer/swiftmailer": "4.1.*",
                 "codeplex/phpexcel": "1.7.8",
                 "webforge/webforge": "dev-master",
