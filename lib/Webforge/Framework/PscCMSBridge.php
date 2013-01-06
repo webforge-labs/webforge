@@ -62,6 +62,7 @@ class PscCMSBridge {
         $staging = FALSE
       )
     ;
+    $project->loadedFromPackage = TRUE;
     
     return $project;
   }

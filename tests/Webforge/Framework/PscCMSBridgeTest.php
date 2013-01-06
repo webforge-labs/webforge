@@ -42,6 +42,7 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Psc\CMS\Project', $project);
     
     $this->assertEquals('library', $project->getName());
+    $this->assertTrue($project->loadedFromPackage);
   }
   
   public function testBridgeInitsAConfigEvenIfThereIsNoLocalConfigFile() {
