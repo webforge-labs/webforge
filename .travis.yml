@@ -7,7 +7,8 @@ branches:
     - master
 
 before_script:
-  - composer update --prefer-dist --dev
+  - composer --version
+  - composer install --prefer-dist --dev
 
 script: phpunit
 

@@ -21,12 +21,12 @@ phpunit
 It's optional to configure the host-config for Psc - CMS. This might change in future, but it is already planned to move the whole autoloading to composer (which is not the case for Psc\* classes)
 
 ## roadmap
-  - step by step integration from psc-cms into this repo
+  - step by step integration from boilerplate code from psc-cms into this repo
   - build better modules out from psc-cms
   - write better and english documentation for these modules
   - [Refactor a lot](http://wiki.ps-webforge.com/psc-cms:start#refactoring-roadmap)
   - search for contributors and people with interest
 
 ##resources
-[Psc-CMS (the old name) - Documentation in german](http://wiki.ps-webforge.com/psc-cms:start)
+[Psc-CMS - Documentation in german](http://wiki.ps-webforge.com/psc-cms:start)
 
