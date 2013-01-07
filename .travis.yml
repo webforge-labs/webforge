@@ -8,8 +8,7 @@ branches:
 
 before_script:
   - composer self-update
-  - composer --version
-  - composer install --prefer-dist --dev
+  - COMPOSER_ROOT_VERSION=dev-master composer --prefer-dist --dev install
 
 script: phpunit
 

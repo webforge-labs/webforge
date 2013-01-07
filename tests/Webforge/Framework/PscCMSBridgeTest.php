@@ -97,8 +97,12 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
   }
 
   public function testGetHostConfiguration_isLoadedFromPscRootDirectory() {
-    $this->assertFileExists(PSC::getRoot()->getFile('host-config.php'), 'PSC::getRoot() must not throw exception for this test. host-config.php should exist');
-    $this->assertInstanceOf('Psc\CMS\Configuration', $this->bridge->getHostConfig());
+    try {
+      $this->assertFileExists(PSC::getRoot()->getFile('host-config.php'), 'PSC::getRoot() must not throw exception for this test. host-config.php should exist');
+      $this->assertInstanceOf('Psc\CMS\Configuration', $this->bridge->getHostConfig());
+    } catch (\Psc\MissingEnvironmentVariableException $e) {
+      $this->markTestSkipped('this is a stupid test with legacy code with static dependencies. And this test is skipped because host-config is not defined on this host');
+    }
   }
   
   public function teardown() {
