@@ -117,6 +117,13 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $this->testInstanceOfProperty('localPackage', 'Webforge\Setup\Package\Package');
   }
   
+  public function testLocalPackageInitFromDirectory_throwsExceptionWhenPackageIsNotFound() {
+    $this->assertNull($this->container->getLocalPackage());
+    
+    $this->setExpectedException('Webforge\Framework\Exception');
+    $this->container->initLocalPackageFromDirectory(Dir::factoryTS($nonRegisteredDir = sys_get_temp_dir()));
+  }
+  
   public function testContainerReturnsALegacyProjectForPSCCMS() {
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
