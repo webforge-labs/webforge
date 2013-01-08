@@ -23,7 +23,7 @@ class CreateClassCommand {
   
   /**
    * is avaible after write()
-   * @var Psc\System\File
+   * @var Webforge\Common\System\File
    */
   protected $file;
   
@@ -93,7 +93,7 @@ class CreateClassCommand {
   }
   
   /**
-   * @return Psc\System\File
+   * @return Webforge\Common\System\File
    */
   public function getFile() {
     return $this->file;

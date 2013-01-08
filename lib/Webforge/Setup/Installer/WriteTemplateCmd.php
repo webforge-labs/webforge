@@ -2,18 +2,18 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 use Psc\TPL\TPL;
 
 class WriteTemplateCmd extends Command {
 
   /**
-   * @var Psc\System\File
+   * @var Webforge\Common\System\File
    */
   protected $template;
 
   /**
-   * @var Psc\System\File
+   * @var Webforge\Common\System\File
    */
   protected $destination;
   

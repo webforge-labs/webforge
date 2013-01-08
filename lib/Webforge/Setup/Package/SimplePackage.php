@@ -2,13 +2,13 @@
 
 namespace Webforge\Setup\Package;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Webforge\Setup\AutoLoadInfo;
 
 class SimplePackage implements Package {
   
   /**
-   * @var Psc\System\Dir
+   * @var Webforge\Common\System\Dir
    */
   protected $rootDirectory;
   
@@ -64,14 +64,14 @@ class SimplePackage implements Package {
   
 
   /**
-   * @return Psc\System\Dir
+   * @return Webforge\Common\System\Dir
    */
   public function getRootDirectory() {
     return $this->rootDirectory;
   }
   
   /**
-   * @return Psc\System\Dir (cloned)
+   * @return Webforge\Common\System\Dir (cloned)
    */
   public function getDirectory($type = self::ROOT) {
     if ($type === self::ROOT) {
@@ -99,7 +99,7 @@ class SimplePackage implements Package {
   
 
   /**
-   * @param Psc\System\Dir $rootDirectory
+   * @param Webforge\Common\System\Dir $rootDirectory
    * @chainable
    */
   public function setRootDirectory(Dir $rootDirectory) {

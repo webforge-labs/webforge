@@ -2,8 +2,8 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\File;
-use Psc\System\Dir;
+use Webforge\Common\System\File;
+use Webforge\Common\System\Dir;
 
 interface Installer {
   
@@ -28,7 +28,7 @@ interface Installer {
   public function createDir($targetSub);
 
   /**
-   * @return Psc\System\Dir
+   * @return Webforge\Common\System\Dir
    */
   public function getInstallTemplates();
   

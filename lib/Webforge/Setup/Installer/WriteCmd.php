@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 
 class WriteCmd extends Command {
   

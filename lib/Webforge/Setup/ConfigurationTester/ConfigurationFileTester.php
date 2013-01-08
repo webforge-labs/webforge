@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 use Psc\JS\JSONConverter;
 
 /**
@@ -38,7 +38,7 @@ class ConfigurationFileTester {
   protected $tester;
   
   /**
-   * @var Psc\System\File
+   * @var Webforge\Common\System\File
    */
   protected $jsonFile;
 

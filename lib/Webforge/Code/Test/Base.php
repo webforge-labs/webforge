@@ -3,20 +3,20 @@
 namespace Webforge\Code\Test;
 
 use Psc\Code\Code;
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Webforge\Code\Generator\GClass;
 
 /**
  * Changes to the PHPUnit-API:
  *
  * - allow just a className (without namespace) for getMock and getMockForAbstractClass. It uses the current Test-Namespace
- * - allow Psc\System\File for file-related
+ * - allow Webforge\Common\System\File for file-related
  * - add assertArrayEquals() as a short coming for equals() with $canonicalize = true
  */
 class Base extends \Psc\Code\Test\Base {
   
   /**
-   * @var Psc\System\Dir
+   * @var Webforge\Common\System\Dir
    */
   protected $testFilesDirectory;
     
@@ -51,7 +51,7 @@ class Base extends \Psc\Code\Test\Base {
   }
   
   /**
-   * @return Psc\System\Dir
+   * @return Webforge\Common\System\Dir
    */
   public function getTestDirectory($sub = '/') {
     if (!isset($this->testFilesDirectory)) {
@@ -66,7 +66,7 @@ class Base extends \Psc\Code\Test\Base {
   /* PHPUnit extensions */
   
   public static function assertFileExists($filename, $message = '') {
-    if ($filename instanceof \Psc\System\File) {
+    if ($filename instanceof \Webforge\Common\System\File) {
       $filename = (string) $filename;
     }
     return parent::assertFileExists($filename, $message);

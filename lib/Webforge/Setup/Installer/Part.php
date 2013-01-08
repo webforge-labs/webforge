@@ -2,8 +2,8 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\File;
-use Psc\System\Dir;
+use Webforge\Common\System\File;
+use Webforge\Common\System\Dir;
 use Webforge\Setup\Package\Package;
 
 /**

@@ -41,7 +41,7 @@ class ClassCreater {
    * Creates a new Class and writes it to a file
    *
    * @param GClass $gClass
-   * @return Psc\System\File
+   * @return Webforge\Common\System\File
    */
   public function create(GClass $gClass, $overwrite = FALSE) {
     $file = $this->mapper->getFile($gClass->getFQN());

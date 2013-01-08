@@ -3,7 +3,7 @@
 namespace Webforge\Code\Test;
 
 use PHPUnit_Framework_Constraint;
-use Psc\System\File;
+use Webforge\Common\System\File;
 
 class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
   

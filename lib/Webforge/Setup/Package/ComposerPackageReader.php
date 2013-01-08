@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Package;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Psc\JS\JSONConverter;
 use Webforge\Setup\AutoLoadInfo;
 

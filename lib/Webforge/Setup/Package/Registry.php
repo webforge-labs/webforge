@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Package;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Psc\A;
 use Webforge\Code\Generator\GClass;
 use Webforge\Common\String;

@@ -6,7 +6,7 @@ use Webforge\Setup\Installer\PartsInstaller;
 use Webforge\Setup\Installer\Macro;
 use Webforge\Setup\Installer\Command;
 use Webforge\Framework\Container;
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 
 class InstallerPartTestCase extends MacroTestCase {
   

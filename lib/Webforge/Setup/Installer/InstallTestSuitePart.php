@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Psc\TPL\TPL;
 use Webforge\Setup\Package\Package;
 

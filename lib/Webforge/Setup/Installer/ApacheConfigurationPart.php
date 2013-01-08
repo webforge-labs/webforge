@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 
 class ApacheConfigurationPart extends Part implements \Webforge\Setup\Package\PackageAware {
   

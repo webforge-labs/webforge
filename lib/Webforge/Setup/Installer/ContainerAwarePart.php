@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Webforge\Framework\ContainerAware;
 use Webforge\Framework\Container;
 

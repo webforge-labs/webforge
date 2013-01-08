@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 
 /**
  * A ClassMapper maps a file to a class FQN
@@ -17,14 +17,14 @@ interface ClassFileMapper {
    * Returns the File for a given Class FQN
    * 
    * @param string FQN of the Class which file is to be determined
-   * @return Psc\System\File
+   * @return Webforge\Common\System\File
    */
   public function getFile($classFQN);
 
   /**
    * Returns the class FQN for a given File
    *
-   * @param Psc\System\File $file the file including the class
+   * @param Webforge\Common\System\File $file the file including the class
    * @return string FQN of the Class which file is given
   */
   public function getClass(File $file);

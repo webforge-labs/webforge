@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 use PHPParser_Parser;
 use PHPParser_Lexer;
 use PHPParser_Error;

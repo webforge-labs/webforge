@@ -2,17 +2,17 @@
 
 namespace Webforge\Setup;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Psc\Preg;
 use InvalidArgumentException;
-use Psc\System\File;
+use Webforge\Common\System\File;
 
 class ApplicationStorage {
   
   const PATTERN_NAME = '/^[a-zA-Z0-9-_]+$/';
   
   /**
-   * @var Psc\System\Dir
+   * @var Webforge\Common\System\Dir
    */
   protected $directory;
   

@@ -4,7 +4,7 @@ namespace Webforge\Setup;
 
 use stdClass;
 use Psc\String AS S;
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Webforge\Code\Generator\GClass;
 
 /**

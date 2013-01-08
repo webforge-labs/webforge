@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Webforge\Common\String AS S;
 use Webforge\Setup\Package\PackageAware;
 

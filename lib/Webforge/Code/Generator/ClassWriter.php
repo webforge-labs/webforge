@@ -3,7 +3,7 @@
 namespace Webforge\Code\Generator;
 
 use Psc\Code\Generate\ClassWritingException;
-use Psc\System\File;
+use Webforge\Common\System\File;
 use Webforge\Common\String as S;
 use Psc\Code\Generate\DocBlock;
 use Psc\A;

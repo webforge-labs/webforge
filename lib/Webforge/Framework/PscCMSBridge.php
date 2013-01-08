@@ -6,7 +6,7 @@ use Webforge\Setup\Package\Package;
 use Psc\CMS\Project;
 use Psc\PSC;
 use Psc\CMS\ProjectsFactory;
-use Psc\System\File;
+use Webforge\Common\System\File;
 use Psc\CMS\Configuration as PscConfiguration;
 use Webforge\Setup\Configuration;
 use Psc\Exception AS BridgeException;
@@ -19,7 +19,7 @@ class PscCMSBridge {
   protected $hostConfig;
 
   /**
-   * @var Psc\System\Dir
+   * @var Webforge\Common\System\Dir
    */
   protected $hostConfigFile;
   

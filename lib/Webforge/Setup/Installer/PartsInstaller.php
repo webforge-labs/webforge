@@ -2,8 +2,8 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\Dir;
-use Psc\System\File;
+use Webforge\Common\System\Dir;
+use Webforge\Common\System\File;
 use Webforge\Framework\ContainerAware;
 use Webforge\Framework\Container;
 use Webforge\Setup\Package\PackageAware;
@@ -27,7 +27,7 @@ class PartsInstaller implements Installer {
   protected $container;
   
   /**
-   * @var Psc\System\Dir
+   * @var Webforge\Common\System\Dir
    */
   protected $target;
 
@@ -114,7 +114,7 @@ class PartsInstaller implements Installer {
   
   /**
    * $directory can be a subdirectory of target (as a string with forward slashes)
-   * @return Psc\System\Dir
+   * @return Webforge\Common\System\Dir
    */
   public function createDir($directory) {
     // when modelled command, it should really return the directory here: 
@@ -129,14 +129,14 @@ class PartsInstaller implements Installer {
   }
   
   /**
-   * @return Psc\System\Dir
+   * @return Webforge\Common\System\Dir
    */
   public function getWebforgeResources() {
     return $this->container->getResourceDirectory();
   }
   
   /**
-   * @return Psc\System\Dir
+   * @return Webforge\Common\System\Dir
    */
   public function getInstallTemplates() {
     return $this->getWebforgeResources()->sub('installTemplates/');

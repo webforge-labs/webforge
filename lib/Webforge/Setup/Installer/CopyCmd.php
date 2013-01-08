@@ -2,18 +2,18 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\Dir;
-use Psc\System\File;
+use Webforge\Common\System\Dir;
+use Webforge\Common\System\File;
 
 class CopyCmd extends Command {
   
   /**
-   * @var Psc\System\Dir|Psc\System\File
+   * @var Webforge\Common\System\Dir|Webforge\Common\System\File
    */
   protected $source;
 
   /**
-   * @var Psc\System\Dir|Psc\System\File
+   * @var Webforge\Common\System\Dir|Webforge\Common\System\File
    */
   protected $destination;
   

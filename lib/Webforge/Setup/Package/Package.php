@@ -2,8 +2,8 @@
 
 namespace Webforge\Setup\Package;
 
-use Psc\System\Dir;
-use Psc\System\File;
+use Webforge\Common\System\Dir;
+use Webforge\Common\System\File;
 use Webforge\Setup\AutoLoadInfo;
 
 /**
@@ -50,7 +50,7 @@ interface Package {
   public function setSlug($slug);
   
   /**
-   * @return Psc\System\File
+   * @return Webforge\Common\System\File
    */
   public function getRootDirectory();
   

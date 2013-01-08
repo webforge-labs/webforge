@@ -14,7 +14,7 @@ use Webforge\Setup\Installer\PartsInstaller;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Psc\JS\JSONConverter;
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 
 /**
  * This container includes the base classes for the framework
@@ -91,7 +91,7 @@ class Container {
   protected $partsInstaller;
   
   /**
-   * @var Psc\System\Dir
+   * @var Webforge\Common\System\Dir
    */
   protected $resourceDirectory;
   
@@ -257,7 +257,7 @@ class Container {
   }
 
   /**
-   * @return Psc\System\Dir
+   * @return Webforge\Common\System\Dir
    */
   public function getResourceDirectory() {
     if (!isset($this->resourceDirectory)) {

@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 use Webforge\Setup\Installer\Installer;
 
 class PscJSBoilerplatePart extends Part {

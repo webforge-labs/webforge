@@ -7,8 +7,8 @@ use Webforge\Code\Generator\GClass;
 use Webforge\Setup\Package\Registry AS PackageRegistry;
 use Webforge\Setup\Package\Package;
 use Webforge\Code\ClassNotFoundException;
-use Psc\System\File;
-use Psc\System\Dir;
+use Webforge\Common\System\File;
+use Webforge\Common\System\Dir;
 use Webforge\Common\String as S;
 use ComposerAutoloaderInit;
 use Webforge\Setup\Package\PackageNotFoundException;
@@ -47,7 +47,7 @@ class GlobalClassFileMapper implements ClassFileMapper {
   }
   
   /**
-   * @return Psc\System\File
+   * @return Webforge\Common\System\File
    */
   public function getFile($fqn) {
     $fqn = $this->normalizeClassFQN($fqn);
@@ -60,7 +60,7 @@ class GlobalClassFileMapper implements ClassFileMapper {
   }
   
   /**
-   * @return Psc\System\File|NULL
+   * @return Webforge\Common\System\File|NULL
    */
   public function findWithRegistry($fqn) {
     if (isset($this->packageRegistry)) {
