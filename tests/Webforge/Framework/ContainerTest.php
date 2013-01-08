@@ -132,7 +132,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
   }
   
   public function testThatAErroneousPackageFromPackagesJSONDoesRemoveThePackageOrDoesSomethingUsefulWithIt() {
-    $this->markTestSkipped('resolve dependency for local storage and move the init package registry to some other place than container?');
+    $this->markTestIncomplete('resolve dependency for local storage and move the init package registry to some other place than container?');
   }
 }
 ?>
