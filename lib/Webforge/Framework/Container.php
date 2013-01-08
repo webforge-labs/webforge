@@ -107,7 +107,12 @@ class Container {
           $info = (object) array('path'=>$info);
         }
         
-        $registry->addComposerPackageFromDirectory(Dir::factoryTS($info->path));
+        try {
+          $registry->addComposerPackageFromDirectory(Dir::factoryTS($info->path));
+        } catch (\Psc\Exception $e) {
+          $e->prependMessage(sprintf("Failed to load package '%s' from '%s'.", $package, $packagesFile));
+          throw $e;
+        }
       }
     }
     

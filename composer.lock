@@ -302,32 +302,32 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms",
-                "reference": "28fd8d20a88245b32ff9da59d8ee18c0ef1e0d95"
+                "reference": "bdc3d6319e4b901eee7131a1ec8566561c3dbb3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/psc-cms/archive/28fd8d20a88245b32ff9da59d8ee18c0ef1e0d95.zip",
-                "reference": "28fd8d20a88245b32ff9da59d8ee18c0ef1e0d95",
+                "url": "https://github.com/pscheit/psc-cms/archive/bdc3d6319e4b901eee7131a1ec8566561c3dbb3c.zip",
+                "reference": "bdc3d6319e4b901eee7131a1ec8566561c3dbb3c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "ext-mbstring": "*",
-                "swiftmailer/swiftmailer": "4.1.*",
-                "codeplex/phpexcel": "1.7.8",
                 "webforge/webforge": "dev-master",
                 "symfony/console": "2.1.*",
                 "symfony/process": "2.1.*",
                 "symfony/css-selector": "2.1.*",
                 "symfony/http-foundation": "2.1.*",
                 "doctrine/orm": "2.3.*",
-                "imagine/imagine": "v0.3.1"
+                "imagine/imagine": "v0.3.1",
+                "swiftmailer/swiftmailer": "4.1.*@stable",
+                "codeplex/phpexcel": "1.7.8@stable"
             },
             "require-dev": {
                 "webforge/testdata-repository": "dev-master",
                 "doctrine/data-fixtures": "dev-master"
             },
-            "time": "2013-01-06 21:00:50",
+            "time": "2013-01-07 06:19:12",
             "type": "library",
             "installation-source": "dist",
             "autoload": {

@@ -20,7 +20,7 @@ class ComposerPackageReader {
       return new SimplePackage($slug, $vendor, $directory, $this->readAutoLoadInfo($json));
       
     } catch (\Psc\Exception $e) {
-      $e->prependMessage(sprintf('Cannot read package from directory %s. ', $directory));
+      $e->prependMessage(sprintf("Cannot read package from directory '%s' ", $directory));
       throw $e;
     }
   }
