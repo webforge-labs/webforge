@@ -248,7 +248,7 @@ class Container {
     $this->localPackage = $this->getPackageRegistry()->findByDirectory($dir);
     
     if ($this->localPackage === NULL) {
-      throw new Exception(
+      throw new LocalPackageInitException(
         sprintf("'Localpackage cannot be initialized from Dir: '%s'. Did you registered the directory with webforge?", $dir)
       );
     }

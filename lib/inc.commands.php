@@ -16,7 +16,12 @@ use Psc\System\Dir;
 use Webforge\Common\String;
 
 $container = new FrameworkContainer();
-$container->initLocalPackageFromDirectory(Dir::factoryTS(getcwd()));
+
+try {
+  $container->initLocalPackageFromDirectory($cwd = Dir::factoryTS(getcwd()));
+} catch (\Webforge\Framework\LocalPackageInitException $e) {
+  print $e->getMessage()."\n";
+}
 
 /**
  *
