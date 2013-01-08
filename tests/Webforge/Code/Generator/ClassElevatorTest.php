@@ -3,8 +3,8 @@
 namespace Webforge\Code\Generator;
 
 use Webforge\Code\GlobalClassFileMapper;
-use Psc\System\File;
-use Psc\System\Dir;
+use Webforge\Common\System\File;
+use Webforge\Common\System\Dir;
 
 class ClassElevatorTest extends \Webforge\Code\Test\Base {
 
@@ -47,7 +47,7 @@ class ClassElevatorTest extends \Webforge\Code\Test\Base {
     $child->setParent($parent);
     
     $this->classReader->expects($this->once())->method('readInto')
-                      ->with($this->isInstanceOf('Psc\System\File'), $this->identicalTo($parent))
+                      ->with($this->isInstanceOf('Webforge\Common\System\File'), $this->identicalTo($parent))
                       ->will($this->returnValue($parent));
     
     $child = $this->elevator->elevateParent($child);

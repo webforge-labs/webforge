@@ -2,8 +2,8 @@
 
 namespace Webforge\Setup;
 
-use Psc\System\File;
-use Psc\System\Dir;
+use Webforge\Common\System\File;
+use Webforge\Common\System\Dir;
 use Psc\A;
 
 class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
@@ -29,7 +29,7 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
     $mappedFiles = $this->info->getFiles('Webforge\Setup\Something', $root);
     $this->assertCount(1, $mappedFiles);
     $mappedFile = $mappedFiles[0];
-    $this->assertInstanceOf('Psc\System\File', $mappedFile);
+    $this->assertInstanceOf('Webforge\Common\System\File', $mappedFile);
     
     $this->assertEquals(
       (string) $root->sub('lib/Webforge/Setup/')->getFile('Something.php'),
@@ -44,7 +44,7 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
     $mappedFiles = $this->absoluteInfo->getFiles('Webforge\Setup\Something', $resolveRelativesTo);
     $this->assertCount(1, $mappedFiles);
     $mappedFile = $mappedFiles[0];
-    $this->assertInstanceOf('Psc\System\File', $mappedFile);
+    $this->assertInstanceOf('Webforge\Common\System\File', $mappedFile);
 
     $this->assertEquals(
       (string) $this->absoluteLibraryLocation->sub('Webforge/Setup/')->getFile('Something.php'),

@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 
 class ApplicationStorageTest extends \Webforge\Code\Test\Base {
   
@@ -15,7 +15,7 @@ class ApplicationStorageTest extends \Webforge\Code\Test\Base {
   public function testApplicationStorageMaintainsADirectoryToReadAndWriteTo() {
     $dir = $this->storage->getDirectory();
     
-    $this->assertInstanceOf('Psc\System\Dir', $dir);
+    $this->assertInstanceOf('Webforge\Common\System\Dir', $dir);
     $this->assertTrue($dir->exists(), $dir.' from application storage does not exist');
     $this->assertTrue($dir->isReadable(), $dir.' from application storage cannot be read');
     $this->assertTrue($dir->isWriteable(), $dir.' from application storage cannot be written');
@@ -24,7 +24,7 @@ class ApplicationStorageTest extends \Webforge\Code\Test\Base {
   public function testApplicationStorageGetsAfile() {
     $file = $this->storage->getFile('configs/webforge.json');
     
-    $this->assertInstanceOf('Psc\System\File', $file);
+    $this->assertInstanceOf('Webforge\Common\System\File', $file);
     $this->assertEquals(
       (string) $this->storage->getDirectory()->sub('configs/')->getFile('webforge.json'),
       (string) $file

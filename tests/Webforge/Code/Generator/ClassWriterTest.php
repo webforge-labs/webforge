@@ -12,7 +12,7 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
   public function setUp() {
     $this->classWriter = new ClassWriter();
     
-    $this->file = $this->getMock('Psc\System\File', array('writeContents','exists'), array('tmp'));
+    $this->file = $this->getMock('Webforge\Common\System\File', array('writeContents','exists'), array('tmp'));
     $this->classWithImports = new GClass('Webforge\Code\Generator\Fixtures\MyGPSLocateableClass');
     $this->classWithImports->addImport(new GClass('Other\UsedClass'));
     

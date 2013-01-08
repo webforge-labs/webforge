@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 
 class WriteCmdTest extends \Webforge\Code\Test\Base {
   
@@ -13,8 +13,8 @@ class WriteCmdTest extends \Webforge\Code\Test\Base {
     parent::setUp();
     
     $this->contents = 'some contents';
-    $this->file = $this->getMock('Psc\System\File', array('writeContents'), array('somefile.txt'));
-    $this->existingFile = $this->getMock('Psc\System\File', array(), array('existingFile.txt'));
+    $this->file = $this->getMock('Webforge\Common\System\File', array('writeContents'), array('somefile.txt'));
+    $this->existingFile = $this->getMock('Webforge\Common\System\File', array(), array('existingFile.txt'));
     $this->existingFile->expects($this->any())->method('exists')->will($this->returnValue(TRUE));
   }
   

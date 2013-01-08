@@ -3,7 +3,7 @@
 namespace Webforge\Framework;
 
 use Webforge\Setup\Package\SimplePackage;
-use Psc\System\Dir;
+use Webforge\Common\System\Dir;
 
 class ContainerTest extends \Webforge\Code\Test\Base {
   
@@ -35,7 +35,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('packageRegistry', 'Webforge\Setup\Package\Registry');
     $prop('composerPackageReader', 'Webforge\Setup\Package\ComposerPackageReader');
     $prop('partsInstaller', 'Webforge\Setup\Installer\PartsInstaller');
-    $prop('resourceDirectory', 'Psc\System\Dir');
+    $prop('resourceDirectory', 'Webforge\Common\System\Dir');
     $prop('cmsBridge', 'Webforge\Framework\PscCMSBridge');
     
     return $props;

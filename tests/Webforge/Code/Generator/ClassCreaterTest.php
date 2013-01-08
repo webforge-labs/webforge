@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 
 class ClassCreaterTest extends \Webforge\Code\Test\Base {
   
@@ -115,7 +115,7 @@ PHP;
   protected function expectClassisWritten() {
     $this->classWriter
       ->expects($constraint ?: $this->once())->method('write')
-      ->with($this->instanceOf(__NAMESPACE__.'\\GClass'), $this->instanceOf('Psc\System\File'))
+      ->with($this->instanceOf(__NAMESPACE__.'\\GClass'), $this->instanceOf('Webforge\Common\System\File'))
       ->will($this->returnSelf());
   }
   

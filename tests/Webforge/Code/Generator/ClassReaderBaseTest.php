@@ -13,7 +13,7 @@ abstract class ClassReaderBaseTest extends \Webforge\Code\Test\Base {
   public function setUp() {
     $this->classReader = new ClassReader();
     
-    $this->file = $this->getMock('Psc\System\File', array('getContents'), array('ClassFile.php'));
+    $this->file = $this->getMock('Webforge\Common\System\File', array('getContents'), array('ClassFile.php'));
   }
   
   protected function inClass($php) {

@@ -2,8 +2,8 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\Dir;
-use Psc\System\File;
+use Webforge\Common\System\Dir;
+use Webforge\Common\System\File;
 use Webforge\Code\Test\ConsoleOutput;
 
 class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
@@ -11,7 +11,7 @@ class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
   protected $testDir;
   
   public function setUp() {
-    $this->testDir = $this->getMock('Psc\System\Dir');
+    $this->testDir = $this->getMock('Webforge\Common\System\Dir');
     $this->container = new \Webforge\Framework\Container();
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
@@ -43,7 +43,7 @@ class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
   }
 
   public function testWriteCommandCreation() {
-    $toFile = $this->getMock('Psc\System\File', array(), array('config.php'));
+    $toFile = $this->getMock('Webforge\Common\System\File', array(), array('config.php'));
     
     $this->onInstall(function ($target, $installer) use($toFile) {
       $installer->write('some content', $toFile);
@@ -57,8 +57,8 @@ class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
   }
 
   public function testWriteTemplateCommandCreation() {
-    $tpl = $this->getMock('Psc\System\File', array(), array('config.template.php'));
-    $toFile = $this->getMock('Psc\System\File', array(), array('config.php'));
+    $tpl = $this->getMock('Webforge\Common\System\File', array(), array('config.template.php'));
+    $toFile = $this->getMock('Webforge\Common\System\File', array(), array('config.php'));
     
     $this->onInstall(function ($target, $installer) use($tpl, $toFile) {
       $installer->writeTemplate($tpl, $toFile);
@@ -72,11 +72,11 @@ class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
   }
   
   public function testGetInstallTemplatesIsADir() {
-    $this->assertInstanceOf('Psc\System\Dir', $this->partsInstaller->getInstallTemplates());
+    $this->assertInstanceOf('Webforge\Common\System\Dir', $this->partsInstaller->getInstallTemplates());
   }
 
   public function testGetWebforgeResourcesIsADir() {
-    $this->assertInstanceOf('Psc\System\Dir', $this->partsInstaller->getWebforgeResources());
+    $this->assertInstanceOf('Webforge\Common\System\Dir', $this->partsInstaller->getWebforgeResources());
   }
 
   protected function dryInstall() {
@@ -88,7 +88,7 @@ class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
   }
 
   protected function onInstallCopyConfigFile() {
-    $configFile = $this->getMock('Psc\System\File', array(), array('config.template.php'));
+    $configFile = $this->getMock('Webforge\Common\System\File', array(), array('config.template.php'));
     
     $this->onInstall(function (Dir $target, Installer $installer) use ($configFile) {
       $installer->copy($configFile, $target->sub('etc/'));

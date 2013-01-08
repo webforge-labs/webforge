@@ -11,8 +11,8 @@ use Webforge\Setup\Installer\PartsInstaller;
 use Webforge\Framework\Container AS FrameworkContainer;
 
 use Psc\JS\JSONConverter;
-use Psc\System\File;
-use Psc\System\Dir;
+use Webforge\Common\System\File;
+use Webforge\Common\System\Dir;
 use Webforge\Common\String;
 
 $container = new FrameworkContainer();

@@ -8,13 +8,13 @@ class WriteTemplateCmdTest extends \Webforge\Code\Test\Base {
     $this->chainClass = 'Webforge\\Setup\\Installer\\WriteTemplateCmd';
     parent::setUp();
     
-    $this->file = $this->getMock('Psc\System\File', array('writeContents'), array('somefile.txt'));
+    $this->file = $this->getMock('Webforge\Common\System\File', array('writeContents'), array('somefile.txt'));
     
     $this->expectedContents = 'some contents';
-    $this->tpl = $this->getMock('Psc\System\File', array('getContents'), array('somefile.txt'));
+    $this->tpl = $this->getMock('Webforge\Common\System\File', array('getContents'), array('somefile.txt'));
     $this->tpl->expects($this->any())->method('getContents')->will($this->returnValue('%which% contents'));
     
-    $this->existingFile = $this->getMock('Psc\System\File', array(), array('existingFile.txt'));
+    $this->existingFile = $this->getMock('Webforge\Common\System\File', array(), array('existingFile.txt'));
     $this->existingFile->expects($this->any())->method('exists')->will($this->returnValue(TRUE));
   }
   

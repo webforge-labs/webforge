@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\System\File;
+use Webforge\Common\System\File;
 
 class CopyCmdTest extends \Webforge\Code\Test\Base {
   
@@ -16,14 +16,14 @@ class CopyCmdTest extends \Webforge\Code\Test\Base {
     $this->existingFile->writeContents('not empty');
     
     $this->destination =
-      $this->getMockBuilder('Psc\System\File')
+      $this->getMockBuilder('Webforge\Common\System\File')
            ->setMethods(array('copy'))
            ->setConstructorArgs(array(__DIR__.DIRECTORY_SEPARATOR.'destination.file'))
            ->disableArgumentCloning()
            ->getMock();
 
     $this->someDir =
-      $this->getMockBuilder('Psc\System\Dir')
+      $this->getMockBuilder('Webforge\Common\System\Dir')
            ->setMethods(array('copy'))
            ->setConstructorArgs(array(__DIR__.DIRECTORY_SEPARATOR.'destination.dir/'))
            ->disableArgumentCloning()
@@ -31,7 +31,7 @@ class CopyCmdTest extends \Webforge\Code\Test\Base {
            
     $this->someFile = new File(__FILE__);
     
-    $this->source = $this->getMock('Psc\System\File', array('copy'), array(__FILE__));
+    $this->source = $this->getMock('Webforge\Common\System\File', array('copy'), array(__FILE__));
     
   }
   
