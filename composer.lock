@@ -1,5 +1,5 @@
 {
-    "hash": "47fa50b6c18a941afbc1569b9f8ee057",
+    "hash": "18a1badd78e3df6948726074366c3f30",
     "packages": [
         {
             "name": "CodePlex/PHPExcel",
@@ -21,7 +21,6 @@
             },
             "time": "2012-11-21 10:55:52",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "PHPExcel": ""
@@ -76,7 +75,6 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common": "lib/"
@@ -146,7 +144,6 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\DBAL": "lib/"
@@ -219,7 +216,6 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\ORM": "lib/"
@@ -278,7 +274,6 @@
             },
             "time": "2012-11-12 21:16:43",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Imagine": "lib/"
@@ -323,7 +318,6 @@
             },
             "time": "2012-12-21 12:28:35",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "PHPParser": "lib/"
@@ -350,12 +344,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms",
-                "reference": "6560f6f729d5f054082a006894c153415ca14fdf"
+                "reference": "85b9bc9af56c13c6eda45984774bc5250b416a0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/psc-cms/archive/6560f6f729d5f054082a006894c153415ca14fdf.zip",
-                "reference": "6560f6f729d5f054082a006894c153415ca14fdf",
+                "url": "https://github.com/pscheit/psc-cms/archive/85b9bc9af56c13c6eda45984774bc5250b416a0f.zip",
+                "reference": "85b9bc9af56c13c6eda45984774bc5250b416a0f",
                 "shasum": ""
             },
             "require": {
@@ -376,9 +370,8 @@
                 "webforge/testdata-repository": "dev-master",
                 "doctrine/data-fixtures": "1.0.*@alpha"
             },
-            "time": "2013-01-09 11:19:20",
+            "time": "2013-01-09 12:13:34",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Psc": [
@@ -433,7 +426,6 @@
                     "dev-master": "4.1-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "files": [
                     "lib/swift_required.php"
@@ -479,7 +471,6 @@
             },
             "time": "2013-01-09 08:51:07",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Console": ""
@@ -522,7 +513,6 @@
             },
             "time": "2013-01-09 08:51:07",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\CssSelector": ""
@@ -565,7 +555,6 @@
             },
             "time": "2013-01-09 08:51:07",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\HttpFoundation": "",
@@ -609,7 +598,6 @@
             },
             "time": "2013-01-09 08:51:07",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Process": ""
@@ -653,7 +641,6 @@
             },
             "time": "2013-01-08 15:46:10",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Webforge\\Common": [
@@ -702,7 +689,6 @@
                 "src/bin/pdepend"
             ],
             "type": "library",
-            "installation-source": "dist",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Official version of pdepend to be handled with Composer"
         },
@@ -729,7 +715,6 @@
                 "src/bin/phpmd"
             ],
             "type": "library",
-            "installation-source": "dist",
             "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "../../pdepend/pdepend/src/main/php",
@@ -756,7 +741,6 @@
             },
             "time": "2012-11-07 07:33:07",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Webforge\\TestData": [
