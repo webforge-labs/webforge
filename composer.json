@@ -25,6 +25,6 @@
   "autoload": {
     "psr-0": {"Webforge": ["lib", "tests"]}
   },
-  "bin": ["bin/webforge.bat"],
+  "bin": ["bin/webforge", "bin/webforge.bat"],
   "minimum-stability": "dev"
 }
