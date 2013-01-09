@@ -7,7 +7,11 @@
 $ds = DIRECTORY_SEPARATOR;
 
 // autoload project dependencies and self autoloading for the library
-require_once __DIR__.$ds.'vendor'.$ds.'autoload.php';
+if (file_exists($ownVendor = __DIR__.$ds.'vendor'.$ds.'autoload.php')) {
+  require $ownVendor;
+} else {
+  require __DIR__.$ds.'..'.$ds.'..'.$ds.'autoload.php';
+}
 
 if (file_exists($cmsBootstrap = getenv('PSC_CMS').'bootstrap.php')) {
   require_once $cmsBootstrap;
