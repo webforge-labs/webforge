@@ -350,12 +350,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms",
-                "reference": "62e78f8a2f91b7c909959f9eaf6ef78de37d2354"
+                "reference": "6560f6f729d5f054082a006894c153415ca14fdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/psc-cms/archive/62e78f8a2f91b7c909959f9eaf6ef78de37d2354.zip",
-                "reference": "62e78f8a2f91b7c909959f9eaf6ef78de37d2354",
+                "url": "https://github.com/pscheit/psc-cms/archive/6560f6f729d5f054082a006894c153415ca14fdf.zip",
+                "reference": "6560f6f729d5f054082a006894c153415ca14fdf",
                 "shasum": ""
             },
             "require": {
@@ -369,25 +369,32 @@
                 "symfony/css-selector": "2.1.*@stable",
                 "symfony/http-foundation": "2.1.*@stable",
                 "doctrine/orm": "2.3.*@stable",
-                "imagine/imagine": "0.3.*@stable"
+                "imagine/imagine": "0.3.*@stable",
+                "webforge/common": "dev-master"
             },
             "require-dev": {
                 "webforge/testdata-repository": "dev-master",
                 "doctrine/data-fixtures": "1.0.*@alpha"
             },
-            "time": "2013-01-08 06:51:39",
+            "time": "2013-01-09 11:19:20",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Psc": [
                         "lib/"
+                    ],
+                    "Hitch": [
+                        "application/src/hitch/lib/"
+                    ],
+                    "PHPWord": [
+                        "application/src/PHPWord/"
                     ]
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-2.1+"
+                "LGPL-3.0"
             ],
             "authors": [
                 {
@@ -459,18 +466,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "331ee1ef8b7cd2c9bf2daba5511d6ce145b62f00"
+                "reference": "fc27a6b04f5425036764e4bfa96c9c889f34c957"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/archive/331ee1ef8b7cd2c9bf2daba5511d6ce145b62f00.zip",
-                "reference": "331ee1ef8b7cd2c9bf2daba5511d6ce145b62f00",
+                "url": "https://github.com/symfony/Console/archive/fc27a6b04f5425036764e4bfa96c9c889f34c957.zip",
+                "reference": "fc27a6b04f5425036764e4bfa96c9c889f34c957",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-05 20:33:45",
+            "time": "2013-01-09 08:51:07",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -502,18 +509,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector",
-                "reference": "f50f9ed762f45caeafb992e6211904d79cbf9199"
+                "reference": "8e8cb053407749391e14c0cae7ac3b7e155c1392"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/CssSelector/archive/f50f9ed762f45caeafb992e6211904d79cbf9199.zip",
-                "reference": "f50f9ed762f45caeafb992e6211904d79cbf9199",
+                "url": "https://github.com/symfony/CssSelector/archive/8e8cb053407749391e14c0cae7ac3b7e155c1392.zip",
+                "reference": "8e8cb053407749391e14c0cae7ac3b7e155c1392",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-04 17:00:54",
+            "time": "2013-01-09 08:51:07",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -545,18 +552,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation",
-                "reference": "d6e7836ca110ebfaa2aefd8baa6d8ca241ee8c71"
+                "reference": "229cc2272d62f4141c17254d15511532e6e46ce0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpFoundation/archive/d6e7836ca110ebfaa2aefd8baa6d8ca241ee8c71.zip",
-                "reference": "d6e7836ca110ebfaa2aefd8baa6d8ca241ee8c71",
+                "url": "https://github.com/symfony/HttpFoundation/archive/229cc2272d62f4141c17254d15511532e6e46ce0.zip",
+                "reference": "229cc2272d62f4141c17254d15511532e6e46ce0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-07 15:55:04",
+            "time": "2013-01-09 08:51:07",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -589,18 +596,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process",
-                "reference": "9c9d18824450562312bd69f9a5f72381da7b64f6"
+                "reference": "d8b0d8c29f9ed5139dccadb31dd0b1ac53c82d2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Process/archive/9c9d18824450562312bd69f9a5f72381da7b64f6.zip",
-                "reference": "9c9d18824450562312bd69f9a5f72381da7b64f6",
+                "url": "https://github.com/symfony/Process/archive/d8b0d8c29f9ed5139dccadb31dd0b1ac53c82d2e.zip",
+                "reference": "d8b0d8c29f9ed5139dccadb31dd0b1ac53c82d2e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-04 21:46:41",
+            "time": "2013-01-09 08:51:07",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -631,12 +638,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/webforge-common",
-                "reference": "3b9d01e2794c883c9f19be9274dee10ea1257a2f"
+                "reference": "36641ce4131753f8e353dbb94705af8b19264f61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/webforge-common/archive/3b9d01e2794c883c9f19be9274dee10ea1257a2f.zip",
-                "reference": "3b9d01e2794c883c9f19be9274dee10ea1257a2f",
+                "url": "https://github.com/pscheit/webforge-common/archive/36641ce4131753f8e353dbb94705af8b19264f61.zip",
+                "reference": "36641ce4131753f8e353dbb94705af8b19264f61",
                 "shasum": ""
             },
             "require": {
@@ -644,7 +651,7 @@
                 "ext-mbstring": "*",
                 "symfony/console": "2.1.*"
             },
-            "time": "2013-01-08 14:40:00",
+            "time": "2013-01-08 15:46:10",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -672,7 +679,111 @@
             ]
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "name": "pdepend/pdepend",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/pdepend/pdepend.git",
+                "reference": "981b7c9c831dc489523c5034729eba7297fa424e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/pdepend/pdepend/archive/981b7c9c831dc489523c5034729eba7297fa424e.zip",
+                "reference": "981b7c9c831dc489523c5034729eba7297fa424e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.3"
+            },
+            "time": "2012-11-28 11:29:58",
+            "bin": [
+                "src/bin/pdepend"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Official version of pdepend to be handled with Composer"
+        },
+        {
+            "name": "phpmd/phpmd",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/phpmd/phpmd.git",
+                "reference": "1.4.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/phpmd/phpmd/zipball/1.4.0",
+                "reference": "1.4.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "pdepend/pdepend": "*"
+            },
+            "time": "2012-09-07 14:52:24",
+            "bin": [
+                "src/bin/phpmd"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "../../pdepend/pdepend/src/main/php",
+                "src/main/php"
+            ],
+            "description": "Official version of PHPMD handled with Composer."
+        },
+        {
+            "name": "webforge/testdata-repository",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pscheit/webforge-testdata-repository.git",
+                "reference": "0.2.1-alpha"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/pscheit/webforge-testdata-repository/archive/0.2.1-alpha.zip",
+                "reference": "0.2.1-alpha",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "time": "2012-11-07 07:33:07",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Webforge\\TestData": [
+                        "lib/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp Scheit",
+                    "email": "p.scheit@ps-webforge.com"
+                }
+            ],
+            "description": "A repository for data that you can use to fill your unit tests.",
+            "homepage": "http://github.com/pscheit/webforge-testdata-repository",
+            "keywords": [
+                "data",
+                "unit test",
+                "testdata"
+            ]
+        }
+    ],
     "aliases": [
 
     ],
