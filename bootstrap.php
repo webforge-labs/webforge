@@ -13,8 +13,8 @@ if (file_exists($ownVendor = __DIR__.$ds.'vendor'.$ds.'autoload.php')) {
   require __DIR__ . '/../../autoload.php';
 }
 
-if (file_exists($cmsBootstrap = getenv('PSC_CMS').'bootstrap.php')) {
-  require_once $cmsBootstrap;
+if (getenv('PSC_CMS')) {
+  require_once getenv('PSC_CMS').'bootstrap.php';
 }
 
 if (!class_exists('Psc\PSC', FALSE)) {
