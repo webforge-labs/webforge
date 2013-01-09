@@ -7,17 +7,17 @@
 $ds = DIRECTORY_SEPARATOR;
 
 // autoload project dependencies and self autoloading for the library
-if (file_exists($ownVendor = __DIR__.$ds.'vendor'.$ds.'autoload.php')) {
-  require $ownVendor;
-} else {
-  require __DIR__ . '/../../autoload.php';
+$vendor = __DIR__.$ds.'vendor'.$ds;
+
+// are we loaded as dependency?
+if (!file_exists($vendor.'autoload.php')) {
+  $vendor = __DIR__ . '/../../';
 }
 
-if (getenv('PSC_CMS')) {
-  require_once getenv('PSC_CMS').'bootstrap.php';
-}
+require $vendor.'autoload.php';
 
-if (!class_exists('Psc\PSC', FALSE)) {
+// when composer provided the Psc* classes we do not need to include the phar
+if (!class_exists('Psc\PSC')) {
   require_once __DIR__.$ds.'vendor'.$ds.'pscheit'.$ds.'psc-cms'.$ds.'dist'.$ds.'psc-cms.phar.gz';
 }
 
