@@ -1,5 +1,5 @@
 {
-    "hash": "18a1badd78e3df6948726074366c3f30",
+    "hash": "e60ebaaa611c9f5ad98946461910a567",
     "packages": [
         {
             "name": "CodePlex/PHPExcel",
@@ -21,6 +21,7 @@
             },
             "time": "2012-11-21 10:55:52",
             "type": "library",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "PHPExcel": ""
@@ -75,6 +76,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common": "lib/"
@@ -103,7 +105,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -144,6 +146,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\DBAL": "lib/"
@@ -188,12 +191,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/doctrine/doctrine2.git",
-                "reference": "f5bb8be884fab26f1bf72e7c55f97d226028b9d9"
+                "reference": "019094655b6606852a3e3231de93425d9913bac4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/doctrine2/archive/f5bb8be884fab26f1bf72e7c55f97d226028b9d9.zip",
-                "reference": "f5bb8be884fab26f1bf72e7c55f97d226028b9d9",
+                "url": "https://github.com/doctrine/doctrine2/archive/019094655b6606852a3e3231de93425d9913bac4.zip",
+                "reference": "019094655b6606852a3e3231de93425d9913bac4",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +208,7 @@
             "suggest": {
                 "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
             },
-            "time": "2013-01-07 20:05:04",
+            "time": "2012-12-24 10:18:12",
             "bin": [
                 "bin/doctrine",
                 "bin/doctrine.php"
@@ -216,6 +219,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\ORM": "lib/"
@@ -253,53 +257,6 @@
             ]
         },
         {
-            "name": "imagine/Imagine",
-            "version": "v0.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/avalanche123/Imagine",
-                "reference": "v0.3.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/avalanche123/Imagine/archive/v0.3.1.zip",
-                "reference": "v0.3.1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "sami/sami": "dev-master"
-            },
-            "time": "2012-11-12 21:16:43",
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Imagine": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bulat Shakirzyanov",
-                    "email": "mallluhuct@gmail.com",
-                    "homepage": "http://avalanche123.com"
-                }
-            ],
-            "description": "Image processing for PHP 5.3",
-            "homepage": "http://imagine.readthedocs.org/",
-            "keywords": [
-                "image manipulation",
-                "image processing",
-                "drawing",
-                "graphics"
-            ]
-        },
-        {
             "name": "nikic/php-parser",
             "version": "dev-master",
             "source": {
@@ -318,6 +275,7 @@
             },
             "time": "2012-12-21 12:28:35",
             "type": "library",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "PHPParser": "lib/"
@@ -344,12 +302,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms",
-                "reference": "85b9bc9af56c13c6eda45984774bc5250b416a0f"
+                "reference": "0dad97be91ede8f72907f9bc871ffb4746860283"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/psc-cms/archive/85b9bc9af56c13c6eda45984774bc5250b416a0f.zip",
-                "reference": "85b9bc9af56c13c6eda45984774bc5250b416a0f",
+                "url": "https://github.com/pscheit/psc-cms/archive/0dad97be91ede8f72907f9bc871ffb4746860283.zip",
+                "reference": "0dad97be91ede8f72907f9bc871ffb4746860283",
                 "shasum": ""
             },
             "require": {
@@ -364,14 +322,16 @@
                 "symfony/http-foundation": "2.1.*@stable",
                 "doctrine/orm": "2.3.*@stable",
                 "imagine/imagine": "0.3.*@stable",
-                "webforge/common": "dev-master"
+                "webforge/common": "dev-master",
+                "ext-curl": "*"
             },
             "require-dev": {
                 "webforge/testdata-repository": "dev-master",
                 "doctrine/data-fixtures": "1.0.*@alpha"
             },
-            "time": "2013-01-09 12:13:34",
+            "time": "2013-01-12 03:26:37",
             "type": "library",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Psc": [
@@ -403,74 +363,26 @@
             ]
         },
         {
-            "name": "swiftmailer/swiftmailer",
-            "version": "v4.1.8",
-            "source": {
-                "type": "git",
-                "url": "git://github.com/swiftmailer/swiftmailer.git",
-                "reference": "v4.1.8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/swiftmailer/swiftmailer/zipball/v4.1.8",
-                "reference": "v4.1.8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.4"
-            },
-            "time": "2012-06-17 13:55:34",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.1-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "lib/swift_required.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Chris Corbyn"
-                }
-            ],
-            "description": "Swiftmailer, free feature-rich PHP mailer",
-            "homepage": "http://swiftmailer.org",
-            "keywords": [
-                "mail",
-                "mailer"
-            ]
-        },
-        {
             "name": "symfony/console",
             "version": "2.1.x-dev",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "fc27a6b04f5425036764e4bfa96c9c889f34c957"
+                "reference": "331ee1ef8b7cd2c9bf2daba5511d6ce145b62f00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/archive/fc27a6b04f5425036764e4bfa96c9c889f34c957.zip",
-                "reference": "fc27a6b04f5425036764e4bfa96c9c889f34c957",
+                "url": "https://github.com/symfony/Console/archive/331ee1ef8b7cd2c9bf2daba5511d6ce145b62f00.zip",
+                "reference": "331ee1ef8b7cd2c9bf2daba5511d6ce145b62f00",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-09 08:51:07",
+            "time": "2013-01-05 20:33:45",
             "type": "library",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Console": ""
@@ -494,110 +406,26 @@
             "homepage": "http://symfony.com"
         },
         {
-            "name": "symfony/css-selector",
-            "version": "2.1.x-dev",
-            "target-dir": "Symfony/Component/CssSelector",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/CssSelector",
-                "reference": "8e8cb053407749391e14c0cae7ac3b7e155c1392"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/symfony/CssSelector/archive/8e8cb053407749391e14c0cae7ac3b7e155c1392.zip",
-                "reference": "8e8cb053407749391e14c0cae7ac3b7e155c1392",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "time": "2013-01-09 08:51:07",
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\CssSelector": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony CssSelector Component",
-            "homepage": "http://symfony.com"
-        },
-        {
-            "name": "symfony/http-foundation",
-            "version": "2.1.x-dev",
-            "target-dir": "Symfony/Component/HttpFoundation",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/HttpFoundation",
-                "reference": "229cc2272d62f4141c17254d15511532e6e46ce0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/symfony/HttpFoundation/archive/229cc2272d62f4141c17254d15511532e6e46ce0.zip",
-                "reference": "229cc2272d62f4141c17254d15511532e6e46ce0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "time": "2013-01-09 08:51:07",
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\HttpFoundation": "",
-                    "SessionHandlerInterface": "Symfony/Component/HttpFoundation/Resources/stubs"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony HttpFoundation Component",
-            "homepage": "http://symfony.com"
-        },
-        {
             "name": "symfony/process",
             "version": "2.1.x-dev",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process",
-                "reference": "d8b0d8c29f9ed5139dccadb31dd0b1ac53c82d2e"
+                "reference": "78002b904ea21606213a7e3b57387e73cf3ea32f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Process/archive/d8b0d8c29f9ed5139dccadb31dd0b1ac53c82d2e.zip",
-                "reference": "d8b0d8c29f9ed5139dccadb31dd0b1ac53c82d2e",
+                "url": "https://github.com/symfony/Process/archive/78002b904ea21606213a7e3b57387e73cf3ea32f.zip",
+                "reference": "78002b904ea21606213a7e3b57387e73cf3ea32f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-09 08:51:07",
+            "time": "2013-01-11 13:37:04",
             "type": "library",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Process": ""
@@ -641,6 +469,7 @@
             },
             "time": "2013-01-08 15:46:10",
             "type": "library",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Webforge\\Common": [
@@ -668,6 +497,54 @@
     ],
     "packages-dev": [
         {
+            "name": "imagine/Imagine",
+            "version": "v0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/avalanche123/Imagine",
+                "reference": "v0.3.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/avalanche123/Imagine/archive/v0.3.1.zip",
+                "reference": "v0.3.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "sami/sami": "dev-master"
+            },
+            "time": "2012-11-12 21:16:43",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Imagine": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bulat Shakirzyanov",
+                    "email": "mallluhuct@gmail.com",
+                    "homepage": "http://avalanche123.com"
+                }
+            ],
+            "description": "Image processing for PHP 5.3",
+            "homepage": "http://imagine.readthedocs.org/",
+            "keywords": [
+                "image manipulation",
+                "image processing",
+                "drawing",
+                "graphics"
+            ]
+        },
+        {
             "name": "pdepend/pdepend",
             "version": "dev-master",
             "source": {
@@ -689,6 +566,7 @@
                 "src/bin/pdepend"
             ],
             "type": "library",
+            "installation-source": "dist",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Official version of pdepend to be handled with Composer"
         },
@@ -710,17 +588,153 @@
                 "php": ">=5.3.0",
                 "pdepend/pdepend": "*"
             },
-            "time": "2012-09-07 14:52:24",
+            "time": "2012-09-07 21:52:24",
             "bin": [
                 "src/bin/phpmd"
             ],
             "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
+            "installation-source": "dist",
             "include-path": [
                 "../../pdepend/pdepend/src/main/php",
                 "src/main/php"
             ],
             "description": "Official version of PHPMD handled with Composer."
+        },
+        {
+            "name": "swiftmailer/swiftmailer",
+            "version": "v4.1.8",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/swiftmailer/swiftmailer.git",
+                "reference": "v4.1.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/swiftmailer/swiftmailer/zipball/v4.1.8",
+                "reference": "v4.1.8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "time": "2012-06-17 13:55:34",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "lib/swift_required.php"
+                ]
+            },
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Chris Corbyn"
+                }
+            ],
+            "description": "Swiftmailer, free feature-rich PHP mailer",
+            "homepage": "http://swiftmailer.org",
+            "keywords": [
+                "mail",
+                "mailer"
+            ]
+        },
+        {
+            "name": "symfony/css-selector",
+            "version": "2.1.x-dev",
+            "target-dir": "Symfony/Component/CssSelector",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/CssSelector",
+                "reference": "8e8cb053407749391e14c0cae7ac3b7e155c1392"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/symfony/CssSelector/archive/8e8cb053407749391e14c0cae7ac3b7e155c1392.zip",
+                "reference": "8e8cb053407749391e14c0cae7ac3b7e155c1392",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "time": "2013-01-09 08:51:07",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\CssSelector": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony CssSelector Component",
+            "homepage": "http://symfony.com"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "2.1.x-dev",
+            "target-dir": "Symfony/Component/HttpFoundation",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/HttpFoundation",
+                "reference": "229cc2272d62f4141c17254d15511532e6e46ce0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/symfony/HttpFoundation/archive/229cc2272d62f4141c17254d15511532e6e46ce0.zip",
+                "reference": "229cc2272d62f4141c17254d15511532e6e46ce0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "time": "2013-01-09 08:51:07",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\HttpFoundation": "",
+                    "SessionHandlerInterface": "Symfony/Component/HttpFoundation/Resources/stubs"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony HttpFoundation Component",
+            "homepage": "http://symfony.com"
         },
         {
             "name": "webforge/testdata-repository",
@@ -741,6 +755,7 @@
             },
             "time": "2012-11-07 07:33:07",
             "type": "library",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Webforge\\TestData": [
@@ -773,7 +788,9 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
+        "symfony/console": 0,
         "nikic/php-parser": 20,
+        "doctrine/orm": 0,
         "pscheit/psc-cms": 20,
         "webforge/common": 20,
         "webforge/testdata-repository": 20
