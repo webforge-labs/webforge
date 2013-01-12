@@ -302,12 +302,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms",
-                "reference": "0dad97be91ede8f72907f9bc871ffb4746860283"
+                "reference": "39299d4b5aa674335fcc14c5c02587b4a467a773"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/psc-cms/archive/0dad97be91ede8f72907f9bc871ffb4746860283.zip",
-                "reference": "0dad97be91ede8f72907f9bc871ffb4746860283",
+                "url": "https://github.com/pscheit/psc-cms/archive/39299d4b5aa674335fcc14c5c02587b4a467a773.zip",
+                "reference": "39299d4b5aa674335fcc14c5c02587b4a467a773",
                 "shasum": ""
             },
             "require": {
@@ -329,7 +329,7 @@
                 "webforge/testdata-repository": "dev-master",
                 "doctrine/data-fixtures": "1.0.*@alpha"
             },
-            "time": "2013-01-12 03:26:37",
+            "time": "2013-01-12 05:31:50",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -454,20 +454,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/webforge-common",
-                "reference": "36641ce4131753f8e353dbb94705af8b19264f61"
+                "reference": "63e1732c910fb03d0fc17bb2aa89c74156c51b72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/webforge-common/archive/36641ce4131753f8e353dbb94705af8b19264f61.zip",
-                "reference": "36641ce4131753f8e353dbb94705af8b19264f61",
+                "url": "https://github.com/pscheit/webforge-common/archive/63e1732c910fb03d0fc17bb2aa89c74156c51b72.zip",
+                "reference": "63e1732c910fb03d0fc17bb2aa89c74156c51b72",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "ext-mbstring": "*",
-                "symfony/console": "2.1.*"
+                "symfony/console": "2.1.*@stable"
             },
-            "time": "2013-01-08 15:46:10",
+            "time": "2013-01-12 05:36:35",
             "type": "library",
             "installation-source": "source",
             "autoload": {

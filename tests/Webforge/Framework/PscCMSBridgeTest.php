@@ -24,9 +24,6 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     
     $this->bridge = new PscCMSBridge();
     
-    $this->rollbackFactory = PSC::getProjectsFactory();
-    PSC::setProjectsFactory(NULL);
-
     try {
       PSC::getProjectsFactory(); // throws exception if not exists
       
@@ -103,10 +100,6 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     } catch (\Psc\MissingEnvironmentVariableException $e) {
       $this->markTestSkipped('this is a stupid test with legacy code with static dependencies. And this test is skipped because host-config is not defined on this host');
     }
-  }
-  
-  public function teardown() {
-    PSC::setProjectsFactory($this->rollbackFactory);
   }
 }
 ?>
