@@ -16,10 +16,5 @@ if (!file_exists($vendor.'autoload.php')) {
 
 require $vendor.'autoload.php';
 
-// when composer provided the Psc* classes we do not need to include the phar
-if (!class_exists('Psc\PSC')) {
-  require_once __DIR__.$ds.'vendor'.$ds.'pscheit'.$ds.'psc-cms'.$ds.'dist'.$ds.'psc-cms.phar.gz';
-}
-
 return $GLOBALS['env']['root'] = new \Webforge\Common\System\Dir(__DIR__.DIRECTORY_SEPARATOR);
 ?>
