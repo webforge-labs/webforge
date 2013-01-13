@@ -78,7 +78,7 @@ class PscCMSBridge {
     return $project;
   }
   
-  protected function getProjectsFactory() {
+  public function getProjectsFactory() {
     if (!isset($this->projectsFactory)) {
       $this->projectsFactory = new ProjectsFactory($this->getHostConfig());
     }
@@ -102,14 +102,16 @@ class PscCMSBridge {
     $localConfigFile = $this->getLocalConfigFile($project);
     
     if ($localConfigFile !== NULL) {
-      return $this->readConfigurationFromFile($localConfigFile);
+      return $this->readConfigurationFromFile($localConfigFile, $scope = array('project'=>$project));
     } else {
       $conf = array();
       return new Configuration($conf);
     }
   }
   
-  protected function readConfigurationFromFile(File $configFile) {
+  protected function readConfigurationFromFile(File $configFile, Array $scope = array()) {
+    extract($scope);
+    
     require $configFile;
       
     if (!isset($conf)) {
