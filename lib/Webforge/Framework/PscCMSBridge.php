@@ -86,13 +86,15 @@ class PscCMSBridge {
   }
   
   public function getHostConfig(\Psc\CMS\ProjectsFactory $projectsFactory = NULL) {
-    $projectsFactory = $projectsFactory ?: $this->getPscProjectsFactory();
-    if (isset($projectsFactory)) {
-      $this->hostConfig = $projectsFactory->getHostConfig();
-    } elseif ($hostConfigFile = $this->getHostConfigFile()) {
-      $this->hostConfig = $this->readConfigurationFromFile($hostConfigFile);
-    } else {
-      $this->hostConfig = new Configuration(array());
+    if (!isset($this->hostConfig)) {
+      $projectsFactory = $projectsFactory ?: $this->getPscProjectsFactory();
+      if (isset($projectsFactory)) {
+        $this->hostConfig = $projectsFactory->getHostConfig();
+      } elseif ($hostConfigFile = $this->getHostConfigFile()) {
+        $this->hostConfig = $this->readConfigurationFromFile($hostConfigFile);
+      } else {
+        $this->hostConfig = new Configuration(array());
+      }
     }
     
     return $this->hostConfig;
