@@ -2,3 +2,4 @@
 /webforge.komodoproject
 /build/coverage
 /composer.lock
+/tests/files/tmp/*

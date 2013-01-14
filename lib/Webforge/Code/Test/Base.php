@@ -62,6 +62,12 @@ class Base extends \Psc\Code\Test\Base {
     return $this->testFilesDirectory->sub($sub);
   }
   
+  /**
+   * @return Webforge\Common\System\Dir
+   */
+  public function getTempDirectory($sub) {
+    return $this->getTestDirectory('tmp/')->sub($sub);
+  }
   
   /* PHPUnit extensions */
   
@@ -72,6 +78,9 @@ class Base extends \Psc\Code\Test\Base {
     return parent::assertFileExists($filename, $message);
   }
 
+  public static function assertDirectoryExists($dir, $message = '') {
+    return self::assertTrue(is_dir((string) $dir), 'failed asserting that '.$dir.' is a directory. '.$message);
+  }
   
   public function getMock($originalClassName, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = TRUE, $callOriginalClone = TRUE, $callAutoload = TRUE, $cloneArguments = TRUE) {
     $originalClassName = Code::expandNamespace($originalClassName, Code::getNamespace(get_class($this)));
