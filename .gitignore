@@ -1,3 +1,4 @@
 /vendor
 /webforge.komodoproject
 /build/coverage
+/composer.lock
