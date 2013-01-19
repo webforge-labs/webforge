@@ -12,9 +12,9 @@
     "php": ">=5.3.2",
     "ext-mbstring": "*",
     
-    "symfony/console": "2.1.*",
+    "symfony/console": "2.1.*@stable",
     "nikic/php-parser": "dev-master",
-    "doctrine/orm": "2.3.*",
+    "doctrine/orm": "2.3.*@stable",
     "pscheit/psc-cms": "dev-master",
     "webforge/common": "dev-master"
   },

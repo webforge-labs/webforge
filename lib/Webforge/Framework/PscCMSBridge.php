@@ -78,7 +78,7 @@ class PscCMSBridge {
     return $project;
   }
   
-  protected function getProjectsFactory() {
+  public function getProjectsFactory() {
     if (!isset($this->projectsFactory)) {
       $this->projectsFactory = new ProjectsFactory($this->getHostConfig());
     }
@@ -86,13 +86,15 @@ class PscCMSBridge {
   }
   
   public function getHostConfig(\Psc\CMS\ProjectsFactory $projectsFactory = NULL) {
-    $projectsFactory = $projectsFactory ?: $this->getPscProjectsFactory();
-    if (isset($projectsFactory)) {
-      $this->hostConfig = $projectsFactory->getHostConfig();
-    } elseif ($hostConfigFile = $this->getHostConfigFile()) {
-      $this->hostConfig = $this->readConfigurationFromFile($hostConfigFile);
-    } else {
-      $this->hostConfig = new Configuration(array());
+    if (!isset($this->hostConfig)) {
+      $projectsFactory = $projectsFactory ?: $this->getPscProjectsFactory();
+      if (isset($projectsFactory)) {
+        $this->hostConfig = $projectsFactory->getHostConfig();
+      } elseif ($hostConfigFile = $this->getHostConfigFile()) {
+        $this->hostConfig = $this->readConfigurationFromFile($hostConfigFile);
+      } else {
+        $this->hostConfig = new Configuration(array());
+      }
     }
     
     return $this->hostConfig;
@@ -102,14 +104,16 @@ class PscCMSBridge {
     $localConfigFile = $this->getLocalConfigFile($project);
     
     if ($localConfigFile !== NULL) {
-      return $this->readConfigurationFromFile($localConfigFile);
+      return $this->readConfigurationFromFile($localConfigFile, $scope = array('project'=>$project));
     } else {
       $conf = array();
       return new Configuration($conf);
     }
   }
   
-  protected function readConfigurationFromFile(File $configFile) {
+  protected function readConfigurationFromFile(File $configFile, Array $scope = array()) {
+    extract($scope);
+    
     require $configFile;
       
     if (!isset($conf)) {
