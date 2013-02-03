@@ -3,12 +3,47 @@
 namespace Webforge\Code\Generator;
 
 use Psc\A;
+use Webforge\Common\System\File;
+use PHPParser_Lexer;
+use PHPParser_Parser;
 
 class GFunctionBodyPrettyPrintTest extends \Webforge\Code\Test\Base {
   
   protected $body;
   
   public function setUp() {
+  }
+  
+  public static function provideTestFiles() {
+    return array(
+      array(__DIR__.DIRECTORY_SEPARATOR.'ClassWriterPHPTest.php')
+    );
+  }
+  
+  /**
+   * @dataProvider provideTestFiles
+   */
+  public function testAWrittenTokenStreamConstructsTheCodeAgain($filename) {
+    $file = new File($filename);
+    
+    $php = $file->getContents();
+    
+    //$tokens = token_get_all($php);
+    
+    $lexer = new LexerWithTokenOffsets();
+    $parser = new PHPParser_Parser($lexer);
+    $tokens = $parser->parse($php);
+    
+    $gPHP = array();
+    $lastOffset = 0;
+    foreach ($tokens as $token) {
+      var_dump($token->getAttribute('endOffset'), $token->getValue());
+      foreach (range($token->getAttribute('startOffset'), $token->getAttribute('endOffset')) as $offset) {
+        $gPHP[$offset] = '';
+      }
+    }
+    
+    var_dump($gPHP);
   }
   
   /**
