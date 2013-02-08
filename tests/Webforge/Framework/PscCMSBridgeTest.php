@@ -8,7 +8,7 @@ use Psc\Exception as PscException;
 
 class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
   
-  protected $registry, $package, $appPackage;
+  protected $registry, $package, $appPackage, $withoutAutoLoadPackage, $oldStylePackage;
   
   protected $bridge;
   
@@ -22,6 +22,8 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     $this->package = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
     $this->withoutAutoLoadPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/WithoutAutoLoad/'));
     $this->appPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
+    $this->oldStylePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/PscOldStyleProject/Umsetzung/base/src/'));
+    
     
     $this->bridge = new PscCMSBridge();
     
@@ -101,6 +103,15 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     } catch (\Psc\MissingEnvironmentVariableException $e) {
       $this->markTestSkipped('this is a stupid test with legacy code with static dependencies. And this test is skipped because host-config is not defined on this host');
     }
+  }
+
+  public function testProjectWithOldStyleShouldHaveSrcAsThePackageRoot() {
+    $project = $this->bridge->createProjectFromPackage($this->oldStylePackage);
+    
+    $this->assertEquals(
+      (string) $this->oldStylePackage->getRootDirectory(),
+      (string) $project->getSrc()
+    );
   }
   
   public function testProjectCanBeInitEvenForPackagesWithoutAutoLoadInfo_thenClassPathIsLibPerDefault() {

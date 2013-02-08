@@ -40,18 +40,35 @@ class PscCMSBridge {
     $projectsFactory = $this->getProjectsFactory();
     
     $paths = array();
-
-    $paths[PSC::PATH_SRC] = './application/src/';
-    $paths[PSC::PATH_HTDOCS] = './www/';
-    $paths[PSC::PATH_BASE] = './';
-    $paths[PSC::PATH_CACHE] = './files/cache/';
-    $paths[PSC::PATH_BIN] = './bin/';
-    $paths[PSC::PATH_TPL] = './application/tpl/';
-    $paths[PSC::PATH_TESTDATA] = './tests/files/';
-    $paths[PSC::PATH_TESTS] = './tests';
-    $paths[PSC::PATH_CLASS] = '.'.$this->getPackageClassPath($package)->getUrl($package->getRootDirectory());
-    $paths[PSC::PATH_FILES] = './files/';
-    $paths[PSC::PATH_BUILD] = './build/';
+    
+    if ($this->isOldStylePackage($package)) {
+      $classPath = $this->getPackageClassPath($package);
+      
+      // all relative to Umsetzung/base/src
+      $paths[PSC::PATH_SRC] = './';
+      $paths[PSC::PATH_HTDOCS] = './../htdocs/';
+      $paths[PSC::PATH_BASE] = './../';
+      $paths[PSC::PATH_CACHE] = '../files/cache/';
+      $paths[PSC::PATH_BIN] = './../bin/';
+      $paths[PSC::PATH_TPL] = './tpl/';
+      $paths[PSC::PATH_TESTDATA] = './../files/testdata/';
+      $paths[PSC::PATH_TESTS] = '.'.$classPath->sub('tests/')->getUrl($package->getRootDirectory());
+      $paths[PSC::PATH_CLASS] = '.'.$classPath->getUrl($package->getRootDirectory());
+      $paths[PSC::PATH_FILES] = './../files/';
+      $paths[PSC::PATH_BUILD] = './../build/';
+    } else {
+      $paths[PSC::PATH_SRC] = './application/src/';
+      $paths[PSC::PATH_HTDOCS] = './www/';
+      $paths[PSC::PATH_BASE] = './';
+      $paths[PSC::PATH_CACHE] = './files/cache/';
+      $paths[PSC::PATH_BIN] = './bin/';
+      $paths[PSC::PATH_TPL] = './application/tpl/';
+      $paths[PSC::PATH_TESTDATA] = './tests/files/';
+      $paths[PSC::PATH_TESTS] = './tests';
+      $paths[PSC::PATH_CLASS] = '.'.$this->getPackageClassPath($package)->getUrl($package->getRootDirectory());
+      $paths[PSC::PATH_FILES] = './files/';
+      $paths[PSC::PATH_BUILD] = './build/';
+    }
     
     foreach ($paths as $path => $value) {
       $projectsFactory->setProjectPath($package->getSlug(), $path, $value);
@@ -73,15 +90,26 @@ class PscCMSBridge {
   }
   
   protected function getPackageClassPath(Package $package) {
+    list ($namespace, $dir) = $this->getPackageNamespaceAndPath($package);
+    
+    return $dir->sub($namespace.'/');
+  }
+  
+  /**
+   * @return list(string $namespace, $dir rootLibraryPath)
+   */
+  protected function getPackageNamespaceAndPath(Package $package) {
     try {
       list ($namespace, $dir) = $package->getAutoLoadInfo()->getMainPrefixAndPath($package->getRootDirectory());
     } catch (RuntimeException $e) {
       // it might be possible that these package has no autoLoad defined for a main path
       // fallback to lib
-      return $package->getRootDirectory()->sub('lib/'.$this->namespaceify($package->getSlug()).'/');
+      // create namespace from package slug
+      $namespace = $this->namespaceify($package->getSlug());
+      $dir = $package->getRootDirectory()->sub('lib/');
     }
     
-    return $dir->sub($namespace.'/');
+    return array($namespace, $dir);
   }
   
   
@@ -190,6 +218,11 @@ class PscCMSBridge {
     return ucfirst(Preg::replace_callback($string, '/\-([a-zA-Z])/', function ($match) {
       return mb_strtoupper($match[1]);
     }));
+  }
+  
+  protected function isOldStylePackage(Package $package) {
+    //dumb first:
+    return $package->getRootDirectory()->up()->getName() === 'base';
   }
 }
 ?>
