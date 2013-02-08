@@ -9,7 +9,6 @@ use Psc\Boot\BootLoader;
  */
 $ds = DIRECTORY_SEPARATOR;
 
-xdebug_break();
 require_once __DIR__.$ds.'package.boot.php';
 $bootLoader = new BootLoader(__DIR__);
 $bootLoader->loadComposer();
