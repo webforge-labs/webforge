@@ -15,6 +15,7 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
     );
     
     $this->info = new AutoLoadInfo(json_decode('{"psr-0": {"Webforge": ["lib/"]}}'));
+    $this->emptyInfo = new AutoLoadInfo(array());
     $this->ambiguousInfo = new AutoLoadInfo(json_decode('{"psr-0": {"Webforge": ["lib/", "tests/"]}}'));
     $this->absoluteInfo = new AutoLoadInfo(Array(
       'psr-0'=>(object) array(
@@ -59,6 +60,13 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
     
     $root = $this->absoluteLibraryLocation->up();
     $this->assertEquals(array('Webforge', $this->absoluteLibraryLocation), $this->absoluteInfo->getMainPrefixAndPath($root));
+  }
+  
+  public function testGetMainPrefixAndPathThrowsExceptionWhenNotAutoloadPrefixesAreDefined() {
+    $this->setExpectedException('RuntimeException');
+    
+    $root = new Dir(__DIR__.DIRECTORY_SEPARATOR);
+    $this->emptyInfo->getMainPrefixAndPath($root);
   }
   
   public function testAmbInfoReturnsAllFiles() {

@@ -6,6 +6,7 @@ use stdClass;
 use Psc\String AS S;
 use Webforge\Common\System\Dir;
 use Webforge\Code\Generator\GClass;
+use RuntimeException;
 
 /**
  * This class encapsulates types of autoloads (mainly psr-0)
@@ -65,17 +66,26 @@ class AutoLoadInfo {
   }
   
   /**
+   * Returns the first to find prefix and path in autoloadInfo
+   *
+   * normally this is the package main Prefix and the main package-library-path
    * @return list(string $prefix, $dir)
+   * @throws RuntimeException if autoload info is not defined
    */
   public function getMainPrefixAndPath(Dir $rootDir) {
     $prefixesPaths = $this->getPrefixes();
     $prefixes = array_keys($prefixesPaths);
-    $firstPrefixPaths = array_shift($prefixesPaths);
     
-    $path = array_shift($firstPrefixPaths);
-    $dir = $path instanceof Dir ? $path : $rootDir->sub($path);
+    if (count($prefixes) > 0) {
+      $firstPrefixPaths = array_shift($prefixesPaths);
+
+      $path = array_shift($firstPrefixPaths);
+      $dir = $path instanceof Dir ? $path : $rootDir->sub($path);
     
-    return array(array_shift($prefixes), $dir);
+      return array(array_shift($prefixes), $dir);
+    }
+    
+    throw new RuntimeException('Cannot retrieve the main Prefix and Library Path from AutoLoadInfo. AutoLoadInfo is defined: '.print_r($prefixesPaths, true)."\nPlease insert autoload informations into your composer.json");
   }
 
   

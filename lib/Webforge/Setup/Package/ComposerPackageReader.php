@@ -8,6 +8,9 @@ use Webforge\Setup\AutoLoadInfo;
 
 class ComposerPackageReader {
   
+  /**
+   * @return Webforge\Setup\Package\Package
+   */
   public function fromDirectory(Dir $directory) {
     try {
       $jsonFile = $this->findComposerJSON($directory);
