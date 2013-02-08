@@ -344,12 +344,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms",
-                "reference": "57ce3cbb0e8b9a5ac6b2ce0a7d33bf5e47301a51"
+                "reference": "f35511f2cf01be6fb6fa32de5000f61b18cf9421"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/57ce3cbb0e8b9a5ac6b2ce0a7d33bf5e47301a51",
-                "reference": "57ce3cbb0e8b9a5ac6b2ce0a7d33bf5e47301a51",
+                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/f35511f2cf01be6fb6fa32de5000f61b18cf9421",
+                "reference": "f35511f2cf01be6fb6fa32de5000f61b18cf9421",
                 "shasum": ""
             },
             "require": {
@@ -371,7 +371,7 @@
                 "webforge/testdata-repository": "dev-master",
                 "doctrine/data-fixtures": "1.0.*@alpha"
             },
-            "time": "2013-02-08 09:58:10",
+            "time": "2013-02-08 17:19:38",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -410,15 +410,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms-boot",
-                "reference": "12759d5a1065d8e384186a48fe8b8df1545f6e23"
+                "reference": "491f4fe83261d1dc28079df861493377f46df9d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pscheit/psc-cms-boot/zipball/12759d5a1065d8e384186a48fe8b8df1545f6e23",
-                "reference": "12759d5a1065d8e384186a48fe8b8df1545f6e23",
+                "url": "https://api.github.com/repos/pscheit/psc-cms-boot/zipball/491f4fe83261d1dc28079df861493377f46df9d4",
+                "reference": "491f4fe83261d1dc28079df861493377f46df9d4",
                 "shasum": ""
             },
-            "time": "2013-02-08 13:07:09",
+            "time": "2013-02-08 17:21:43",
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "authors": [

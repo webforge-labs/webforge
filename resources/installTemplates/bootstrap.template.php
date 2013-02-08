@@ -1,4 +1,7 @@
 <?php
+
+use Psc\Boot\BootLoader;
+
 /**
  * Bootstrap and Autoload whole application
  *
@@ -6,20 +9,10 @@
  */
 $ds = DIRECTORY_SEPARATOR;
 
-// autoload project dependencies and self autoloading for the library
-if (file_exists($ownVendor = __DIR__.$ds.'vendor'.$ds.'autoload.php')) {
-  require $ownVendor;
-} else {
-  require __DIR__.$ds.'..'.$ds.'..'.$ds.'autoload.php';
-}
+xdebug_break();
+require_once __DIR__.$ds.'package.boot.php';
+$bootLoader = new BootLoader(__DIR__);
+$bootLoader->loadComposer();
+$bootLoader->registerCMSContainer();
 
-if (file_exists($cmsBootstrap = getenv('PSC_CMS').'bootstrap.php')) {
-  require_once $cmsBootstrap;
-}
-
-if (!class_exists('Psc\PSC', FALSE)) {
-  require_once __DIR__.$ds.'vendor'.$ds.'pscheit'.$ds.'psc-cms'.$ds.'bin'.$ds.'psc-cms.phar.gz';
-}
-
-return $GLOBALS['env']['root'] = new \Psc\System\Dir(__DIR__.DIRECTORY_SEPARATOR);
 ?>

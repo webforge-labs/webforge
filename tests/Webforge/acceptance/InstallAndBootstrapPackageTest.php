@@ -24,7 +24,7 @@ class InstallAndBootstrapPackageTest extends \Webforge\Code\Test\Base {
     // if false: its not recreating the whole directory,
     // its using update on previous test-created dir and deletes some files in prepareempty
     // just a convenience switch: ALWAYS put this to TRUE afterwards
-    $this->realAcceptance = FALSE;
+    $this->realAcceptance = TRUE;
     
     $this->dir = $this->getTempDirectory('bootstrap-package/');
     $this->composerDir = $this->dir->sub('Umsetzung/base/src/');
@@ -96,7 +96,7 @@ class InstallAndBootstrapPackageTest extends \Webforge\Code\Test\Base {
           break;
         
         default:
-          $reason = 'unknown '.$process->getOutput();
+          $reason = 'unknown (maybe php error)';
       }
       
       $this->fail('Bootstrap test failed because: '.$reason."\n".$message."\n\n".$stack);
@@ -184,6 +184,7 @@ PHP;
     $process = Process::build($this->which('phpunit'))
                   ->addOption('no-configuration')
                   ->addOption('stop-on-failure')
+                  ->addOption('no-globals-backup') // because this would destroy our "same same" acceptance tests
                   ->addOption('bootstrap', $this->src->getFile('bootstrap.php'))
                   ->addArgument((string) $unitTest)
                   ->end();
