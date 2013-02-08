@@ -16,6 +16,7 @@ interface Package {
   
   const ROOT = 'root';
   const TESTS = 'tests';
+  const VENDOR = 'vendor';
   
   /**
    * A full identifier for the package

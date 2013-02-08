@@ -16,6 +16,7 @@
     "nikic/php-parser": "dev-master",
     "doctrine/orm": "2.3.*@stable",
     "pscheit/psc-cms": "dev-master",
+    "pscheit/psc-cms-boot": "dev-master",
     "webforge/common": "dev-master"
   },
   "require-dev": {

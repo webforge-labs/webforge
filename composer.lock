@@ -1,5 +1,5 @@
 {
-    "hash": "e60ebaaa611c9f5ad98946461910a567",
+    "hash": "c5781c635fc0f116a0bc07bad340ca6c",
     "packages": [
         {
             "name": "CodePlex/PHPExcel",
@@ -61,14 +61,14 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/common/archive/bb0aebbf234db52df476a2b473d434745b34221c.zip",
+                "url": "https://github.com/doctrine/common/zipball/bb0aebbf234db52df476a2b473d434745b34221c",
                 "reference": "bb0aebbf234db52df476a2b473d434745b34221c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "2012-09-20 05:55:18",
+            "time": "2012-09-19 22:55:18",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -80,7 +80,6 @@
                     "Doctrine\\Common": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -106,7 +105,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -126,19 +125,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal",
-                "reference": "4c33f633c48eeafe3408b308f6fc51743a21a3b7"
+                "reference": "fd45c6f6baa618d871f3201fabe76df5043abb1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/dbal/archive/4c33f633c48eeafe3408b308f6fc51743a21a3b7.zip",
-                "reference": "4c33f633c48eeafe3408b308f6fc51743a21a3b7",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/fd45c6f6baa618d871f3201fabe76df5043abb1e",
+                "reference": "fd45c6f6baa618d871f3201fabe76df5043abb1e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "doctrine/common": "2.3.*"
             },
-            "time": "2013-01-07 20:03:43",
+            "time": "2013-01-20 11:50:36",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -185,28 +184,28 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.3.2",
+            "version": "2.3.x-dev",
             "source": {
                 "type": "git",
                 "url": "git://github.com/doctrine/doctrine2.git",
-                "reference": "2.3.2"
+                "reference": "6829c464e88cccd7a2a0714e42e95f3930b38e37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/doctrine2/archive/2.3.2.zip",
-                "reference": "2.3.2",
+                "url": "https://github.com/doctrine/doctrine2/archive/6829c464e88cccd7a2a0714e42e95f3930b38e37.zip",
+                "reference": "6829c464e88cccd7a2a0714e42e95f3930b38e37",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "ext-pdo": "*",
-                "doctrine/dbal": "2.3.*",
-                "symfony/console": "2.*"
+                "symfony/console": "2.*",
+                "doctrine/dbal": "2.3.*"
             },
             "suggest": {
                 "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
             },
-            "time": "2013-01-07 20:05:04",
+            "time": "2013-01-12 09:32:44",
             "bin": [
                 "bin/doctrine",
                 "bin/doctrine.php"
@@ -306,18 +305,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser",
-                "reference": "222c9612ab9c65551b7febd38cbb0fa685b0e0db"
+                "reference": "81d20bf10e33b9fca0ddf082322a74df1f71c9f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/nikic/PHP-Parser/archive/222c9612ab9c65551b7febd38cbb0fa685b0e0db.zip",
-                "reference": "222c9612ab9c65551b7febd38cbb0fa685b0e0db",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/81d20bf10e33b9fca0ddf082322a74df1f71c9f8",
+                "reference": "81d20bf10e33b9fca0ddf082322a74df1f71c9f8",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
             },
-            "time": "2012-12-21 12:28:35",
+            "time": "2013-01-15 17:21:42",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -345,12 +344,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms",
-                "reference": "39299d4b5aa674335fcc14c5c02587b4a467a773"
+                "reference": "57ce3cbb0e8b9a5ac6b2ce0a7d33bf5e47301a51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/psc-cms/archive/39299d4b5aa674335fcc14c5c02587b4a467a773.zip",
-                "reference": "39299d4b5aa674335fcc14c5c02587b4a467a773",
+                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/57ce3cbb0e8b9a5ac6b2ce0a7d33bf5e47301a51",
+                "reference": "57ce3cbb0e8b9a5ac6b2ce0a7d33bf5e47301a51",
                 "shasum": ""
             },
             "require": {
@@ -372,12 +371,13 @@
                 "webforge/testdata-repository": "dev-master",
                 "doctrine/data-fixtures": "1.0.*@alpha"
             },
-            "time": "2013-01-12 05:31:50",
+            "time": "2013-02-08 09:58:10",
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "Psc": [
-                        "lib/"
+                        "lib/",
+                        "tests/"
                     ],
                     "Hitch": [
                         "application/src/hitch/lib/"
@@ -403,6 +403,31 @@
                 "framework",
                 "cms"
             ]
+        },
+        {
+            "name": "pscheit/psc-cms-boot",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pscheit/psc-cms-boot",
+                "reference": "12759d5a1065d8e384186a48fe8b8df1545f6e23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pscheit/psc-cms-boot/zipball/12759d5a1065d8e384186a48fe8b8df1545f6e23",
+                "reference": "12759d5a1065d8e384186a48fe8b8df1545f6e23",
+                "shasum": ""
+            },
+            "time": "2013-02-08 13:07:09",
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Philipp Scheit",
+                    "email": "p.scheit@ps-webforge.com"
+                }
+            ],
+            "description": "Boot strapping package for Webforge"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -455,23 +480,23 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.1.6",
+            "version": "2.1.x-dev",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "v2.1.6"
+                "reference": "fc27a6b04f5425036764e4bfa96c9c889f34c957"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/archive/v2.1.6.zip",
-                "reference": "v2.1.6",
+                "url": "https://github.com/symfony/Console/archive/fc27a6b04f5425036764e4bfa96c9c889f34c957.zip",
+                "reference": "fc27a6b04f5425036764e4bfa96c9c889f34c957",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-13 17:42:00",
+            "time": "2013-01-09 08:51:07",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -502,12 +527,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector",
-                "reference": "8e8cb053407749391e14c0cae7ac3b7e155c1392"
+                "reference": "v2.1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/CssSelector/archive/8e8cb053407749391e14c0cae7ac3b7e155c1392.zip",
-                "reference": "8e8cb053407749391e14c0cae7ac3b7e155c1392",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/v2.1.7",
+                "reference": "v2.1.7",
                 "shasum": ""
             },
             "require": {
@@ -544,18 +569,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation",
-                "reference": "229cc2272d62f4141c17254d15511532e6e46ce0"
+                "reference": "bdaeac9fe079cfc7cc09a4c210b9b8869391ef59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpFoundation/archive/229cc2272d62f4141c17254d15511532e6e46ce0.zip",
-                "reference": "229cc2272d62f4141c17254d15511532e6e46ce0",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/bdaeac9fe079cfc7cc09a4c210b9b8869391ef59",
+                "reference": "bdaeac9fe079cfc7cc09a4c210b9b8869391ef59",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-09 08:51:07",
+            "time": "2013-02-07 22:54:36",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -587,18 +612,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process",
-                "reference": "78002b904ea21606213a7e3b57387e73cf3ea32f"
+                "reference": "v2.1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Process/archive/78002b904ea21606213a7e3b57387e73cf3ea32f.zip",
-                "reference": "78002b904ea21606213a7e3b57387e73cf3ea32f",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/v2.1.7",
+                "reference": "v2.1.7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-11 13:37:04",
+            "time": "2013-01-16 09:27:54",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -628,20 +653,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/webforge-common",
-                "reference": "63e1732c910fb03d0fc17bb2aa89c74156c51b72"
+                "reference": "0bfba1abf32f555a32ba1a70fafeaa52f1f3244b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pscheit/webforge-common/archive/63e1732c910fb03d0fc17bb2aa89c74156c51b72.zip",
-                "reference": "63e1732c910fb03d0fc17bb2aa89c74156c51b72",
+                "url": "https://api.github.com/repos/pscheit/webforge-common/zipball/0bfba1abf32f555a32ba1a70fafeaa52f1f3244b",
+                "reference": "0bfba1abf32f555a32ba1a70fafeaa52f1f3244b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "ext-mbstring": "*",
-                "symfony/console": "2.1.*@stable"
+                "symfony/console": "2.1.*@stable",
+                "symfony/process": "2.1.*@stable"
             },
-            "time": "2013-01-12 05:36:35",
+            "time": "2013-02-08 09:00:30",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -675,18 +701,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/pdepend/pdepend.git",
-                "reference": "981b7c9c831dc489523c5034729eba7297fa424e"
+                "reference": "85b3d7f2d2c6105a76daea0f5a0aee7c7a140b25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/pdepend/pdepend/archive/981b7c9c831dc489523c5034729eba7297fa424e.zip",
-                "reference": "981b7c9c831dc489523c5034729eba7297fa424e",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/85b3d7f2d2c6105a76daea0f5a0aee7c7a140b25",
+                "reference": "85b3d7f2d2c6105a76daea0f5a0aee7c7a140b25",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.3"
             },
-            "time": "2012-11-28 11:29:58",
+            "time": "2013-01-25 15:09:33",
             "bin": [
                 "src/bin/pdepend"
             ],
@@ -779,6 +805,7 @@
         "nikic/php-parser": 20,
         "doctrine/orm": 0,
         "pscheit/psc-cms": 20,
+        "pscheit/psc-cms-boot": 20,
         "webforge/common": 20,
         "webforge/testdata-repository": 20
     }

@@ -6,10 +6,10 @@ use Webforge\Setup\AutoLoadInfo;
 
 class SimplePackageTest extends \Webforge\Code\Test\Base {
   
-  protected $simplePackage;
+  protected $simplePackage, $root;
   
   public function setUp() {
-    $this->simplePackage = new SimplePackage('some-slug', 'some-vendor', $this->getTestDirectory()->sub('packages/ACME/'), new AutoLoadInfo(array()));
+    $this->simplePackage = new SimplePackage('some-slug', 'some-vendor', $this->root = $this->getTestDirectory()->sub('packages/ACME/'), new AutoLoadInfo(array()));
   }
   
   public function testPackageIsAPackageInterface() {
@@ -26,6 +26,14 @@ class SimplePackageTest extends \Webforge\Code\Test\Base {
   
   public function testSlugIsOnlyTheNameOfThePackage() {
     $this->assertEquals('some-slug', $this->simplePackage->getSlug());
+  }
+  
+  public function testGetDirectoryVorVendorReturnsTheVendorDirectory() {
+    $this->assertInstanceOf('Webforge\Common\System\Dir', $vendor = $this->simplePackage->getDirectory(Package::VENDOR));
+    $this->assertEquals(
+      (string) $this->root->sub('vendor/'),
+      (string) $vendor
+    );
   }
 }
 ?>

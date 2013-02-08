@@ -77,7 +77,9 @@ class SimplePackage implements Package {
     if ($type === self::ROOT) {
       return $this->getRootDirectory()->sub('/');
     } elseif ($type === self::TESTS) {
-      return $this->getRootDirectory()->sub('/tests');
+      return $this->getRootDirectory()->sub('tests/');
+    } elseif ($type === self::VENDOR) {
+      return $this->getRootDirectory()->sub('vendor/');
     }
   }
   
