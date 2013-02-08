@@ -20,6 +20,7 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     
     $this->registry = new Registry();
     $this->package = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+    $this->withoutAutoLoadPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/WithoutAutoLoad/'));
     $this->appPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
     
     $this->bridge = new PscCMSBridge();
@@ -100,6 +101,16 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     } catch (\Psc\MissingEnvironmentVariableException $e) {
       $this->markTestSkipped('this is a stupid test with legacy code with static dependencies. And this test is skipped because host-config is not defined on this host');
     }
+  }
+  
+  public function testProjectCanBeInitEvenForPackagesWithoutAutoLoadInfo_thenClassPathIsLibPerDefault() {
+    $project = $this->bridge->createProjectFromPackage($this->withoutAutoLoadPackage);
+    
+    $this->assertEquals(
+      (string) $this->withoutAutoLoadPackage->getRootDirectory()->sub('lib/WithoutAutoload'),
+      (string) $project->getClassPath(),
+      'the project created from package does not have autoload info so it should just return lib/ per default'
+    );
   }
 }
 ?>

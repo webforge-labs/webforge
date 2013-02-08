@@ -7,10 +7,15 @@ use Psc\CMS\Project;
 use Psc\PSC;
 use Psc\CMS\ProjectsFactory;
 use Webforge\Common\System\File;
+use Webforge\Common\Preg;
 use Psc\CMS\Configuration as PscConfiguration;
 use Webforge\Setup\Configuration;
 use Psc\Exception AS BridgeException;
+use RuntimeException;
 
+/**
+ * @todo some inflector for namspaceify (where to put?)
+ */
 class PscCMSBridge {
   
   /**
@@ -68,10 +73,17 @@ class PscCMSBridge {
   }
   
   protected function getPackageClassPath(Package $package) {
-    list ($namespace, $dir) = $package->getAutoLoadInfo()->getMainPrefixAndPath($package->getRootDirectory());
+    try {
+      list ($namespace, $dir) = $package->getAutoLoadInfo()->getMainPrefixAndPath($package->getRootDirectory());
+    } catch (RuntimeException $e) {
+      // it might be possible that these package has no autoLoad defined for a main path
+      // fallback to lib
+      return $package->getRootDirectory()->sub('lib/'.$this->namespaceify($package->getSlug()).'/');
+    }
     
     return $dir->sub($namespace.'/');
   }
+  
   
   public function initLocalConfigurationFor(Project $project) {
     $project->initConfiguration($this->getLocalConfig($project));
@@ -172,6 +184,12 @@ class PscCMSBridge {
     }
     
     return NULL;
+  }
+
+  protected function namespaceify($string) {
+    return ucfirst(Preg::replace_callback($string, '/\-([a-zA-Z])/', function ($match) {
+      return mb_strtoupper($match[1]);
+    }));
   }
 }
 ?>

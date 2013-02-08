@@ -1,0 +1,13 @@
+{
+    "name": "webforge/without-autoload",
+    "description": "this package is has no autoload info, but is a composer package",
+    "authors": [
+        {
+            "name": "p.scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ],
+    "require": {
+
+    }
+}
