@@ -42,20 +42,12 @@ class PscCMSBridge {
     $paths = array();
     
     if ($this->isOldStylePackage($package)) {
-      $classPath = $this->getPackageClassPath($package);
+      // notice: the package root and the project root for oldStyleProjects are vastly different!
+      $projectRoot = $package->getRootDirectory()->sub('../../')->resolvePath(); // => base, umsetzung
       
-      // all relative to Umsetzung/base/src
-      $paths[PSC::PATH_SRC] = './';
-      $paths[PSC::PATH_HTDOCS] = './../htdocs/';
-      $paths[PSC::PATH_BASE] = './../';
-      $paths[PSC::PATH_CACHE] = '../files/cache/';
-      $paths[PSC::PATH_BIN] = './../bin/';
-      $paths[PSC::PATH_TPL] = './tpl/';
-      $paths[PSC::PATH_TESTDATA] = './../files/testdata/';
-      $paths[PSC::PATH_TESTS] = '.'.$classPath->sub('tests/')->getUrl($package->getRootDirectory());
-      $paths[PSC::PATH_CLASS] = '.'.$classPath->getUrl($package->getRootDirectory());
-      $paths[PSC::PATH_FILES] = './../files/';
-      $paths[PSC::PATH_BUILD] = './../build/';
+      // we use the default paths from the old ProjectsFactory because they are fine if root is set correctly
+      $paths = $projectsFactory->getProjectPaths($package->getSlug());
+      
     } else {
       $paths[PSC::PATH_SRC] = './application/src/';
       $paths[PSC::PATH_HTDOCS] = './www/';
@@ -68,6 +60,8 @@ class PscCMSBridge {
       $paths[PSC::PATH_CLASS] = '.'.$this->getPackageClassPath($package)->getUrl($package->getRootDirectory());
       $paths[PSC::PATH_FILES] = './files/';
       $paths[PSC::PATH_BUILD] = './build/';
+      
+      $projectRoot = $package->getRootDirectory();
     }
     
     foreach ($paths as $path => $value) {
@@ -77,7 +71,7 @@ class PscCMSBridge {
     $project =
       $projectsFactory->getProjectInstance(
         $package->getSlug(),
-        $package->getRootDirectory(),
+        $projectRoot,
         $this->getHostConfig(),
         $paths,
         $mode = Project::MODE_SRC,

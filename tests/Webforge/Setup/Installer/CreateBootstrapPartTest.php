@@ -14,7 +14,7 @@ class CreateBootstrapPartTest extends \Webforge\Code\Test\InstallerPartTestCase 
   public function testPartCreatesTheBootstrapPHPFile() {
     $this->macro = $this->installer->dryInstall($this->part, $this->target);
     
-    $this->assertArrayEquals(array('/bootstrap.php'), $this->getCopiedFiles($this->macro));
+    $this->assertArrayEquals(array('/bootstrap.php', '/package.boot.php'), $this->getCopiedFiles($this->macro));
   }
 }
 ?>

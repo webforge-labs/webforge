@@ -105,7 +105,16 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     }
   }
 
-  public function testProjectWithOldStyleShouldHaveSrcAsThePackageRoot() {
+  public function testProjectWithOldStyleShouldHaveRootOnUmsetzung() {
+    $project = $this->bridge->createProjectFromPackage($this->oldStylePackage);
+    
+    $this->assertEquals(
+      (string) $this->oldStylePackage->getRootDirectory()->up()->up()->resolvePath(), // back to base, back to umsetzung
+      (string) $project->getRoot()
+    );
+  }
+
+  public function testProjectWithOldStyleShouldHaveSrcAsPackageRootDirectory() {
     $project = $this->bridge->createProjectFromPackage($this->oldStylePackage);
     
     $this->assertEquals(
