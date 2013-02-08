@@ -6,6 +6,7 @@ use Webforge\Common\System\Dir;
 use Psc\Preg;
 use InvalidArgumentException;
 use Webforge\Common\System\File;
+use RuntimeException;
 
 class ApplicationStorage {
   
@@ -60,9 +61,9 @@ class ApplicationStorage {
     $home = Dir::factoryTS($home);
     
     if (!$home->exists()) {
-      throw new \RuntimeException(
+      throw new RuntimeException(
         sprintf("Cannot find your existing HOME Path ('%s').\n".
-                "On Windows %APPDATA% should be existing.\n".
+                "On Windows %%APPDATA%% should be existing.\n".
                 "On Unix/Windows you can set \$HOME to your home path.",
                 
                 $home
