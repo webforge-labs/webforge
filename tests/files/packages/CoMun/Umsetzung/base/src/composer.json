@@ -1,0 +1,21 @@
+{
+    "name": "pscheit/comun",
+    "require": {
+        "webforge/webforge": "dev-master",
+        "pscheit/psc-cms": "dev-master",
+        "gedmo/doctrine-extensions": "v2.3.3@stable"
+    },
+    "require-dev": {
+        "doctrine/data-fixtures": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "CoMun": ["./"] }
+    },
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "p.scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ]
+}

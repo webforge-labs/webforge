@@ -70,7 +70,7 @@ class PscCMSBridge {
     
     $project =
       $projectsFactory->getProjectInstance(
-        $package->getSlug(),
+        $this->getProjectName($package),
         $projectRoot,
         $this->getHostConfig(),
         $paths,
@@ -87,6 +87,17 @@ class PscCMSBridge {
     list ($namespace, $dir) = $this->getPackageNamespaceAndPath($package);
     
     return $dir->sub($namespace.'/');
+  }
+  
+  protected function getProjectName(Package $package) {
+    list($namespace, $dir) = $this->getPackageNamespaceAndPath($package);
+    
+    // use namespace if namespace is camel cased package slug
+    if ($namespace !== $package->getSlug() && mb_strtolower($namespace) === mb_strtolower($package->getSlug())) {
+      return $namespace;
+    }
+    
+    return $package->getSlug();
   }
   
   /**

@@ -8,7 +8,7 @@ use Psc\Exception as PscException;
 
 class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
   
-  protected $registry, $package, $appPackage, $withoutAutoLoadPackage, $oldStylePackage;
+  protected $registry, $package, $appPackage, $withoutAutoLoadPackage, $oldStylePackage, $camelCasePackage;
   
   protected $bridge;
   
@@ -23,7 +23,7 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     $this->withoutAutoLoadPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/WithoutAutoLoad/'));
     $this->appPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
     $this->oldStylePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/PscOldStyleProject/Umsetzung/base/src/'));
-    
+    $this->camelCasePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/CoMun/Umsetzung/base/src/'));
     
     $this->bridge = new PscCMSBridge();
     
@@ -130,6 +130,22 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
       (string) $this->withoutAutoLoadPackage->getRootDirectory()->sub('lib/WithoutAutoload'),
       (string) $project->getClassPath(),
       'the project created from package does not have autoload info so it should just return lib/ per default'
+    );
+  }
+  
+  public function testProjectWillHaveNamespaceInCamelCase_whenqqqq() {
+    $project = $this->bridge->createProjectFromPackage($this->camelCasePackage);
+    
+    $this->assertEquals(
+      'CoMun',
+      $project->getNamespace(),
+      'Namespace should be CamelCased'
+    );
+
+    $this->assertEquals(
+      'CoMun',
+      $project->getName(),
+      'Name should be also CamelCased'
     );
   }
 }
