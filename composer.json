@@ -13,10 +13,10 @@
     "ext-mbstring": "*",
     
     "symfony/console": "2.1.*@stable",
-    "nikic/php-parser": "dev-master",
+    "nikic/php-parser": "v0.9.3",
     "doctrine/orm": "2.3.*@stable",
     "pscheit/psc-cms": "dev-master",
-    "pscheit/psc-cms-boot": "dev-master",
+    "pscheit/psc-cms-boot": "2.*",
     "webforge/common": "dev-master"
   },
   "require-dev": {
