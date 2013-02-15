@@ -70,7 +70,7 @@ class AutoLoadInfo {
    *
    * normally this is the package main Prefix and the main package-library-path
    * @return list(string $prefix, $dir)
-   * @throws RuntimeException if autoload info is not defined
+   * @throws NoAutoLoadPrefixException if autoload info is not defined
    */
   public function getMainPrefixAndPath(Dir $rootDir) {
     $prefixesPaths = $this->getPrefixes();
@@ -85,7 +85,7 @@ class AutoLoadInfo {
       return array(array_shift($prefixes), $dir);
     }
     
-    throw new RuntimeException('Cannot retrieve the main Prefix and Library Path from AutoLoadInfo. AutoLoadInfo is defined: '.print_r($prefixesPaths, true)."\nPlease insert autoload informations into your composer.json");
+    throw new NoAutoLoadPrefixException('Cannot retrieve the main Prefix and Library Path from AutoLoadInfo. AutoLoadInfo is defined: '.print_r($prefixesPaths, true)."\nPlease insert autoload informations into your composer.json");
   }
 
   

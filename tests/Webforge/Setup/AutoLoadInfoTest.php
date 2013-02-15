@@ -63,7 +63,7 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
   }
   
   public function testGetMainPrefixAndPathThrowsExceptionWhenNotAutoloadPrefixesAreDefined() {
-    $this->setExpectedException('RuntimeException');
+    $this->setExpectedException('Webforge\Setup\NoAutoLoadPrefixException');
     
     $root = new Dir(__DIR__.DIRECTORY_SEPARATOR);
     $this->emptyInfo->getMainPrefixAndPath($root);

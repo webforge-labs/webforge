@@ -4,6 +4,8 @@ namespace Webforge\Framework\Package;
 
 use Webforge\Common\System\Dir;
 use Webforge\Setup\AutoLoadInfo;
+use Webforge\Setup\NoAutoLoadPrefixException;
+use Webforge\Framework\Inflector;
 
 class SimplePackage implements Package {
   
@@ -26,6 +28,20 @@ class SimplePackage implements Package {
    * @var Webforge\Setup\AutoLoadInfo|NULL
    */
   protected $autoLoadInfo;
+  
+  /**
+   * Caches the namespace
+   * 
+   * @var string
+   */
+  protected $namespace;
+
+  /**
+   * Caches the namespace directory
+   * 
+   * @var string
+   */
+  protected $namespaceDirectory;
   
   public function __construct($slug, $vendor, Dir $root, AutoLoadInfo $info = NULL) {
     $this->slug = $slug;
@@ -90,16 +106,59 @@ class SimplePackage implements Package {
     return $this->autoLoadInfo;
   }
   
+  /**
+   * @inherit-doc
+   * @return string
+   */
+  public function getNamespace(Inflector $inflector = NULL) {
+    if (!isset($this->namespace)) {
+      try {
+        list ($mainPrefix, $dir) = $this->autoLoadInfo->getMainPrefixAndPath($this->rootDirectory);
+        
+        $this->namespace = $mainPrefix;
+        
+      } catch (NoAutoLoadPrefixException $e) {
+        $inflector = $inflector ?: new Inflector();
+        
+        // it might be possible that these package has no autoLoad defined for a main path
+        $this->namespace = $inflector->namespaceify($this->slug);
+      }
+    }
+    
+    return $this->namespace;
+  }
+
+  /**
+   * @inherit-doc
+   * @return Webforge\Common\System\Dir
+   */
+  public function getNamespaceDirectory() {
+    if (!isset($this->namespaceDirectory)) {
+      try {
+        list ($namespace, $dir) = $this->autoLoadInfo->getMainPrefixAndPath($this->rootDirectory);
+        
+      } catch (NoAutoLoadPrefixException $e) {
+        // it might be possible that these package has no autoLoad defined for a main path
+        // fallback to lib as namespace root
+        $dir = $this->rootDirectory->sub('lib/');
+      }
+      
+      $this->namespaceDirectory = $dir->sub($this->getNamespace().'/');
+    }
+    
+    return $this->namespaceDirectory;
+  }
+
   // @codeCoverageIgnoreStart
   /**
    * @param Psc\Setup\AutoLoadInfo $info
    */
   public function setAutoLoadInfo(AutoLoadInfo $info) {
+    $this->namespace = $this->namespaceDirectory = NULL;
     $this->autoLoadInfo = $info;
     return $this;
   }
   
-
   /**
    * @param Webforge\Common\System\Dir $rootDirectory
    * @chainable
@@ -108,7 +167,6 @@ class SimplePackage implements Package {
     $this->rootDirectory = $rootDirectory;
     return $this;
   }
-
 
   /**
    * @param string $slug
@@ -123,5 +181,6 @@ class SimplePackage implements Package {
     return $this->getSlug();
   }
   // @codeCoverageIgnoreEnd
+
 }
 ?>

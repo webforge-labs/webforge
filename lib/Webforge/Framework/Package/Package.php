@@ -5,6 +5,7 @@ namespace Webforge\Framework\Package;
 use Webforge\Common\System\Dir;
 use Webforge\Common\System\File;
 use Webforge\Setup\AutoLoadInfo;
+use Webforge\Framework\Inflector;
 
 /**
  * Package
@@ -74,5 +75,21 @@ interface Package {
    * @param Psc\Setup\AutoLoadInfo $info
    */
   public function setAutoLoadInfo(AutoLoadInfo $info);
+  
+  /**
+   * Returns the (main-)Namespace of the package
+   *
+   * @return string
+   */
+  public function getNamespace(Inflector $inflector = NULL);
+
+  /**
+   * Returns the directory of the (main-)Namespace of the package
+   *
+   * for example: if the namespace is "Webforge" this is package-root/lib/Webforge
+   * @return Webforge\Common\System\Dir
+   */
+  public function getNamespaceDirectory();
+  
 }
 ?>
