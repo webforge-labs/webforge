@@ -13,9 +13,6 @@ use Webforge\Setup\Configuration;
 use Psc\Exception AS BridgeException;
 use RuntimeException;
 
-/**
- * @todo some inflector for namspaceify (where to put?)
- */
 class PscCMSBridge {
   
   /**
@@ -57,7 +54,7 @@ class PscCMSBridge {
       $paths[PSC::PATH_TPL] = './application/tpl/';
       $paths[PSC::PATH_TESTDATA] = './tests/files/';
       $paths[PSC::PATH_TESTS] = './tests';
-      $paths[PSC::PATH_CLASS] = '.'.$this->getPackageClassPath($package)->getUrl($package->getRootDirectory());
+      $paths[PSC::PATH_CLASS] = '.'.$package->getNamespaceDirectory()->getUrl($package->getRootDirectory());
       $paths[PSC::PATH_FILES] = './files/';
       $paths[PSC::PATH_BUILD] = './build/';
       
@@ -83,40 +80,17 @@ class PscCMSBridge {
     return $project;
   }
   
-  protected function getPackageClassPath(Package $package) {
-    list ($namespace, $dir) = $this->getPackageNamespaceAndPath($package);
-    
-    return $dir->sub($namespace.'/');
-  }
-  
   protected function getProjectName(Package $package) {
-    list($namespace, $dir) = $this->getPackageNamespaceAndPath($package);
+    $namespace = $package->getNamespace();
+    $slug = $package->getSlug();
     
     // use namespace if namespace is camel cased package slug
-    if ($namespace !== $package->getSlug() && mb_strtolower($namespace) === mb_strtolower($package->getSlug())) {
+    if ($namespace !== $slug && mb_strtolower($namespace) === mb_strtolower($slug)) {
       return $namespace;
     }
     
-    return $package->getSlug();
+    return $slug;
   }
-  
-  /**
-   * @return list(string $namespace, $dir rootLibraryPath)
-   */
-  protected function getPackageNamespaceAndPath(Package $package) {
-    try {
-      list ($namespace, $dir) = $package->getAutoLoadInfo()->getMainPrefixAndPath($package->getRootDirectory());
-    } catch (RuntimeException $e) {
-      // it might be possible that these package has no autoLoad defined for a main path
-      // fallback to lib
-      // create namespace from package slug
-      $namespace = $this->namespaceify($package->getSlug());
-      $dir = $package->getRootDirectory()->sub('lib/');
-    }
-    
-    return array($namespace, $dir);
-  }
-  
   
   public function initLocalConfigurationFor(Project $project) {
     $project->initConfiguration($this->getLocalConfig($project));
@@ -218,13 +192,6 @@ class PscCMSBridge {
     
     return NULL;
   }
-
-  protected function namespaceify($string) {
-    return ucfirst(Preg::replace_callback($string, '/\-([a-zA-Z])/', function ($match) {
-      return mb_strtoupper($match[1]);
-    }));
-  }
-  
   protected function isOldStylePackage(Package $package) {
     //dumb first:
     return $package->getRootDirectory()->up()->getName() === 'base';
