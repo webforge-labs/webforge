@@ -12,7 +12,7 @@ interface Installer {
   public function install(Part $part, Dir $destination);
   
   /**
-   * Copies the $source to $destionation
+   * Copies the $source to $destination
    *
    * if source is a file and destination is a dir the $file is copied to $destination
    * if source is a dir and destination is a dir
@@ -35,5 +35,10 @@ interface Installer {
   public function execute($cmd);
   
   public function warn($msg);
+  
+  /**
+   * Outputs a suggestion / or message
+   */
+  public function info($msg);
 }
 ?>

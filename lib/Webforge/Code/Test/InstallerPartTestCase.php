@@ -13,6 +13,8 @@ class InstallerPartTestCase extends MacroTestCase {
   protected $installer;
   protected $container;
   
+  protected $output;
+  
   public function setUp() {
     parent::setUp();
     
@@ -20,7 +22,8 @@ class InstallerPartTestCase extends MacroTestCase {
     $this->container = new Container();
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
-    $this->installer = new PartsInstaller(array(), $this->container);
+    $this->output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface');
+    $this->installer = new PartsInstaller(array(), $this->container, $this->output);
   }
   
   public function findCopyCmds(Macro $macro) {

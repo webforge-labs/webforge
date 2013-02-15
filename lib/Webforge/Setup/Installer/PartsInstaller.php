@@ -150,7 +150,11 @@ class PartsInstaller implements Installer {
   
   
   public function warn($msg) {
-    return $this->output->writeln($msg);
+    return $this->output->writeln('<error>'.$msg.'</error>');
+  }
+
+  public function info($msg) {
+    return $this->output->writeln('<info>'.$msg.'</info>');
   }
   
   public function getPart($name) {
