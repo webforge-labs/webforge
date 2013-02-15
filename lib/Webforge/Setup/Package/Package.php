@@ -37,7 +37,6 @@ interface Package {
    */
   public function getVendor();
   
-  
   /**
    * The full title for the package
    *
@@ -65,7 +64,6 @@ interface Package {
    */
   public function getDirectory($type = self::ROOT);
 
-  
   /**
    * Gives Information for the Paths the Projects loads it classes from
    * @return Psc\Setup\AutoLoadInfo
@@ -76,6 +74,5 @@ interface Package {
    * @param Psc\Setup\AutoLoadInfo $info
    */
   public function setAutoLoadInfo(AutoLoadInfo $info);
-  
 }
 ?>
