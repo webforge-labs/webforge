@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup\Package;
+namespace Webforge\Framework\Package;
 
 use Webforge\Setup\AutoLoadInfo;
 
@@ -13,7 +13,7 @@ class SimplePackageTest extends \Webforge\Code\Test\Base {
   }
   
   public function testPackageIsAPackageInterface() {
-    $this->assertInstanceOf('Webforge\Setup\Package\Package', $this->simplePackage);
+    $this->assertInstanceOf('Webforge\Framework\Package\Package', $this->simplePackage);
   }
   
   public function testPackageReturnsAnAutoloadInfo() {

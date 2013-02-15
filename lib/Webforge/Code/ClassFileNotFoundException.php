@@ -2,7 +2,7 @@
 
 namespace Webforge\Code;
 
-use Webforge\Setup\Package\PackageNotFoundException;
+use Webforge\Framework\Package\PackageNotFoundException;
 
 class ClassFileNotFoundException extends \Psc\Exception {
   

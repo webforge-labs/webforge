@@ -37,7 +37,7 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
               ->setConstructorArgs(array('packageTestPart'))
               ->setMethods(array('setPackage','getPackage','installTo'))
               ->getMock();
-    $part->expects($this->once())->method('setPackage')->with($this->isInstanceOf('Webforge\Setup\Package\Package'));
+    $part->expects($this->once())->method('setPackage')->with($this->isInstanceOf('Webforge\Framework\Package\Package'));
     
     $this->partsInstaller->dryInstall($part, $this->testDir);
   }
@@ -105,7 +105,7 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
   }
 }
 
-abstract class PackageAwareTestPart extends Part implements \Webforge\Setup\Package\PackageAware {
+abstract class PackageAwareTestPart extends Part implements \Webforge\Framework\Package\PackageAware {
   
 }
 ?>

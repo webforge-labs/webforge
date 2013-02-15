@@ -6,7 +6,7 @@ use Webforge\Common\System\Dir;
 use Webforge\Common\System\File;
 use Webforge\Framework\ContainerAware;
 use Webforge\Framework\Container;
-use Webforge\Setup\Package\PackageAware;
+use Webforge\Framework\Package\PackageAware;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Psc\TPL\TPL;

@@ -3,7 +3,7 @@
 namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
-use Webforge\Setup\Package\Package;
+use Webforge\Framework\Package\Package;
 use RuntimeException;
 
 class CreateBootstrapPart extends ContainerAwarePart {

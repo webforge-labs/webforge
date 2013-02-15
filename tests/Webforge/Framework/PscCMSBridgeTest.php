@@ -2,7 +2,7 @@
 
 namespace Webforge\Framework;
 
-use Webforge\Setup\Package\Registry;
+use Webforge\Framework\Package\Registry;
 use Psc\PSC;
 use Psc\Exception as PscException;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup\Package;
+namespace Webforge\Framework\Package;
 
 use Webforge\Common\System\Dir;
 use Webforge\Common\System\File;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup\Package;
+namespace Webforge\Framework\Package;
 
 use Webforge\Common\System\Dir;
 use Psc\JS\JSONConverter;
@@ -9,7 +9,7 @@ use Webforge\Setup\AutoLoadInfo;
 class ComposerPackageReader {
   
   /**
-   * @return Webforge\Setup\Package\Package
+   * @return Webforge\Framework\Package\Package
    */
   public function fromDirectory(Dir $directory) {
     try {

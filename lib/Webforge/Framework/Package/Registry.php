@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup\Package;
+namespace Webforge\Framework\Package;
 
 use Webforge\Common\System\Dir;
 use Psc\A;
@@ -10,7 +10,7 @@ use Webforge\Common\String;
 class Registry {
   
   /**
-   * @var Webforge\Setup\Package\ComposerPackageReader
+   * @var Webforge\Framework\Package\ComposerPackageReader
    */
   protected $composerPackageReader;
   
@@ -75,7 +75,7 @@ class Registry {
   }
   
   /**
-   * @param Webforge\Setup\Package\Package $package
+   * @param Webforge\Framework\Package\Package $package
    */
   public function addPackage(Package $package) {
     $this->indexPackage($package);
@@ -116,7 +116,7 @@ class Registry {
   }
   
   /**
-   * @return Webforge\Setup\Package\ComposerPackageReader
+   * @return Webforge\Framework\Package\ComposerPackageReader
    */
   public function getComposerPackageReader() {
     if (!isset($this->composerPackageReader)) {

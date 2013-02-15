@@ -4,7 +4,7 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
-use Webforge\Setup\Package\Package;
+use Webforge\Framework\Package\Package;
 
 /**
  * "implement" PackageAware to have the $package set to the local package
@@ -17,7 +17,7 @@ abstract class Part {
   protected $name;
   
   /**
-   * @var Webforge\Setup\Package\Package
+   * @var Webforge\Framework\Package\Package
    */
   protected $package;
   
@@ -38,7 +38,7 @@ abstract class Part {
   }
   
   /**
-   * @param Webforge\Setup\Package\Package $package
+   * @param Webforge\Framework\Package\Package $package
    * @chainable
    */
   public function setPackage(Package $package) {
@@ -47,7 +47,7 @@ abstract class Part {
   }
 
   /**
-   * @return Webforge\Setup\Package\Package
+   * @return Webforge\Framework\Package\Package
    */
   public function getPackage() {
     return $this->package;

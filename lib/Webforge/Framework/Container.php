@@ -8,8 +8,8 @@ use Webforge\Code\Generator\ClassReader;
 use Webforge\Code\Generator\ClassElevator;
 use Webforge\Code\GlobalClassFileMapper;
 use Webforge\Code\Generator\ClassFileMapper;
-use Webforge\Setup\Package\Registry AS PackageRegistry;
-use Webforge\Setup\Package\ComposerPackageReader;
+use Webforge\Framework\Package\Registry AS PackageRegistry;
+use Webforge\Framework\Package\ComposerPackageReader;
 use Webforge\Setup\Installer\PartsInstaller;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -56,7 +56,7 @@ class Container {
   /**
    * A Registry for Packages installed on the host (e.g.)
    * 
-   * @var Webforge\Setup\Package\Registry
+   * @var Webforge\Framework\Package\Registry
    */
   protected $packageRegistry;
   
@@ -69,7 +69,7 @@ class Container {
    * The local package is the package for the current context
    * 
    * this is not necessary the package from webforge unless its called from webforge-core
-   * @var Webforge\Setup\Package\Package
+   * @var Webforge\Framework\Package\Package
    */
   protected $localPackage;
 
@@ -81,7 +81,7 @@ class Container {
   protected $localProject;
   
   /**
-   * @var Webforge\Setup\Package\ComposerPackageReader
+   * @var Webforge\Framework\Package\ComposerPackageReader
    */
   protected $composerPackageReader;
 
@@ -178,7 +178,7 @@ class Container {
   }
 
   /**
-   * @return Webforge\Setup\Package\Registry
+   * @return Webforge\Framework\Package\Registry
    */
   public function getPackageRegistry() {
     if (!isset($this->packageRegistry)) {
@@ -189,7 +189,7 @@ class Container {
   }
 
   /**
-   * @return Webforge\Setup\Package\ComposerPackageReader
+   * @return Webforge\Framework\Package\ComposerPackageReader
    */
   public function getComposerPackageReader() {
     if (!isset($this->composerPackageReader)) {
@@ -223,7 +223,7 @@ class Container {
   }
   
   /**
-   * @return Webforge\Setup\Package\Package
+   * @return Webforge\Framework\Package\Package
    */
   public function getLocalPackage() {
     return $this->localPackage;
@@ -278,7 +278,7 @@ class Container {
   
   // @codeCoverageIgnoreStart
   /**
-   * @param Webforge\Setup\Package\Registry $packageRegistry
+   * @param Webforge\Framework\Package\Registry $packageRegistry
    * @chainable
    */
   public function setPackageRegistry(PackageRegistry $packageRegistry) {

@@ -4,12 +4,12 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
 use Psc\TPL\TPL;
-use Webforge\Setup\Package\Package;
+use Webforge\Framework\Package\Package;
 
-class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Setup\Package\PackageAware {
+class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Framework\Package\PackageAware {
 
   /**
-   * @var Webforge\Setup\Package\Package
+   * @var Webforge\Framework\Package\Package
    */
   protected $package;
   

@@ -2,7 +2,7 @@
 
 namespace Webforge\Framework;
 
-use Webforge\Setup\Package\SimplePackage;
+use Webforge\Framework\Package\SimplePackage;
 use Webforge\Common\System\Dir;
 
 class ContainerTest extends \Webforge\Code\Test\Base {
@@ -32,8 +32,8 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('classReader', 'Webforge\Code\Generator\ClassReader');
     $prop('classElevator', 'Webforge\Code\Generator\ClassElevator');
     $prop('classFileMapper', 'Webforge\Code\GlobalClassFileMapper');
-    $prop('packageRegistry', 'Webforge\Setup\Package\Registry');
-    $prop('composerPackageReader', 'Webforge\Setup\Package\ComposerPackageReader');
+    $prop('packageRegistry', 'Webforge\Framework\Package\Registry');
+    $prop('composerPackageReader', 'Webforge\Framework\Package\ComposerPackageReader');
     $prop('partsInstaller', 'Webforge\Setup\Installer\PartsInstaller');
     $prop('resourceDirectory', 'Webforge\Common\System\Dir');
     $prop('cmsBridge', 'Webforge\Framework\PscCMSBridge');
@@ -68,7 +68,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
                   ));
     
     $this->container->setComposerPackageReader(
-      $reader = $this->getMock('Webforge\Setup\Package\ComposerPackageReader', array('fromDirectory'))
+      $reader = $this->getMock('Webforge\Framework\Package\ComposerPackageReader', array('fromDirectory'))
     );
     $reader->expects($this->exactly(2))->method('fromDirectory')
            ->will($this->onConsecutiveCalls(
@@ -114,7 +114,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
-    $this->testInstanceOfProperty('localPackage', 'Webforge\Setup\Package\Package');
+    $this->testInstanceOfProperty('localPackage', 'Webforge\Framework\Package\Package');
   }
   
   public function testLocalPackageInitFromDirectory_throwsExceptionWhenPackageIsNotFound() {

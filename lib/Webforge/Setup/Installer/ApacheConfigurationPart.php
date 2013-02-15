@@ -4,7 +4,7 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
 
-class ApacheConfigurationPart extends Part implements \Webforge\Setup\Package\PackageAware {
+class ApacheConfigurationPart extends Part implements \Webforge\Framework\Package\PackageAware {
   
   public function __construct() {
     parent::__construct('ApacheConfiguration');

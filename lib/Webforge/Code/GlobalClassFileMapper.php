@@ -4,14 +4,14 @@ namespace Webforge\Code;
 
 use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Code\Generator\GClass;
-use Webforge\Setup\Package\Registry AS PackageRegistry;
-use Webforge\Setup\Package\Package;
+use Webforge\Framework\Package\Registry AS PackageRegistry;
+use Webforge\Framework\Package\Package;
 use Webforge\Code\ClassNotFoundException;
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
 use Webforge\Common\String as S;
 use ComposerAutoloaderInit;
-use Webforge\Setup\Package\PackageNotFoundException;
+use Webforge\Framework\Package\PackageNotFoundException;
 
 /**
  * The Global Class File Mapper finds the corrosponding file in a project on the local machine
@@ -35,7 +35,7 @@ class GlobalClassFileMapper implements ClassFileMapper {
   /**
    * A Registry for Packages installed on the host (e.g.)
    * 
-   * @var Webforge\Setup\Package\Registry
+   * @var Webforge\Framework\Package\Registry
    */
   protected $packageRegistry;
 
@@ -143,7 +143,7 @@ class GlobalClassFileMapper implements ClassFileMapper {
   }
   
   /**
-   * @param Webforge\Setup\Package\Registry $packageRegistry
+   * @param Webforge\Framework\Package\Registry $packageRegistry
    * @chainable
    */
   public function setPackageRegistry(PackageRegistry $packageRegistry) {
@@ -152,7 +152,7 @@ class GlobalClassFileMapper implements ClassFileMapper {
   }
 
   /**
-   * @return Webforge\Setup\Package\Registry
+   * @return Webforge\Framework\Package\Registry
    */
   public function getPackageRegistry() {
     return $this->packageRegistry;

@@ -4,7 +4,7 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
 use Webforge\Common\String AS S;
-use Webforge\Setup\Package\PackageAware;
+use Webforge\Framework\Package\PackageAware;
 
 class InitConfigurationPart extends Part implements PackageAware {
   

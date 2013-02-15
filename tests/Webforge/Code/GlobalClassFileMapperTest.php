@@ -3,9 +3,9 @@
 namespace Webforge\Code;
 
 use Webforge\Code\Generator\ClassFileMapper;
-use Webforge\Setup\Package\Package;
-use Webforge\Setup\Package\PackageNotFoundException;
-use Webforge\Setup\Package\SimplePackage;
+use Webforge\Framework\Package\Package;
+use Webforge\Framework\Package\PackageNotFoundException;
+use Webforge\Framework\Package\SimplePackage;
 use Webforge\Setup\AutoLoadInfo;
 
 /**
@@ -16,7 +16,7 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
   protected $mapper;
   
   public function setUp() {
-    $this->registry = $this->getMock('Webforge\Setup\Package\Registry', array('findByFQN'));
+    $this->registry = $this->getMock('Webforge\Framework\Package\Registry', array('findByFQN'));
     $this->mapper = new GlobalClassFileMapper();
     $this->mapper->setPackageRegistry($this->registry);
   }

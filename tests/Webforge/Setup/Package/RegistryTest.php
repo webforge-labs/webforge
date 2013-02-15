@@ -1,6 +1,6 @@
 <?php
 
-namespace Webforge\Setup\Package;
+namespace Webforge\Framework\Package;
 
 class RegistryTest extends \Webforge\Code\Test\Base {
   
@@ -15,12 +15,12 @@ class RegistryTest extends \Webforge\Code\Test\Base {
   public function testFindACMEByFQN() {
     $acmePackage = $this->registry->findByFQN('ACME\IntranetApplication\Main');
     
-    $this->assertInstanceOf('Webforge\Setup\Package\Package', $acmePackage);
+    $this->assertInstanceOf('Webforge\Framework\Package\Package', $acmePackage);
     $this->assertEquals('acme/intranet-application', $acmePackage->getIdentifier());
   }
   
   /**
-   * @expectedException Webforge\Setup\Package\PackageNotFoundException
+   * @expectedException Webforge\Framework\Package\PackageNotFoundException
    */
   public function testNonFindablePrefixFQNThrowsException() {
     $this->registry->findByFQN('BananenbaumisnotdefinedPrefix');
