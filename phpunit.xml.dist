@@ -15,4 +15,10 @@
             <directory suffix="Test.php">./tests/Webforge</directory>
         </testsuite>
     </testsuites>
+
+    <groups>
+      <exclude>
+        <group>acceptance</group>
+      </exclude>
+    </groups>          
 </phpunit>

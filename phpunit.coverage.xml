@@ -16,6 +16,12 @@
         </testsuite>
     </testsuites>
 
+    <groups>
+      <exclude>
+        <group>acceptance</group>
+      </exclude>
+    </groups>          
+
     <logging>
       <log type="coverage-html" target="./build/coverage" title="Webforge" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
     </logging>
