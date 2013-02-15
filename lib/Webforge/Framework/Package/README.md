@@ -45,7 +45,3 @@ dont commit these directories. put into your ignore file for source control
 * files related to frontend: put into www if access needs to be public. But everything else in lib or application. If nothing matches use resources
 * vendor: never put something here, leave it to composer to manage this dir
 * files for continous integration, composer, phpunit etc, put into root if single file. Put into resources/build if more complicated
-
-## TODO
-
-Discussion: Package should be subnamespace of Framework, not Setup?
