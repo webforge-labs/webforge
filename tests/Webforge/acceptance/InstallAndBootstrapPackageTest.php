@@ -226,9 +226,17 @@ PHP;
   
   protected function which($cmd) {
     $finder = new \Symfony\Component\Process\ExecutableFinder;
-    return new File($finder->find($cmd));
     
-    $this->assertInstanceOf('Webforge\Common\System\File', $bin = \Psc\System\System::which($cmd), 'cmd cannot be whiched: '.$cmd);
+    if ($file = $finder->find($cmd)) {
+      return new File($file);
+    }
+    
+    $this->assertInstanceOf(
+      'Webforge\Common\System\File',
+      $bin = \Psc\System\System::which($cmd),
+      'cmd cannot be whiched: '.$cmd
+    );
+    
     return $bin;
   }
 }
