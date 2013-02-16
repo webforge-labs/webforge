@@ -234,7 +234,7 @@ PHP;
     $this->assertInstanceOf(
       'Webforge\Common\System\File',
       $bin = \Psc\System\System::which($cmd),
-      'cmd cannot be whiched: '.$cmd
+      'cmd cannot be whiched: '.$cmd.' path: '.var_dump(getenv('PATH'))
     );
     
     return $bin;
