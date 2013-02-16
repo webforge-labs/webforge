@@ -231,6 +231,10 @@ PHP;
       return new File($file);
     }
     
+    if (\Psc\PSC::isTravis() && $cmd === 'webforge') {
+      return Dir::factoryTS(__DIR__)->sub('../../../bin/webforge');
+    }
+    
     $this->assertInstanceOf(
       'Webforge\Common\System\File',
       $bin = \Psc\System\System::which($cmd),
