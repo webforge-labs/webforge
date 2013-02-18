@@ -6,11 +6,17 @@ use PHPParser_Node_Stmt_Switch;
 use PHPParser_Node_Stmt_Case;
 use PHPParser_Node_Expr_ClosureUse;
 use PHPParser_Node_Expr_Closure;
+use PHPParser_Node;
 use Webforge\Common\String AS S;
 
 class PrettyPrinter extends \PHPParser_PrettyPrinter_Zend {
   
   protected $baseIndent;
+  
+  protected $offsets, $lastOffset;
+  public $inphp, $php;
+  
+  protected $stks;
   
   public function __construct($baseIndent = 0) {
     $this->baseIndent = $baseIndent;
@@ -18,9 +24,39 @@ class PrettyPrinter extends \PHPParser_PrettyPrinter_Zend {
   }
   
   public function prettyPrint(array $nodes) {
-    $php = parent::prettyPrint($nodes);
+    $this->stks = new StringTokenStream($this->inphp);
     
-    return S::indent($php, $this->baseIndent, "\n");
+    $this->offsets = array();
+    $this->lastOffset = -1;
+    $this->php = '';
+    print "\n";
+    $ppPHP = parent::prettyPrint($nodes);
+    
+    //$missingOffsets = array_diff(range(0, $this->lastOffset), $this->offsets);
+    
+    return $this->php;
+  }
+  
+  protected function p(PHPParser_Node $node) {
+    $start = $node->getAttribute('startOffset');
+    $end = $node->getAttribute('endOffset');
+    
+    $this->lastOffset++;
+    
+    if ($start > $this->lastOffset) {
+      printf("fülle start auf: %d:%d vor %s\n", $this->lastOffset, $start, get_class($node));
+      $this->php .= implode('', $this->stks->slicep($this->lastOffset, $start));
+    }
+    
+    printf("fülle offsets: %d:%d %s\n", $start,$end, get_class($node));
+    foreach(range($start, $end) as $offset) {
+      $this->offsets[] = $offset;
+      $this->php .= $this->stks->get($offset);
+    }
+    
+    $this->lastOffset = $end;
+    
+    parent::p($node);
   }
 
   public function pStmt_Switch(PHPParser_Node_Stmt_Switch $node) {

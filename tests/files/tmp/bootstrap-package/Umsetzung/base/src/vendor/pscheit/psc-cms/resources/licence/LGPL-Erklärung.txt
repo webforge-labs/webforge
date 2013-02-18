@@ -1,0 +1,10 @@
+Die LGPL ist eine sogenannte Open Source Software Lizenz. Es handelt sich um eine Lizenz mit beschränktem Copyleft-Effekt.
+
+LG Frankfurt/Main, 06.09.2006 - 2-06 O 224/06, 2/6 O 224/06
+
+Die Einräumung eines ausschließlichen Nutzungsrechts (hier: an Computerprogrammen) kann auch dann wirksam erfolgen, wenn Dritten gemäß der GNU General Public License (GPL) Nutzungsrechte eingeräumt wurden. Denn durch die GPL werden lediglich einfache Nutzungrechte eingeräumt. Wie sich aus § 33 UrhG ergibt, kann ein ausschließliches Nutzungsrecht um bereits zuvor eingeräumte einfache Nutzungsrechte beschränkt eingeräumt werden. Umgekehrt ist es den Urhebern möglich auch nach Einräumung des ausschließlichen Nutzungsrechts Dritten einfache Nutzungsrechte nach der GPL einzuräumen.
+
+
+"Die Software enthält Bestandteile, die als Open Source Software lizenziert sind. Die davon betroffenen Bestandteile und die dazu gehörenden Lizenzbedingungen sind diesem als Anlage beigefügt. Der Lizenznehmer erhält an der verwendeten Open Source Software von den jeweiligen Rechteinhabern ein einfaches Nutzungsrecht unter den Bedingungen, die die dafür jeweils gültigen Lizenzbedingungen vorsehen. Die vorliegenden Lizenzbedingungen gelten nur für die Bestandteile, die nicht als Open Source Software lizenziert sind."
+ 
+"Die Regelungen zu Haftung und Gewährleistung in diesen Lizenzbedingungen gelten im Verhältnis zum Lizenzgeber für die gesamte Software. Die Haftungs- und Gewährleistungsregelungen der Open Source Lizenzen haben Geltung nur im Verhältnis zu den jeweiligen Rechteinhabern."
