@@ -1,19 +1,11 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
-use Symfony\Component\Console\Application;
-use Psc\System\File;
+use Webforge\Console\PackageConsole;
 use Psc\System\Dir;
-use Psc\System\Console\CommandsIncluder;
 
 require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'bootstrap.php';
 
-$application = new Application();
-
-$dir = new Dir(__DIR__.DIRECTORY_SEPARATOR);
-$includer = new \Psc\System\Console\CommandsIncluder($f = $dir->sub('../lib/')->getFile('inc.commands.php'));
-
-$application->addCommands($includer->getCommands());
-$application->run();
-
+$console = new PackageConsole();
+$console->run();
 ?>
