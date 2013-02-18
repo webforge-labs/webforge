@@ -26,37 +26,41 @@ class PrettyPrinter extends \PHPParser_PrettyPrinter_Zend {
   public function prettyPrint(array $nodes) {
     $this->stks = new StringTokenStream($this->inphp);
     
+    $this->php = array();
+    foreach ($this->stks as $offset=>$value) {
+      $this->php[$offset] = $value;
+    }
+
+    
     $this->offsets = array();
     $this->lastOffset = -1;
-    $this->php = '';
-    print "\n";
     $ppPHP = parent::prettyPrint($nodes);
     
-    //$missingOffsets = array_diff(range(0, $this->lastOffset), $this->offsets);
-    
-    return $this->php;
+
+    return implode('', $this->php);
   }
   
   protected function p(PHPParser_Node $node) {
     $start = $node->getAttribute('startOffset');
     $end = $node->getAttribute('endOffset');
     
-    $this->lastOffset++;
+    //if ($start > $this->lastOffset) {
+    //  printf("fülle start auf: %d:%d vor %s\n", $this->lastOffset, $start, get_class($node));
+    //  $this->php .= implode('', $this->stks->slicep($this->lastOffset, $start));
+    //}
+    //
+    $php = parent::p($node);
     
-    if ($start > $this->lastOffset) {
-      printf("fülle start auf: %d:%d vor %s\n", $this->lastOffset, $start, get_class($node));
-      $this->php .= implode('', $this->stks->slicep($this->lastOffset, $start));
+    if ($node instanceof \PHPParser_Node_Stmt_Use) {
+      $this->php[$start] = $php;
+      printf("\nreplace %d:%d with \n%s\n", $start, $end, $php);
+      
+      foreach(range($start+1, $end) as $offset) {
+        $this->php[$offset] = NULL;
+      }
     }
     
-    printf("fülle offsets: %d:%d %s\n", $start,$end, get_class($node));
-    foreach(range($start, $end) as $offset) {
-      $this->offsets[] = $offset;
-      $this->php .= $this->stks->get($offset);
-    }
-    
-    $this->lastOffset = $end;
-    
-    parent::p($node);
+    return $php;
   }
 
   public function pStmt_Switch(PHPParser_Node_Stmt_Switch $node) {
