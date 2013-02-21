@@ -6,6 +6,9 @@ branches:
   only:
     - master
 
+env:
+  - WEBFORGE=~/.webforge
+
 before_install:
   - composer self-update
   - COMPOSER_ROOT_VERSION=dev-master composer install --dev --prefer-source --no-interaction
