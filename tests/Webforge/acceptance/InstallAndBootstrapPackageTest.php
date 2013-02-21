@@ -73,6 +73,9 @@ class InstallAndBootstrapPackageTest extends \Webforge\Code\Test\Base {
     $this->assertDirectoryExists($this->composerDir->sub('vendor/pscheit/psc-cms/'));
   }
   
+  /**
+   * @depends testPackageInstalledFromComposer_vendorDependencyWasCreated
+   */
   public function testWrittenBootstrapTestFileReturnsOKForBootstrapCreatedFromWebforge() {
     $phpFile = $this->writeTestPHPFileToHtdocs($this->dir);
     
@@ -178,6 +181,9 @@ PHP;
 PHP;
   }
   
+  /**
+   * @depends testWrittenBootstrapTestFileReturnsOKForBootstrapCreatedFromWebforge
+   */
   public function testPHPUnitInnerTestIsSuccessful() {
     $unitTest = $this->copyPHPUnitTest();
     
