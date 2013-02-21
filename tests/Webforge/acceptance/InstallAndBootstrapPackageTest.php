@@ -232,7 +232,7 @@ PHP;
     }
     
     if (\Psc\PSC::isTravis() && $cmd === 'webforge') {
-      return Dir::factoryTS(__DIR__)->sub('../../../bin/webforge');
+      return Dir::factoryTS(__DIR__)->getFile('../../../bin/webforge');
     }
     
     $this->assertInstanceOf(
