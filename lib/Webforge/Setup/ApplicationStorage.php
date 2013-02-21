@@ -64,7 +64,8 @@ class ApplicationStorage {
       throw new RuntimeException(
         sprintf("Cannot find your existing HOME Path ('%s').\n".
                 "On Windows %%APPDATA%% should be existing.\n".
-                "On Unix/Windows you can set \$HOME to your home path.",
+                "On Unix/Windows you can set \$HOME to your home path.\n".
+                "If you dont want to set your homepath to HOME you can set ".$this->getEnvName()." instead.",
                 
                 $home
                )
