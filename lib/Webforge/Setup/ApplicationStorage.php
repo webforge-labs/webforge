@@ -47,27 +47,29 @@ class ApplicationStorage {
   
   protected function getHomeDirectory() {
     // prefer a environment variable for the specific app
-    if (!$home = getenv($this->getEnvName())) {
-      
-      // prefer the envrionment variable HOME for the home dir
-      if (!$home = getenv('HOME')) {
-        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-          $home = getenv('APPDATA');
-        }
+    if ($appPath = getenv($this->getEnvName())) {
+      return Dir::factoryTS($appPath);
+    }
+     
+    // prefer the envrionment variable HOME for the home dir
+    if (!$home = getenv('HOME')) {
+      if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+        $home = getenv('APPDATA');
       }
     }
     
-    // try to find home and create our application dir
+    // try to find home
     $home = Dir::factoryTS($home);
     
     if (!$home->exists()) {
       throw new RuntimeException(
-        sprintf("Cannot find your existing HOME Path ('%s').\n".
+        sprintf("Cannot find your existing storage Path ('%2\$s') in HOME for %1\$s.\n".
                 "On Windows %%APPDATA%% should be existing.\n".
                 "On Unix/Windows you can set \$HOME to your home path.\n".
-                "If you dont want to set your homepath to HOME you can set ".$this->getEnvName()." instead.",
+                "If you dont want to set your homepath to HOME you can set %1\$s instead (will be created).",
                 
-                $home
+                $home,
+                $this->getEnvName()
                )
       );
     }
