@@ -123,6 +123,24 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     );
   }
   
+  public function testProjectWithOldStyleHasVendorInBaseSrc() {
+    $project = $this->bridge->createProjectFromPackage($this->oldStylePackage);
+    
+    $this->assertEquals(
+      (string) $this->oldStylePackage->getRootDirectory()->sub('vendor/'),
+      (string) $project->getVendor()
+    );
+  }
+
+  public function testProjectFromNewStyleHasVendorInRoot() {
+    $project = $this->bridge->createProjectFromPackage($this->package);
+    
+    $this->assertEquals(
+      (string) $this->package->getRootDirectory()->sub('vendor/'),
+      (string) $project->getVendor()
+    );
+  }
+  
   public function testProjectCanBeInitEvenForPackagesWithoutAutoLoadInfo_thenClassPathIsLibPerDefault() {
     $project = $this->bridge->createProjectFromPackage($this->withoutAutoLoadPackage);
     
