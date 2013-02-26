@@ -201,4 +201,40 @@ $createCommand('install:create-part',
   },
   'Creates a new part in the Installer'
 );
+
+$createCommand('windows:batch-link',
+  array(
+    $arg('source', 'the name of the file you want to link from. in 99% of all cases you want to pass .bat with it'),
+    $arg('destination', 'the name of the bin you want to link to. (with extension)')
+  ),
+  function ($input, $output, $command) use ($container) {
+    $destination = $command->validateFile($input->getArgument('destination'));
+    $source = $command->validateFile($input->getArgument('source'), 0);
+    
+    if ($source->exists()) {
+      throw $command->exitException('Source: '.$source.' does exist. Will not overwride..', 1);
+    }
+    
+    
+    try {
+      $relativeDestination = clone $destination->getDirectory();
+      $relativeDestination->makeRelativeTo($source->getDirectory());
+      
+      $path = '%~dp0'.((string) $relativeDestination);
+      
+    } catch (\Exception $e) {
+      // use absolute path
+      $path = (string) $destination->getDirectory()->resolvePath();
+    }
+    
+    
+    $source->writeContents(
+      "@echo off\r\n".
+      $path.$destination->getName()." %*\r\n"
+    );
+    
+    $command->info('written '.$source);
+  },
+  "Creates a link to another batch/binary file from source to destination"
+);               
 ?>
