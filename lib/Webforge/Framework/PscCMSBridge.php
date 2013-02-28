@@ -44,6 +44,7 @@ class PscCMSBridge {
       
       // we use the default paths from the old ProjectsFactory because they are fine if root is set correctly
       $paths = $projectsFactory->getProjectPaths($package->getSlug());
+      $paths['vendor'] = $paths['src'].'vendor/';
       
     } else {
       $paths[PSC::PATH_SRC] = './application/src/';
@@ -57,6 +58,7 @@ class PscCMSBridge {
       $paths[PSC::PATH_CLASS] = '.'.$package->getNamespaceDirectory()->getUrl($package->getRootDirectory());
       $paths[PSC::PATH_FILES] = './files/';
       $paths[PSC::PATH_BUILD] = './build/';
+      $paths[PSC::PATH_VENDOR] = './vendor/';
       
       $projectRoot = $package->getRootDirectory();
     }
