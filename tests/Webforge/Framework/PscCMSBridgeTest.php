@@ -24,6 +24,7 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     $this->appPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
     $this->oldStylePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/PscOldStyleProject/Umsetzung/base/src/'));
     $this->camelCasePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/CoMun/Umsetzung/base/src/'));
+    $this->underscorePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/serien-loader/'));
     
     $this->bridge = new PscCMSBridge();
     
@@ -151,7 +152,7 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     );
   }
   
-  public function testProjectWillHaveNamespaceInCamelCase_whenqqqq() {
+  public function testProjectWillHaveNamespaceInCamelCase_whenSlugEqualsLowerCasedCamelcaseNamespace() {
     $project = $this->bridge->createProjectFromPackage($this->camelCasePackage);
     
     $this->assertEquals(
@@ -164,6 +165,22 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
       'CoMun',
       $project->getName(),
       'Name should be also CamelCased'
+    );
+  }
+
+  public function testProjectWillHaveNamespaceInCamelCase_whenSluggedUnderscoresReplacedToCamelCaseEqualNamespace() {
+    $project = $this->bridge->createProjectFromPackage($this->underscorePackage);
+    
+    $this->assertEquals(
+      'SerienLoader',
+      $project->getName(),
+      'Name should be CamelCased'
+    );
+    
+    $this->assertEquals(
+      'SerienLoader',
+      $project->getNamespace(),
+      'Namespace should be CamelCased'
     );
   }
 }

@@ -86,9 +86,18 @@ class PscCMSBridge {
     $namespace = $package->getNamespace();
     $slug = $package->getSlug();
     
-    // use namespace if namespace is camel cased package slug
-    if ($namespace !== $slug && mb_strtolower($namespace) === mb_strtolower($slug)) {
-      return $namespace;
+    if ($namespace !== $slug) {
+      
+      // use namespace if namespace is camel cased package slug
+      if (mb_strtolower($namespace) === mb_strtolower($slug)) {
+        return $namespace;
+      }
+
+      $inflector = new Inflector();
+      
+      if ($inflector->namespaceify($slug) === $namespace) {
+        return $namespace;
+      }
     }
     
     return $slug;
