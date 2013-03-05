@@ -17,7 +17,7 @@
     "doctrine/orm": "2.3.*@stable",
     "pscheit/psc-cms": "dev-master",
     "pscheit/psc-cms-boot": "2.*",
-    "webforge/common": "dev-master"
+    "webforge/common": "1.0.*@dev"
   },
   "require-dev": {
     "webforge/testdata-repository": "dev-master",
@@ -27,5 +27,10 @@
     "psr-0": {"Webforge": ["lib", "tests"]}
   },
   "bin": ["bin/webforge"],
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
 }
