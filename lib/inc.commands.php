@@ -9,6 +9,7 @@ use Webforge\Code\Generator\GClass;
 use Webforge\Code\Generator\GInterface;
 use Webforge\Setup\Installer\PartsInstaller;
 use Webforge\Framework\Container AS FrameworkContainer;
+use Webforge\Framework\Package\Package;
 
 use Psc\JS\JSONConverter;
 use Webforge\Common\System\File;
@@ -202,6 +203,25 @@ $createCommand('install:create-part',
   'Creates a new part in the Installer'
 );
 
+
+$createCommand('composer',
+  array(
+    $arg('composerArguments', 'all parameters passed to composer without --working-dir', $required = TRUE, $multiple = TRUE)
+  ),
+  function ($input, $output, $command) use ($container) {
+    $args = $input->getArgument('composerArguments');
+    
+    $package = $container->getLocalPackage();
+    $vendorDir = $package->getDirectory(Package::VENDOR);
+    $composer = 'composer';
+    
+    system($composer.' --working-dir="'.$vendorDir->getQuotedString().'" '.implode(' ',$args));
+    
+    $command->info('written '.$source);
+  },
+  "Calls composer for the current package (in the right directory)"
+);
+
 $createCommand('windows:batch-link',
   array(
     $arg('source', 'the name of the file you want to link from. in 99% of all cases you want to pass .bat with it'),
@@ -236,5 +256,5 @@ $createCommand('windows:batch-link',
     $command->info('written '.$source);
   },
   "Creates a link to another batch/binary file from source to destination"
-);               
+);
 ?>
