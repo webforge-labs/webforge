@@ -17,7 +17,7 @@
     "doctrine/orm": "2.3.*@stable",
     "pscheit/psc-cms": "1.2.*@dev",
     "pscheit/psc-cms-boot": "2.*",
-    "webforge/common": "1.0.*@dev"
+    "webforge/common": "1.1.*@dev"
   },
   "require-dev": {
     "webforge/testdata-repository": "dev-master",
