@@ -1,0 +1,19 @@
+{
+    "name": "acme/conflicting",
+    "description": "none",
+    "authors": [
+        {
+            "name": "p.scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-0": {
+            "ACME\\Conflicting": ["lib"],
+            "ACME": ["/reference/to/ACME/IntranetApplication"]
+        }
+    }
+}
