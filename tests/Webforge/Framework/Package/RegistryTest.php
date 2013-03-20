@@ -26,7 +26,7 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $this->registry->findByFQN('BananenbaumisnotdefinedPrefix');
   }
   
-  public function testFindACMEWithConflictingPackagesByFQN() {
+  public function testFindACMEWithConflictingPackagesByFQN_whichCanBeResolvedThroughSubNamespace() {
     $registry = new Registry();
     
     // this is a project from ACME which is for the root autoloading namespace ACME\*
@@ -43,6 +43,20 @@ class RegistryTest extends \Webforge\Code\Test\Base {
 
     $acmeLibPackage = $registry->findByFQN('ACME\Common\Util');
     $this->assertEquals('acme/library', $acmeLibPackage->getIdentifier());
+  }
+  
+
+  public function testFindACMEWithConflictingPackagesByFQN_whichCaneBeResolvedWithQueryingTheMainNamespace() {
+    $registry = new Registry();
+    
+    // this is a project from ACME which is for the root autoloading namespace ACME\Common\*
+    $registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+    
+    // the other Package does have its own namespace (ACME\Conflicting) but it references the ACME\Common Namespace in autoload as well
+    $registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMEConflicting/'));
+    
+    $this->assertEquals('acme/library', $registry->findByFQN('ACME\Common\Util')->getIdentifier());
+    $this->assertEquals('acme/conflicting', $registry->findByFQN('ACME\Conflicting\Util')->getIdentifier());
   }
   
   public function testFindByIdentifier() {

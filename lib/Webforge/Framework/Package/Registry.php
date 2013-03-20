@@ -6,6 +6,7 @@ use Webforge\Common\System\Dir;
 use Psc\A;
 use Webforge\Code\Generator\GClass;
 use Webforge\Common\String;
+use Psc\Code\Code;
 
 class Registry {
   
@@ -68,10 +69,41 @@ class Registry {
     if (count($packages) == 1) {
       return current($packages);
     }
+
+    $log = '';
+
+    try {
+      return $this->resolveToOneWithPrimaryNamespace($packages, $fqn);
     
-    // no algorithm yet:
-    throw new \Psc\Exception(sprintf("Multiple Packages found for '%s'. This cannot be solved, yet.\nFound:\n%s",
-                                     $fqn, A::implode($packages, "\n", function ($package) { return $package->getIdentifier().' '.$package->getRootDirectory(); })));
+    } catch (NotResolvedException $e) {
+      $log .= "\n".$e->getMessage();
+    }    
+    
+    // no other ideas yet:
+    throw new NotResolvedException(
+      sprintf(
+        "Multiple Packages found for '%s'. This cannot be solved, yet.\nFound:\n%s\nResults:%s",
+        $fqn, 
+        A::implode($packages, "\n", function ($package) { return $package->getIdentifier().' '.$package->getRootDirectory(); }),
+        $log
+      )
+    );
+  }
+
+  protected function resolveToOneWithPrimaryNamespace(Array $packages, $fqn) {
+    $ns = ltrim(Code::getNamespace($fqn), "\\");
+    $packagesWithPrimaryNamespace = array();
+    foreach ($packages as $package) {
+      if (mb_strpos($ns, $package->getNamespace()) === 0) { // package loads file with primary namespace
+        $packagesWithPrimaryNamespace[] = $package;
+      }
+    }
+
+    if (count($packagesWithPrimaryNamespace) == 1) {
+      return current($packagesWithPrimaryNamespace);
+    }
+
+    throw new NotResolvedException(sprintf('%d Packages match with the primary namespace to the fqn: %s', count($packagesWithPrimaryNamespace), $fqn));
   }
   
   /**
