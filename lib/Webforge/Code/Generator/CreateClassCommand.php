@@ -4,6 +4,8 @@ namespace Webforge\Code\Generator;
 
 use Webforge\Framework\Container;
 use Closure;
+use Webforge\Common\System\File;
+use Webforge\Framework\Package\Package;
 
 /**
  * Easier usage of the classCreater
@@ -14,6 +16,11 @@ class CreateClassCommand {
    * @var Webforge\Code\Generator\ClassCreater
    */
   protected $classCreater;
+
+  /**
+   * @var Webforge\Code\Generator\ClassFileMapper
+   */
+  protected $classFileMapper;
   
   /**
    * is avaible after fqn()
@@ -27,8 +34,9 @@ class CreateClassCommand {
    */
   protected $file;
   
-  public function __construct(ClassCreater $classCreater) {
+  public function __construct(ClassCreater $classCreater, ClassFileMapper $classFileMapper) {
     $this->classCreater = $classCreater;
+    $this->classFileMapper = $classFileMapper;
   }
   
   /**
@@ -40,7 +48,8 @@ class CreateClassCommand {
         $container->getClassFileMapper(),
         $container->getClassWriter(),
         $container->getClassElevator()
-      )
+      ),
+      $container->getClassFileMapper()
     );
   }
   
@@ -84,7 +93,20 @@ class CreateClassCommand {
     $do($this->gClass);
     return $this;
   }
+
+  public function setFileFromPackage(Package $package) {
+    $this->file = $this->classFileMapper->findWithPackage(
+      $this->gClass->getFQN(), 
+      $package
+    );
+    return $this;
+  }
   
+  public function setWriteFile(File $file) {
+    $this->file = $file;
+    return $this;
+  }
+
   /**
    * @return Webforge\Code\Generator\GClass
    */
@@ -103,7 +125,11 @@ class CreateClassCommand {
    * @chainable
    */
   public function write($overwrite = FALSE) {
-    $this->file = $this->classCreater->create($this->gClass, $overwrite ? ClassCreater::OVERWRITE : FALSE);
+    $this->file = $this->classCreater->create(
+      $this->gClass,
+      $overwrite ? ClassCreater::OVERWRITE : FALSE, 
+      $this->file
+    );
     
     return $this;
   }

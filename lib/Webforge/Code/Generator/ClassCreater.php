@@ -3,6 +3,7 @@
 namespace Webforge\Code\Generator;
 
 use Webforge\Code\ClassFileNotFoundException;
+use Webforge\Common\System\File;
 
 /**
  * @TODO create a logger / output interfaces to warn when class elevating does not work
@@ -41,10 +42,11 @@ class ClassCreater {
    * Creates a new Class and writes it to a file
    *
    * @param GClass $gClass
+   * @param File $file if not given the ClassFileMapper will be asked for a file
    * @return Webforge\Common\System\File
    */
-  public function create(GClass $gClass, $overwrite = FALSE) {
-    $file = $this->mapper->getFile($gClass->getFQN());
+  public function create(GClass $gClass, $overwrite = FALSE, File $file = NULL) {
+    $file = $file ?: $this->mapper->getFile($gClass->getFQN());
     
     $file->getDirectory()->create();
 
