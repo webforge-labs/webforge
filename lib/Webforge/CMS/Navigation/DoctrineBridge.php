@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManager;
  * basically its:
  *
  * $bridge = new DoctrineBridge(EntityManager $em)
- * $bridge->startTransaction();
+ * $bridge->beginTransaction();
  *
  * $bridge->persist($node1);
  * $bridge->persist($node2);
