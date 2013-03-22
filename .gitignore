@@ -3,3 +3,4 @@
 /build/coverage
 /composer.lock
 /tests/files/tmp/*
+/*.sublime-workspace
