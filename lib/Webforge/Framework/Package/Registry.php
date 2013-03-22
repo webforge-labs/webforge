@@ -22,6 +22,10 @@ class Registry {
     $this->composerPackageReader = $reader;
   }
   
+  /**
+   * @return Package
+   * @throws PackageNotFoundException
+   */
   public function findByFQN($fqn) {
     $gClass = new GClass($fqn);
     $fqn = $gClass->getFQN();

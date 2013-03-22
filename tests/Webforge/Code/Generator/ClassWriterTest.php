@@ -24,7 +24,8 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
       $this->logicalAnd(
         $this->stringContains('namespace Webforge\Code\Generator\Fixtures;'),
         $this->stringStartsWith('<?php'),
-        $this->stringEndsWith("}\n\n")
+        $this->stringEndsWith("}\n"),
+        $this->logicalNot($this->stringEndsWith("}\n\n"))
       )
     );
     
@@ -74,4 +75,3 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
 
   }
 }
-?>
