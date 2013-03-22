@@ -76,8 +76,9 @@ class ClassWriter {
     
     $php .= $this->writeGClass($gClass, $namespace, $eol);
     
-    $php .= $eol;
-    $php .= '?>';
+    $php .= $eol; // after last brace
+    $php .= $eol; // PSR-x
+
     return $php;
   }
   

@@ -37,7 +37,7 @@ namespace Webforge\Code\Generator\Fixtures;
 class MyClass1 {
   
 }
-?>
+
 PHP;
 
     $this->assertThatFileWasWritten($file);
@@ -83,7 +83,7 @@ class MyGPSLocateableClass implements \Webforge\TestData\PHPClasses\GPSLocateabl
     
   }
 }
-?>
+
 PHP;
 
     $this->assertThatFileWasWritten($file);

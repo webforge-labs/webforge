@@ -82,4 +82,3 @@ class ClassCreater {
     return $this;
   }
 }
-?>
