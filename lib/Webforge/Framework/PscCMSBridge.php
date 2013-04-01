@@ -188,6 +188,12 @@ class PscCMSBridge {
     if ($packageConfigFile->exists()) {
       return $packageConfigFile;
     }
+
+    $etcConfigFile = $project->getRoot()->getFile('etc/config.php');
+    
+    if ($etcConfigFile->exists()) {
+      return $etcConfigFile;
+    }
     
     $projectConfigFile = $project->getSrc()->getFile('inc.config.php');
     
