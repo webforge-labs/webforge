@@ -74,7 +74,7 @@ class PscCMSBridge {
         $this->getHostConfig(),
         $paths,
         $mode = Project::MODE_SRC,
-        $staging = FALSE
+        $staging = $this->isStagingPackage($package)
       )
     ;
     $project->loadedFromPackage = TRUE;
@@ -212,6 +212,11 @@ class PscCMSBridge {
   protected function isOldStylePackage(Package $package) {
     //dumb first:
     return $package->getRootDirectory()->up()->getName() === 'base';
+  }
+
+  protected function isStagingPackage(Package $package) {
+    // dirty hack
+    return $package->getRootDirectory()->getFile('staging')->exists();
   }
 }
 ?>
