@@ -11,7 +11,7 @@ use Webforge\Setup\Installer\PartsInstaller;
 use Webforge\Framework\Container AS FrameworkContainer;
 use Webforge\Framework\Package\Package;
 
-use Psc\JS\JSONConverter;
+use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
 use Webforge\Common\String;
@@ -264,4 +264,28 @@ $createCommand('windows:batch-link',
   },
   "Creates a link to another batch/binary file from source to destination"
 );
-?>
+
+
+$createCommand('sublime:new-project',
+  array(
+  ),
+  function ($input, $output, $command) use ($container) {
+    $package = $container->getLocalPackage();
+    
+    $project = (object) array(
+      'folders'=> array(
+        (object) array(
+          "path"=> (string) $package->getRootDirectory(),
+          "folder_exclude_patterns"=> array("vendor", "build")
+        )
+      )
+    );
+
+    $converter = new JSONConverter();
+    $dest = $package->getRootDirectory()->getFile($package->getSlug().'.sublime-project')
+      ->writeContents($converter->stringify($project));
+    
+    $command->info('written '.$dest);
+  },
+  "Creates a link to another batch/binary file from source to destination"
+);
