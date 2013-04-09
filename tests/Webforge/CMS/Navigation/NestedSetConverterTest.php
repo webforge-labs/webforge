@@ -57,6 +57,17 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
       $this->unwrap($this->nestedSetConverter->fromParentPointer($this->wrap(Array( array('title'=>'root', 'parent'=>NULL, 'depth'=>0)))))
     );
   }
+
+  /**
+   * @dataProvider getFixtures
+   */
+  public function testConversionToParentPointerFromNestedSetFlatArray($fixture) {
+    $this->assertEquals(
+      $fixture->toParentPointerArray(),
+      $this->unwrap($this->nestedSetConverter->toParentPointer($this->wrap($fixture->toArray())))
+    );
+  }
+  
   
   /**
    * Converts the array nodes from the fixture into a node of the interface

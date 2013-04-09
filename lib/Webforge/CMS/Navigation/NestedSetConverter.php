@@ -82,7 +82,7 @@ class NestedSetConverter extends \Psc\SimpleObject {
     }
 
     // close from last iteration
-    $html .= "</li>\n";
+    $html .= $nodeClose."\n";
     for ($i = 1; $i<=$depth; $i++) {
       $indent--;
       $html .= str_repeat('  ', $indent).$listClose."\n"; 
@@ -194,6 +194,43 @@ class NestedSetConverter extends \Psc\SimpleObject {
     } while ($walkupNode !== NULL);
     
     return $tree;
+  }
+
+
+  /**
+   * @param Webforge\CMS\Navigation\Node[] $tree
+   * @param array $events
+   * @return string
+   */
+  public function toParentPointer(Array $tree, Array $events = array()) {
+    $ppTree = array();
+    $l = 0;
+
+    if (count($tree) > 0) {
+      $stack = array();
+      foreach ($tree as $node) {
+        $node->setChildren(array());
+        $l = count($stack);
+
+        // Check if we're dealing with different levels
+        while($l > 0 && $stack[$l - 1]->getPepth() >= $node->getDepth()) {
+          array_pop($stack);
+          $l--;
+        }
+
+        if ($l == 0) {
+          $i = count($ppTree);
+          $ppTree[$i] = $node;
+          $stack[] = $ppTree[$i];
+        } else {
+          $i = count($stack[$l - 1]->getChildren());
+          $stack[$l - 1][$this->childrenIndex][$i] = $item;
+          $stack[] = &$stack[$l - 1][$this->childrenIndex][$i];
+        }
+      }
+    }
+
+    return $ppTree;
   }
   
   /**
