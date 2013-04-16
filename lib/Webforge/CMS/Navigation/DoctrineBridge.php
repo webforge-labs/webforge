@@ -3,6 +3,7 @@
 namespace Webforge\CMS\Navigation;
 
 use Doctrine\ORM\EntityManager;
+use Closure;
 
 /**
  * The doctrine bridge helps to adjust the nestedset values a set of gathered navigation nodes
@@ -46,6 +47,11 @@ class DoctrineBridge {
    * @var Webforge\CMS\Navigation\NestedSetConverter
    */
   protected $converter;
+
+  /**
+   * @var array
+   */
+  protected $callbacks = array();
   
   public function __construct(EntityManager $em, NestedSetConverter $converter = NULL) {
     $this->em = $em;
@@ -72,8 +78,20 @@ class DoctrineBridge {
   public function commit() {
     if ($this->trxLevel > 0) {
       $this->getConverter()->fromParentPointer($this->nodes);
+      if (isset($this->callbacks['commitRootNode'])) {
+        $this->callbacks['commitRootNode']($this->nodes[0]);
+      }
+
       $this->trxLevel--;
     }
+    return $this;
+  }
+
+  /**
+   * @param Closure $callback function($rootNode)
+   */
+  public function onCommitRootNode(Closure $callback) {
+    $this->callbacks['commitRootNode'] = $callback;
     return $this;
   }
   
