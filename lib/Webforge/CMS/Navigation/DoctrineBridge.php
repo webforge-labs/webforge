@@ -112,12 +112,12 @@ class DoctrineBridge {
   /**
    * Adds a node and persists it in the EntityManager
    *
-   * @chainable
+   * @return Node
    */
   public function persist(Node $node) {
     $this->em->persist($node);
     $this->addNode($node);
-    return $this;
+    return $node;
   }
   
   /**
