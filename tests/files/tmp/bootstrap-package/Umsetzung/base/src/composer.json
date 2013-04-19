@@ -1,0 +1,14 @@
+{
+    "name": "pscheit/old-style-project",
+    "description": "A test project for the acceptance test to install and bootstrap",
+    "authors": [
+        {
+            "name": "Philipp Scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "pscheit/psc-cms": "dev-master"
+    }
+}

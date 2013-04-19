@@ -4,6 +4,7 @@ namespace Webforge\Code\Generator;
 
 use Psc\A;
 use Webforge\Common\System\File;
+use Webforge\TestData\PHPCodeStandard\PSR\CodeIndentation;
 use PHPParser_Lexer;
 use PHPParser_Parser;
 
@@ -14,42 +15,48 @@ class GFunctionBodyPrettyPrintTest extends \Webforge\Code\Test\Base {
   public function setUp() {
   }
   
-  public static function provideTestFiles() {
-    return array(
-      array(__DIR__.DIRECTORY_SEPARATOR.'ClassWriterPHPTest.php')
+  /**
+   * @dataProvider providePSRCases
+   */
+  public function testStringTokenStreamConstructsTheCodeAgain($php) {
+    $stks = new StringTokenStream($php);
+    
+    $constructedPHP = '';
+    foreach ($stks as $token) {
+      $constructedPHP .= $token;
+    }
+    
+    $this->assertSame(
+      $php,
+      $constructedPHP
     );
   }
   
   /**
-   * @dataProvider provideTestFiles
+   * @dataProvider providePSRCases
    */
-  public function testAWrittenTokenStreamConstructsTheCodeAgain($filename) {
-    $file = new File($filename);
-    
-    $php = $file->getContents();
-    
-    //$tokens = token_get_all($php);
-    
+  public function testParserWithLexerWithOffsets_ConstructsTheCodeAgain_whenNothingIsChanged($php) {
     $lexer = new LexerWithTokenOffsets();
     $parser = new PHPParser_Parser($lexer);
     $tokens = $parser->parse($php);
     
-    $gPHP = array();
-    $lastOffset = 0;
-    foreach ($tokens as $token) {
-      var_dump($token->getAttribute('endOffset'), $token->getValue());
-      foreach (range($token->getAttribute('startOffset'), $token->getAttribute('endOffset')) as $offset) {
-        $gPHP[$offset] = '';
-      }
-    }
+    $prettyPrinter = new PrettyPrinter();
+    $prettyPrinter->inphp = $php;
     
-    var_dump($gPHP);
+    $actualPHP = $prettyPrinter->prettyPrint($tokens);    
+    
+    $this->assertEquals(
+      $php,
+      $actualPHP
+    );
   }
+
   
   /**
    * @dataProvider phpIndentedBodyExamples
    */
   public function testPHPCodeEqualsArrayLinesIndentation($phpCode) {
+    $this->markTestIncomplete('blocking errors with php parser');
     $body = GFunctionBody::create($phpCode);
     
     $this->assertEquals(
@@ -62,6 +69,30 @@ class GFunctionBodyPrettyPrintTest extends \Webforge\Code\Test\Base {
     $this->markTestIncomplete('blocking errors with php parser');
     // comments are not parsed correctly
     // inline comments are not assigned correctly, etc
+  }
+  
+  public static function providePSRCases() {
+    $tests = array();
+    
+    foreach (CodeIndentation::getAllCases() as $fqn) {
+      $case = new $fqn();
+      
+      $tests[] = array(
+        "<?php\n".$case->toPSR2(),
+        "<?php\n".$case->toString()
+      );
+    }
+    
+    $php = <<<'PHP'
+<?php
+if ($expr) {
+    // body comment
+}
+PHP;
+    
+    $tests[] = array($php, $php);
+    
+    return $tests;
   }
   
   public static function phpIndentedBodyExamples() {
