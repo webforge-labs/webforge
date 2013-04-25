@@ -239,13 +239,19 @@ class NestedSetConverter extends \Psc\SimpleObject {
   public function toStructure(Array $tree, Array $events = array()) {
     $ppTree = array();
 
+    if (!isset($events['onNodeComplete'])) {
+      $events['onNodeComplete'] = function (Node $node, Node $parent = NULL, Array $stack) {
+
+      };
+    }
+
     if (count($tree) > 0) {
       $stack = array(NULL);
       $depth = 0;
       $prevNode = NULL;
 
       foreach ($tree as $node) {
-        $node->setChildren(array());
+        $node->setChildren($this->emptyCollection());
 
          if ($node->getDepth() > $depth) {
            // new level
@@ -267,6 +273,8 @@ class NestedSetConverter extends \Psc\SimpleObject {
         else // node is a root node
           $ppTree[] = $node;
 
+        $events['onNodeComplete']($node, $parent, $stack);
+
         $prevNode = $node;
       }
     }
@@ -279,6 +287,11 @@ class NestedSetConverter extends \Psc\SimpleObject {
     $children[] = $child;
     $parentNode->setChildren($children);
     return $children;
+  }
+
+  protected function emptyCollection() {
+    return new \Psc\Data\ArrayCollection(array());
+    return array();
   }
   
   /**

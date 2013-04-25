@@ -25,7 +25,7 @@ interface Node {
   
   public function setLft($left);
 
-  public function setChildren($children);
+  //public function setChildren($children);
 
   //public function setParent(Node $parent = NULL);
 }
