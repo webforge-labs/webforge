@@ -17,27 +17,7 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
     return Array(
       array(new \Webforge\TestData\NestedSet\FoodCategories()),
       array(new \Webforge\TestData\NestedSet\Consumables()),
-    );
-  }
-  
-  /**
-   * @dataProvider getFixtures
-   */
-  public function testAndCreateTheArrayStructureSnippet($fixture) {
-    //$this->assertXmlStringEqualsXmlString(
-    $this->assertEquals( // our function is whitespace-safe, so we can use assertEquals instead of XmlStringEquals
-      $fixture->toHTMLList(),
-      $this->nestedSetConverter->toHTMLList($this->wrap($fixture->toArray()))
-    );
-  }
-
-  /**
-   * @dataProvider getFixtures
-   */
-  public function testTextConversionFromFlatArrayToString($fixture) {
-    $this->assertEquals(
-      $fixture->toString(),
-      $this->nestedSetConverter->toString($this->wrap($fixture->toArray()))
+      array(new \Webforge\TestData\NestedSet\Hgdrn()),
     );
   }
   
@@ -55,6 +35,29 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
     $this->assertEquals(
       Array ( array('title'=>'root', 'lft'=>1, 'rgt' =>2, 'depth'=>0)),
       $this->unwrap($this->nestedSetConverter->fromParentPointer($this->wrap(Array( array('title'=>'root', 'parent'=>NULL, 'depth'=>0)))))
+    );
+  }
+
+  
+  /**
+   * @dataProvider getFixtures
+   */
+  public function testHTMLStructureEqualsConvertedHTMLList($fixture) {
+    //$this->assertXmlStringEqualsXmlString(
+    $this->assertEquals( // our function is whitespace-safe, so we can use assertEquals instead of XmlStringEquals
+      $h1 = $fixture->toHTMLList(),
+      $h2 = $this->nestedSetConverter->toHTMLList($this->wrap($fixture->toArray())),
+      sprintf("\n<<<expected\n%s\n\n<<<actual\n%s\n", $h1, $h2)
+    );
+  }
+
+  /**
+   * @dataProvider getFixtures
+   */
+  public function testTextConversionFromFlatArrayToString($fixture) {
+    $this->assertEquals(
+      $fixture->toString(),
+      $this->nestedSetConverter->toString($this->wrap($fixture->toArray()))
     );
   }
   
