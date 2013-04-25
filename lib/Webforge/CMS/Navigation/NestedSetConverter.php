@@ -2,6 +2,8 @@
 
 namespace Webforge\CMS\Navigation;
 
+use Webforge\Common\ArrayUtil as A;
+
 class NestedSetConverter extends \Psc\SimpleObject {
 
   /**
@@ -204,29 +206,27 @@ class NestedSetConverter extends \Psc\SimpleObject {
    */
   public function toParentPointer(Array $tree, Array $events = array()) {
     $ppTree = array();
-    $l = 0;
 
     if (count($tree) > 0) {
-      $stack = array();
+      $stack = array(NULL);
+      $depth = 0;
+      $prevNode = NULL;
+
       foreach ($tree as $node) {
-        $node->setChildren(array());
-        $l = count($stack);
 
-        // Check if we're dealing with different levels
-        while($l > 0 && $stack[$l - 1]->getPepth() >= $node->getDepth()) {
-          array_pop($stack);
-          $l--;
+         if ($node->getDepth() > $depth) {
+           $stack[] = $prevNode;
+           $depth = $node->getDepth();
+
+         } else if ($node->getDepth() < $depth) {
+           for ($s = 1; $s <= abs($depth - $node->getDepth()); $s++) {
+             array_pop($stack);
+           }
+           $depth = $node->getDepth();
         }
 
-        if ($l == 0) {
-          $i = count($ppTree);
-          $ppTree[$i] = $node;
-          $stack[] = $ppTree[$i];
-        } else {
-          $i = count($stack[$l - 1]->getChildren());
-          $stack[$l - 1][$this->childrenIndex][$i] = $item;
-          $stack[] = &$stack[$l - 1][$this->childrenIndex][$i];
-        }
+        $node->setParent(A::peek($stack)); 
+        $ppTree[] = $prevNode = $node;
       }
     }
 
@@ -250,4 +250,3 @@ class NestedSetConverter extends \Psc\SimpleObject {
     return $text;
   }
 }
-?>

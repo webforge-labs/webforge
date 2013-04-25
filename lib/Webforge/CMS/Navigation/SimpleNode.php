@@ -9,6 +9,8 @@ namespace Webforge\CMS\Navigation;
 class SimpleNode implements Node {
   
   protected $lft, $rgt, $depth, $title, $parent;
+
+  protected $children;
   
   public function __construct(Array $node) {
     $this->title = $node['title'];
@@ -31,13 +33,21 @@ class SimpleNode implements Node {
     return $this->title;
   }
   
-  public function unwrap() {
-    return array (
-      'title' => $this->title,
-      'rgt' => $this->rgt,
-      'lft' => $this->lft,
-      'depth' => $this->depth
-    );
+  public function unwrap($type) {
+    if ($type === 'parentPointer') {
+      return array (
+        'title' => $this->title,
+        'parent' => isset($this->parent) ? $this->parent->title : NULL,
+        'depth' => $this->depth
+        );
+    } else {
+      return array (
+        'title' => $this->title,
+        'rgt' => $this->rgt,
+        'lft' => $this->lft,
+        'depth' => $this->depth
+        );
+    }
   }
   
   public function getNodeHTML() {
@@ -54,7 +64,7 @@ class SimpleNode implements Node {
    * @param TestNode $parent
    * @chainable
    */
-  public function setParent(SimpleNode $parent) {
+  public function setParent(SimpleNode $parent = NULL) {
     $this->parent = $parent;
     return $this;
   }
@@ -129,6 +139,14 @@ class SimpleNode implements Node {
    */
   public function getLft() {
     return $this->lft;
+  }
+
+  public function getChildren() {
+    return $this->children;
+  }
+
+  public function setChildren($children) {
+    $this->children = $children;
   }
 
   // @codeCoverageIgnoreEnd

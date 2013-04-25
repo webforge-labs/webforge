@@ -64,10 +64,13 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
   /**
    * @dataProvider getFixtures
    */
-  public function testConversionToParentPointerFromNestedSetFlatArray($fixture) {
+  public function testConversionToParentPointerFromDepthFlatArray($fixture) {
     $this->assertEquals(
       $fixture->toParentPointerArray(),
-      $this->unwrap($this->nestedSetConverter->toParentPointer($this->wrap($fixture->toArray())))
+      $this->unwrap(
+        $this->nestedSetConverter->toParentPointer($this->wrap($fixture->toArray())), 
+        'parentPointer'
+      )
     );
   }
   
@@ -93,9 +96,11 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
   /**
    * Converts the node of the interface into an array node
    */
-  protected function unwrap(Array $objectNodes) {
-    return array_map(function (SimpleNode $node) {
-      return $node->unwrap();
+  protected function unwrap(Array $objectNodes, $type = NULL) {
+    return array_map(function (SimpleNode $node) use ($type) {
+      $node = $node->unwrap($type);
+
+      return $node;
     }, $objectNodes);
   }
 }
