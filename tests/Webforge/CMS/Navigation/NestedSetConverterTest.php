@@ -20,6 +20,12 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
       array(new \Webforge\TestData\NestedSet\Hgdrn()),
     );
   }
+
+  public static function getStructureFixtures() {
+    return Array(
+      array(new \Webforge\TestData\NestedSet\Hgdrn()),
+    );
+  }
   
   /**
    * @dataProvider getFixtures
@@ -70,6 +76,19 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
       $this->unwrap(
         $this->nestedSetConverter->toParentPointer($this->wrap($fixture->toArray())), 
         'parentPointer'
+      )
+    );
+  }
+
+  /**
+   * @dataProvider getStructureFixtures
+   */
+  public function testConversionToStructureFromDepthFlatArray($fixture) {
+    $this->assertEquals(
+      $fixture->toStructureArray(),
+      $this->unwrap(
+        $this->nestedSetConverter->toStructure($this->wrap($fixture->toArray())), 
+        'structure'
       )
     );
   }

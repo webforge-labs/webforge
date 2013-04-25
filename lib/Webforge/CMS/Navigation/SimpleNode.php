@@ -40,6 +40,15 @@ class SimpleNode implements Node {
         'parent' => isset($this->parent) ? $this->parent->title : NULL,
         'depth' => $this->depth
         );
+    } elseif ($type === 'structure') {
+      return array (
+        'title' => $this->title,
+        'parent' => isset($this->parent) ? $this->parent->title : NULL,
+        'depth' => $this->depth,
+        'children' => array_map(function ($child) {
+             return $child->unwrap('structure');
+           }, $this->children)
+        );
     } else {
       return array (
         'title' => $this->title,

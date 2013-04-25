@@ -202,7 +202,6 @@ class NestedSetConverter extends \Psc\SimpleObject {
   /**
    * @param Webforge\CMS\Navigation\Node[] $tree
    * @param array $events
-   * @return string
    */
   public function toParentPointer(Array $tree, Array $events = array()) {
     $ppTree = array();
@@ -231,6 +230,55 @@ class NestedSetConverter extends \Psc\SimpleObject {
     }
 
     return $ppTree;
+  }
+
+  /**
+   * @param Webforge\CMS\Navigation\Node[] $tree
+   * @param array $events
+   */
+  public function toStructure(Array $tree, Array $events = array()) {
+    $ppTree = array();
+
+    if (count($tree) > 0) {
+      $stack = array(NULL);
+      $depth = 0;
+      $prevNode = NULL;
+
+      foreach ($tree as $node) {
+        $node->setChildren(array());
+
+         if ($node->getDepth() > $depth) {
+           // new level
+           $stack[] = $prevNode;
+           $depth = $node->getDepth();
+
+         } else if ($node->getDepth() < $depth) {
+           // level end
+           for ($s = 1; $s <= abs($depth - $node->getDepth()); $s++) {
+             array_pop($stack);
+           }
+           $depth = $node->getDepth();
+        }
+
+        $node->setParent($parent = A::peek($stack)); 
+
+        if ($parent)
+          $this->appendChild($parent, $node);
+        else // node is a root node
+          $ppTree[] = $node;
+
+        $prevNode = $node;
+      }
+    }
+
+    return $ppTree;
+  }
+
+  protected function appendChild(Node $parentNode, Node $child) {
+    $children = $parentNode->getChildren();
+    $children[] = $child;
+    $parentNode->setChildren($children);
+    return $children;
   }
   
   /**
