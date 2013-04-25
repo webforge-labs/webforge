@@ -47,7 +47,7 @@ class SimpleNode implements Node {
         'depth' => $this->depth,
         'children' => array_map(function ($child) {
              return $child->unwrap('structure');
-           }, $this->children)
+           }, $this->children->toArray())
         );
     } else {
       return array (
