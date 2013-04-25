@@ -4,3 +4,5 @@
 /composer.lock
 /tests/files/tmp/*
 /*.sublime-workspace
+
+/composer.psc.json
