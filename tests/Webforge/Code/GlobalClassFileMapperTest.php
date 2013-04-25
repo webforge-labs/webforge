@@ -90,7 +90,7 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
     list($vendor, $slug) = explode('/', $slug, 2);
     $package = new SimplePackage($slug,
                                  $vendor,
-                                 $this->getPackageDir($dirName),
+                                 $this->getFPackageDir($dirName),
                                  new AutoLoadInfo(
                                   $autoLoadInfoSpec ?: 
                                     Array(
@@ -107,7 +107,7 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
     return $this->getTestDirectory('packages/'.$package.'/'.implode('/',$path).'/')->getFile($fileName);
   }
   
-  protected function getPackageDir($dirName) {
+  protected function getFPackageDir($dirName) {
     return $this->getTestDirectory('packages/'.$dirName.'/');
   }
 }
