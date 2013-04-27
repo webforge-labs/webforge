@@ -15,6 +15,16 @@
 /* General */
 $conf['host'] = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n');
 $conf['production'] = TRUE;
+
+/* database global system management */
+$conf['system']['dbm']['user'] = 'root';
+$conf['system']['dbm']['password'] = 'my-very-secrect-mysql-password';
+$conf['system']['dbm']['host'] = '127.0.0.1';
+
+/* a test-system-user for acceptance tests */
+$conf['cmf']['user'] = 'system@your-domain.com';
+$conf['cmf']['password'] = 'generate-some-here';
+
  
 /* Project Paths */
 //$conf['projects']['root'] = '/var/local/www/';
@@ -29,6 +39,3 @@ $conf['defaults']['mail']['smtp']['user'] = 'mail@ps-webforge.net';
 $conf['defaults']['mail']['smtp']['password'] = 'xxxxx';
 $conf['defaults']['debug']['errorRecipient']['mail'] = NULL; // mail errors to this address
  
-/* CMS / HTTP */
-$conf['defaults']['js']['url'] = '/js/';
-?>
