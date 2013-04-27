@@ -5,28 +5,31 @@ a content management framework for easy to build and individual content manageme
 
 Webforge aims to be a framework for consumers and developers at the same time. It helps developers to build their own individual cms for the needs of their customers. The customer gains all benefits of a ready-to-use cms without losing the opportunity to create new features.
 
-Webforge is a rename from Psc - CMS, which has a much larger codebase. But the code needs a lot of restructuring and refactoring, so that I decided to do it step by step.
-
-## installation
+## installation (quick)
 Use [Composer](http://getcomposer.org) to install the framework.
 ```
-php composer.phar install
+composer create-project -v --prefer-source --stability=dev webforge/webforge webforge dev-master
 ```
+
+link ``bin\webforge`` to a global binary ``webforge``
 
 to run the tests use:
 ```
 phpunit
 ```
 
-It's optional to configure the host-config for Psc - CMS. This might change in future, but it is already planned to move the whole autoloading to composer (which is not the case for Psc\* classes)
+## installation
+
+http://wiki.ps-webforge.com/psc-cms:dokumentation:core
+
+It's optional to configure the host-config, but recommended.
 
 ## roadmap
-  - step by step integration from boilerplate code from psc-cms into this repo
-  - build better modules out from psc-cms
+  - implement pretty printing for the GClass
   - write better and english documentation for these modules
   - [Refactor a lot](http://wiki.ps-webforge.com/psc-cms:start#refactoring-roadmap)
   - search for contributors and people with interest
 
 ##resources
-[Psc-CMS - Documentation in german](http://wiki.ps-webforge.com/psc-cms:start)
-
+[Psc - CMS - Documentation in german / half english](http://wiki.ps-webforge.com/psc-cms:start)
+For module documentation see the README files in namespace directories in ``lib/``
