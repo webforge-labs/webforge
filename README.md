@@ -31,5 +31,6 @@ It's optional to configure the host-config, but recommended.
   - search for contributors and people with interest
 
 ##resources
-[Psc - CMS - Documentation in german / half english](http://wiki.ps-webforge.com/psc-cms:start)
-For module documentation see the README files in namespace directories in ``lib/``
+  - [Psc - CMS - Documentation in german / half english](http://wiki.ps-webforge.com/psc-cms:start)
+  - For module documentation see the README files in namespace directories in ``lib/``
+  - [read more about ps-webforge](http://www.ps-webforge.com)
