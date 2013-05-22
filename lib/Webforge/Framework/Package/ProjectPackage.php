@@ -3,6 +3,7 @@
 namespace Webforge\Framework\Package;
 
 use Webforge\Setup\ConfigurationReader;
+use Webforge\Framework\PscCMSBridge;
 
 class ProjectPackage {
 
@@ -10,8 +11,51 @@ class ProjectPackage {
 
   protected $configuration;
 
+  /**
+   * Lowercased name with dashes
+   * 
+   * @var string
+   */
+  protected $lowerName;
+
+  /**
+   * CamelCased Name
+   * 
+   * @var string
+   */
+  protected $name;
+
   public function __construct(Package $package) {
     $this->package = $package;
+  }
+
+  /**
+   * Returns the project name in CamelCase
+   * @return string
+   */
+  public function getName() {
+    if (!isset($this->name)) {
+      $bridge = new PscCMSBridge();
+      $this->name = $bridge->getProjectName($this->package);
+    }
+
+    return $this->name;
+  }
+
+
+  /**
+   * Returns a safe slug in lowercase
+   * 
+   * Camel Case Project Names will be separated with -
+   * this is aequivalent to the package slug
+   * @return string
+   */
+  public function getLowerName() {
+    if (!isset($this->lowerName)) {
+      $this->lowerName = $this->package->getSlug();
+    }
+
+    return $this->lowerName;
   }
 
   public function getConfiguration() {
@@ -27,7 +71,7 @@ class ProjectPackage {
    */
   protected function readConfiguration () {
     $reader = new ConfigurationReader();
-    $reader->setScope(array('package'=>$this->package));
+    $reader->setScope(array('package'=>$this->package, 'project'=>$this));
 
     if ($configFile = $this->getConfigurationFile()) {
       return $reader->fromPHPFile($configFile);
@@ -53,5 +97,12 @@ class ProjectPackage {
     }
 
     return NULL;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isStaging() {
+    return FALSE;
   }
 }

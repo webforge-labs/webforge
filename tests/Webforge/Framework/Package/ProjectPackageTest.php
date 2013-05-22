@@ -13,6 +13,7 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->projectPackage = new ProjectPackage($this->configPackage);
     $this->projectPackageApplicationConfig = new ProjectPackage($this->appPackage);
     $this->projectPackageWithoutConfig = new ProjectPackage($this->package);
+    $this->comun = new ProjectPackage($this->camelCasePackage);
   }
 
   public function testProjectPackageCanReadItsConfigurationFromEtcConfig() {
@@ -31,5 +32,21 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
   public function testProjectPackageReturnsEmptyConfigurationForNonFoundConfig() {
     $this->assertInstanceOf('Webforge\Setup\Configuration', $configuration = $this->projectPackageWithoutConfig->getConfiguration());
+  }
+
+  public function testLowerProjectName() {
+    $this->assertEquals('super-blog', $this->projectPackage->getLowerName());
+    $this->assertEquals('intranet-application', $this->projectPackageApplicationConfig->getLowerName());
+    $this->assertEquals('comun', $this->comun->getLowerName());
+  }
+
+  public function testProjectName() {
+    $this->assertEquals('SuperBlog', $this->projectPackage->getName());
+    $this->assertEquals('IntranetApplication', $this->projectPackageApplicationConfig->getName());
+    $this->assertEquals('CoMun', $this->comun->getName());
+  }
+
+  public function testIsStaging() {
+    $this->assertFalse($this->projectPackage->isStaging());
   }
 }

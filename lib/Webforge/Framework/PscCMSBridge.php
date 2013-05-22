@@ -13,6 +13,7 @@ use Webforge\Setup\Configuration;
 use Psc\Exception AS BridgeException;
 use RuntimeException;
 use Webforge\Setup\ConfigurationReader;
+use Webforge\Common\String as S;
 
 class PscCMSBridge {
   
@@ -83,10 +84,10 @@ class PscCMSBridge {
     return $project;
   }
   
-  protected function getProjectName(Package $package) {
+  public function getProjectName(Package $package) {
     $namespace = $package->getNamespace();
     $slug = $package->getSlug();
-    
+
     if ($namespace !== $slug) {
       
       // use namespace if namespace is camel cased package slug
@@ -95,9 +96,10 @@ class PscCMSBridge {
       }
 
       $inflector = new Inflector();
-      
-      if ($inflector->namespaceify($slug) === $namespace) {
-        return $namespace;
+      $ccSlug = $inflector->namespaceify($slug);
+
+      if (S::endsWith($namespace, $ccSlug)) {
+        return $ccSlug;
       }
     }
     
