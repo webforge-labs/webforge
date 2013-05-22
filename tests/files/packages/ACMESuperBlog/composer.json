@@ -1,0 +1,16 @@
+{
+    "name": "acme/super-blog",
+    "description": "This is not a real IntranetApplication from ACME but is used for a lot of testing",
+    "authors": [
+        {
+            "name": "p.scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-0": {"ACME\\SuperBlog": ["lib"]}
+    }
+}
