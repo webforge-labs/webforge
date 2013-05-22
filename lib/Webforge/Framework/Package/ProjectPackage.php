@@ -29,7 +29,11 @@ class ProjectPackage {
     $reader = new ConfigurationReader();
     $reader->setScope(array('package'=>$this->package));
 
-    return $reader->fromPHPFile($this->getConfigurationFile());
+    if ($configFile = $this->getConfigurationFile()) {
+      return $reader->fromPHPFile($configFile);
+    } else {
+      return $reader->fromArray(array());
+    }
   }
 
   /**

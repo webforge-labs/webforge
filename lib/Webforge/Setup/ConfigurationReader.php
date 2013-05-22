@@ -8,6 +8,9 @@ class ConfigurationReader {
 
   protected $scope = array();
 
+  /**
+   * @return Webforge\Setup\Configuration
+   */
   public function fromPHPFile(File $phpFile) {
     extract($this->scope);
 
@@ -19,6 +22,13 @@ class ConfigurationReader {
       );
     }
     
+    return $this->fromArray($conf);
+  }
+
+  /**
+   * @return Webforge\Setup\Configuration
+   */
+  public function fromArray(Array $conf) {
     return new Configuration($conf);
   }
 

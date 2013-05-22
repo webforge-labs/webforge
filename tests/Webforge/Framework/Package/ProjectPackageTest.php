@@ -12,6 +12,7 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
     $this->projectPackage = new ProjectPackage($this->configPackage);
     $this->projectPackageApplicationConfig = new ProjectPackage($this->appPackage);
+    $this->projectPackageWithoutConfig = new ProjectPackage($this->package);
   }
 
   public function testProjectPackageCanReadItsConfigurationFromEtcConfig() {
@@ -26,5 +27,9 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->assertInstanceOf('Webforge\Setup\Configuration', $configuration = $this->projectPackageApplicationConfig->getConfiguration());
 
     $this->assertEquals('ACME IntranetApplication', $configuration->get('project.name'));
+  }
+
+  public function testProjectPackageReturnsEmptyConfigurationForNonFoundConfig() {
+    $this->assertInstanceOf('Webforge\Setup\Configuration', $configuration = $this->projectPackageWithoutConfig->getConfiguration());
   }
 }

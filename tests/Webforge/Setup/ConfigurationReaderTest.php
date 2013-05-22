@@ -42,4 +42,8 @@ class ConfigurationReaderTest extends \Webforge\Code\Test\Base {
 
     $this->reader->fromPHPFile($this->getFile('empty.php'));
   }
+
+  public function testReadFromEmptyArray() {
+    $this->assertInstanceOf('Webforge\Setup\Configuration', $this->reader->fromArray(array()));
+  }
 }
