@@ -146,4 +146,3 @@ PHP
     $this->assertNotEmpty($constraint->toString());
   }
 }
-?>
