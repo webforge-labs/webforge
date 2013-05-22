@@ -69,7 +69,7 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
   public function testBridgeThrowExceptionIfHostConfigFileisEmpty() {
     $this->bridge->setHostConfigFile($this->getFile('empty.php'));
     
-    $this->setExpectedException('Psc\Exception');
+    $this->setExpectedException('Webforge\Setup\ConfigurationReadingException');
     $this->bridge->getHostConfig();
   }
   

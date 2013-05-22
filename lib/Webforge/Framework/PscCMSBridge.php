@@ -12,6 +12,7 @@ use Psc\CMS\Configuration as PscConfiguration;
 use Webforge\Setup\Configuration;
 use Psc\Exception AS BridgeException;
 use RuntimeException;
+use Webforge\Setup\ConfigurationReader;
 
 class PscCMSBridge {
   
@@ -142,17 +143,10 @@ class PscCMSBridge {
   }
   
   protected function readConfigurationFromFile(File $configFile, Array $scope = array()) {
-    extract($scope);
-    
-    require $configFile;
-      
-    if (!isset($conf)) {
-      throw new BridgeException(
-        sprintf("Config-File '%s' does not define \$conf. Even if its empty it should define \$conf as empty array.", $configFile)
-      );
-    }
-    
-    return new Configuration($conf);
+    $reader = new ConfigurationReader();
+    $reader->setScope($scope);
+
+    return $reader->fromPHPFile($configFile);
   }
   
   protected function getPscProjectsFactory() {

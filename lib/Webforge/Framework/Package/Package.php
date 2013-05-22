@@ -92,4 +92,3 @@ interface Package {
   public function getNamespaceDirectory();
   
 }
-?>

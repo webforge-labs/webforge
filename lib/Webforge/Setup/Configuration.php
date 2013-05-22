@@ -36,4 +36,3 @@ class Configuration extends \Psc\CMS\Configuration {
     }
   }
 }
-?>
