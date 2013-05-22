@@ -2,13 +2,10 @@
 
 namespace Webforge\Framework;
 
-use Webforge\Framework\Package\Registry;
 use Psc\PSC;
 use Psc\Exception as PscException;
 
-class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
-  
-  protected $registry, $package, $appPackage, $withoutAutoLoadPackage, $oldStylePackage, $camelCasePackage;
+class PscCMSBridgeTest extends \Webforge\Framework\Package\PackagesTestCase {
   
   protected $bridge;
   
@@ -17,14 +14,6 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
   public function setUp() {
     $this->chainClass = 'Webforge\\Framework\\PscCMSBridge';
     parent::setUp();
-    
-    $this->registry = new Registry();
-    $this->package = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
-    $this->withoutAutoLoadPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/WithoutAutoLoad/'));
-    $this->appPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
-    $this->oldStylePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/PscOldStyleProject/Umsetzung/base/src/'));
-    $this->camelCasePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/CoMun/Umsetzung/base/src/'));
-    $this->underscorePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/serien-loader/'));
     
     $this->bridge = new PscCMSBridge();
     
@@ -184,4 +173,3 @@ class PscCMSBridgeTest extends \Webforge\Code\Test\Base {
     );
   }
 }
-?>
