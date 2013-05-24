@@ -92,6 +92,13 @@ class NestedSetConverterTest extends \Psc\Code\Test\Base {
       )
     );
   }
+
+  public function testEmptyConversionToHTML() {
+    $this->assertEquals(
+      '<ul></ul>',
+      $this->nestedSetConverter->toHTMLList(array())
+    );
+  }
   
   
   /**

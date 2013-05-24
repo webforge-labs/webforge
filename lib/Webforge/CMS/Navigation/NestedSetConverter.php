@@ -40,6 +40,10 @@ class NestedSetConverter extends \Psc\SimpleObject {
       $htmlSnippets
     );
     extract($htmlSnippets); // unfortunately we cannot use in code: $htmlSnippets->rootOpen()
+
+    if (empty($tree)) {
+      return $rootOpen(NULL).$rootClose;
+    }
     
     $depth = -1;
     $indent = -1;
