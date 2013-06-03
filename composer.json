@@ -23,7 +23,7 @@
   "require-dev": {
     "webforge/testdata-repository": "0.2.2-alpha",
     "phpmd/phpmd": "1.4.0",
-    "webforge/testplate": "1.2.*@dev",
+    "webforge/testplate": "1.2.*@dev"
   },
   "autoload": {
     "psr-0": {
