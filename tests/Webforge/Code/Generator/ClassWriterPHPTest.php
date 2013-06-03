@@ -2,6 +2,8 @@
 
 namespace Webforge\Code\Generator;
 
+use Psc\Data\Type\Type;
+
 /**
  *
  */
@@ -63,7 +65,7 @@ PHP;
   public function testWritesGMethodWithParameters() {
     $method = GMethod::create('someAction', array(GParameter::create('xValue', new GClass('PointValue')),
                                                   GParameter::create('yValue', new GClass('PointValue')),
-                                                  GParameter::create('info', $this->getType('Array'))
+                                                  GParameter::create('info', Type::create('Array'))
                                                     ->setDefault(array('x','y'))
                                                   )
                               );

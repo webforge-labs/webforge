@@ -18,6 +18,7 @@
     "pscheit/psc-cms": "1.2.*@dev",
     "pscheit/psc-cms-boot": "2.*",
     "webforge/common": "1.1.*@dev",
+    "webforge/testplate": "1.2.*@dev",
     "sebastian/diff": "1.0.*"
   },
   "require-dev": {

@@ -2,13 +2,15 @@
 
 namespace Webforge\Code\Generator;
 
+use Psc\Data\Type\Type;
+
 class GParameterTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
     $this->classParam = GParameter::create('coordinates', $this->classHint = new GClass('Webforge\Data\Models\Coordinates'));
     $this->arrayParam = GParameter::create('simpleCoords', 'Array');
     $this->unknownParam = new GParameter('unknown');
-    $this->stringParam = $this->defParam = new GParameter('enume', $this->createType('String'), 'def');
+    $this->stringParam = $this->defParam = new GParameter('enume', $this->getType('String'), 'def');
   }
   
   public function testHintCanBeStringArrayForCreate() {
@@ -56,7 +58,7 @@ class GParameterTest extends \Webforge\Code\Test\Base {
   }
 
   public function testHasDefaultValueIsTrue_IfItHasADefaultValue() {
-    $param = new GParameter('meanDefault', $this->createType('String'), NULL);
+    $param = new GParameter('meanDefault', $this->getType('String'), NULL);
     $this->assertTrue($param->hasDefault());
     $this->assertTrue($param->isOptional());
     
@@ -66,7 +68,7 @@ class GParameterTest extends \Webforge\Code\Test\Base {
   }
   
   public function testDefaultValueCanBeRemoved() {
-    $param = new GParameter('meanDefault', $this->createType('String'), NULL);
+    $param = new GParameter('meanDefault', $this->getType('String'), NULL);
     $param->removeDefault();
     
     $this->assertFalse($param->hasDefault());
@@ -98,5 +100,8 @@ class GParameterTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Psc\Data\Type\ObjectType', $param->getType());
     $this->assertEquals('PointValue', $param->getType()->getClassFQN());
   }
+
+  public function getType($type) {
+    return Type::create($type);
+  }
 }
-?>

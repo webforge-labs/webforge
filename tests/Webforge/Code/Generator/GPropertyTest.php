@@ -55,7 +55,7 @@ class GPropertyTest extends \Webforge\Code\Test\Base {
   }
   
   public function testCreateCreatesApropertyWithType() {
-    $property = GProperty::create('x', $this->getType('Integer'));
+    $property = GProperty::create('x', Type::create('Integer'));
     
     $this->assertInstanceOf('Webforge\Code\Generator\GProperty', $property);
     $this->assertInstanceOf('Psc\Data\Type\IntegerType', $property->getType());
@@ -74,4 +74,3 @@ class GPropertyTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Psc\Data\Type\ArrayType', $property->getType());
   }
 }
-?>

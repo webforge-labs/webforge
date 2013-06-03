@@ -29,7 +29,7 @@ class ConfigurationFileTesterTest extends \Webforge\Code\Test\Base {
       return $fakeIni[$name];
     }));
     
-    $this->jsonFile = $this->getFile('php-ini-configuration.json', 'Setup/');
+    $this->jsonFile = $this->getFile('Setup/php-ini-configuration.json');
     
     $this->fileTester = new ConfigurationFileTester(
       $this->jsonFile,
@@ -46,24 +46,26 @@ class ConfigurationFileTesterTest extends \Webforge\Code\Test\Base {
   public function testCreateForLocal() {
     $fileTester = ConfigurationFileTester::create($this->jsonFile, ConfigurationFileTester::LOCAL);
     
-    $this->assertInstanceOf('Webforge\Setup\ConfigurationTester\LocalConfigurationRetriever',
-                            $fileTester->getConfigurationTester()->getRetriever()
-                            );
+    $this->assertInstanceOf(
+      'Webforge\Setup\ConfigurationTester\LocalConfigurationRetriever',
+      $fileTester->getConfigurationTester()->getRetriever()
+    );
   }
 
   public function testCreateForRemote() {
     $fileTester = ConfigurationFileTester::create($this->jsonFile, ConfigurationFileTester::REMOTE, 'http://localhost:80');
     
-    $this->assertInstanceOf('Webforge\Setup\ConfigurationTester\RemoteConfigurationRetriever',
-                            $fileTester->getConfigurationTester()->getRetriever()
-                            );
+    $this->assertInstanceOf(
+      'Webforge\Setup\ConfigurationTester\RemoteConfigurationRetriever',
+      $fileTester->getConfigurationTester()->getRetriever()
+    );
   }
   
   public function testCreateForRemoteWithoutURL() {
     $this->setExpectedException('InvalidArgumentException');
+
     $fileTester = ConfigurationFileTester::create($this->jsonFile, ConfigurationFileTester::REMOTE);
   }
-
 
   public function testAuthenticationSetting() {
     $retriever = $this->getMock('RemoteConfigurationRetriever', array('setAuthentication'), array('/fake/url'));
@@ -92,4 +94,3 @@ class ConfigurationFileTesterTest extends \Webforge\Code\Test\Base {
     return A::join($this->t->getDefects(), "%s\n");
   }
 }
-?>

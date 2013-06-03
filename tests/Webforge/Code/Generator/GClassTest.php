@@ -97,7 +97,7 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $gClass = GClass::create('Point')
       ->createProperty('x', new GClass('PointValue'))
       ->getGClass();
-    
+
     $this->assertGCollectionEquals(array('PointValue'), $gClass->getImports());
   }
 
