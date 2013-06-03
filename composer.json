@@ -27,7 +27,7 @@
   },
   "autoload": {
     "psr-0": {
-      "Webforge": ["lib", "tests"]
+      "Webforge": ["lib/", "tests/"]
     }
   },
   "bin": ["bin/webforge"],
