@@ -210,11 +210,12 @@ class Container {
             new \Webforge\Setup\Installer\CreateBootstrapPart(),
             new \Webforge\Setup\Installer\ApacheConfigurationPart(),
             new \Webforge\Setup\Installer\InstallTestSuitePart(),
+            new \Webforge\Setup\Installer\TravisCIPart(),
             new \Webforge\Setup\Installer\WriteHtaccessPart(),
             new \Webforge\Setup\Installer\PscJSBoilerplatePart(),
             new \Webforge\Setup\Installer\InitConfigurationPart(),
             new \Webforge\Setup\Installer\InitDoctrinePart()
-          ),
+        ),
         $this,
         $output
       );
