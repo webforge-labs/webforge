@@ -10,7 +10,7 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->chainClass = 'Webforge\\Framework\\Package\\ProjectPackage';
     parent::setUp();
 
-    $this->projectPackage = new ProjectPackage($this->configPackage);
+    $this->projectPackage = new ProjectPackage($this->configPackage); // ACMESuperBlog
     $this->projectPackageApplicationConfig = new ProjectPackage($this->appPackage);
     $this->projectPackageWithoutConfig = new ProjectPackage($this->package);
     $this->comun = new ProjectPackage($this->camelCasePackage);
@@ -48,5 +48,10 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
   public function testIsStaging() {
     $this->assertFalse($this->projectPackage->isStaging());
+  }
+
+  public function testHasLanguagesAndADefaultLanguage() {
+    $this->assertEquals(array('de', 'en'), $this->projectPackage->getLanguages());
+    $this->assertEquals('de', $this->projectPackage->getDefaultLanguage());
   }
 }

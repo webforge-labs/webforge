@@ -7,8 +7,14 @@ use Webforge\Framework\PscCMSBridge;
 
 class ProjectPackage {
 
+  /**
+   * @var Webforge\Framework\Package\Package
+   */
   protected $package;
 
+  /**
+   * @var Webforge\Setup\Configuration
+   */
   protected $configuration;
 
   /**
@@ -24,6 +30,11 @@ class ProjectPackage {
    * @var string
    */
   protected $name;
+
+  /**
+   * @var array
+   */
+  protected $languages;
 
   public function __construct(Package $package) {
     $this->package = $package;
@@ -58,6 +69,9 @@ class ProjectPackage {
     return $this->lowerName;
   }
 
+  /**
+   * @return Webforge\Setup\Configuraton
+   */
   public function getConfiguration() {
     if (!isset($this->configuration)) {
       $this->configuration = $this->readConfiguration();
@@ -66,9 +80,6 @@ class ProjectPackage {
     return $this->configuration;
   }
 
-  /**
-   * @return Webforge\Setup\Configuraton
-   */
   protected function readConfiguration () {
     $reader = new ConfigurationReader();
     $reader->setScope(array('package'=>$this->package, 'project'=>$this));
@@ -104,5 +115,21 @@ class ProjectPackage {
    */
   public function isStaging() {
     return FALSE;
+  }
+
+  public function getLanguages() {
+    if (!isset($this->languages)) {
+      $this->languages = $this->getConfiguration()->req(array('languages'));
+    }
+
+    return $this->languages;
+  }
+
+  public function getDefaultLanguage() {
+    if (!isset($this->defaultLanguage)) {
+      $this->defaultLanguage = current($this->getLanguages());
+    }
+    
+    return $this->defaultLanguage;
   }
 }

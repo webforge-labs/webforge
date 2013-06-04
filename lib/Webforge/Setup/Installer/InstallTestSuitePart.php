@@ -40,7 +40,10 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Frame
       $installer->warn('bootstrap.php should exist for php unit tests bootstrapping');
     }
     
-    //@TODO ENHC: add to composer.json for autoloading
+    // add testplate
+    $installer->execute(
+      sprintf('composer --working-dir=%s --dev require webforge/testplate:1.2.*@dev', $target->getQuotedString())
+    );
     
     if ($this->installPHPUnitLocally) {
       $installer->execute(
