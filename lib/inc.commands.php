@@ -288,7 +288,7 @@ $createCommand('sublime:new-project',
     $project = (object) array(
       'folders'=> array(
         (object) array(
-          "path"=> (string) $package->getRootDirectory(),
+          "path"=> '.',
           "folder_exclude_patterns"=> array("vendor", "build")
         )
       )
@@ -300,5 +300,5 @@ $createCommand('sublime:new-project',
     
     $command->info('written '.$dest);
   },
-  "Creates a link to another batch/binary file from source to destination"
+  "Creates an very basic sublime project file"
 );
