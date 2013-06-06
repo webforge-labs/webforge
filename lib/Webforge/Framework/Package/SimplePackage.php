@@ -78,7 +78,6 @@ class SimplePackage implements Package {
     return ucfirst($this->slug);
   }
   
-
   /**
    * @return Webforge\Common\System\Dir
    */
@@ -181,6 +180,4 @@ class SimplePackage implements Package {
     return $this->getSlug();
   }
   // @codeCoverageIgnoreEnd
-
 }
-?>
