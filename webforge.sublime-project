@@ -2,7 +2,7 @@
 	"folders":
 	[
 		{
-			"path": "D:\\www\\webforge",
+			"path": ".",
       "folder_exclude_patterns": ["vendor", "build", ".komodotools"]
 		}
 	]
