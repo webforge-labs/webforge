@@ -132,4 +132,11 @@ class ProjectPackage {
     
     return $this->defaultLanguage;
   }
+
+  /**
+   * @return Webforge\Common\System\Dir
+   */
+  public function getRootDirectory() {
+    return $this->package->getRootDirectory();
+  }
 }
