@@ -4,6 +4,7 @@ namespace Webforge\Framework;
 
 use Webforge\Framework\Package\SimplePackage;
 use Webforge\Common\System\Dir;
+use Webforge\Framework\Package\Package;
 
 class ContainerTest extends \Webforge\Code\Test\Base {
   
@@ -134,5 +135,25 @@ class ContainerTest extends \Webforge\Code\Test\Base {
   public function testThatAErroneousPackageFromPackagesJSONDoesRemoveThePackageOrDoesSomethingUsefulWithIt() {
     $this->markTestIncomplete('resolve dependency for local storage and move the init package registry to some other place than container?');
   }
+
+  public function testContainerThrowsAnExceptionIfVendorPackageisNotInstalled() {
+    $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
+
+    $this->setExpectedException('Webforge\Framework\VendorPackageInitException');
+
+    $this->container->getVendorPackage('schnurps/schlurps');
+  }
+
+  public function testContainerCanGetPackageInstalledAsVendor() {
+    $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
+
+    $commonPackage = $this->container->getVendorPackage('webforge/common');
+
+    $this->assertEquals('webforge/common', $commonPackage->getIdentifier());
+
+    $this->assertEquals(
+      (string) $this->container->getLocalPackage()->getDirectory(Package::VENDOR)->sub('webforge/common/'),
+      (string) $commonPackage->getRootDirectory()
+    );
+  }
 }
-?>

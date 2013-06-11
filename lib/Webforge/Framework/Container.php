@@ -10,9 +10,9 @@ use Webforge\Code\GlobalClassFileMapper;
 use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Framework\Package\Registry AS PackageRegistry;
 use Webforge\Framework\Package\ComposerPackageReader;
+use Webforge\Framework\Package\Package;
 use Webforge\Setup\Installer\PartsInstaller;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use Psc\JS\JSONConverter;
 use Webforge\Common\System\Dir;
 
@@ -256,6 +256,29 @@ class Container {
     }
     
     return $this;
+  }
+
+  /**
+   * Gets an package which is installed as vendor in the current locale package
+   * 
+   * @return Package
+   */
+  public function getVendorPackage($packageIdentifier) {
+    $localPackage = $this->getLocalPackage();
+
+    $vendor = $localPackage->getDirectory(Package::VENDOR);
+    $packageRoot = $vendor->sub($packageIdentifier.'/');
+
+    $e = NULL;
+    try {
+      if ($packageRoot->exists()) {
+        return $this->getComposerPackageReader()->fromDirectory($packageRoot);
+      }
+
+    } catch (\Exception $e) {
+    }
+
+    throw VendorPackageInitException::fromIdentifierAndVendor($packageIdentifier, $vendor, $e);
   }
 
   /**
