@@ -123,6 +123,13 @@ class ProjectPackage {
     return FALSE;
   }
 
+  /**
+   * @return bool
+   */
+  public function isDevelopment() {
+    return FALSE;
+  }
+
   public function getLanguages() {
     if (!isset($this->languages)) {
       $this->languages = $this->getConfiguration()->req(array('languages'));
