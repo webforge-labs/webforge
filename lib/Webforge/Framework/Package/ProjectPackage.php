@@ -107,7 +107,7 @@ class ProjectPackage {
       return $packageConfigFile;
     }
 
-    $projectConfigFile = $project->getSrc()->getFile('inc.config.php');
+    $projectConfigFile = $this->package->getRootDirectory()->getFile('inc.config.php');
     
     if ($projectConfigFile->exists()) {
       return $projectConfigFile;
