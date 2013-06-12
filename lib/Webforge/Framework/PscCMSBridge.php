@@ -3,7 +3,7 @@
 namespace Webforge\Framework;
 
 use Webforge\Framework\Package\Package;
-use Psc\CMS\Project;
+use Psc\CMS\Project AS PscProject;
 use Psc\PSC;
 use Psc\CMS\ProjectsFactory;
 use Webforge\Common\System\File;
@@ -75,7 +75,7 @@ class PscCMSBridge {
         $projectRoot,
         $this->getHostConfig(),
         $paths,
-        $mode = Project::MODE_SRC,
+        $mode = PscProject::MODE_SRC,
         $staging = $this->isStagingPackage($package)
       )
     ;
@@ -106,7 +106,7 @@ class PscCMSBridge {
     return $slug;
   }
   
-  public function initLocalConfigurationFor(Project $project) {
+  public function initLocalConfigurationFor(PscProject $project) {
     $project->initConfiguration($this->getLocalConfig($project));
     return $project;
   }
@@ -133,7 +133,7 @@ class PscCMSBridge {
     return $this->hostConfig;
   }
   
-  protected function getLocalConfig(Project $project) {
+  protected function getLocalConfig(PscProject $project) {
     $localConfigFile = $this->getLocalConfigFile($project);
     
     if ($localConfigFile !== NULL) {
@@ -178,7 +178,7 @@ class PscCMSBridge {
   /**
    * @return File|NULL
    */
-  protected function getLocalConfigFile(Project $project) {
+  protected function getLocalConfigFile(PscProject $project) {
     $packageConfigFile = $project->getRoot()->getFile('application/inc.config.php');
     
     if ($packageConfigFile->exists()) {
@@ -215,4 +215,3 @@ class PscCMSBridge {
     return $package->getRootDirectory()->getFile('staging')->exists();
   }
 }
-?>

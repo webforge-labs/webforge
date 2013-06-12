@@ -5,7 +5,7 @@ namespace Webforge\Framework\Package;
 use Webforge\Setup\ConfigurationReader;
 use Webforge\Framework\PscCMSBridge;
 
-class ProjectPackage {
+class ProjectPackage implements \Webforge\Framework\Project {
 
   /**
    * @var Webforge\Framework\Package\Package
