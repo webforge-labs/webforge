@@ -32,12 +32,18 @@ class ProjectPackage implements \Webforge\Framework\Project {
   protected $name;
 
   /**
+   * host where the project is run on
+   */
+  protected $host;
+
+  /**
    * @var array
    */
   protected $languages;
 
   public function __construct(Package $package) {
     $this->package = $package;
+    $this->bridge = new PscCMSBridge();
   }
 
   /**
@@ -46,8 +52,7 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function getName() {
     if (!isset($this->name)) {
-      $bridge = new PscCMSBridge();
-      $this->name = $bridge->getProjectName($this->package);
+      $this->name = $this->bridge->getProjectName($this->package);
     }
 
     return $this->name;
@@ -114,6 +119,16 @@ class ProjectPackage implements \Webforge\Framework\Project {
     }
 
     return NULL;
+  }
+
+  /**
+   * @inherit-doc
+   */
+  public function getHost() {
+    if (!isset($this->host)) {
+      $this->host = $this->bridge->getHostConfig()->req('host');
+    }
+    return $this->host;
   }
 
   /**
