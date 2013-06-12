@@ -130,6 +130,21 @@ class ProjectPackage {
     return FALSE;
   }
 
+  /**
+   * Returns the status of the project as a descriptive string
+   */
+  public function getStatus() {
+    if ($this->isStaging()) {
+      $status = 'staging';
+    } elseif($this->isDevelopment()) {
+      $status = 'development';
+    } else {
+      $status = 'live';
+    }
+
+    return $status;
+  }
+
   public function getLanguages() {
     if (!isset($this->languages)) {
       $this->languages = $this->getConfiguration()->req(array('languages'));

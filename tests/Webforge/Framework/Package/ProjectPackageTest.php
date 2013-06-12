@@ -54,4 +54,12 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->assertEquals(array('de', 'en'), $this->projectPackage->getLanguages());
     $this->assertEquals('de', $this->projectPackage->getDefaultLanguage());
   }
+
+  public function testIsDevelopment() {
+    $this->assertFalse($this->projectPackage->isStaging());
+  }
+
+  public function testGetsStatusAsString() {
+    $this->assertNotEmpty($this->projectPackage->getStatus());
+  }
 }
