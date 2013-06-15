@@ -41,6 +41,7 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Frame
     }
     
     // add testplate
+    $installer->info('adding webforge-testplate with composer (that might take a while) ...');
     $installer->execute(
       sprintf('composer --working-dir=%s --dev require webforge/testplate:1.2.*@dev', $target->getQuotedString())
     );
