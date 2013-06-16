@@ -3,8 +3,9 @@
 namespace Webforge\Framework\Package;
 
 use Webforge\Common\System\Dir;
-use Psc\JS\JSONConverter;
+use Webforge\Common\JS\JSONConverter;
 use Webforge\Setup\AutoLoadInfo;
+use Webforge\Common\Exception\MessageException;
 
 class ComposerPackageReader {
   
@@ -22,7 +23,7 @@ class ComposerPackageReader {
       
       return new SimplePackage($slug, $vendor, $directory, $this->readAutoLoadInfo($json));
       
-    } catch (\Psc\Exception $e) {
+    } catch (MessageException $e) {
       $e->prependMessage(sprintf("Cannot read package from directory '%s' ", $directory));
       throw $e;
     }
@@ -43,10 +44,9 @@ class ComposerPackageReader {
     $file = $directory->getFile('composer.json');
     
     if (!$file->exists()) {
-      throw new \Psc\Exception('composer.json cannot be found.');
+      throw new \Webforge\Common\Exception('composer.json cannot be found in');
     }
     
     return $file;
   }
 }
-?>

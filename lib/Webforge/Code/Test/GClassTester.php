@@ -6,6 +6,7 @@ use Webforge\Code\Generator\GClass;
 use Webforge\Code\Generator\GProperty;
 use Webforge\Code\Generator\GMethod;
 use Webforge\Code\Generator\GModifiersObject;
+use Webforge\Common\Exception\NotImplementedException;
 
 class GClassTester {
   
@@ -55,7 +56,7 @@ class GClassTester {
                                   $this->msg("MethodParameter %d hat nicht den Namen %s in '%s'. Parameter sind: [%s]", $key, $parameter, $m->getName(), implode(", ",$debugParameters)));
         
       } else {
-        throw new \Psc\Code\NotImplementedException('Parameter können bis jetzt nur strings sein');
+        throw NotImplementedException::fromString('Parameter können bis jetzt nur strings sein');
       }
     }
     

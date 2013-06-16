@@ -18,14 +18,29 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Webforge\Framework\Package\Package', $acmePackage);
     $this->assertEquals('acme/intranet-application', $acmePackage->getIdentifier());
   }
-  
-  /**
-   * @expectedException Webforge\Framework\Package\PackageNotFoundException
-   */
+
+  public function testNonFindableIdentifierReturnsNULL() {
+    $this->assertNull($this->registry->findByIdentifier('is-not-defined/package'));
+  }
+
   public function testNonFindablePrefixFQNThrowsException() {
-    $this->registry->findByFQN('BananenbaumisnotdefinedPrefix');
+    $this->setExpectedException('Webforge\Framework\Package\PackageNotFoundException');
+    $this->registry->findByFQN('IsNotDefinedPrefix');
   }
   
+  public function testFindACMEWithConflictingPackagesThrowsANotResolvedException() {
+    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
+    $acmePackage = $this->registry->findByIdentifier('acme/intranet-application');
+
+    $acmePackage2 = clone $acmePackage;
+    $acmePackage2->setSlug('intranet-application-clone');
+
+    $this->registry->addPackage($acmePackage2);
+
+    $this->setExpectedException('Webforge\Framework\Package\NotResolvedException');
+    $this->registry->findByFQN('ACME\IntranetApplication\Main');
+  }
+
   public function testFindACMEWithConflictingPackagesByFQN_whichCanBeResolvedThroughSubNamespace() {
     $registry = new Registry();
     

@@ -5,7 +5,9 @@ namespace Webforge\Setup\Installer;
 use Psc\Code\Event\Dispatcher as EventDispatcher;
 use Psc\Code\Event\Manager as EventManager;
 use Psc\Code\Event\Subscriber as EventSubscriber;
-
+/**
+ * @todo refactor to use symfony event system
+ */
 abstract class Command implements \Webforge\Common\Command, EventDispatcher {
   
   const IF_NOT_EXISTS = Installer::IF_NOT_EXISTS;

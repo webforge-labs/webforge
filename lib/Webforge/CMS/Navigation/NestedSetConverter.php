@@ -4,7 +4,7 @@ namespace Webforge\CMS\Navigation;
 
 use Webforge\Common\ArrayUtil as A;
 
-class NestedSetConverter extends \Psc\SimpleObject {
+class NestedSetConverter {
 
   /**
    * Converts a NestedSet flat-Array into a nested HTML-List (ul, li)

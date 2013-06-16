@@ -8,6 +8,8 @@ use Psc\DataInputException;
 /**
  *
  * PscCMSBridge relies that Psc\CMS\Configuration is parent from this class!
+ * 
+ * @TODO use Webforge\Common\KeysMap to refactor this class
  */
 class Configuration extends \Psc\CMS\Configuration {
   

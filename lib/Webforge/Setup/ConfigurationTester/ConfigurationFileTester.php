@@ -3,7 +3,7 @@
 namespace Webforge\Setup\ConfigurationTester;
 
 use Webforge\Common\System\File;
-use Psc\JS\JSONConverter;
+use Webforge\Common\JS\JSONConverter;
 
 /**
  * Reads the INI-Configuration out of a file and tests this values
@@ -43,7 +43,7 @@ class ConfigurationFileTester {
   protected $jsonFile;
 
   /**
-   * @var Psc\JS\JSONConverter
+   * @var Webforge\Common\JS\JSONConverter
    */
   protected $converter;
   

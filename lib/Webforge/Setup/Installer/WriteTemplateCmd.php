@@ -3,7 +3,7 @@
 namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\File;
-use Psc\TPL\TPL;
+use Webforge\Common\String as S;
 
 class WriteTemplateCmd extends Command {
 
@@ -44,7 +44,7 @@ class WriteTemplateCmd extends Command {
       return $this;
     }
     
-    $contents = TPL::miniTemplate($this->template->getContents(), $this->vars);
+    $contents = S::miniTemplate($this->template->getContents(), $this->vars);
     
     $this->destination->writeContents($contents);
     
@@ -59,4 +59,3 @@ class WriteTemplateCmd extends Command {
     return $this->template;
   }
 }
-?>

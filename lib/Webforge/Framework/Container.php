@@ -13,8 +13,9 @@ use Webforge\Framework\Package\ComposerPackageReader;
 use Webforge\Framework\Package\Package;
 use Webforge\Setup\Installer\PartsInstaller;
 use Symfony\Component\Console\Output\OutputInterface;
-use Psc\JS\JSONConverter;
+use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\Dir;
+use Webforge\Common\Exception\MessageException;
 
 /**
  * This container includes the base classes for the framework
@@ -109,7 +110,7 @@ class Container {
         
         try {
           $registry->addComposerPackageFromDirectory(Dir::factoryTS($info->path));
-        } catch (\Psc\Exception $e) {
+        } catch (MessageException $e) {
           $e->prependMessage(sprintf("Failed to load package '%s' from '%s'.", $package, $packagesFile));
           throw $e;
         }
@@ -389,4 +390,3 @@ class Container {
 
   // @codeCoverageIgnoreEnd
 }
-?>

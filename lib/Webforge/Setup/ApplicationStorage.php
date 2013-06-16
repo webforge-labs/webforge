@@ -3,7 +3,7 @@
 namespace Webforge\Setup;
 
 use Webforge\Common\System\Dir;
-use Psc\Preg;
+use Webforge\Common\Preg;
 use InvalidArgumentException;
 use Webforge\Common\System\File;
 use RuntimeException;

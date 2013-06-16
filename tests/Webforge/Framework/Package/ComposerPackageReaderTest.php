@@ -30,10 +30,8 @@ class ComposerPackageReaderTest extends \Webforge\Code\Test\Base {
     );
   }
   
-  /**
-   * @expectedException Psc\Exception
-   */
   public function testFromDirectoryWithoutJSONFileFails() {
+    $this->setExpectedException('Webforge\Common\Exception');
     $this->reader->fromDirectory($this->getTestDirectory('sub/packages/Blank'));
   }
 }

@@ -2,6 +2,8 @@
 
 namespace Webforge\Code\Test;
 
+use Webforge\Common\String as S;
+
 class CodeEqualsConstraintTest extends \Psc\Code\Test\Base {
 
   /**
@@ -25,9 +27,9 @@ class CodeEqualsConstraintTest extends \Psc\Code\Test\Base {
                         $constraint->matches($actualCode),
                         
                         "\n".
-                        \Psc\String::eolVisible($constraint->normalizeCode($actualCode)).
+                        S::eolVisible($constraint->normalizeCode($actualCode)).
                         "\n".
-                        \Psc\String::eolVisible($constraint->normalizeCode($expectedCode))
+                        S::eolVisible($constraint->normalizeCode($expectedCode))
                        );
   }
   

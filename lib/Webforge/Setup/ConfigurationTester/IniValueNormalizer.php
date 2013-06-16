@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-use Psc\Preg;
+use Webforge\Common\Preg;
 
 class IniValueNormalizer extends \Webforge\Common\BaseObject {
   

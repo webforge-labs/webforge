@@ -67,12 +67,12 @@ interface Package {
 
   /**
    * Gives Information for the Paths the Projects loads it classes from
-   * @return Psc\Setup\AutoLoadInfo
+   * @return Webforge\Setup\AutoLoadInfo
    */
   public function getAutoLoadInfo();
 
   /**
-   * @param Psc\Setup\AutoLoadInfo $info
+   * @param Webforge\Setup\AutoLoadInfo $info
    */
   public function setAutoLoadInfo(AutoLoadInfo $info);
   

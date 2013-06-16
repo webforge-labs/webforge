@@ -4,6 +4,9 @@ namespace Webforge\Setup\Installer;
 
 use Psc\Data\ArrayCollection;
 
+/**
+ * @todo refactor to use common collection
+ */
 class Macro implements \Webforge\Common\Macro {
   
   protected $commands;
@@ -29,4 +32,3 @@ class Macro implements \Webforge\Common\Macro {
     return $this;
   }
 }
-?>

@@ -3,7 +3,7 @@
 namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
-use Psc\TPL\TPL;
+use Webforge\Common\String as S;
 use Webforge\Framework\Package\Package;
 
 class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Framework\Package\PackageAware {
@@ -26,7 +26,7 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Frame
     };
     
     $installer->write(
-      TPL::miniTemplate(
+      S::miniTemplate(
         $tpl('phpunit.template.xml')->getContents(),
         array('packageTitle'=>$this->package->getTitle())
       ),
@@ -53,4 +53,3 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Frame
     }
   }
 }
-?>

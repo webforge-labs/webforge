@@ -12,6 +12,7 @@ use Webforge\Common\System\Dir;
 use Webforge\Common\String as S;
 use ComposerAutoloaderInit;
 use Webforge\Framework\Package\PackageNotFoundException;
+use Webforge\Common\Exception\NotImplementedException;
 
 /**
  * The Global Class File Mapper finds the corrosponding file in a project on the local machine
@@ -43,7 +44,7 @@ class GlobalClassFileMapper implements ClassFileMapper {
    * @return GClass
    */
   public function getClass(File $file) {
-    throw new \Psc\Code\NotImplementedException('not yet');
+    throw NotImplementedException::fromString('getting the class from a file');
   }
   
   /**

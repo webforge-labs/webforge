@@ -26,6 +26,8 @@ It's optional to configure the host-config, but recommended.
 
 ## roadmap
   - implement pretty printing for the GClass
+  - replace events in Setup\Installer\Command with Symfony Event
+  - Decouple `Webforge\Code\Generator\*` from Psc - Classes
   - write better and english documentation for these modules
   - [Refactor a lot](http://wiki.ps-webforge.com/psc-cms:start#refactoring-roadmap)
   - search for contributors and people with interest

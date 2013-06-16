@@ -4,7 +4,7 @@ namespace Webforge\Framework\Package;
 
 class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
-  protected $projectPackage;
+  protected $projectPackage, $oldStyleProjectPackage, $projectPackageWithoutConfig, $projectPackageApplicationConfig;
   
   public function setUp() {
     $this->chainClass = 'Webforge\\Framework\\Package\\ProjectPackage';
@@ -13,6 +13,7 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->projectPackage = new ProjectPackage($this->configPackage); // ACMESuperBlog
     $this->projectPackageApplicationConfig = new ProjectPackage($this->appPackage);
     $this->projectPackageWithoutConfig = new ProjectPackage($this->package);
+    $this->oldStyleProjectPackage = new ProjectPackage($this->oldStylePackage);
     $this->comun = new ProjectPackage($this->camelCasePackage);
   }
 
@@ -61,5 +62,22 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
   public function testGetsStatusAsString() {
     $this->assertNotEmpty($this->projectPackage->getStatus());
+  }
+
+  public function testGetHostReturnsString() {
+    $this->assertNotEmpty($host = $this->projectPackage->getHost());
+  }
+
+  public function testOldStyleProjectPackageCanReadItsConfigurationSourceConfig() {
+    $this->assertInstanceOf('Webforge\Setup\Configuration', $configuration = $this->oldStyleProjectPackage->getConfiguration());
+
+    $this->assertEquals(TRUE, $configuration->get(array('PscOldStyleProject', 'loaded')));
+  }
+
+  public function testGetRootDirectoryReturnsPackageRoot() {
+    $this->assertSame(
+      $this->projectPackage->getRootDirectory(),
+      $this->configPackage-> getRootDirectory()
+    );
   }
 }

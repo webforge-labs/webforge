@@ -147,10 +147,8 @@ class SimplePackage implements Package {
     
     return $this->namespaceDirectory;
   }
-
-  // @codeCoverageIgnoreStart
   /**
-   * @param Psc\Setup\AutoLoadInfo $info
+   * @param Webforge\Setup\AutoLoadInfo $info
    */
   public function setAutoLoadInfo(AutoLoadInfo $info) {
     $this->namespace = $this->namespaceDirectory = NULL;
@@ -158,6 +156,7 @@ class SimplePackage implements Package {
     return $this;
   }
   
+  // @codeCoverageIgnoreStart
   /**
    * @param Webforge\Common\System\Dir $rootDirectory
    * @chainable

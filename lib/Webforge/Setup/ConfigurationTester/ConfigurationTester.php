@@ -2,8 +2,8 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-use Psc\A;
-use Psc\Preg;
+use Webforge\Common\ArrayUtil as A;
+use Webforge\Common\Preg;
 
 /**
  * 

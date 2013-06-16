@@ -3,11 +3,13 @@
 namespace Webforge\Setup\ConfigurationTester;
 
 use Psc\URL\RequestDispatcher;
-use Psc\JS\JSONConverter;
-use Psc\JS\JSONParsingException;
+use Webforge\Common\JS\JSONConverter;
+use Webforge\Common\JS\JSONParsingException;
 
 /**
  * 
+ * @TODO refactor to use guzzle instead of RequestDispatcher
+ * (add Guzzle RequestDispatcher)
  */
 class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implements ConfigurationRetriever {
   
