@@ -2,7 +2,8 @@
 
 namespace Webforge\CMS;
 
-use Psc\Session\Session;
+use Webforge\Common\Session;
+use Psc\Session\Session as SessionImplementation;
 use Psc\PHP\CookieManager;
 
 class EnvironmentContainer {
@@ -24,7 +25,7 @@ class EnvironmentContainer {
 
   public function getSession() {
     if (!isset($this->session)) {
-      $this->session = new Session();
+      $this->session = new SessionImplementation();
 
       if ($this->getOption('session.init')) {
         $this->session->init();

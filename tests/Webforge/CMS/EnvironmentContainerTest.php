@@ -47,7 +47,7 @@ class EnvironmentContainerTest extends \Webforge\Code\Test\Base {
       $tests[] = func_get_args();
     };
   
-    $test('Session', 'Psc\Session\Session');
+    $test('Session', 'Webforge\Common\Session');
     $test('CookieManager', 'Psc\PHP\CookieManager');
   
     return $tests;
