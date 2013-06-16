@@ -15,6 +15,7 @@ use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
 use Webforge\Common\String;
+use Webforge\Common\CLassUtil;
 
 $container = new FrameworkContainer();
 
@@ -301,4 +302,55 @@ $createCommand('sublime:new-project',
     $command->info('written '.$dest);
   },
   "Creates an very basic sublime project file"
+);
+
+$createCommand('sublime:create-use-completion',
+  array(
+  ),
+  function ($input, $output, $command) use ($container) {
+    $folder = new Dir('C:\Users\Philipp Scheit\Dropbox\work\sublime\Packages\Webforge\\');
+
+    if (!$folder->exists()) {
+      $folder = $command->askAndValidate('In welches Verzeichnis soll die complection file geschrieben werden? (muss existieren)', function ($dir) {
+        $dir = new Dir($dir);
+
+        return $dir->exists();
+      });
+    }
+
+    $converter = new JSONConverter();
+
+    // read
+    $useFile = $folder->getFile('use.sublime-completions');
+    if ($useFile->exists()) {
+      $use = $converter->parseFile($useFile);
+    } else {
+      $use = (object) array(
+        "scope"=> "text.html.basic",
+        "completions"=> array(
+
+        )
+      );
+    }
+
+    $fqn = $command->ask('Wie ist der FQN?');
+    $fqn = ltrim($fqn, '\\');
+
+    $alias = $command->ask('Wie ist der Alias ? (optional) ');
+
+    $trigger = $command->askDefault('Der Name des Triggers ohne "use " davor', ClassUtil::getClassName($fqn));
+
+    // add
+    $use->completions[] = (object) array(
+      "trigger"=>"use ".$trigger, 
+      "contents"=>$alias
+        ? sprintf("use %s as %s;", $fqn, $alias)
+        : sprintf("use %s;", $fqn)
+    );
+    
+    $useFile->writeContents($converter->stringify($use, JSONConverter::PRETTY_PRINT));
+    $command->info('written '.$useFile);
+    $command->out('Die Completion kann jetzt mite use '.$trigger.'<tab> benutzt werden');
+  },
+  "Creates an new PHP use completion for sublime"
 );
