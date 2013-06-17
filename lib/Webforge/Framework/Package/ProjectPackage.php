@@ -2,9 +2,8 @@
 
 namespace Webforge\Framework\Package;
 
-use Webforge\Setup\ConfigurationReader;
-use Webforge\Framework\PscCMSBridge;
 use Webforge\Setup\MissingConfigVariableException;
+use Webforge\Setup\Configuration;
 
 class ProjectPackage implements \Webforge\Framework\Project {
 
@@ -49,10 +48,12 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   protected $languages;
 
-  public function __construct(Package $package, $mode = 0x000000) {
+  public function __construct(Package $package, $name, $lowerName, $mode = 0x000000, $host) {
+    $this->name = $name;
+    $this->lowerName = $lowerName;
     $this->package = $package;
-    $this->bridge = new PscCMSBridge();
     $this->mode = $mode;
+    $this->host = $host;
   }
 
   /**
@@ -60,13 +61,8 @@ class ProjectPackage implements \Webforge\Framework\Project {
    * @return string
    */
   public function getName() {
-    if (!isset($this->name)) {
-      $this->name = $this->bridge->getProjectName($this->package);
-    }
-
     return $this->name;
   }
-
 
   /**
    * Returns a safe slug in lowercase
@@ -76,10 +72,6 @@ class ProjectPackage implements \Webforge\Framework\Project {
    * @return string
    */
   public function getLowerName() {
-    if (!isset($this->lowerName)) {
-      $this->lowerName = $this->package->getSlug();
-    }
-
     return $this->lowerName;
   }
 
@@ -88,60 +80,24 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function getConfiguration() {
     if (!isset($this->configuration)) {
-      $this->configuration = $this->readConfiguration();
+      throw new \RuntimeException('Configuration is not yet defined! Factory error(!).');
     }
 
     return $this->configuration;
   }
 
-  protected function readConfiguration () {
-    $reader = new ConfigurationReader();
-    $reader->setScope(array('package'=>$this->package, 'project'=>$this));
-
-    if ($configFile = $this->getConfigurationFile()) {
-      return $reader->fromPHPFile($configFile);
-    } else {
-      return $reader->fromArray(array());
-    }
-  }
-
   /**
-   * @return File|NULL
+   * @param Webforge\Setup\Configuraton $config
    */
-  protected function getConfigurationFile() {
-    $etcConfigFile = $this->package->getRootDirectory()->getFile('etc/config.php');
-    
-    if ($etcConfigFile->exists()) {
-      return $etcConfigFile;
-    }
-
-    $packageConfigFile = $this->package->getRootDirectory()->getFile('application/inc.config.php');
-    
-    if ($packageConfigFile->exists()) {
-      return $packageConfigFile;
-    }
-
-    $projectConfigFile = $this->package->getRootDirectory()->getFile('inc.config.php');
-    
-    if ($projectConfigFile->exists()) {
-      return $projectConfigFile;
-    }
-
-    return NULL;
+  public function setConfiguration(Configuration $config) {
+    $this->configuration = $config;
+    return $this;
   }
 
   /**
    * @inherit-doc
    */
   public function getHost() {
-    if (!isset($this->host)) {
-      try {
-        $this->host = $this->bridge->getHostConfig()->req('host');
-      } catch (MissingConfigVariableException $e) {
-        $this->host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n');
-      }
-    }
-
     return $this->host;
   }
 
@@ -165,7 +121,7 @@ class ProjectPackage implements \Webforge\Framework\Project {
   public function getStatus() {
     if ($this->isStaging()) {
       $status = 'staging';
-    } elseif($this->isDevelopment()) {
+    } elseif ($this->isDevelopment()) {
       $status = 'development';
     } else {
       $status = 'live';
@@ -174,6 +130,9 @@ class ProjectPackage implements \Webforge\Framework\Project {
     return $status;
   }
 
+  /**
+   * @return array
+   */
   public function getLanguages() {
     if (!isset($this->languages)) {
       $this->languages = $this->getConfiguration()->req(array('languages'));
@@ -197,8 +156,12 @@ class ProjectPackage implements \Webforge\Framework\Project {
     return $this->package->getRootDirectory();
   }
 
-  public function setBridge(PscCMSBridge $bridge) {
-    $this->bridge = $bridge;
+  public function setStaging($to = TRUE) {
+    if ($to) {
+      $this->mode |= self::STAGING;
+    } else {
+      $this->mode &= ~self::STAGING;
+    }
     return $this;
   }
 }

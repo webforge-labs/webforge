@@ -39,6 +39,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('resourceDirectory', 'Webforge\Common\System\Dir');
     $prop('cmsBridge', 'Webforge\Framework\PscCMSBridge');
     $prop('hostConfiguration', 'Webforge\Setup\Configuration');
+    $prop('projectsFactory', 'Webforge\Framework\ProjectsFactory');
     
     return $props;
   }

@@ -60,7 +60,12 @@ class Container {
    * @var Webforge\Framework\Package\Registry
    */
   protected $packageRegistry;
-  
+
+  /**
+   * @var Webforge\Framework\ProjectsFactory
+   */
+  protected $projectsFactory;
+
   /**
    * @var Webforge\Framework\PscCMSBridge
    */
@@ -318,8 +323,28 @@ class Container {
 
     return $this->hostConfiguration;
   }
+
+
+  /**
+   * @return \Webforge\Framework\ProjectsFactory
+   */
+  public function getProjectsFactory() {
+    if (!isset($this->projectsFactory)) {
+      $this->projectsFactory = new ProjectsFactory($this);
+    }
+    return $this->projectsFactory;
+  }
   
   // @codeCoverageIgnoreStart
+  /**
+   * @param \Webforge\Framework\ProjectsFactory projectsFactory
+   * @chainable
+   */
+  public function setProjectsFactory(ProjectsFactory $projectsFactory) {
+    $this->projectsFactory = $projectsFactory;
+    return $this;
+  }
+
   /**
    * @param Webforge\Framework\Package\Registry $packageRegistry
    * @chainable

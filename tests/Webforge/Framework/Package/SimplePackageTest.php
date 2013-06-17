@@ -33,12 +33,29 @@ class SimplePackageTest extends \Webforge\Code\Test\Base {
     $this->assertEquals('some-slug', $this->simplePackage->getSlug());
   }
   
-  public function testGetDirectoryVorVendorReturnsTheVendorDirectory() {
+  public function testGetDirectoryForVendorReturnsTheVendorDirectory() {
     $this->assertInstanceOf('Webforge\Common\System\Dir', $vendor = $this->simplePackage->getDirectory(Package::VENDOR));
     $this->assertEquals(
       (string) $this->root->sub('vendor/'),
       (string) $vendor
     );
+  }
+
+  public function testGetDirectoryForWithRootReturnsCloneOfRoot() {
+    $this->assertInstanceOf('Webforge\Common\System\Dir', $root = $this->simplePackage->getDirectory(Package::ROOT));
+
+    $this->assertEquals(
+      (string) $this->root,
+      (string) $root
+    );
+
+    $this->assertNotSame($this->root, $root);
+  }
+
+  public function testGetDirectoryWithOtherConstantDoesNotWork() {
+    $this->setExpectedException('InvalidArgumentException');
+
+    $this->simplePackage->getDirectory('notdefined');
   }
   
   public function testGetNamespaceReturnsANamespacedNamedFromPackageSlug_byConvention_whenAutoloadInfoIsEmpty() {

@@ -6,6 +6,7 @@ use Webforge\Common\System\Dir;
 use Webforge\Setup\AutoLoadInfo;
 use Webforge\Setup\NoAutoLoadPrefixException;
 use Webforge\Framework\Inflector;
+use InvalidArgumentException;
 
 class SimplePackage implements Package {
   
@@ -96,6 +97,8 @@ class SimplePackage implements Package {
     } elseif ($type === self::VENDOR) {
       return $this->getRootDirectory()->sub('vendor/');
     }
+
+    throw new InvalidArgumentException(sprintf('the type %s is not known.', $type));
   }
   
   /**
