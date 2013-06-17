@@ -125,7 +125,10 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function getHost() {
     if (!isset($this->host)) {
-      $this->host = $this->bridge->getHostConfig()->reqDefault('host', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n'));
+      $this->host = $this->bridge->getHostConfig()->req(
+        'host', 
+        isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n')
+      );
     }
     return $this->host;
   }
