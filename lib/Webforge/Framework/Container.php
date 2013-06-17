@@ -65,6 +65,11 @@ class Container {
    * @var Webforge\Framework\PscCMSBridge
    */
   protected $cmsBridge;
+
+  /**
+   * @var Webforge\Setup\Configuration
+   */
+  protected $hostConfiguration;
   
   /**
    * The local package is the package for the current context
@@ -299,7 +304,19 @@ class Container {
     if (!isset($this->cmsBridge)) {
       $this->cmsBridge = new PscCMSBridge();    
     }
+
     return $this->cmsBridge;
+  }
+
+  /**
+   * @return Webforge\Setup\Configuration
+   */
+  public function getHostConfiguration() {
+    if (!isset($this->hostConfiguration)) {
+      $this->hostConfiguration = $this->getCMSBridge()->getHostConfig();
+    }
+
+    return $this->hostConfiguration;
   }
   
   // @codeCoverageIgnoreStart

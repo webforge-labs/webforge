@@ -38,10 +38,11 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('partsInstaller', 'Webforge\Setup\Installer\PartsInstaller');
     $prop('resourceDirectory', 'Webforge\Common\System\Dir');
     $prop('cmsBridge', 'Webforge\Framework\PscCMSBridge');
+    $prop('hostConfiguration', 'Webforge\Setup\Configuration');
     
     return $props;
   }
-  
+
   public function testApplicationStorageHasApplicationStorageName() {
     $this->assertEquals($this->container->getApplicationStorageName(), $this->container->getApplicationStorage()->getName());
   }

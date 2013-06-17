@@ -129,7 +129,7 @@ class PscCMSBridge {
         $this->hostConfig = new Configuration(array());
       }
     }
-    
+
     return $this->hostConfig;
   }
   
