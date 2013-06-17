@@ -2,6 +2,9 @@
 
 namespace Webforge\Framework\Package;
 
+use Webforge\Setup\Configuration;
+use Webforge\Setup\MissingConfigVariableException;
+
 class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
   protected $projectPackage, $oldStyleProjectPackage, $projectPackageWithoutConfig, $projectPackageApplicationConfig;
@@ -13,8 +16,8 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->projectPackage = new ProjectPackage($this->configPackage); // ACMESuperBlog
     $this->projectPackageApplicationConfig = new ProjectPackage($this->appPackage);
     $this->projectPackageWithoutConfig = new ProjectPackage($this->package);
-    $this->oldStyleProjectPackage = new ProjectPackage($this->oldStylePackage);
-    $this->comun = new ProjectPackage($this->camelCasePackage);
+    $this->develPackage = $this->oldStyleProjectPackage = new ProjectPackage($this->oldStylePackage, ProjectPackage::DEVELOPMENT);
+    $this->stagingPackage = $this->comun = new ProjectPackage($this->camelCasePackage, ProjectPackage::STAGING);
   }
 
   public function testProjectPackageCanReadItsConfigurationFromEtcConfig() {
@@ -49,6 +52,7 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
   public function testIsStaging() {
     $this->assertFalse($this->projectPackage->isStaging());
+    $this->assertTrue($this->stagingPackage->isStaging());
   }
 
   public function testHasLanguagesAndADefaultLanguage() {
@@ -57,14 +61,33 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
   }
 
   public function testIsDevelopment() {
-    $this->assertFalse($this->projectPackage->isStaging());
+    $this->assertFalse($this->projectPackage->isDevelopment());
+    $this->assertTrue($this->develPackage->isDevelopment());
   }
 
   public function testGetsStatusAsString() {
-    $this->assertNotEmpty($this->projectPackage->getStatus());
+    $this->assertEquals('live', $this->projectPackage->getStatus());
+    $this->assertEquals('development', $this->develPackage->getStatus());
+    $this->assertEquals('staging', $this->stagingPackage->getStatus());
   }
 
-  public function testGetHostReturnsString() {
+  public function testGetHostReturnsStringFromConfig() {
+    $this->bridge = $this->getMock('Webforge\Framework\PscCMSBridge');
+    $this->projectPackage->setBridge($this->bridge);
+    $this->bridge
+      ->expects($this->once())->method('getHostConfig')
+      ->will($this->returnValue(new Configuration(array('host'=>'testhost'))));
+
+    $this->assertEquals('testhost', $host = $this->projectPackage->getHost());
+  }
+
+  public function testGetHostFallsBackToPHPUname() {
+    $this->bridge = $this->getMock('Webforge\Framework\PscCMSBridge');
+    $this->projectPackage->setBridge($this->bridge);
+    $this->bridge
+      ->expects($this->once())->method('getHostConfig')
+      ->will($this->throwException(MissingConfigVariableException::fromKeys(array('host'))));
+
     $this->assertNotEmpty($host = $this->projectPackage->getHost());
   }
 

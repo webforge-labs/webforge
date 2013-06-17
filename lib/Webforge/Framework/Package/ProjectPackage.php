@@ -8,6 +8,9 @@ use Webforge\Setup\MissingConfigVariableException;
 
 class ProjectPackage implements \Webforge\Framework\Project {
 
+  const STAGING = 0x000001;
+  const DEVELOPMENT   = 0x000010;
+
   /**
    * @var Webforge\Framework\Package\Package
    */
@@ -37,13 +40,19 @@ class ProjectPackage implements \Webforge\Framework\Project {
   protected $host;
 
   /**
+   * @var bitmap
+   */
+  protected $mode;
+
+  /**
    * @var array
    */
   protected $languages;
 
-  public function __construct(Package $package) {
+  public function __construct(Package $package, $mode = 0x000000) {
     $this->package = $package;
     $this->bridge = new PscCMSBridge();
+    $this->mode = $mode;
   }
 
   /**
@@ -140,14 +149,14 @@ class ProjectPackage implements \Webforge\Framework\Project {
    * @return bool
    */
   public function isStaging() {
-    return FALSE;
+    return (bool) ($this->mode & self::STAGING);
   }
 
   /**
    * @return bool
    */
   public function isDevelopment() {
-    return FALSE;
+    return (bool) ($this->mode & self::DEVELOPMENT);
   }
 
   /**
@@ -186,5 +195,10 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function getRootDirectory() {
     return $this->package->getRootDirectory();
+  }
+
+  public function setBridge(PscCMSBridge $bridge) {
+    $this->bridge = $bridge;
+    return $this;
   }
 }
