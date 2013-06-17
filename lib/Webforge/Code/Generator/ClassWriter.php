@@ -6,7 +6,7 @@ use Psc\Code\Generate\ClassWritingException;
 use Webforge\Common\System\File;
 use Webforge\Common\String as S;
 use Psc\Code\Generate\DocBlock;
-use Psc\A;
+use Webforge\Common\ArrayUtil as A;
 use Psc\Code\Generate\CodeWriter;
 
 /**

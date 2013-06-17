@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\String AS S;
+use Webforge\Common\String as S;
 use ReflectionClass;
 use Psc\Data\Type\ObjectType;
 use InvalidArgumentException;
