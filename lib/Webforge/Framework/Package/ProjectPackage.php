@@ -4,6 +4,7 @@ namespace Webforge\Framework\Package;
 
 use Webforge\Setup\ConfigurationReader;
 use Webforge\Framework\PscCMSBridge;
+use Webforge\Setup\MissingConfigVariableException;
 
 class ProjectPackage implements \Webforge\Framework\Project {
 
@@ -125,11 +126,13 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function getHost() {
     if (!isset($this->host)) {
-      $this->host = $this->bridge->getHostConfig()->req(
-        'host', 
-        isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n')
-      );
+      try {
+        $this->host = $this->bridge->getHostConfig()->req('host');
+      } catch (MissingConfigVariableException $e) {
+        $this->host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n');
+      }
     }
+
     return $this->host;
   }
 
