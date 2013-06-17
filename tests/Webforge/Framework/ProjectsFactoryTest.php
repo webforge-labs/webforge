@@ -16,8 +16,8 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->container = new Container();
     $this->container->getHostConfiguration()->set(array('production'), FALSE);
     $this->container->getHostConfiguration()->set(array('development'), NULL);
+    $this->container->getHostConfiguration()->set(array('host'), 'testhost');
     $this->factory = $this->container->getProjectsFactory();
-    $this->realHost = $this->container->getHostConfiguration()->req(array('host'));
 
     $this->projectPackage = $this->factory->fromPackage($this->configPackage); // ACMESuperBlog
     $this->projectPackageApplicationConfig = $this->factory->fromPackage($this->appPackage);
@@ -84,7 +84,7 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
   }
 
   public function testGetHostReturnsStringFromConfig() {
-    $this->assertEquals($this->realHost, $this->projectPackage->getHost());
+    $this->assertEquals('testhost', $this->projectPackage->getHost());
   }
 
   public function testGetHostFallsBackToPHPUname() {
