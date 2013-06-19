@@ -150,7 +150,7 @@ $createCommand('install:part',
     $partName = $input->getArgument('part');
     $location = $command->validateDirectory($input->getArgument('location') ?: '.');
 
-    $partsInstaller = $container->getPartsInstaller($output);
+    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), $output);
 
     if (empty($partName)) {
       $command->info('parts avaible:');
@@ -176,7 +176,7 @@ $createCommand('install:part',
 $createCommand('install:list-parts',
   array(),
   function ($input, $output, $command) use ($container) {
-    $partsInstaller = $container->getPartsInstaller();
+    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), $output);
     
     $command->info('parts avaible:');
     

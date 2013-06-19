@@ -2,7 +2,7 @@
 
 namespace Webforge\Console;
 
-use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Application as SymfonyApplication;
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
 use Webforge\Framework\Package\Package;
@@ -15,8 +15,8 @@ class IncludeCommandsConsole {
    */
   protected $application;
   
-  public function __construct(Application $application = NULL) {
-    $this->application = $application ?: new Application();
+  public function __construct(SymfonyApplication $application = NULL) {
+    $this->application = $application ?: new SymfonyApplication();
   }
   
   /**
@@ -45,4 +45,3 @@ class IncludeCommandsConsole {
     return $this;
   }
 }
-?>

@@ -17,4 +17,3 @@ if (!file_exists($vendor.'autoload.php')) {
 require $vendor.'autoload.php';
 
 return $GLOBALS['env']['root'] = new \Webforge\Common\System\Dir(__DIR__.DIRECTORY_SEPARATOR);
-?>
