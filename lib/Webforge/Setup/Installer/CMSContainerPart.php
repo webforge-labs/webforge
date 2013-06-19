@@ -16,7 +16,7 @@ class CMSContainerPart extends Part implements PackageAware {
     $namespace = $this->package->getNamespace();
 
     $installer->createClass('CMS\Container', Installer::IF_NOT_EXISTS)
-      ->parent('Psc\CMS\AbstractContainer')
+      ->parent('Psc\CMS\Roles\AbstractContainer')
       ->withGClass(function ($gClass) use ($installer, $namespace) {
         $gClass->addProperty(
           GProperty::create(
