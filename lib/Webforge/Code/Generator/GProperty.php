@@ -177,4 +177,3 @@ class GProperty extends GModifiersObject {
   }
   // @codeCoverageIgnoreEnd
 }
-?>

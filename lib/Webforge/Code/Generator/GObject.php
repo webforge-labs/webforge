@@ -64,4 +64,3 @@ abstract class GObject {
     return $this->docBlock != NULL;
   }  
 }
-?>

@@ -136,18 +136,18 @@ class ClassWriter {
     /* those other methods make the margin with line breaks to top and to their left.*/
     
     /* Constants */
-    $php .= A::joinc($gClass->getConstants(), '  '.$eol.'%s;'.$eol, function ($constant) use ($that) {
-      return $that->writeConstant($constant, 2);
+    $php .= A::joinc($gClass->getConstants(), '  '.$eol.'%s;'.$eol, function ($constant) use ($that, $eol) {
+      return $that->writeConstant($constant, 2, $eol);
     });
     
     /* Properties */
-    $php .= A::joinc($gClass->getProperties(), '  '.$eol.'%s;'.$eol, function ($property) use ($that) {
-      return $that->writeProperty($property, 2);
+    $php .= A::joinc($gClass->getProperties(), '  '.$eol.'%s;'.$eol, function ($property) use ($that, $eol) {
+      return $that->writeProperty($property, 2, $eol);
     });
 
     /* Methods */
-    $php .= A::joinc($gClass->getMethods(), '  '.$eol.'%s'.$eol, function ($method) use ($that) {
-      return $that->writeMethod($method, 2); 
+    $php .= A::joinc($gClass->getMethods(), '  '.$eol.'%s'.$eol, function ($method) use ($that, $eol) {
+      return $that->writeMethod($method, 2, $eol); 
     });
     
     $php .= '}';
@@ -287,7 +287,7 @@ class ClassWriter {
     return '';
   }
 
-  public function writeArgumentValue($value) {
+  protected function writeArgumentValue($value) {
     if (is_array($value) && A::getType($value) === 'numeric') {
       return $this->getCodeWriter()->exportList($value);
     } elseif (is_array($value)) {
@@ -300,11 +300,39 @@ class ClassWriter {
       }
     }
   }
+
+  /**
+   * @return string
+   */
+  public function writeProperty(GProperty $property, $baseIndent, $eol = "\n") {
+    $php = NULL;
+
+    if ($property->hasDocBlock()) {
+      $php = $this->writeDocBlock($property->getDocBlock(), $baseIndent, $eol);
+    }
+
+    $php .= str_repeat(' ', $baseIndent);
+    
+    $php .= $this->writeModifiers($property->getModifiers());
+    
+    $php .= '$'.$property->getName();
+    
+    if ($property->hasDefaultValue() && $property->getDefaultValue() !== NULL) {
+      $php .= ' = '.$this->writePropertyValue($property->getDefaultValue());
+    }
+
+    return $php;
+  }
+
+  protected function writePropertyValue($value) {
+    return $this->writeArgumentValue($value);
+  }
+
   
   /**
    * @return string
    */
-  public function writeDocBlock(DocBlock $docBlock, $baseIndent = 0) {
+  public function writeDocBlock(DocBlock $docBlock, $baseIndent = 0, $eol = "\n") {
     return S::indent($docBlock->toString(), $baseIndent);
   }
   
@@ -373,4 +401,3 @@ class ClassWriter {
     return $this->codeWriter;
   }
 }
-?>

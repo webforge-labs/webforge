@@ -13,8 +13,9 @@ class ClassWriterPHPTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
     $this->classWriter = new ClassWriter();
+    $this->gClass = new GClass('Blank');
   }
-  
+
   public function testWriteGClass_ContainsDocBlock() {
     $gClass = new GClass('WithDocBlock');
     $gClass->createDocBlock('The comment');
@@ -114,7 +115,7 @@ PHP;
   }
   public function testWritesParameterHintWithoutFQNWhenHintWasInGClass() {
     $param = GParameter::create('yValue', $point = new GClass('Webforge\Geometric\PointValue'));
-    
+   
     $gClass = new GClass('WithImport');
     $gClass->createMethod('someActionWithY', array($param));
     
@@ -144,5 +145,34 @@ PHP;
 
     $this->assertCodeEquals($phpCode, $this->classWriter->writeGClass($if, $namespace = 'ACME'));
   }
+
+  public function testPropertyWithDefaultValue() {
+    $this->gClass->addProperty(GProperty::create('defaultNamespace', 'String', 'Psc\CMS\Controllers'));
+
+    $phpCode = "protected \$defaultNamespace = 'Psc\\\\CMS\\\\Controllers';";
+
+    $this->assertInnerCodeEquals($phpCode);
+  }
+
+  public function testPropertyWithoutDefaultValue() {
+    $this->gClass->addProperty(GProperty::create('defaultNamespace', 'String'));
+
+    $phpCode = "protected \$defaultNamespace;";
+
+    $this->assertInnerCodeEquals($phpCode);
+  }
+
+  protected function assertInnerCodeEquals($innerPhpCode) {
+    $phpCode =
+<<<'PHP'
+class Blank {
+  %s
 }
-?>
+PHP;
+
+    $this->assertCodeEquals(
+      sprintf($phpCode, $innerPhpCode), 
+      $this->classWriter->writeGClass($this->gClass, $namespace = 'ACME')
+    );
+  }
+}

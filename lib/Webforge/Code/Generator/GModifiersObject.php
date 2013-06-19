@@ -171,4 +171,3 @@ abstract class GModifiersObject extends GObject {
     return $this;
   }
 }
-?>
