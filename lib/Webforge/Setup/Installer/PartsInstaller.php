@@ -186,11 +186,11 @@ class PartsInstaller implements Installer {
    */
   public function ask($question, $default = NULL, \Closure $validator = NULL, $attempts = FALSE) {
     if ($validator) {
-      $this->interaction->askAndValidate($question, $validator, $attempts, $default);
+      return $this->interaction->askAndValidate($question, $validator, $attempts, $default);
     } elseif($default !== NULL) {
-      $this->interaction->askDefault($question, $default);
+      return $this->interaction->askDefault($question, $default);
     } else {
-      $this->interaction->ask($question, $default);
+      return $this->interaction->ask($question, $default);
     }
   }
 
