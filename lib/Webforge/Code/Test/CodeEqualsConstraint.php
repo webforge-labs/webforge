@@ -23,6 +23,7 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
   
   public function __construct($code) {
     $this->code = $code;
+    parent::__construct();
   }
   
   /**
