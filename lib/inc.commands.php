@@ -310,11 +310,17 @@ $createCommand('sublime:create-use-completion',
   function ($input, $output, $command) use ($container) {
     $folder = new Dir('C:\Users\Philipp Scheit\Dropbox\work\sublime\Packages\Webforge\\');
 
+    // @TODO if this is asked, then save into a .webforge/settings.json file
+    // like: askGlobalConfigurationSetting(sublime.use-complections-directory)
     if (!$folder->exists()) {
       $folder = $command->askAndValidate('In welches Verzeichnis soll die complection file geschrieben werden? (muss existieren)', function ($dir) {
-        $dir = new Dir($dir);
+        $dir = Dir::factoryTS($dir);
 
-        return $dir->exists();
+        if (!$dir->exists()) {
+          throw new RuntimeException('Directory does not exist: '.$dir);
+        }
+
+        return $dir;
       });
     }
 

@@ -6,6 +6,7 @@ use Webforge\Framework\Container;
 use Closure;
 use Webforge\Common\System\File;
 use Webforge\Framework\Package\Package;
+use Webforge\Common\ClassUtil;
 
 /**
  * Easier usage of the classCreater
@@ -33,23 +34,32 @@ class CreateClassCommand {
    * @var Webforge\Common\System\File
    */
   protected $file;
+
+  /**
+   * Namspace will be appended to classes created with name()
+   * 
+   * @var string without backslash at end
+   */  
+  protected $defaultNamespace;
   
-  public function __construct(ClassCreater $classCreater, ClassFileMapper $classFileMapper) {
+  public function __construct(ClassCreater $classCreater, ClassFileMapper $classFileMapper, $defaultNamespace) {
     $this->classCreater = $classCreater;
     $this->classFileMapper = $classFileMapper;
+    $this->defaultNamespace = rtrim($defaultNamespace, '\\');
   }
   
   /**
    * @return Webforge\Code\Generator\CreateClassCommand
    */
-  public static function fromContainer(Container $container) {
+  public static function fromContainer(Container $container, $defaultNamespace = NULL) {
     return new static(
       new ClassCreater(
         $container->getClassFileMapper(),
         $container->getClassWriter(),
         $container->getClassElevator()
       ),
-      $container->getClassFileMapper()
+      $container->getClassFileMapper(),
+      $defaultNamespace ?: $container->getLocalPackage()->getNamespace()
     );
   }
   
@@ -66,6 +76,13 @@ class CreateClassCommand {
     $this->reset();
     $this->gClass = new GClass($fqn);
     return $this;
+  }
+
+  /**
+   * @chainable
+   */
+  public function name($relativeClassName) {
+    return $this->fqn(ClassUtil::setNamespace($relativeClassName, $this->defaultNamespace));
   }
   
   /**
@@ -141,4 +158,3 @@ class CreateClassCommand {
     return $this->write(TRUE);
   }
 }
-?>
