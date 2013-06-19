@@ -5,6 +5,7 @@ namespace Webforge\Framework;
 use Webforge\Framework\Package\SimplePackage;
 use Webforge\Common\System\Dir;
 use Webforge\Framework\Package\Package;
+use Webforge\Console\InteractionHelper;
 
 class ContainerTest extends \Webforge\Code\Test\Base {
   
@@ -35,13 +36,32 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('classFileMapper', 'Webforge\Code\GlobalClassFileMapper');
     $prop('packageRegistry', 'Webforge\Framework\Package\Registry');
     $prop('composerPackageReader', 'Webforge\Framework\Package\ComposerPackageReader');
-    $prop('partsInstaller', 'Webforge\Setup\Installer\PartsInstaller');
     $prop('resourceDirectory', 'Webforge\Common\System\Dir');
     $prop('cmsBridge', 'Webforge\Framework\PscCMSBridge');
     $prop('hostConfiguration', 'Webforge\Setup\Configuration');
     $prop('projectsFactory', 'Webforge\Framework\ProjectsFactory');
     
     return $props;
+  }
+
+  protected function getInteractionHelper() {
+    return new InteractionHelper(
+      $this->getMock('Symfony\Component\Console\Helper\DialogHelper'),
+      $this->getMock('Symfony\Component\Console\Output\OutputInterface')
+    );
+  }
+
+  public function testContainerConstructsPartsInstaller() {
+    $this->assertInstanceOf(
+      'Webforge\Setup\Installer\PartsInstaller',
+      $this->container->getPartsInstaller($this->getInteractionHelper())
+    );
+  }
+
+  public function testPartsInstallerHasSomeParts() {
+    $partsInstaller = $this->container->getPartsInstaller($this->getInteractionHelper());
+    
+    $this->assertGreaterThan(0, count($partsInstaller->getParts()));
   }
 
   public function testApplicationStorageHasApplicationStorageName() {
@@ -97,14 +117,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
       $this->pluck($packages, 'identifier')
     );
   }
-  
-    
-  public function testPartsInstallerHasSomeParts() {
-    $partsInstaller = $this->container->getPartsInstaller();
-    
-    $this->assertGreaterThan(0, count($partsInstaller->getParts()));
-  }
-  
+      
   public function testResourceDirectoryIsTheWebforgeResourceDirectory() {
     $this->assertEquals(
       (string) Dir::factory(__DIR__.DIRECTORY_SEPARATOR)->sub('../../../resources')->resolvePath(),

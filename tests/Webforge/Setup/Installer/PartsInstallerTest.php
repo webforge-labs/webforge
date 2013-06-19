@@ -16,7 +16,8 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
     $this->output = new ConsoleOutput();
-    $this->partsInstaller = new PartsInstaller(array(), $this->container, $this->output);
+    $this->interaction = $this->getMockBuilder('Webforge\Console\InteractionHelper')->disableOriginalConstructor()->getMock();
+    $this->partsInstaller = new PartsInstaller(array(), $this->container, $this->interaction, $this->output);
     
     $this->mockPart = $this->getMockForAbstractClass('Part', array('MockPart'));
   }

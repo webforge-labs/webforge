@@ -40,4 +40,3 @@ class WriteCmd extends Command {
     return $this->contents;
   }
 }
-?>

@@ -9,6 +9,9 @@ use Webforge\Framework\Container;
 use Webforge\Framework\Package\PackageAware;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Helper\DialogHelper;
+use Webforge\Console\InteractionHelper;
+use Webforge\Code\Generator\CreateClassCommand;
 
 /**
  * @todo an output interface to communicate and warn
@@ -31,12 +34,18 @@ class PartsInstaller implements Installer {
   protected $target;
 
   /**
+   * @var Webforge\Console\InteractionHelper
+   */
+  protected $interaction;
+
+  /**
    * @param $container Container make sure that this container has a localPackage defined
    */
-  public function __construct(Array $parts, Container $container, OutputInterface $output = NULL) {
+  public function __construct(Array $parts, Container $container, InteractionHelper $interaction, OutputInterface $output = NULL) {
     $this->parts = $parts;
     $this->container = $container;
     $this->output = $output ?: new NullOutput();
+    $this->interaction = $interaction;
   }
   
   public function install(Part $part, Dir $destination) {
@@ -126,6 +135,25 @@ class PartsInstaller implements Installer {
     
     return $directory;
   }
+
+  /**
+   * 
+   * @YAGNI: if needed relativeClassName could be given as GClass to determine the FQN (better a FQN Class?)
+   * @param string $relatitveClassName will be expanded with the namespace of the local package
+   * @return Webforge\Code\Generator\CreateClassCommand
+   */
+  public function createClass($relativeClassName, $flags = 0x000000, File $destination = NULL) {
+    $createClassCmd = CreateClassCommand::fromContainer($this->container, $this->getPackage()->getNamespace())
+      ->name($relativeClassName)
+      ->setFileFromPackage($this->getPackage())
+    ;
+
+    $this->command(
+      new CreateClassCmd($createClassCmd, $destination, $flags)
+    );
+
+    return $createClassCmd;
+  }
   
   /**
    * @return Webforge\Common\System\Dir
@@ -141,12 +169,34 @@ class PartsInstaller implements Installer {
     return $this->getWebforgeResources()->sub('installTemplates/');
   }
 
+  /**
+   * @return Webforge\Common\System\File
+   */
+  public function getInstallTemplate($relativePath) {
+    return $this->getInstallTemplates()->getFile($relativePath);
+  }
 
   protected function command(Command $cmd) {
     $this->macro->addCommand($cmd);
     return $cmd;
   }
   
+  /**
+   * @param string $question 
+   */
+  public function ask($question, $default = NULL, \Closure $validator = NULL, $attempts = FALSE) {
+    if ($validator) {
+      $this->interaction->askAndValidate($question, $validator, $attempts, $default);
+    } elseif($default !== NULL) {
+      $this->interaction->askDefault($question, $default);
+    } else {
+      $this->interaction->ask($question, $default);
+    }
+  }
+
+  public function confirm($question) {
+    return $this->interaction->confirm($question);
+  }
   
   public function warn($msg) {
     return $this->output->writeln('<error>'.$msg.'</error>');
@@ -183,6 +233,10 @@ class PartsInstaller implements Installer {
    */
   public function getParts() {
     return $this->parts;
+  }
+
+  protected function getPackage() {
+    return $this->container->getLocalPackage();
   }
 }
 ?>

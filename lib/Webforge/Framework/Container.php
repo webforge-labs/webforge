@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\Dir;
 use Webforge\Common\Exception\MessageException;
+use Webforge\Console\InteractionHelper;
 
 /**
  * This container includes the base classes for the framework
@@ -212,11 +213,11 @@ class Container {
   /**
    * @return Webforge\Setup\Installer\PartsInstaller
    */
-  public function getPartsInstaller(OutputInterface $output = NULL) {
+  public function getPartsInstaller(InteractionHelper $interaction = NULL, OutputInterface $output = NULL) {
     if (!isset($this->partsInstaller)) {
       $this->partsInstaller =
         new PartsInstaller(
-          Array(
+          array(
             new \Webforge\Setup\Installer\CreateCLIPart(),
             new \Webforge\Setup\Installer\CreateBootstrapPart(),
             new \Webforge\Setup\Installer\ApacheConfigurationPart(),
@@ -225,11 +226,14 @@ class Container {
             new \Webforge\Setup\Installer\WriteHtaccessPart(),
             new \Webforge\Setup\Installer\PscJSBoilerplatePart(),
             new \Webforge\Setup\Installer\InitConfigurationPart(),
-            new \Webforge\Setup\Installer\InitDoctrinePart()
-        ),
-        $this,
-        $output
-      );
+            new \Webforge\Setup\Installer\InitDoctrinePart(),
+            new \Webforge\Setup\Installer\CMSContainerPart()
+          ),
+          $this,
+          $interaction,
+          $output
+        )
+      ;
     }
     
     return $this->partsInstaller;
@@ -427,6 +431,15 @@ class Container {
    */
   public function setPartsInstaller(PartsInstaller $partsInstaller) {
     $this->partsInstaller = $partsInstaller;
+    return $this;
+  }
+
+  /**
+   * @param Webforge\Framework\Package\Package localPackage
+   * @chainable
+   */
+  public function setLocalPackage(Package $localPackage) {
+    $this->localPackage = $localPackage;
     return $this;
   }
 

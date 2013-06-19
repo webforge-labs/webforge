@@ -8,7 +8,7 @@ use Webforge\Common\System\Dir;
 interface Installer {
   
   const IF_NOT_EXISTS = 0x000001;
-  
+
   public function install(Part $part, Dir $destination);
   
   /**
@@ -28,17 +28,36 @@ interface Installer {
   public function createDir($targetSub);
 
   /**
+   * @return Webforge\Code\Generator\CreateClassCommand
+   */
+  public function createClass($relativeClassName, $flags = 0x000000, File $destination);
+
+  /**
    * @return Webforge\Common\System\Dir
    */
   public function getInstallTemplates();
+
+  /**
+   * @return Webforge\Common\System\File
+   */
+  public function getInstallTemplate($relativePath);
   
   public function execute($cmd);
   
   public function warn($msg);
+
+  /**
+   * @return string input from user or return value from $validator if given
+   */
+  public function ask($question, $default = NULL, \Closure $validator = NULL, $attempts = FALSE);
+
+  /**
+   * @return bool
+   */
+  public function confirm($question);
   
   /**
    * Outputs a suggestion / or message
    */
   public function info($msg);
 }
-?>

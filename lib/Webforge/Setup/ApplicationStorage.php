@@ -128,4 +128,3 @@ class ApplicationStorage {
     return $this->name;
   }
 }
-?>

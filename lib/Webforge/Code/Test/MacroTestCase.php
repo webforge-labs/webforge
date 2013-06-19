@@ -7,4 +7,3 @@ class MacroTestCase extends Base {
   protected $macro;
   
 }
-?>

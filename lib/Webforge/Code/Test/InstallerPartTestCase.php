@@ -21,9 +21,23 @@ class InstallerPartTestCase extends MacroTestCase {
     $this->target = Dir::createTemporary();
     $this->container = new Container();
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
+
+    /*
+     this would be the package were webforge operates in
+     in webforge tests $this->package->getIdentifier() === 'webforge/webforge'
+     so that setRootDirectory() would change 'webforge/webforge' in package-registry package)
+     thats why we have to clone the local package to "fake" a webforge-is-operating-on-it-package
+
+     we need to do this extra work, because the createClassCommand is not injected with $this->target (and uses the package root dir)
+     but i thinks this makes the test more realistic
+    */
+    $this->package = clone $this->container->getLocalPackage();
+    $this->package->setRootDirectory($this->target);
+    $this->container->setLocalPackage($this->package);
     
     $this->output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface');
-    $this->installer = new PartsInstaller(array(), $this->container, $this->output);
+    $this->interaction = $this->getMockBuilder('Webforge\Console\InteractionHelper')->disableOriginalConstructor()->getMock();
+    $this->installer = new PartsInstaller(array(), $this->container, $this->interaction, $this->output);
   }
   
   public function findCopyCmds(Macro $macro) {
@@ -63,6 +77,7 @@ class InstallerPartTestCase extends MacroTestCase {
       if ($this->isCmd('WriteTemplate', $write)) {
         $files[(string) $write->getTemplate()] = $write->getDestination()->getUrl($this->target);
         $this->assertFileExists($write->getTemplate(), 'template does not exist: '. $write->describe());
+
       } elseif($this->isCmd('Write', $write)) {
         $files[] = $write->getDestination()->getUrl($this->target);
       }
@@ -86,11 +101,21 @@ class InstallerPartTestCase extends MacroTestCase {
     
     return $str;
   }
-  
+
+  public function expectQuestion($constraint, $answer, $type = 'all') {
+    $this->interaction
+     ->expects($this->once())
+     ->method($type === 'all' 
+       ? $this->logicalOr($this->equalTo('ask'), $this->equalTo('askAndValidate'), $this->equalTo('askDefault'), $this->equalTo('confirm')) 
+       : $type
+     )
+     ->with($constraint)
+     ->will($this->returnValue($answer));
+  }
+
   public function tearDown() {
     if (isset($this->target)) {
       $this->target->delete();
     }
   }
 }
-?>

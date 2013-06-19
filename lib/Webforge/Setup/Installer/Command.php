@@ -35,4 +35,3 @@ abstract class Command implements \Webforge\Common\Command, EventDispatcher {
     );
   }
 }
-?>

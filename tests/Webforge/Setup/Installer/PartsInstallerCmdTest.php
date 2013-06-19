@@ -9,6 +9,8 @@ use Webforge\Code\Test\ConsoleOutput;
 class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
   
   protected $testDir;
+
+  protected $container, $output, $interaction, $partsInstaller, $mockPart;
   
   public function setUp() {
     $this->testDir = $this->getMock('Webforge\Common\System\Dir');
@@ -16,7 +18,8 @@ class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
     $this->output = new ConsoleOutput();
-    $this->partsInstaller = new PartsInstaller(array(), $this->container, $this->output);
+    $this->interaction = $this->getMockBuilder('Webforge\Console\InteractionHelper')->disableOriginalConstructor()->getMock();
+    $this->partsInstaller = new PartsInstaller(array(), $this->container, $this->interaction, $this->output);
     
     $this->mockPart = $this->getMockForAbstractClass('Part', array('MockPart'));
   }
