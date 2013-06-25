@@ -17,6 +17,8 @@ use Webforge\Common\System\Dir;
 use Webforge\Common\String;
 use Webforge\Common\CLassUtil;
 
+use Psc\System\Command\Command;
+
 $container = new FrameworkContainer();
 
 try {
@@ -113,7 +115,7 @@ $createCommand('register-package',
     $arg('type', 'the type for the packageReader (only composer, yet)', FALSE)
   ),
   function ($input, $output, $command) use ($container) {
-    $location = $command->validateDirectory($input->getArgument('location'));
+    $location = $command->validateDirectory($input->getArgument('location'), Command::MUST_EXIST | Command::RESOLVE_RELATIVE);
     $type = $command->validateEnum($input->getArgument('type') ?: 'composer', array('composer'));
     
     if ($type === 'composer') {
