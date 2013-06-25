@@ -29,8 +29,7 @@
   },
   "autoload": {
     "psr-0": {
-      "Webforge": ["lib/", "tests/"],
-      "Webforge\\Configuration": "D:\\www\\webforge-config\\lib"
+      "Webforge": ["lib/", "tests/"]
     }
   },
   "bin": ["bin/webforge"],
