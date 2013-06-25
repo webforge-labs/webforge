@@ -5,6 +5,7 @@ namespace Webforge\Setup\Installer;
 use Webforge\Common\System\Dir;
 use Webforge\Framework\Package\PackageAware;
 use Webforge\Code\Generator\GProperty;
+use Webforge\Code\Generator\GMethod;
 
 class CMSContainerPart extends Part implements PackageAware {
   
@@ -18,6 +19,7 @@ class CMSContainerPart extends Part implements PackageAware {
     $installer->createClass('CMS\Container', Installer::IF_NOT_EXISTS)
       ->parent('Psc\CMS\Roles\AbstractContainer')
       ->withGClass(function ($gClass) use ($installer, $namespace) {
+
         $gClass->addProperty(
           GProperty::create(
             'defaultNamespace', 
@@ -25,7 +27,13 @@ class CMSContainerPart extends Part implements PackageAware {
             $installer->ask('Specify the default ControllerNamespace:', $namespace.'\\Controllers')
           )
         );
+
+        $gClass->addMethod(
+          GMethod::create('createContentStreamConverter', array(), NULL, GMethod::MODIFIER_PROTECTED)
+        );
       })
     ;
+
+    $installer->info('Done.');
   }
 }
