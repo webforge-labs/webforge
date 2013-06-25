@@ -14,7 +14,7 @@
  
 /* General */
 $conf['host'] = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n');
-$conf['production'] = TRUE;
+$conf['development'] = FALSE;
 
 /* database global system management */
 $conf['system']['dbm']['user'] = 'root';
