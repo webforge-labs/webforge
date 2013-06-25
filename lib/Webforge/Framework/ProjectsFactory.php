@@ -4,7 +4,7 @@ namespace Webforge\Framework;
 
 use Webforge\Framework\Package\Package;
 use Webforge\Framework\Package\ProjectPackage;
-use Webforge\Setup\ConfigurationReader;
+use Webforge\Configuration\ConfigurationReader;
 
 class ProjectsFactory implements ContainerAware {
 

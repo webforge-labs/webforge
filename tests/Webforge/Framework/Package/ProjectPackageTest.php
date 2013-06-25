@@ -2,7 +2,7 @@
 
 namespace Webforge\Framework\Package;
 
-use Webforge\Setup\Configuration;
+use Webforge\Configuration\Configuration;
 use Webforge\Setup\MissingConfigVariableException;
 
 class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {

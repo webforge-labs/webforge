@@ -19,6 +19,7 @@
     "pscheit/psc-cms": "1.3.*@dev",
     "pscheit/psc-cms-boot": "2.*",
     "webforge/common": "1.1.*@dev",
+    "webforge/config": "1.0.*@dev",
     "sebastian/diff": "1.0.*"
   },
   "require-dev": {
@@ -28,7 +29,8 @@
   },
   "autoload": {
     "psr-0": {
-      "Webforge": ["lib/", "tests/"]
+      "Webforge": ["lib/", "tests/"],
+      "Webforge\\Configuration": "D:\\www\\webforge-config\\lib"
     }
   },
   "bin": ["bin/webforge"],

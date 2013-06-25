@@ -9,16 +9,16 @@ use Psc\CMS\ProjectsFactory;
 use Webforge\Common\System\File;
 use Webforge\Common\Preg;
 use Psc\CMS\Configuration as PscConfiguration;
-use Webforge\Setup\Configuration;
+use Webforge\Configuration\Configuration;
 use Psc\Exception AS BridgeException;
 use RuntimeException;
-use Webforge\Setup\ConfigurationReader;
+use Webforge\Configuration\ConfigurationReader;
 use Webforge\Common\String as S;
 
 class PscCMSBridge {
   
   /**
-   * @var Webforge\Setup\Configuration
+   * @var Webforge\Configuration\Configuration
    */
   protected $hostConfig;
 
@@ -128,20 +128,28 @@ class PscCMSBridge {
       } else {
         $this->hostConfig = new Configuration(array());
       }
+
+      $this->hostConfig = $this->convertToPscConfig($this->hostConfig);
     }
 
     return $this->hostConfig;
+  }
+
+  protected function convertToPscConfig($config) {
+    return new \Psc\CMS\Configuration($config->toArray());
   }
   
   protected function getLocalConfig(PscProject $project) {
     $localConfigFile = $this->getLocalConfigFile($project);
     
     if ($localConfigFile !== NULL) {
-      return $this->readConfigurationFromFile($localConfigFile, $scope = array('project'=>$project));
+      $config = $this->readConfigurationFromFile($localConfigFile, $scope = array('project'=>$project));
     } else {
       $conf = array();
-      return new Configuration($conf);
+      $config = new Configuration($conf);
     }
+
+    return $this->convertToPscConfig($config);
   }
   
   protected function readConfigurationFromFile(File $configFile, Array $scope = array()) {

@@ -3,7 +3,7 @@
 namespace Webforge\Framework\Package;
 
 use Webforge\Setup\MissingConfigVariableException;
-use Webforge\Setup\Configuration;
+use Webforge\Configuration\Configuration;
 
 class ProjectPackage implements \Webforge\Framework\Project {
 
@@ -16,7 +16,7 @@ class ProjectPackage implements \Webforge\Framework\Project {
   protected $package;
 
   /**
-   * @var Webforge\Setup\Configuration
+   * @var Webforge\Configuration\Configuration
    */
   protected $configuration;
 

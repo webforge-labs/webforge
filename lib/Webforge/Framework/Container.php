@@ -17,6 +17,7 @@ use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\Dir;
 use Webforge\Common\Exception\MessageException;
 use Webforge\Console\InteractionHelper;
+use Webforge\Configuration\ConfigurationReader;
 
 /**
  * This container includes the base classes for the framework
@@ -73,7 +74,7 @@ class Container {
   protected $cmsBridge;
 
   /**
-   * @var Webforge\Setup\Configuration
+   * @var Webforge\Configuration\Configuration
    */
   protected $hostConfiguration;
   
@@ -318,11 +319,29 @@ class Container {
   }
 
   /**
-   * @return Webforge\Setup\Configuration
+   * @return Webforge\Configuration\Configuration
    */
   public function getHostConfiguration() {
     if (!isset($this->hostConfiguration)) {
-      $this->hostConfiguration = $this->getCMSBridge()->getHostConfig();
+      // @TODO refactor this into a host-configuration-reader
+      $reader = new ConfigurationReader();
+
+      try {
+        if (class_exists('Psc\PSC')) {
+          $hostConfigFile = \Psc\PSC::getRoot()->getFile('host-config.php');
+
+          $this->hostConfiguration = $reader->fromPHPFile($hostConfigFile);
+        }
+
+      } catch (\Psc\MissingEnvironmentVariableException $e) {
+      }
+
+      if (!isset($this->hostConfiguration)) {
+        $this->hostConfiguration = $reader->fromArray(array(
+          'host'=>isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n'),
+          'development'=>FALSE
+        ));
+      }
     }
 
     return $this->hostConfiguration;

@@ -38,7 +38,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('composerPackageReader', 'Webforge\Framework\Package\ComposerPackageReader');
     $prop('resourceDirectory', 'Webforge\Common\System\Dir');
     $prop('cmsBridge', 'Webforge\Framework\PscCMSBridge');
-    $prop('hostConfiguration', 'Webforge\Setup\Configuration');
+    $prop('hostConfiguration', 'Webforge\Configuration\Configuration');
     $prop('projectsFactory', 'Webforge\Framework\ProjectsFactory');
     
     return $props;

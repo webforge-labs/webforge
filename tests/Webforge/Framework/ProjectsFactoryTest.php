@@ -33,7 +33,7 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
   }
 
   public function testProjectHasNamesAndConfigurationFromEtcConfig() {
-    $this->assertInstanceOf('Webforge\Setup\Configuration', $configuration = $this->projectPackage->getConfiguration());
+    $this->assertInstanceOf('Webforge\Configuration\Configuration', $configuration = $this->projectPackage->getConfiguration());
 
     $this->assertEquals('ACME SuperBlog', $configuration->get('project.title'));
     $this->assertEquals('super-blog', $configuration->get('db.default.user'));
@@ -41,13 +41,13 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
   }
 
   public function testProjectCanReadItsConfigurationFromApplicationConfig() {
-    $this->assertInstanceOf('Webforge\Setup\Configuration', $configuration = $this->projectPackageApplicationConfig->getConfiguration());
+    $this->assertInstanceOf('Webforge\Configuration\Configuration', $configuration = $this->projectPackageApplicationConfig->getConfiguration());
 
     $this->assertEquals('ACME IntranetApplication', $configuration->get('project.name'));
   }
 
   public function testProjectReturnsEmptyConfigurationForNonFoundConfig() {
-    $this->assertInstanceOf('Webforge\Setup\Configuration', $configuration = $this->projectPackageWithoutConfig->getConfiguration());
+    $this->assertInstanceOf('Webforge\Configuration\Configuration', $configuration = $this->projectPackageWithoutConfig->getConfiguration());
   }
 
   public function testLowerProjectNameIsEquivalentToPackageSlug() {
@@ -92,7 +92,7 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
   }
 
   public function testOldStyleProjectPackageCanReadItsConfigurationSourceConfig() {
-    $this->assertInstanceOf('Webforge\Setup\Configuration', $configuration = $this->oldStyleProjectPackage->getConfiguration());
+    $this->assertInstanceOf('Webforge\Configuration\Configuration', $configuration = $this->oldStyleProjectPackage->getConfiguration());
 
     $this->assertEquals(TRUE, $configuration->get(array('PscOldStyleProject', 'loaded')));
   }
