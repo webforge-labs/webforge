@@ -2,13 +2,9 @@
 
 use Webforge\Code\Generator\ClassCreater;
 use Webforge\Code\Generator\CreateClassCommand;
-use Webforge\Code\Generator\ClassWriter;
 use Webforge\Code\Generator\GFunctionBody;
-use Webforge\Code\GlobalClassFileMapper;
 use Webforge\Code\Generator\GClass;
-use Webforge\Code\Generator\GInterface;
 use Webforge\Setup\Installer\PartsInstaller;
-use Webforge\Framework\Container AS FrameworkContainer;
 use Webforge\Framework\Package\Package;
 
 use Webforge\Common\JS\JSONConverter;
@@ -16,16 +12,6 @@ use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
 use Webforge\Common\String;
 use Webforge\Common\CLassUtil;
-
-use Psc\System\Console\Command;
-
-$container = new FrameworkContainer();
-
-try {
-  $container->initLocalPackageFromDirectory($cwd = Dir::factoryTS(getcwd()));
-} catch (\Webforge\Framework\LocalPackageInitException $e) {
-  print $e->getMessage()."\n";
-}
 
 /**
  *
@@ -107,40 +93,6 @@ $createCommand('create-test',
     return 0;
   },
   'Creates a new empty Unit-Test stub'
-);
-
-$createCommand('register-package',
-  array(
-    $arg('location', 'the path to the location of the product (relatives are resolved relative to current work directory)'),
-    $arg('type', 'the type for the packageReader (only composer, yet)', FALSE)
-  ),
-  function ($input, $output, $command) use ($container) {
-    $location = $command->validateDirectory($input->getArgument('location'), Command::MUST_EXIST | Command::RESOLVE_RELATIVE);
-    $type = $command->validateEnum($input->getArgument('type') ?: 'composer', array('composer'));
-    
-    if ($type === 'composer') {
-      $package = $container->getPackageRegistry()->addComposerPackageFromDirectory($location);
-      $command->info(sprintf("Found ComposerPackage: '%s'", $package->getSlug()));
-      
-      // write to packages.json in appDir
-      $packagesFile = $container->getApplicationStorage()->getFile('packages.json');
-      $jsonConverter = new JSONConverter();
-      
-      // read
-      $packages = new \stdClass;
-      if ($packagesFile->exists()) {
-        $packages = $jsonConverter->parseFile($packagesFile);
-      }
-      
-      // modify
-      $packages->{$package->getSlug()} = (string) $package->getRootDirectory();      
-      
-      // write
-      $packagesFile->writeContents($jsonConverter->stringify($packages, JSONConverter::PRETTY_PRINT));
-      $command->info('updated packages-registry in: '.$packagesFile.'');
-    }
-  },
-  'Registers a local package to be noticed by webforge'
 );
 
 $createCommand('install:part',

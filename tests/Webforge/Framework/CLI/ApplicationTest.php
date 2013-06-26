@@ -1,18 +1,16 @@
 <?php
 
-namespace Webforge\Console;
+namespace Webforge\Framework\CLI;
 
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ApplicationTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
-    $this->chainClass = 'Webforge\\Console\\Application';
+    $this->chainClass = 'Webforge\\CLI\\Application';
     parent::setUp();
 
-    $this->application = Application::fromDirectory($this->getPackageDir('/'));
+    $this->application = new Application($this->getPackageDir('/'));
   }
 
   /**

@@ -3,7 +3,9 @@
 
 namespace Webforge;
 
+use Webforge\Common\System\Dir;
+
 $base = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'bootstrap.php';
 
-$application = Console\Application::fromDirectory($base);
+$application = new Framework\CLI\Application($base);
 $application->run();

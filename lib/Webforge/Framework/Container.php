@@ -11,6 +11,7 @@ use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Framework\Package\Registry AS PackageRegistry;
 use Webforge\Framework\Package\ComposerPackageReader;
 use Webforge\Framework\Package\Package;
+use Webforge\Framework\Inflector;
 use Webforge\Setup\Installer\PartsInstaller;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webforge\Common\JS\JSONConverter;
@@ -72,6 +73,11 @@ class Container {
    * @var Webforge\Framework\PscCMSBridge
    */
   protected $cmsBridge;
+  
+  /**
+   * @var Webforge\Framework\Inflector
+   */
+  protected $inflector;
 
   /**
    * @var Webforge\Configuration\Configuration
@@ -346,7 +352,16 @@ class Container {
 
     return $this->hostConfiguration;
   }
-
+  
+  /**
+   * @return Webforge\Framework\Inflector
+   */
+  public function getInflector() {
+    if (!isset($this->inflector)) {
+      $this->inflector = new Inflector();
+    }
+    return $this->inflector;
+  }
 
   /**
    * @return \Webforge\Framework\ProjectsFactory
@@ -359,6 +374,15 @@ class Container {
   }
   
   // @codeCoverageIgnoreStart
+  /**
+   * @param Webforge\Framework\Inflector inflector
+   * @chainable
+   */
+  public function setInflector(Inflector $inflector) {
+    $this->inflector = $inflector;
+    return $this;
+  }
+
   /**
    * @param \Webforge\Framework\ProjectsFactory projectsFactory
    * @chainable

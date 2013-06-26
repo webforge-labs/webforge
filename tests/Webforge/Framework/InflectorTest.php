@@ -36,5 +36,29 @@ class InflectorTest extends \Webforge\Code\Test\Base {
     
     return $tests;
   }
+
+  /**
+   * @dataProvider provideCommandNameIt
+   */
+  public function testCommandNameIt($className, $commandName) {
+    $this->assertEquals(
+      $commandName,
+      $this->inflector->commandNameIt($className)
+    );
+  }
+  
+  public static function provideCommandNameIt() {
+    $tests = array();
+  
+    $test = function() use (&$tests) {
+      $tests[] = func_get_args();
+    };
+  
+    $test('RegisterPackage', 'register-package');
+    $test('RegisterOtherPackage', 'register-other-package');
+    $test('API', 'api');
+  
+    return $tests;
+  }
 }
 ?>

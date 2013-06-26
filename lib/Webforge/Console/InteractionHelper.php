@@ -5,7 +5,7 @@ namespace Webforge\Console;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InteractionHelper {
+class InteractionHelper implements CommandInteraction {
 
   protected $dialog;
 

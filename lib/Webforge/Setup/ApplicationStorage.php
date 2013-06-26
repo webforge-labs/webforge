@@ -24,8 +24,9 @@ class ApplicationStorage {
    */
   protected $name;
   
-  public function __construct($appName) {
+  public function __construct($appName, Dir $directory = NULL) {
     $this->setName($appName);
+    $this->directory = $directory;
   }
   
   protected function initDirectory() {
