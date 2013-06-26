@@ -17,7 +17,7 @@ use Webforge\Common\System\Dir;
 use Webforge\Common\String;
 use Webforge\Common\CLassUtil;
 
-use Psc\System\Command\Command;
+use Psc\System\Console\Command;
 
 $container = new FrameworkContainer();
 
