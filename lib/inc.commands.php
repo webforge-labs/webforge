@@ -30,6 +30,7 @@ $createCommand('create-class',
     $arg('fqn', 'The full qualified name of the class'),
     $arg('parent', 'The full qualified name of the parent class', FALSE),
     $arg('interface', 'The full qualified names of one or more interfaces', FALSE, $multiple = TRUE),
+    $opt('implements', '', 'The full qualified name of one interface', TRUE),
     $flag('overwrite', NULL, 'If set the class will be created, regardless if the file already exists'),
     $opt('use-package', NULL, TRUE, 'Specify a package to use. When none is given the FQN is used to determine the package')
   ),
@@ -39,6 +40,10 @@ $createCommand('create-class',
       
     if ($parent = $input->getArgument('parent')) {
       $cmd->parent($parent);
+    }
+
+    if ($interface = $input->getOption('implements')) {
+      $cmd->addInterface($interface);
     }
     
     foreach ($input->getArgument('interface') as $interface) {
