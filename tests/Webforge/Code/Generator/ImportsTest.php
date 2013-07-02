@@ -42,6 +42,10 @@ class ImportsTest extends \Webforge\Code\Test\Base {
     
     $this->imports->add(GClass::create(get_class($this)), 'doctrinehelper');
   }
+
+  public function testAddingAnExistingAliasIsAllowedIfFQNIsResolvedToTheSameClass() {
+    $this->imports->add(GClass::create($this->helper->getFQN()), 'DoctrineHelper');
+  }
   
   /**
    * @depends testAddingAnExistingsAliasIsNotAllowed

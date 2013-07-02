@@ -62,7 +62,11 @@ class Imports implements IteratorAggregate, Countable {
     }
     
     if (array_key_exists($lowerAlias = mb_strtolower($alias), $this->aliases)) {
-      throw new \Psc\Exception('Alias: '.$alias.' is already used by Class '.$this->classes[ $this->aliases[$lowerAlias] ]);
+      $usedBy = $this->classes[ $this->aliases[$lowerAlias] ];
+
+      if (!$import->equals($usedBy)) {
+        throw new \Psc\Exception('Alias: '.$alias.' is already used by Class '.$usedBy);
+      }
     }
     
     $this->classes[$alias] = $import;
@@ -173,4 +177,3 @@ class Imports implements IteratorAggregate, Countable {
     return count($this->classes);
   }  
 }
-?>
