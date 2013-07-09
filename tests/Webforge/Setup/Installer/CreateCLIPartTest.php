@@ -30,7 +30,7 @@ class CreateCLIPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
     }
 
     $this->assertArrayEquals(
-      array('/bin/cli.bat','/bin/cli.php','/lib/inc.commands.php'),
+      array('/bin/cli.bat','/bin/cli.php','/bin/cli.sh', '/lib/inc.commands.php'),
       $createdFiles
     );
   }
