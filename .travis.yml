@@ -19,5 +19,5 @@ before_script:
 script: phpunit -c phpunit.travis.xml
 
 notifications:
-  irc: "irc.freenode.org#webforge"
+  hipchat: 1fbdbbbaa517c485f935a6d72f1110@ps-webforge
   mail: p.scheit@ps-webforge.com
