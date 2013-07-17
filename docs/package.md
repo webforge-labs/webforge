@@ -8,6 +8,8 @@ A package can be seen as a whole application / website / framwork or library. It
 Packages can rely on other packages to work. In concrete a package is a structure of directories with files in it. Those files and code insides this files, defines the package.
 Packages can be loaded with the registry, and listed with the registry. Simplepackage is a small implemenation of the Package Interface.
 
+![package-schema](assets/img/package.png "package schema")
+
 ### Names and Slugs
 
 Often there are more than one wording to name a Package itself. To be compatible with composer we have the `identifier` which is just the `vendor`/`slug` (vendor and slug concatenated with a slash).

@@ -30,3 +30,5 @@ $className2 = 'Mapping';
 
 ### Package
 the term is used as used in composer. A package is a collection of class files and scripts or binaries that represent a common context. A Package can be a kind of library, or application, or something else. On github one repository would be considered as a package.
+
+![package-schema](assets/img/package.png "package schema")
