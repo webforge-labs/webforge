@@ -1,0 +1,24 @@
+{
+  "curly": false, /* dont blame for missing curlies around ifs */
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": true,
+  "devel": false,
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "trailing": false,
+  "undef": true,
+  "boss": true,
+  "eqnull": true,
+  "browser": true,
+  "jquery": true,
+  "globals": {
+    "$": true,
+    "define": true, 
+    "require": true,
+    "requirejs": true,
+      
+    "QUnit": true, "module": true, "stop": true, "start": true, "ok": true, "asyncTest": true, "test": true, "expect": true
+  }
+}
