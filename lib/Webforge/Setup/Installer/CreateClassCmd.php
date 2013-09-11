@@ -5,6 +5,9 @@ namespace Webforge\Setup\Installer;
 use Webforge\Common\System\File;
 use Webforge\Code\Generator\CreateClassCommand;
 
+/**
+ * CreateClassCommand used in the PartsInstaller
+ */
 class CreateClassCmd extends WriteCmd {
   
   protected $flags;

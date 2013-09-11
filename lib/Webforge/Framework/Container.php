@@ -234,7 +234,8 @@ class Container {
             new \Webforge\Setup\Installer\PscJSBoilerplatePart(),
             new \Webforge\Setup\Installer\InitConfigurationPart(),
             new \Webforge\Setup\Installer\InitDoctrinePart(),
-            new \Webforge\Setup\Installer\CMSContainerPart()
+            new \Webforge\Setup\Installer\CMSContainerPart(),
+            new \Webforge\Setup\Installer\CMSCompilerPart()
           ),
           $this,
           $interaction,
