@@ -18,5 +18,7 @@ class InitDoctrinePartTest extends \Webforge\Code\Test\InstallerPartTestCase {
       array('/resources/db/001_create_dbs.sql'),
       $this->getWrittenFiles($this->macro)
     );
+
+    $this->assertCount(3, $this->getAddedCLICommands($this->macro));
   }
 }

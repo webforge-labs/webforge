@@ -4,6 +4,7 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
+use Webforge\Code\Generator\GClass;
 
 interface Installer {
   
@@ -31,6 +32,9 @@ interface Installer {
    * @return Webforge\Code\Generator\CreateClassCommand
    */
   public function createClass($relativeClassName, $flags = 0x000000, File $destination);
+
+
+  public function addCLICommand(GClass $gClass);
 
   /**
    * @return Webforge\Common\System\Dir

@@ -85,6 +85,23 @@ class InstallerPartTestCase extends MacroTestCase {
     
     return $files;
   }
+
+  public function getAddedCLICommands($macro) {
+    $commands = array();
+    foreach ($macro->getCommands() as $addCLICommand) {
+      if ($this->isCmd('AddCLI', $addCLICommand)) {
+        $commands[$addCLICommand->getCLICommand()->getFQN()] = $addCLICommand->getCLICommand();
+      }
+    }
+    
+    return $commands;
+  }
+
+  public function assertHasAddedCLICommand($macro, $fqn) {
+    $commands = $this->getAddedCLICommands($macro);
+    $this->assertArrayHasKey($fqn, $commands, $fqn.' was not added as CLI Command. Added were ('.count($commands).'): '.implode(', ', array_keys($commands)));
+  }
+
   
   public function isCmd($name, Command $command) {
     $class = 'Webforge\Setup\Installer\\'.$name.'Cmd';

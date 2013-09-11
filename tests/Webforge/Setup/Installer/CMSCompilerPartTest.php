@@ -11,7 +11,7 @@ class CMSCompilerPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
     $this->part = new CMSCompilerPart();
   }
   
-  public function testCopiesExpectedFiles() {
+  public function testWritesExpectedFilesAndAddsCommand() {
     $this->macro = $this->installer->dryInstall($this->part, $this->target);
     
     $this->assertArrayEquals(
@@ -21,5 +21,7 @@ class CMSCompilerPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
       ),
       $this->getWrittenFiles($this->macro)
     );
+
+    $this->assertHasAddedCLICommand($this->macro, $this->package->getNamespace().'\\CMS\\CompileCommand');
   }
 }

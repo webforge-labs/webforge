@@ -4,9 +4,11 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
 use Webforge\Framework\ContainerAware;
+use Webforge\Code\Generator\GClass;
 
 /**
- * @TODO add bootstrap module to bootstra.php
+ * @TODO add bootstrap module to bootstrap.php
+ * @TODO add ORM-Commands to the cli application (do this together with the compiler command)
  */
 class InitDoctrinePart extends Part implements ContainerAware {
   
@@ -25,10 +27,14 @@ class InitDoctrinePart extends Part implements ContainerAware {
 
     $installer->info(
       sprintf(
-        "You can create your database with %s",
+        "You can create your database with importing %s into your database.",
         $file
       )
     );
+
+    $installer->addCLICommand(new GClass('Psc\System\Console\ORMSchemaCommand'));
+    $installer->addCLICommand(new GClass('Psc\System\Console\ORMCreateEntityCommand'));
+    $installer->addCLICommand(new GClass('Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand'));
   }
 
   protected function readFromConfig() {

@@ -55,7 +55,7 @@ PHP
       ->parent('Psc\System\Console\ProjectCompileCommand')
       ->getGClass();
 
-    $installer->info('You need to put '.$command.' into your CLI application.');
+    $installer->addCLICommand($command);
     $installer->info('Done.');
   }
 }

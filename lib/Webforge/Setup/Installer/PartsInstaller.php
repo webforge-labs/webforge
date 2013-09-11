@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Webforge\Console\InteractionHelper;
 use Webforge\Code\Generator\CreateClassCommand;
+use Webforge\Code\Generator\GClass;
 
 /**
  * @todo an output interface to communicate and warn
@@ -153,6 +154,13 @@ class PartsInstaller implements Installer {
     );
 
     return $createClassCmd;
+  }
+
+
+  public function addCLICommand(GClass $command) {
+    $this->command(
+      new AddCLICmd($command)
+    );
   }
   
   /**

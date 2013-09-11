@@ -19,6 +19,14 @@ abstract class Command implements \Webforge\Common\Command, EventDispatcher {
       $this
     );
   }
+
+  protected function info($msg) {
+    $this->getManager()->dispatchEvent(
+      self::INFO,
+      (object) array('msg'=>$msg),
+      $this
+    );
+  }
   
   public function getManager() {
     if (!isset($this->manager)) {
