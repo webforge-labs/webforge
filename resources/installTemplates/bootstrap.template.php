@@ -12,6 +12,7 @@ $ds = DIRECTORY_SEPARATOR;
 require_once __DIR__.$ds.'package.boot.php';
 $bootLoader = new BootLoader(__DIR__);
 $bootLoader->loadComposer();
-$bootLoader->registerCMSContainer();
+//$bootLoader->registerCMSContainer();
+$bootLoader->registerPackageRoot();
 
 ?>
