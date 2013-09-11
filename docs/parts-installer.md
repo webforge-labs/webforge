@@ -7,6 +7,10 @@
 
 ## TODO
 
+  - refactor macro or commands to use a communication systems (a nicer one then using Psc\Code\Event\* Classes)
+    - see console.md for a concreter plan
+  - actually output the warn and info commands from commands from a macro when executed in the parts installer
+    - see console.md for a concreter plan
   - use the command pattern to implement:
     - log what is happening while running a part
   - create a simple composite part (you can still use: `$installer::install` to nest)
