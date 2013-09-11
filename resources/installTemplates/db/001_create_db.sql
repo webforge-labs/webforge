@@ -1,4 +1,4 @@
-CREATE USER 'hagedorn'@'localhost' IDENTIFIED BY '%db.password%';
+CREATE USER '%db.user%'@'localhost' IDENTIFIED BY '%db.password%';
 
 GRANT USAGE ON * . * TO '%db.user%'@'localhost' IDENTIFIED BY '%db.password%' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
 
