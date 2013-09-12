@@ -9,10 +9,26 @@ class StringCommandOutput implements CommandOutput {
   protected $msgs;
 
   /**
-   * A success message that is printed highlighted and should indicate a successful event
+   * @inherit-doc
    */
   public function ok($msg) {
     $this->msgs .= 'ok: '.$msg."\n";
+    return $this;
+  }
+
+  /**
+   * @inherit-doc
+   */
+  public function warn($msg) {
+    $this->msgs .= 'warning: '.$msg."\n";
+    return $this;
+  }
+
+  /**
+   * @inherit-doc
+   */
+  public function msg($msg) {
+    $this->msgs .= $msg."\n";
     return $this;
   }
 

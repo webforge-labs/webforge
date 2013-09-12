@@ -8,6 +8,7 @@ use Webforge\Console\StringCommandOutput;
 use Webforge\Console\CommandOutput;
 use Webforge\Console\CommandInput;
 use Webforge\Console\CommandInteraction;
+use Webforge\Common\System\ExecutionSystem;
 
 abstract class ContainerCommand {
 
@@ -16,7 +17,7 @@ abstract class ContainerCommand {
    */
   protected $container;
 
-  protected $output, $input, $interact;
+  protected $output, $input, $interact, $system;
 
   public function __construct(Container $container) {
     $this->container = $container;
@@ -32,9 +33,14 @@ abstract class ContainerCommand {
     );
   }
 
-  public function initIO(CommandInput $input, CommandOutput $output, CommandInteraction $interact) {
+  /**
+   * 
+   * this is always called before execute()
+   */
+  public function initIO(CommandInput $input, CommandOutput $output, CommandInteraction $interact, ExecutionSystem $system) {
     $this->output = $output;
     $this->input = $input;
     $this->interact = $interact;
+    $this->system = $system;
   }
 }

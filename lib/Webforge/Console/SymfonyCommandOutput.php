@@ -15,19 +15,28 @@ class SymfonyCommandOutput implements CommandOutput {
     $this->consoleOutput = $output;
   }
 
-  public function ok($msg) {
-    return $this->out('<info>'.$msg.'</info>');
+  /**
+   * @inherit-doc
+   */ 
+   public function ok($msg) {
+    return $this->msg('<info>'.$msg.'</info>');
   }
 
-  public function out($msg) {
+  /**
+   * @inherit-doc
+   */ 
+  public function warn($msg) {
+    return $this->msg('<comment>'.$msg.'</comment>');
+  }
+
+  /**
+   * @inherit-doc
+   */ 
+  public function msg($msg) {
     $this->consoleOutput->writeln($msg);
   }
 
   /*
-  public function warn($msg) {
-    return $this->out('<error>'.$msg.'</error>');
-  }
-
   public function info($msg) {
     return $this->out('<info>'.$msg.'</info>');
   }
