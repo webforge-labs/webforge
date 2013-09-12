@@ -26,7 +26,8 @@
     "webforge/testdata-repository": "dev-master",
     "phpmd/phpmd": "1.4.0",
     "webforge/testplate": "1.2.*@dev",
-    "mikey179/vfsStream": "1.3.*@dev"
+    "mikey179/vfsStream": "1.3.*@dev",
+    "mockery/mockery": "dev-master"
   },
   "autoload": {
     "psr-0": {

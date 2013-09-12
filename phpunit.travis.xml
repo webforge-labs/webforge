@@ -15,4 +15,8 @@
             <directory suffix="Test.php">./tests/Webforge</directory>
         </testsuite>
     </testsuites>
+
+    <listeners>
+      <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
+    </listeners>
 </phpunit>
