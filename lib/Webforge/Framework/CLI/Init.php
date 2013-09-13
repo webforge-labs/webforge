@@ -9,10 +9,18 @@ use Webforge\Console\CommandInteraction;
 use Webforge\Common\Preg;
 use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\Util as SystemUtil;
+use Webforge\Common\JS\JSONFile;
+use Webforge\Framework\Inflector;
+use stdClass;
 
 class Init extends ContainerCommand {
 
   protected $root;
+
+  protected function setUp() {
+    parent::setUp();
+    $this->inflector = new Inflector();
+  }
 
   public function getDescription() {
     return 'Registers a local package to be noticed by webforge';
@@ -46,35 +54,54 @@ class Init extends ContainerCommand {
     if ($this->interact->confirm('Do you want to init a composer configuration?', TRUE)) {
       $params = array(
         'working-dir'=>(string) $this->root,
-        'no-interaction'=>NULL,
         'name'=>$vendor.'/'.$packageSlug,
         "description"=>$this->retrieveDescription(),
         'stability'=>$this->retrieveMinimumStability()
       );
 
-      $exit = $this->system->exec($cmd = 'composer init '.$this->buildParams($params), function($type, $out) {
-        print $out;
+      $this->system->passthru($cmd = 'composer init '.$this->buildParams($params));
+
+      $autoload = $this->retrieveAutoload($vendor, $packageSlug);
+
+      $jsonFile = new JSONFile($this->root->getFile('composer.json'));
+      $jsonFile->modify(function($composerConfig) use ($autoload) {
+        if ($autoload) {
+          list($namespace, $lib, $tests) = $autoload;
+
+          if (!isset($composerConfig->autoload)) {
+            $composerConfig->autoload = new stdClass;
+          }
+
+          if (!isset($composerConfig->autoload->{'psr-0'})) {
+            $composerConfig->autoload->{'psr-0'} = new stdClass;
+          }
+          
+          /*
+            "autoload": {
+              "psr-0": {
+                "Webforge": ["lib/", "tests/"]
+              }
+            }
+          */ 
+
+          $composerConfig->autoload->{'psr-0'}->$namespace = $tests ? array($lib, $tests) : array($lib);
+        }
+
+        if (!isset($composerConfig->extra)) {
+          $composerConfig->extra = new stdClass;
+        }
+
+        if (!isset($composerConfig->extra->{'branch-alias'})) {
+          $composerConfig->extra->{'branch-alias'} = new stdClass;
+        }
+
+        if (!isset($composerConfig->extra->{'branch-alias'}->{'dev-master'})) {
+          $composerConfig->extra->{'branch-alias'}->{'dev-master'} = '1.0.x-dev';
+        }
+
       });
 
-      if ($exit !== 0) {
-        throw new \RuntimeException('Cannot run the composer init command: '."\n".$cmd);
-      }
-
-
-      // needs to be written after composer init
-      $configs = array();
-      $this->retrieveExtraConfig($configs);
-
-      foreach ($configs as $key => $value) {
-        $this->system->exec(
-          sprintf('composer config %s %s %s',
-            $this->buildParams(array('working-dir'=>(string) $this->root)),
-            $key,
-            $this->systemEsc($value)
-          )
-        );
-      }
-
+      $this->output->ok('finished webforge init.');
     } else {
       $this->output->warn('I cannot init webforge successfully, because the package cannot be read (only composer repositories yet)');
     }
@@ -110,9 +137,20 @@ class Init extends ContainerCommand {
     return 'dev';
   }
 
-  protected function retrieveExtraConfig(Array &$configs) {
-    $configs['extra.branch-alias.dev-master'] = '1.0.x-dev';
-  }
+  protected function retrieveAutoload($vendor, $packageSlug) {
+
+    if ($this->interact->confirm('Do you want to init autoload information (psr-0)?', TRUE)) {
+      $namespace = $this->inflector->namespaceify($vendor).'\\'.$this->inflector->namespaceify($packageSlug);
+
+      $lib = $this->interact->askDefault('Where is your library path (relative to '.$this->root.')', 'lib/');
+      $namespace = $this->interact->askDefault('What is your Namespace?', $namespace);
+      $tests = $this->interact->askDefault('Where is your tests path (relative to '.$this->root.')', 'tests/');
+
+      return array($namespace, $lib, $tests);
+    }
+
+    return FALSE;
+  }  
 
   protected function systemEsc($string) {
     return SystemUtil::escapeShellArg($string, $this->system->getOperatingSystem());

@@ -52,6 +52,14 @@ class ExecutionSystem implements ExecutionSystemInterface {
     return $process;
   }
 
+
+  /**
+   * @inherit-doc
+   */
+  public function passthru($commandline, $options = NULL) {
+    return passthru($commandline);
+  }
+
   /**
    * @return string|NULL if NULL is returned the current is used
    */

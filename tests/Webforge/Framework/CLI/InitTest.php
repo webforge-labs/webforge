@@ -5,6 +5,7 @@ namespace Webforge\Framework\CLI;
 use Mockery as m;
 use Webforge\Common\System\Util as SystemUtil;
 use Webforge\Common\String as S;
+use Webforge\Common\JS\JSONConverter;
 
 class InitTest extends CommandTestCase {
   
@@ -19,6 +20,8 @@ class InitTest extends CommandTestCase {
     $this->extraConfiguration = array(
       'extra.branch-alias.dev-master'=>'1.0.x-dev'
     );
+
+    $this->autoloadAnswers = FALSE;
   }
 
   protected function executeTest(Array $initConfiguration, Array $additionalConfiguration) {
@@ -29,10 +32,12 @@ class InitTest extends CommandTestCase {
     // what is given to the composer init command?
     $this->expectComposerInit($initConfiguration);
 
-    // what is given to the composer config setkey setvalue
-    $this->expectAdditionalConfiguration($additionalConfiguration);
+    $this->expectAutoloadQuestions($this->autoloadAnswers);
 
     $this->execute();
+
+    // additional written info into the composer.json manually made
+    $this->assertAdditionalConfiguration($additionalConfiguration);
   }
 
   public function testInitAsksForTheVendorAndTheSlugofThePackageAndGuessesItFromTheRootDirectoryName() {
@@ -55,6 +60,14 @@ MARKDOWN
     $this->executeTest(array('stability'=>'dev'), $this->extraConfiguration);
   }
 
+  public function testAsksForAutoloadAndWritesIt() {
+    $this->autoloadAnswers = TRUE;
+    
+    $this->extraConfiguration['autoload.psr-0.ACME\\SuperBlog'] = array("src/", "tests/");
+
+    $this->executeTest(array('stability'=>'dev'), $this->extraConfiguration);
+  }
+
   public function testArgumentsWillBeDefined() {
     // how to do that?
   }
@@ -65,27 +78,22 @@ MARKDOWN
 
 
   /* custom expectations */
-  public function expectAdditionalConfiguration(Array $configs) {
-    $test = $this;
-    foreach ($configs as $key =>$value) {
-      $this->system
-        ->shouldReceive('exec')
-        ->ordered('execs')
-        ->once()
-        ->with(m::on(function($commandline) use ($test, $key, $value) {
-          $test->assertContains('composer config', $commandline);
+  public function assertAdditionalConfiguration(Array $configs) {
+    $composerConfig = JSONConverter::create()->parseFile($this->packageRoot->getFile('composer.json'));
 
-          $test->assertContains(
-            sprintf('%s %s', $key, SystemUtil::escapeShellArg($value, $this->testOs)), 
-            $commandline,
-            'composer config should be called with '.$key.' set to '.$value
-          );
+    foreach ($configs as $pathString => $expectedValue) {
+      $path = explode('.', $pathString);
 
-          return TRUE;
-        }))
-        ->andReturn(0);
+      $value = $composerConfig;
+      foreach ($path as $key) {
+        $this->assertObjectHasAttribute($key, $value, 'cannot retreive path: '.$pathString.' keys on this level: '.implode(', ',array_keys((array) $value)));
+        $value = $value->$key;
+      }
+
+      $this->assertEquals($expectedValue, $value, 'Value from path: '.$pathString);
     }
   }
+
 
   protected function expectVendorAndSlugQuestions() {
     $this->expectQuestion()
@@ -103,10 +111,35 @@ MARKDOWN
       ->andReturn($answer);
   }
 
+  protected function expectAutoloadQuestions($questions) {
+    if ($questions === FALSE) {
+      $this->expectConfirm()
+        ->with('/autoload/i', TRUE)
+        ->andReturn(FALSE);
+    } else {
+      $this->expectConfirm()
+        ->with('/autoload/i', TRUE)
+        ->andReturn(TRUE);
+
+      $this->expectQuestion()
+        ->with('/namespace/i', 'Acme\Superblog')
+        ->andReturn('ACME\SuperBlog');
+
+      $this->expectQuestion()
+        ->with('/library[-\s]path/i', 'lib/')
+        ->andReturn('src/');
+
+      $this->expectQuestion()
+        ->with('/tests[-\s]path/i', 'tests/')
+        ->andReturn('tests/');
+    }
+  }
+
   protected function expectComposerInit(array $params) {
     $test = $this;
+    $root = $this->packageRoot;
     return $this->system
-      ->shouldReceive('exec')
+      ->shouldReceive('passthru')
       ->ordered('execs')
       ->once()
       ->with(m::on(function ($commandline) use ($params, $test) {
@@ -123,10 +156,31 @@ MARKDOWN
         }
 
         return TRUE;
-      }),
-        m::any()
-      )
-     ->andReturn(0);
+      }))
+     ->andReturnUsing(function () use ($root) {
+       // we fake the behaviour from composer init here
+
+       $json = <<<'JSON'
+{
+    "name": "acme/superblog",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Philipp Scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+
+    }
+}
+JSON;
+
+       $root->getFile('composer.json')->writeContents($json);
+
+       return 0;
+     });
   }
 
   protected function execute() {

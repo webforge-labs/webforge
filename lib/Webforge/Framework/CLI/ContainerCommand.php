@@ -22,6 +22,11 @@ abstract class ContainerCommand {
   public function __construct(Container $container) {
     $this->container = $container;
     $this->output = new StringCommandOutput();
+    $this->setUp();
+  }
+
+  protected function setUp() {
+
   }
 
   /**
