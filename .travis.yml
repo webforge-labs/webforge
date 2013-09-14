@@ -12,7 +12,7 @@ env:
 before_install:
   - composer self-update
   - COMPOSER_ROOT_VERSION=dev-master composer install --dev --prefer-source --no-interaction
-  
+
 before_script:
   - chmod u+x bin/webforge
 
