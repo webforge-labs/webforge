@@ -116,8 +116,8 @@ class Init extends ContainerCommand {
       list($defaultVendor, $defaultSlug) = explode('-', $this->root->getName(), 2);
     }
 
-    $vendor = $this->interact->askDefault('What is your vendor name (lowercase)?', $defaultVendor);
-    $slug = $this->interact->askDefault('What is the name of your package (lowercase)?', $defaultSlug);
+    $vendor = mb_strtolower($this->interact->askDefault('What is your vendor name (lowercase)?', $defaultVendor));
+    $slug = mb_strtolower($this->interact->askDefault('What is the name of your package (lowercase)?', $defaultSlug));
 
     return array($vendor, $slug);
   }
