@@ -25,6 +25,7 @@ class CreateBootstrapPart extends ContainerAwarePart {
   }
   
   protected function installBootPackage(Dir $target, Installer $installer) {
+    $installer->createDir('lib/');
     
     $installer->copy(
       $this->getWebforgeVendorPackageDirectory('pscheit/psc-cms-boot')->getFile('lib/package.boot.php'),
