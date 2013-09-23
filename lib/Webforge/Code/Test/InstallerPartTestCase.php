@@ -31,7 +31,8 @@ class InstallerPartTestCase extends MacroTestCase {
      we need to do this extra work, because the createClassCommand is not injected with $this->target (and uses the package root dir)
      but i thinks this makes the test more realistic
     */
-    $this->package = clone $this->container->getLocalPackage();
+    $this->webforge = $this->container->getLocalPackage();
+    $this->package = clone $this->webforge;
     $this->package->setRootDirectory($this->target);
     $this->container->setLocalPackage($this->package);
     
