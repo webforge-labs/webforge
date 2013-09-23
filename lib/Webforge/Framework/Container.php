@@ -282,14 +282,15 @@ class Container {
   }
 
   /**
-   * Gets an package which is installed as vendor in the current locale package
+   * Gets an package which is installed as vendor in the (current *locale*) package
    * 
+   * @param Package $searchIn if it is provided it uses this package. otherwise the local package
    * @return Package
    */
-  public function getVendorPackage($packageIdentifier) {
-    $localPackage = $this->getLocalPackage();
+  public function getVendorPackage($packageIdentifier, Package $searchIn = NULL) {
+    $package = $searchIn ?: $this->getLocalPackage();
 
-    $vendor = $localPackage->getDirectory(Package::VENDOR);
+    $vendor = $package->getDirectory(Package::VENDOR);
     $packageRoot = $vendor->sub($packageIdentifier.'/');
 
     $e = NULL;
@@ -312,6 +313,16 @@ class Container {
       $this->resourceDirectory = $this->getPackageRegistry()->findByIdentifier('webforge/webforge')->getRootDirectory()->sub('resources/');
     }
     return $this->resourceDirectory;
+  }
+
+  /**
+   * Returns the package for the (somwhere) installed package from webforge
+   * 
+   * this works even if another local package is inited
+   * @return Webforge\Framework\Package\Package
+   */
+  public function getWebforgePackage() {
+    return $this->getPackageRegistry()->findByIdentifier('webforge/webforge');
   }
   
   /**

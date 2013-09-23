@@ -27,13 +27,14 @@ class CreateBootstrapPart extends ContainerAwarePart {
   protected function installBootPackage(Dir $target, Installer $installer) {
     
     $installer->copy(
-      $this->getVendorPackageDirectory('pscheit/psc-cms-boot')->getFile('lib/package.boot.php'),
+      $this->getWebforgeVendorPackageDirectory('pscheit/psc-cms-boot')->getFile('lib/package.boot.php'),
       $target->getFile('lib/package.boot.php'),
       Installer::IF_NOT_EXISTS
     );
   }
   
-  protected function getVendorPackageDirectory($packageIdentifier) {
-    return $this->container->getVendorPackage($packageIdentifier)->getRootDirectory();
+  protected function getWebforgeVendorPackageDirectory($packageIdentifier) {
+    return $this->container->getVendorPackage($packageIdentifier, $this->container->getWebforgePackage())
+      ->getRootDirectory();
   }
 }
