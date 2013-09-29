@@ -294,8 +294,7 @@ class NestedSetConverter {
   }
 
   protected function emptyCollection() {
-    return new \Psc\Data\ArrayCollection(array());
-    return array();
+    return new \Webforge\Collections\ArrayCollection(array());
   }
   
   /**

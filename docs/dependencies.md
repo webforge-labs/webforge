@@ -10,4 +10,3 @@ to decouple webforge from Psc-Namespace here is a list of required Dependencies 
 * `Webforge\Code\Generator` several classes require Exceptions and Utils
 
 * `Webforge\Framework\PscCMSBridge` has several depdencies (of course)
-* `Webforge\Setup\Configuration` extends Psc\CMS\Configuration (needs refactoring)
