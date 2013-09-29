@@ -12,6 +12,6 @@
         "pscheit/psc-cms": "dev-master"
     },
     "require-dev": {
-        "webforge/testplate": "1.2.*@dev"
+        "webforge/testplate": "dev-master"
     }
 }
