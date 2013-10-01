@@ -5,7 +5,7 @@ namespace Webforge\Setup\Installer;
 class InstallTestsuitePartTest extends \Webforge\Code\Test\InstallerPartTestCase {
   
   public function setUp() {
-    $this->chainClass = 'Webforge\\Setup\\Installer\\CreateBootstrapPart';
+    $this->chainClass = 'Webforge\\Setup\\Installer\\InstallTestsuitePart';
     parent::setUp();
 
     $this->part = new InstallTestsuitePart();

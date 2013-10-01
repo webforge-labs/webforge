@@ -12,6 +12,8 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Frame
    * @var Webforge\Framework\Package\Package
    */
   protected $package;
+
+  protected $tesplateVersion = '1.3.*@dev';
   
   protected $installPHPUnitLocally = FALSE;
 
@@ -43,7 +45,7 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Frame
     // add testplate
     $installer->info('adding webforge-testplate with composer (that might take a while) ...');
     $installer->execute(
-      sprintf('composer --working-dir=%s --dev require webforge/testplate:1.2.*@dev', $target->getQuotedString())
+      sprintf('composer --working-dir=%s --dev require webforge/testplate:'.$this->testplateVersion, $target->getQuotedString())
     );
     
     if ($this->installPHPUnitLocally) {
