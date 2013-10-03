@@ -8,12 +8,15 @@ class ImportsTest extends \Webforge\Code\Test\Base {
   protected $mapping, $helper;
   
   public function setUp() {
+    parent::setup();
     $this->imports = new Imports(
       Array(
         $this->mapping = GClass::create('Doctrine\ORM\Mapping'),
         'DoctrineHelper'=>$this->helper = GClass::create('Psc\Doctrine\Helper')
       )
     );
+
+    $this->logicException = 'LogicException';
   }
   
   public function testConstructWithElementsAddsElements() {
@@ -33,12 +36,12 @@ class ImportsTest extends \Webforge\Code\Test\Base {
    * @expectedExceptionMessage Alias: DoctrineHelper is already used by Class Psc\Doctrine\Helper
    */
   public function testAddingAnExistingsAliasIsNotAllowed() {
-    
+    $this->setExpectedException($this->logicException);
     $this->imports->add(GClass::create(get_class($this)), 'DoctrineHelper');
   }
   
   public function testAddingAnExistingsAliasIsNotAllowedAndIsCaseInsensitiv() {
-    $this->setExpectedException('Psc\Exception');
+    $this->setExpectedException($this->logicException);
     
     $this->imports->add(GClass::create(get_class($this)), 'doctrinehelper');
   }
@@ -131,4 +134,3 @@ class ImportsTest extends \Webforge\Code\Test\Base {
     );
   }
 }
-?>

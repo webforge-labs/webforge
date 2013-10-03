@@ -2,7 +2,8 @@
 
 namespace Webforge\Setup\Installer;
 
-use Psc\Data\ArrayCollection;
+use Webforge\Collections\ArrayCollection;
+
 
 /**
  * @todo refactor to use common collection

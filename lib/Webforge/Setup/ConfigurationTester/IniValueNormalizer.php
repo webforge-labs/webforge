@@ -75,7 +75,7 @@ class IniValueNormalizer extends \Webforge\Common\BaseObject {
       $operators = array('\|', '\^', '&');
       $rx = '/^('.implode('|', array_keys($constants)).'|'.implode('|',$operators).'|\s)+$/';
       
-      if (\Psc\Preg::match($errorReporting, $rx)) {
+      if (Preg::match($errorReporting, $rx)) {
         eval('$errorReporting = '.$errorReporting.';');
       } else {
         throw new \InvalidArgumentException(

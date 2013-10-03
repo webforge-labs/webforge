@@ -4,7 +4,8 @@ namespace Webforge\Code\Generator;
 
 use PHPParser_Parser;
 use PHPParser_Lexer;
-use Psc\A;
+use Webforge\Common\ArrayUtil as A;
+use Webforge\Common\Exception\NotImplementedException;
 
 class GFunctionBody {
   
@@ -48,28 +49,27 @@ class GFunctionBody {
    * @param array $codeLines
    */
   public function appendBodyLines(Array $codeLines) {
-    throw \Psc\Code\NotImplementedException('not yet');
+    throw NotImplementedException('not yet');
     $this->bodyCode = array_merge($this->getBodyCode(), $codeLines);
     return $this;
   }
   
   public function beforeBody(Array $codeLines) {
-    throw \Psc\Code\NotImplementedException('not yet');
+    throw NotImplementedException('not yet');
     $this->bodyCode = array_merge($codeLines, $this->getBodyCode());
     return $this;
   }
 
   public function afterBody(Array $codeLines) {
-    throw \Psc\Code\NotImplementedException('not yet');
+    throw NotImplementedException('not yet');
     $this->bodyCode = array_merge($this->getBodyCode(), $codeLines);
     return $this;
   }
 
   public function insertBody(Array $codeLines, $index) {
-    throw \Psc\Code\NotImplementedException('not yet');
+    throw NotImplementedException('not yet');
     $this->getBodyCode();
-    \Psc\A::insertArray($this->bodyCode, $codeLines, $index);
+    A::insertArray($this->bodyCode, $codeLines, $index);
     return $this;
   }
 }
-?>

@@ -5,6 +5,7 @@ namespace Webforge\Code\Test;
 use PHPUnit_Framework_Constraint;
 use Webforge\Common\System\File;
 use SebastianBergmann\Diff;
+use Webforge\Common\String as S;
 
 class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
   
@@ -50,7 +51,7 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
    */
   public function normalizeCode($code) {
     $code = trim($code);
-    $code = \Psc\String::fixEOL($code);
+    $code = S::fixEOL($code);
     
     if (mb_strpos($code, '<?php') === FALSE) { // we will not constraint that <?php is at the start
       $code = '<?php '.$code;

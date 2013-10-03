@@ -3,7 +3,7 @@
 namespace Webforge\Framework\Package;
 
 use Webforge\Common\System\Dir;
-use Psc\A;
+use Webforge\Common\ArrayUtil as A;
 use Webforge\Code\Generator\GClass;
 use Webforge\Common\String;
 use Webforge\Common\ClassUtil;

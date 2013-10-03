@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\A;
+use Webforge\Common\ArrayUtil as A;
 
 /**
  * A specialized, simple collection for ordered Objects

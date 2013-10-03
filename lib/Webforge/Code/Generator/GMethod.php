@@ -2,8 +2,6 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\A;
-
 class GMethod extends GModifiersObject {
 
   const APPEND = GObjectCollection::END;
@@ -221,4 +219,3 @@ class GMethod extends GModifiersObject {
   }
   // @codeCoverageIgnoreEnd
 }
-?>

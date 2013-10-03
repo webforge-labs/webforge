@@ -5,6 +5,7 @@ namespace Webforge\Code\Generator;
 use IteratorAggregate;
 use ArrayIterator;
 use Countable;
+use LogicException;
 
 class Imports implements IteratorAggregate, Countable {
   
@@ -65,7 +66,7 @@ class Imports implements IteratorAggregate, Countable {
       $usedBy = $this->classes[ $this->aliases[$lowerAlias] ];
 
       if (!$import->equals($usedBy)) {
-        throw new \Psc\Exception('Alias: '.$alias.' is already used by Class '.$usedBy);
+        throw new LogicException('Alias: '.$alias.' is already used by Class '.$usedBy);
       }
     }
     
