@@ -60,4 +60,3 @@ class ClassReader {
     return new NodeVisitor();
   }
 }
-?>
