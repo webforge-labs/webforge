@@ -12,6 +12,7 @@ use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
 use Webforge\Common\String;
 use Webforge\Common\CLassUtil;
+use Webforge\Console\SymfonyCommandOutput;
 
 /**
  *
@@ -109,7 +110,7 @@ $createCommand('install:part',
     $partName = $input->getArgument('part');
     $location = $command->validateDirectory($input->getArgument('location') ?: '.');
 
-    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), $output);
+    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), new SymfonyCommandOutput($output));
 
     if (empty($partName)) {
       $command->info('parts avaible:');
@@ -135,7 +136,7 @@ $createCommand('install:part',
 $createCommand('install:list-parts',
   array(),
   function ($input, $output, $command) use ($container) {
-    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), $output);
+    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), new SymfonyCommandOutput($output));
     
     $command->info('parts avaible:');
     

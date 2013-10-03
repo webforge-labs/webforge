@@ -11,6 +11,8 @@ class CopyCmdTest extends \Webforge\Code\Test\Base {
   public function setUp() {
     $this->chainClass = 'Webforge\\Setup\\Installer\\CopyCmd';
     parent::setUp();
+
+    $this->output = $this->getMockbuilder('Webforge\Common\CommandOutput')->getMockForAbstractClass();
     
     $this->existingFile = File::createTemporary();
     $this->existingFile->writeContents('not empty');
@@ -31,15 +33,14 @@ class CopyCmdTest extends \Webforge\Code\Test\Base {
            
     $this->someFile = new File(__FILE__);
     
-    $this->source = $this->getMock('Webforge\Common\System\File', array('copy'), array(__FILE__));
-    
+    $this->source = $this->getMock('Webforge\Common\System\File', array('copy'), array(__FILE__));    
   }
   
   public function testCopiesFileFromFileToFile() {
     $this->source->expects($this->once())->method('copy')->with($this->equalTo($this->destination));
     
     $copy = new CopyCmd($this->source, $this->destination);
-    $copy->execute();
+    $this->execute($copy);
   }
   
   public function testCopiesFilesOnlyIfTheyDontExistsWhenFlagIsSet() {
@@ -47,11 +48,9 @@ class CopyCmdTest extends \Webforge\Code\Test\Base {
     
     $copy = new CopyCmd($this->source, $destination = $this->existingFile, CopyCmd::IF_NOT_EXISTS);
     
-    $subscriber = $this->getMockForAbstractClass('Psc\Code\Event\Subscriber');
-    $subscriber->expects($this->once())->method('trigger');
+    $this->output->expects($this->once())->method('warn');
     
-    $copy->subscribe($subscriber, CopyCmd::WARNING);
-    $copy->execute();
+    $this->execute($copy);
   }
   
   public function testDescribeIsComplete() {
@@ -67,7 +66,10 @@ class CopyCmdTest extends \Webforge\Code\Test\Base {
     $this->setExpectedException('InvalidArgumentException');
     $copy = new CopyCmd($this->someDir, $this->someFile);
     
-    $copy->execute();
+    $this->execute($copy);
+  }
+
+  protected function execute($command) {
+    return $command->execute($this->output);
   }
 }
-?>

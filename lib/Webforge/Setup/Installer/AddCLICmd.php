@@ -15,7 +15,7 @@ class AddCLICmd extends Command {
     $this->command = $command;
   }
   
-  public function execute() {
+  public function doExecute() {
     $this->info('Add new '.$this->command->getFQN().'() to your CLI-Application commands.');
   }
   

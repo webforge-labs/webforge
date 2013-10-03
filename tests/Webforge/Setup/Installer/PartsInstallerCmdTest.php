@@ -4,7 +4,6 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
 use Webforge\Common\System\File;
-use Webforge\Code\Test\ConsoleOutput;
 
 class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
   
@@ -17,7 +16,7 @@ class PartsInstallerCmdTest extends \Webforge\Code\Test\Base {
     $this->container = new \Webforge\Framework\Container();
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
-    $this->output = new ConsoleOutput();
+    $this->output = $this->getMockForAbstractClass('Webforge\Common\CommandOutput');
     $this->interaction = $this->getMockBuilder('Webforge\Console\InteractionHelper')->disableOriginalConstructor()->getMock();
     $this->partsInstaller = new PartsInstaller(array(), $this->container, $this->interaction, $this->output);
     

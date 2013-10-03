@@ -11,8 +11,11 @@ class ContainerTest extends \Webforge\Code\Test\Base {
   
   protected $container;
   
-  public function setUp() {
+  public function setup() {
+    parent::setup();
+
     $this->container = new Container();
+    $this->output = $this->getMockbuilder('Webforge\Common\CommandOutput')->getMockForAbstractClass();
   }
   
   /**
@@ -55,7 +58,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
   public function testContainerConstructsPartsInstaller() {
     $this->assertInstanceOf(
       'Webforge\Setup\Installer\PartsInstaller',
-      $this->container->getPartsInstaller($this->getInteractionHelper())
+      $this->container->getPartsInstaller($this->getInteractionHelper(), $this->output)
     );
   }
 

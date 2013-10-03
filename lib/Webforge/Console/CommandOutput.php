@@ -7,22 +7,5 @@ namespace Webforge\Console;
  * 
  * use this in your classes to not limit the usage of your command in a symfony console (@see SymfonyCommandOutput)
  */
-interface CommandOutput {
-
-  /**
-   * Some normal printed message (a linebreak will be appended)
-   * 
-   */
-  public function msg($msg);
-
-  /**
-   * A success message that is printed highlighted and should indicate a successful event
-   */
-  public function ok($msg);
-
-  /**
-   * A warning message that is printed highlighted and should indicate some information that is more important than a normal message, but not an error, yet
-   */
-  public function warn($msg);
-
+interface CommandOutput extends \Webforge\Common\CommandOutput {
 }

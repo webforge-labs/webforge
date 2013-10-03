@@ -3,7 +3,7 @@
 namespace Webforge\Setup\Installer;
 
 use Webforge\Collections\ArrayCollection;
-
+use Webforge\Common\CommandOutput;
 
 /**
  * @todo refactor to use common collection
@@ -16,9 +16,9 @@ class Macro implements \Webforge\Common\Macro {
     $this->commands = new ArrayCollection($commands);
   }
   
-  public function execute() {
+  public function execute(CommandOutput $output) {
     foreach ($this->commands as $command) {
-      $command->execute();
+      $command->execute($output);
     }
     
     return $this;

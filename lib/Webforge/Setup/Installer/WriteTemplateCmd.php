@@ -38,7 +38,7 @@ class WriteTemplateCmd extends Command {
     return sprintf("Writing Contents from '%s' to '%s' (%d variables set)", $this->template, $this->destination, count($this->vars));
   }
   
-  public function execute() {
+  public function doExecute() {
     if (($this->flags & self::IF_NOT_EXISTS) && $this->destination->exists()) {
       $this->warn('will not overwrite (per request): '.$this->destination);
       return $this;

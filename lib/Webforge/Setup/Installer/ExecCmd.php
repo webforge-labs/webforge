@@ -10,16 +10,13 @@ class ExecCmd extends Command {
     $this->cmd = $cmd;
   }
   
-  
-  public function execute() {
+  public function doExecute() {
     // @codeCoverageIgnoreStart
     return exec($this->cmd);
     // @codeCoverageIgnoreEnd
   }
   
-  
   public function describe() {
     return sprintf("Executing: '%s'", $this->cmd);
   }
 }
-?>

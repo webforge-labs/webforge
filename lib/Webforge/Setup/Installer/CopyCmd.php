@@ -4,6 +4,7 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
 use Webforge\Common\System\File;
+use InvalidArgumentException;
 
 class CopyCmd extends Command {
   
@@ -27,7 +28,7 @@ class CopyCmd extends Command {
     $this->flags = $flags;
   }
   
-  public function execute() {
+  public function doExecute() {
     if ($this->source instanceof File && $this->destination instanceof File || $this->source instanceof Dir) {
       if (($this->flags & self::IF_NOT_EXISTS) && $this->destination->exists()) {
         $this->warn('will not overwrite (per request): '.$this->destination);
@@ -37,7 +38,7 @@ class CopyCmd extends Command {
     }
     
     if ($this->source instanceof Dir && $this->destination instanceof File) {
-      throw new \InvalidArgumentException(
+      throw new InvalidArgumentException(
         sprintf("Cannot copy a dir to a file. '%s' to '%s'", $this->source, $this->destination)
       );
     }

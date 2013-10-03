@@ -16,7 +16,7 @@ class WriteCmd extends Command {
     $this->flags = $flags;
   }
   
-  public function execute() {
+  public function doExecute() {
     if ($this->destination instanceof File) {
       if (($this->flags & self::IF_NOT_EXISTS) && $this->destination->exists()) {
         $this->warn('will not overwrite (per request): '.$this->destination);

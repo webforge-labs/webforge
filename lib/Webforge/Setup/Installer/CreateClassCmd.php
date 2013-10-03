@@ -23,7 +23,7 @@ class CreateClassCmd extends WriteCmd {
     }
   }
   
-  public function execute() {
+  public function doExecute() {
     if (($this->flags & self::IF_NOT_EXISTS) && $this->getDestination()->exists()) {
       $this->warn('will not overwrite (per request): '.$this->getDestination());
         

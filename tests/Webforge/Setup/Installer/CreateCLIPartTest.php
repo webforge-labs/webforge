@@ -36,7 +36,7 @@ class CreateCLIPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
   }
   
   public function testCLIPartMakesAHintToInstallPscCMSConsole() {
-    $this->output->expects($this->once())->method('writeln')->with(
+    $this->output->expects($this->once())->method('msg')->with(
       $this->logicalAnd(
         $this->stringContains('create-class'),
         $this->stringContains('PackageNamespace\CMS\ProjectConsole'), // class
@@ -47,4 +47,3 @@ class CreateCLIPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
     $this->macro = $this->installer->dryInstall($this->part, $this->target);
   }
 }
-?>

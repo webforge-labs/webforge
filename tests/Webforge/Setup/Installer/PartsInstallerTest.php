@@ -4,7 +4,6 @@ namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
 use Webforge\Common\System\File;
-use Webforge\Code\Test\ConsoleOutput;
 
 class PartsInstallerTest extends \Webforge\Code\Test\Base {
   
@@ -14,8 +13,8 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
     $this->testDir = $this->getMock('Webforge\Common\System\Dir');
     $this->container = new \Webforge\Framework\Container();
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
-    
-    $this->output = new ConsoleOutput();
+
+    $this->output = $this->getMock('Webforge\Common\CommandOutput');
     $this->interaction = $this->getMockBuilder('Webforge\Console\InteractionHelper')->disableOriginalConstructor()->getMock();
     $this->partsInstaller = new PartsInstaller(array(), $this->container, $this->interaction, $this->output);
     
@@ -57,8 +56,10 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
   }
 
   public function testPartsInstallerHasAWarningFunctionThatPrintsToOutput() {
-    $this->partsInstaller->warn('i would install the bootstrap first');
-    $this->assertContains('i would install the bootstrap first', $this->output->stream);
+    foreach (array('warn'=>'warn', 'info'=>'msg') as $proxy => $method) {
+      $this->output->expects($this->once())->method($method)->with($this->equalTo('i would install the bootstrap first'));
+      $this->partsInstaller->$proxy('i would install the bootstrap first');
+    }
   }
   
   public function testPartsInstallerCreatesAMacroInDry() {

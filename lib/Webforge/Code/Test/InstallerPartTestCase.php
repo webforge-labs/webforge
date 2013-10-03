@@ -36,7 +36,8 @@ class InstallerPartTestCase extends MacroTestCase {
     $this->package->setRootDirectory($this->target);
     $this->container->setLocalPackage($this->package);
     
-    $this->output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface');
+    $this->output = $this->getMockbuilder('Webforge\Common\CommandOutput')->getMockForAbstractClass();
+    
     $this->interaction = $this->getMockBuilder('Webforge\Console\InteractionHelper')->disableOriginalConstructor()->getMock();
     $this->installer = new PartsInstaller(array(), $this->container, $this->interaction, $this->output);
   }

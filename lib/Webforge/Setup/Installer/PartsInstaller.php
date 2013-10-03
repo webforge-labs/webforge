@@ -7,12 +7,12 @@ use Webforge\Common\System\File;
 use Webforge\Framework\ContainerAware;
 use Webforge\Framework\Container;
 use Webforge\Framework\Package\PackageAware;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Webforge\Console\InteractionHelper;
 use Webforge\Code\Generator\CreateClassCommand;
 use Webforge\Code\Generator\GClass;
+use Webforge\Common\CommandOutput as OutputInterface;
 
 /**
  * @todo an output interface to communicate and warn
@@ -52,8 +52,8 @@ class PartsInstaller implements Installer {
   public function install(Part $part, Dir $destination) {
     $this->target = $destination;
     $macro = $this->installPart($part, $destination);
-    
-    return $macro->execute();
+
+    return $macro->execute($this->output);
   }
 
   /**
@@ -207,11 +207,11 @@ class PartsInstaller implements Installer {
   }
   
   public function warn($msg) {
-    return $this->output->writeln('<error>'.$msg.'</error>');
+    return $this->output->warn($msg);
   }
 
   public function info($msg) {
-    return $this->output->writeln('<info>'.$msg.'</info>');
+    return $this->output->msg($msg);
   }
   
   public function getPart($name) {
@@ -247,4 +247,3 @@ class PartsInstaller implements Installer {
     return $this->container->getLocalPackage();
   }
 }
-?>

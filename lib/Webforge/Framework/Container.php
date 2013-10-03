@@ -13,9 +13,9 @@ use Webforge\Framework\Package\ComposerPackageReader;
 use Webforge\Framework\Package\Package;
 use Webforge\Framework\Inflector;
 use Webforge\Setup\Installer\PartsInstaller;
-use Symfony\Component\Console\Output\OutputInterface;
 use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\Dir;
+use Webforge\Common\CommandOutput;
 use Webforge\Common\Exception\MessageException;
 use Webforge\Console\InteractionHelper;
 use Webforge\Configuration\ConfigurationReader;
@@ -220,7 +220,7 @@ class Container {
   /**
    * @return Webforge\Setup\Installer\PartsInstaller
    */
-  public function getPartsInstaller(InteractionHelper $interaction = NULL, OutputInterface $output = NULL) {
+  public function getPartsInstaller(InteractionHelper $interaction = NULL, CommandOutput $output = NULL) {
     if (!isset($this->partsInstaller)) {
       $this->partsInstaller =
         new PartsInstaller(
