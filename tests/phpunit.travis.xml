@@ -12,7 +12,7 @@
 >
     <testsuites>
         <testsuite name="Webforge">
-            <directory suffix="Test.php">./tests/Webforge</directory>
+            <directory suffix="Test.php">../tests/Webforge</directory>
         </testsuite>
     </testsuites>
 
