@@ -14,6 +14,7 @@ Sometimes it's a hassle to setup a whole package from scratch. If you want to st
 
 ## TODO (enhc)
 
+  - should run webforge register-package
   - create the repository with the github api
   - should ask for additional requirements like the webforge/testplate while init composer
   - initialize the readme if it's not avaible (easy pick)

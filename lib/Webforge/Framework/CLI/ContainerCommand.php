@@ -26,8 +26,17 @@ abstract class ContainerCommand {
   }
 
   protected function setUp() {
-
   }
+
+  /**
+   * $arg = function ($name, $description = NULL, $required = TRUE, $multiple = FALSE) // default: required
+   * $opt = function($name, $short = NULL, $withValue = TRUE, $description = NULL) // default: mit value required
+   * $defOpt = function($name, $short = NULL, $default = NULL, $description = NULL) // with value and a default value
+   * $flag = function($name, $short = NULL, $description) // ohne value
+   */
+  abstract public function defineArguments(Array $api);
+
+  abstract public function executeCLI(CommandInput $input, CommandOutput $output, CommandInteraction $interact);
 
   /**
    * Returns a lower dashed name for the console api

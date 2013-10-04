@@ -25,46 +25,6 @@ use Webforge\Console\SymfonyCommandOutput;
  * $opt = function($name, $short = NULL, $withValue = TRUE, $description = NULL) // default: mit value required
  * $flag = function($name, $short = NULL, $description) // ohne value
  */
-
-$createCommand('create-class',
-  array(
-    $arg('fqn', 'The full qualified name of the class'),
-    $arg('parent', 'The full qualified name of the parent class', FALSE),
-    $arg('interface', 'The full qualified names of one or more interfaces', FALSE, $multiple = TRUE),
-    $opt('implements', '', 'The full qualified name of one interface', TRUE),
-    $flag('overwrite', NULL, 'If set the class will be created, regardless if the file already exists'),
-    $opt('use-package', NULL, TRUE, 'Specify a package to use. When none is given the FQN is used to determine the package')
-  ),
-  function ($input, $output, $command) use ($container) {
-    $cmd = CreateClassCommand::fromContainer($container)
-      ->fqn($fqn = $input->getArgument('fqn'));
-      
-    if ($parent = $input->getArgument('parent')) {
-      $cmd->parent($parent);
-    }
-
-    if ($interface = $input->getOption('implements')) {
-      $cmd->addInterface($interface);
-    }
-    
-    foreach ($input->getArgument('interface') as $interface) {
-      $cmd->addInterface($interface);
-    }
-
-    if ($input->getOption('use-package')) {
-      $cmd->setFileFromPackage(
-        $container->getPackageRegistry()->findByIdentifier($input->getOption('use-package'))
-      );
-    }
-    
-    $file = $cmd->write($input->getOption('overwrite'))->getFile();
-    
-    $command->info('wrote Class '.$cmd->getGClass().' to file: '.$file);
-    return 0;
-  },
-  'Creates a new empty Class stub'
-);
-
 $createCommand('create-test',
   array(
     $arg('fqn', 'The full qualified name of the class under test'),

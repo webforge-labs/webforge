@@ -184,9 +184,7 @@ JSON;
   }
 
   protected function execute() {
-    // execute directly to inject the mocked interaction helper
-    // if we use the command tester from symfony this is not possible todo
-    $this->init->initIO($this->input, $this->output, $this->interactionHelper, $this->system);
+    $this->initIO($this->init);
 
     return $this->init->execute($this->packageRoot);
   }

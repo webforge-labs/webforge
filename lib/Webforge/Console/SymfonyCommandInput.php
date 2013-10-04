@@ -42,7 +42,7 @@ class SymfonyCommandInput implements CommandInput {
   }
 
   public function getEnum($var, Array $allowedValues, $default = NULL) {
-    $value = $this->getvalue($var);
+    $value = $this->getValue($var);
 
     if ($value === NULL) {
       return $default;
@@ -55,7 +55,11 @@ class SymfonyCommandInput implements CommandInput {
     return $value;
   }
 
-  protected function getValue($var) {
+  public function getFlag($var) {
+    return $this->consoleInput->getOption($var);
+  }
+
+  public function getValue($var) {
     return $this->consoleInput->getArgument($var);
   }
 }

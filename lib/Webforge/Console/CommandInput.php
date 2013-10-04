@@ -10,4 +10,12 @@ namespace Webforge\Console;
 interface CommandInput {
 
   const MUST_EXIST = 0x000001;
+
+  public function getValue($argumentOrOptionName);
+
+  public function getFlag($optionName);
+
+  public function getEnum($var, Array $allowedValues, $default = NULL);
+
+  public function getDirectory($var, $flags = self::MUST_EXIST);
 }

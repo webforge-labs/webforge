@@ -3,6 +3,7 @@
 namespace Webforge\Framework\CLI;
 
 use Webforge\Framework\Container;
+use Webforge\Framework\Package\Registry;
 use Webforge\Setup\ApplicationStorage;
 use org\bovigo\vfs\vfsStream;
 use Webforge\Common\System\Dir;
@@ -11,7 +12,7 @@ use Mockery as m;
 
 class CommandTestCase extends \Webforge\Code\Test\Base {
 
-  protected $container;
+  protected $container, $registry;
 
   public $testOs;
 
@@ -19,7 +20,7 @@ class CommandTestCase extends \Webforge\Code\Test\Base {
     $this->container = new Container();
 
     $this->output = $this->getMockForAbstractClass('Webforge\Console\CommandOutput');
-    $this->input = $this->getMockForAbstractClass('Webforge\Console\CommandInput');
+    $this->input = m::mock('Webforge\Console\CommandInput');
     $this->interactionHelper = m::mock('Webforge\Console\InteractionHelper');
 
     $this->system = m::mock('Webforge\Common\System\ExecutionSystem');
@@ -81,20 +82,50 @@ class CommandTestCase extends \Webforge\Code\Test\Base {
     return $this->expectInteraction('confirm');
   }
 
-  public function expectQuestionWithDefault($constraint, $default, $answer, $type = 'all') {
-    return $this->interactionHelper
-     ->expects($this->once())
-     ->method($type === 'all' 
-       ? $this->logicalOr($this->equalTo('ask'), $this->equalTo('askAndValidate'), $this->equalTo('askDefault'), $this->equalTo('confirm')) 
-       : $type
-     )
-     ->with($this->expandQuestionConstraint($constraint))
-     ->will($this->returnValue($answer));
-  }
-
   protected function getVirtualDirectory($name) {
-    vfsStream::setup($name);
+    $dir = vfsStream::setup($name);
 
     return new Dir(vfsStream::url($name).'/');
+  }
+
+  protected function getVirtualDirectoryFromPhysical($name, Dir $physicalDirectory, $maxFileSize = 2048) {
+    $dir = vfsStream::setup($name);
+
+    vfsStream::copyFromFileSystem((string) $physicalDirectory, $dir, $maxFileSize);
+
+    return new Dir(vfsStream::url($name).'/');
+  }
+
+  protected function expectInputValue($name, $value) {
+    $this->input->shouldReceive('getValue')
+      ->with($name)
+      ->andReturn($value);
+  }
+
+  protected function expectInputFlag($name, $bool) {
+    $this->input->shouldReceive('getFlag')
+      ->with($name)
+      ->andReturn($bool);
+  }
+
+  protected function initIO($command) {
+    $command->initIO($this->input, $this->output, $this->interactionHelper, $this->system);
+  }
+
+  protected function executeCLI($command) {
+    return $command->executeCLI($this->input, $this->output, $this->interactionHelper, $this->system);
+  }
+
+  protected function createVirtualPackage($packageNameInPackages) {
+    $this->container->setPackageRegistry($this->registry = new Registry());
+
+    $virtualDirectory = $this->getVirtualDirectoryFromPhysical(
+      $packageNameInPackages, 
+      $this->getTestDirectory()->sub('packages/'.$packageNameInPackages.'/')
+    );
+
+    $vpackage = $this->registry->addComposerPackageFromDirectory($virtualDirectory);
+
+    return $vpackage;
   }
 }

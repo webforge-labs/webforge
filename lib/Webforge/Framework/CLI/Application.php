@@ -35,7 +35,7 @@ class Application extends \Webforge\Console\Application {
 
     $api = $includer->buildArgsAPI();
 
-    foreach (array('RegisterPackage', 'Init') as $commandName) {
+    foreach (array('RegisterPackage', 'Init', 'CreateClass') as $commandName) {
       $fqn = ClassUtil::expandNamespace($commandName, __NAMESPACE__);
       $cliCommand = new $fqn($this->container);
 
