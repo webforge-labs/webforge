@@ -24,5 +24,14 @@
       <exclude>
         <group>acceptance</group>
       </exclude>
-    </groups>          
+    </groups>
+
+    <filter>
+      <whitelist addUncoveredFilesFromWhitelist="true">
+        <directory suffix=".php">lib</directory>
+        <exclude>
+          <!--<file>class\Psc\PHP\Parser.php</file>-->
+        </exclude>
+      </whitelist>
+    </filter>
 </phpunit>
