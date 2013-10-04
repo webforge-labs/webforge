@@ -2,7 +2,6 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\Code\Generate\ClassWritingException;
 use Webforge\Common\System\File;
 use Webforge\Common\String as S;
 use Webforge\Common\ArrayUtil as A;

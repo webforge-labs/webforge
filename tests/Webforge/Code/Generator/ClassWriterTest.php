@@ -58,7 +58,7 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
   public function testClassWriterDoesNotOverwriteExistingFiles() {
     $this->expectFileExists(TRUE);
     
-    $this->setExpectedException('Psc\Code\Generate\ClassWritingException');
+    $this->setExpectedException('Webforge\Code\Generator\ClassWritingException');
     
     $this->classWriter->write($this->classWithImports, $this->file);
   }
