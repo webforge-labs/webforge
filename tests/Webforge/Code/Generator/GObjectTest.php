@@ -2,8 +2,6 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\Code\Generate\DocBlock;
-
 class GObjectTest extends \Webforge\Code\Test\Base {
   
   protected $o;
@@ -13,7 +11,7 @@ class GObjectTest extends \Webforge\Code\Test\Base {
   }
   
   public function testCreateDocBlockWithGetter() {
-    $this->assertInstanceof('Psc\Code\Generate\DocBlock', $this->o->getDocBlock());
+    $this->assertInstanceof('Webforge\Code\Generator\DocBlock', $this->o->getDocBlock());
   }
   
   public function testSetDocBlockReplacesDocBlock() {

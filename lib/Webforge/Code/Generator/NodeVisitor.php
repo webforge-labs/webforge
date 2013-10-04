@@ -24,8 +24,6 @@ use Psc\Data\Type\ArrayType;
 use Psc\Data\Type\StringType;
 use Psc\Data\Type\Type;
 
-use Psc\Code\Generate\DocBlock;
-
 class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
   
   protected $gClass;
@@ -85,7 +83,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
     foreach ($node->props as $property) {
       $this->gClass->createProperty(
         $property->name,
-        $this->createType(NULL, $property->default, $docBlock), // @TODO read docblock?
+        $this->createType(NULL, $property->default, $docBlock),
         $property->default === NULL ? GProperty::UNDEFINED : $this->visitExpression($property->default),
         $this->createModifiers($node)
       );
@@ -96,7 +94,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
     foreach ($node->consts as $constant) {
       $this->gClass->createConstant(
         $constant->name,
-        $this->createType(NULL, $constant->value), // @TODO read docblock?
+        $this->createType(NULL, $constant->value),
         $this->visitExpression($constant->value),
         GModifiersObject::MODIFIER_PUBLIC
       );

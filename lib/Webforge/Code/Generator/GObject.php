@@ -2,8 +2,6 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\Code\Generate\DocBlock;
-
 /**
  * A Base Class of the G*Model
  *
@@ -13,7 +11,7 @@ abstract class GObject {
   const UNDEFINED = '::.WebforgeCodeGeneratorDefaultIsUndefined.::';
   
   /**
-   * @var Psc\Code\Generate\DocBlock
+   * @var Webforge\Code\Generator\DocBlock
    */
   protected $docBlock;
   
@@ -25,7 +23,7 @@ abstract class GObject {
   abstract public function getKey();
 
   /**
-   * @param Psc\Code\Generate\DocBlock $docBlock
+   * @param Webforge\Code\Generator\DocBlock $docBlock
    * @chainable
    */
   public function setDocBlock(DocBlock $docBlock) {
@@ -48,7 +46,7 @@ abstract class GObject {
    * Returns the DocBlock
    *
    * if no DocBlock is there, it will be created
-   * @return Psc\Code\Generate\DocBlock|NULL
+   * @return Webforge\Code\Generator\DocBlock|NULL
    */
   public function getDocBlock() {
     if (!$this->hasDocBlock())
