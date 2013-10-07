@@ -34,6 +34,8 @@ class InitTest extends CommandTestCase {
 
     $this->expectAutoloadQuestions($this->autoloadAnswers);
 
+    $this->expectRegisterPackage(TRUE);
+
     $this->execute();
 
     // additional written info into the composer.json manually made
@@ -181,6 +183,26 @@ JSON;
 
        return 0;
      });
+  }
+
+  protected function expectRegisterPackage($answer) {
+    $this->expectConfirm()
+      ->with('/register this package/i', TRUE)
+      ->andReturn($answer);
+
+    if ($answer) {
+      $this->system
+        ->shouldReceive('passthru')
+        ->ordered('execs')
+        ->once()
+        ->with(m::on(function ($commandline) {
+          if (!S::startsWith($commandline, 'webforge register-package')) {
+            return FALSE;
+          }
+
+          return TRUE;
+        }));
+    }
   }
 
   protected function execute() {

@@ -54,10 +54,11 @@ class Init extends ContainerCommand {
     if ($this->interact->confirm('Do you want to init a composer configuration?', TRUE)) {
       $params = array(
         'working-dir'=>(string) $this->root,
-        'name'=>$vendor.'/'.$packageSlug,
-        "description"=>$this->retrieveDescription(),
+        'name'=>$vendor.'/'.$packageSlug,        
         'stability'=>$this->retrieveMinimumStability()
       );
+
+      $this->retrieveDescription($params);
 
       $this->system->passthru($cmd = 'composer init '.$this->buildParams($params));
 
@@ -101,6 +102,10 @@ class Init extends ContainerCommand {
 
       });
 
+      if ($this->interact->confirm('Do you want to register this package with webforge?', TRUE)) {
+        $this->system->passthru('webforge register-package '.$params['working-dir']);
+      }
+
       $this->output->ok('finished webforge init.');
     } else {
       $this->output->warn('I cannot init webforge successfully, because the package cannot be read (only composer repositories yet)');
@@ -122,15 +127,13 @@ class Init extends ContainerCommand {
     return array($vendor, $slug);
   }
 
-  protected function retrieveDescription() {
+  protected function retrieveDescription(Array &$params) {
     $readme = $this->root->getFile('README.md');
     if ($readme->exists()) {
       if ($desc = Preg::qmatch($readme->getContents(), '/.+[\r\n]+\=+[\r\n]+(?:\s*[\r\n]*)(.+)[\s\r\n]*$/')) {
-        return $desc;
+        return $params['description'] = $desc;
       }
     }
-
-    return '';
   }
 
   protected function retrieveMinimumStability() {
