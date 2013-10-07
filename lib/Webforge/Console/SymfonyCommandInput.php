@@ -60,6 +60,6 @@ class SymfonyCommandInput implements CommandInput {
   }
 
   public function getValue($var) {
-    return $this->consoleInput->getArgument($var);
+    return $this->consoleInput->hasArgument($var) ? $this->consoleInput->getArgument($var) : $this->consoleInput->getOption($var);
   }
 }
