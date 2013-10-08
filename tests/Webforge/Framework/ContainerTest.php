@@ -144,11 +144,11 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS($nonRegisteredDir = sys_get_temp_dir()));
   }
   
-  public function testContainerReturnsALegacyProjectForPSCCMS() {
+  public function testContainerReturnsAProjectForThePackageIFAvaible() {
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
-    $this->assertInstanceOf('Psc\CMS\Project', $project = $this->container->getLocalProject());
-    $package = $this->container->getLocalPackage();
+    $this->assertInstanceOf('Webforge\Framework\Package\ProjectPackage', $project = $this->container->getLocalProject());
+    $this->assertInstanceOf('Webforge\Framework\Project', $project = $this->container->getLocalProject());
   }
   
   public function testThatAErroneousPackageFromPackagesJSONDoesRemoveThePackageOrDoesSomethingUsefulWithIt() {

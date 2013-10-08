@@ -255,12 +255,11 @@ class Container {
   }
   
   /**
-   * @return Psc\CMS\Project
+   * @return Webforge\Framework\Project
    */
   public function getLocalProject() {
     if (!isset($this->localProject))  {
-      $this->localProject = $this->getCMSBridge()->createProjectFromPackage($this->getLocalPackage());
-      $this->getCMSBridge()->initLocalConfigurationFor($this->localProject);
+      $this->localProject = $this->getProjectsFactory()->fromPackage($this->getLocalPackage());
     }
     
     return $this->localProject;
