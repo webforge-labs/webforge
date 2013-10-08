@@ -56,6 +56,8 @@ class DirectoryLocationsTest extends \Webforge\Framework\Package\PackagesTestCas
     $test('cache', 'files/cache/');
     $test('bin', 'bin/');
     $test('etc', 'etc/');
+    $test('cms-uploads', 'files/uploads/');
+    $test('cms-images', 'files/images/');
   
     return $tests;
   }

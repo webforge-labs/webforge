@@ -41,8 +41,11 @@ class DirectoryLocations {
         'cache'=>'files/cache/',
         'bin'=>'bin/',
         'etc'=>'etc/',
+        'lib'=>'lib/',
         'vendor'=>'vendor/',
-        'tests'=>'tests/'
+        'tests'=>'tests/',
+        'cms-uploads'=>'files/uploads/',
+        'cms-images'=>'files/images/'
       )
     );
   }
