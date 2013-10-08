@@ -13,11 +13,13 @@ class CMSCompilerPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
   
   public function testWritesExpectedFilesAndAddsCommand() {
     $this->macro = $this->installer->dryInstall($this->part, $this->target);
+
+    $namespacePath = str_replace('\\', '/', $this->package->getNamespace());
     
     $this->assertArrayEquals(
       array(
-        '/lib/'.$this->package->getNamespace().'/Entities/Compiler.php',
-        '/lib/'.$this->package->getNamespace().'/CMS/CompileCommand.php',
+        '/lib/'.$namespacePath.'/Entities/Compiler.php',
+        '/lib/'.$namespacePath.'/CMS/CompileCommand.php',
       ),
       $this->getWrittenFiles($this->macro)
     );

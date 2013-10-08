@@ -18,9 +18,11 @@ class CMSContainerPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
     );
 
     $this->macro = $this->installer->dryInstall($this->part, $this->target);
+
+    $namespacePath = str_replace('\\', '/', $this->package->getNamespace());
     
     $this->assertArrayEquals(
-      array('/lib/'.$this->package->getNamespace().'/CMS/Container.php'),
+      array('/lib/'.$namespacePath.'/CMS/Container.php'),
       $this->getWrittenFiles($this->macro)
     );
   }

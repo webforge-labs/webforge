@@ -7,6 +7,7 @@ use Webforge\Setup\Installer\Macro;
 use Webforge\Setup\Installer\Command;
 use Webforge\Framework\Container;
 use Webforge\Common\System\Dir;
+use org\bovigo\vfs\vfsStream;
 
 class InstallerPartTestCase extends MacroTestCase {
   
@@ -18,23 +19,19 @@ class InstallerPartTestCase extends MacroTestCase {
   public function setUp() {
     parent::setUp();
     
-    $this->target = Dir::createTemporary();
+    $packageRoot = vfsStream::setup('package-root');
+    vfsStream::copyFromFileSystem((string) $this->getTestDirectory()->sub('packages/ACMESuperBlog/'), $packageRoot, $maxFileSize = 2*1024*1024);
+    $this->target = new Dir(vfsStream::url('package-root').'/');
+
     $this->container = new Container();
-    $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
-
+    $this->webforge = $this->container->getPackageRegistry()->findByDirectory(Dir::factoryTS(__DIR__));
+    
     /*
-     this would be the package were webforge operates in
-     in webforge tests $this->package->getIdentifier() === 'webforge/webforge'
-     so that setRootDirectory() would change 'webforge/webforge' in package-registry package)
-     thats why we have to clone the local package to "fake" a webforge-is-operating-on-it-package
-
-     we need to do this extra work, because the createClassCommand is not injected with $this->target (and uses the package root dir)
-     but i thinks this makes the test more realistic
+     all parts installer tests are operating on ACMESuperBlog (which is a vfs directory root)
+     in webforge tests $this->package->getIdentifier() === 'acme/super-blog'
     */
-    $this->webforge = $this->container->getLocalPackage();
-    $this->package = clone $this->webforge;
-    $this->package->setRootDirectory($this->target);
-    $this->container->setLocalPackage($this->package);
+    $this->package = $this->container->getPackageRegistry()->addComposerPackageFromDirectory($this->target);
+    $this->container->setLocalPackage($this->package); // inject
     
     $this->output = $this->getMockbuilder('Webforge\Common\CommandOutput')->getMockForAbstractClass();
     
@@ -132,9 +129,10 @@ class InstallerPartTestCase extends MacroTestCase {
      ->will($this->returnValue($answer));
   }
 
-  public function tearDown() {
-    if (isset($this->target)) {
-      $this->target->delete();
-    }
+  protected function getVirtualDirectoryFromPhysical($name, Dir $physicalDirectory, $maxFileSize = 2048) {
+    
+
+    vfsStream::copyFromFileSystem((string) $physicalDirectory, $dir, $maxFileSize);
+
   }
 }
