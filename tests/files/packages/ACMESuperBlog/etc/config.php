@@ -30,5 +30,5 @@ $conf['doctrine']['entities']['names'] = array(
 $conf['doctrine']['types'] = array();
 
 // mail
-$conf['mail']['from'] = 'info@acme.ps-webforge.com';
+$conf['mail']['from'] = 'info@acme.ps-webforge.com'; // used in ProjectsFactoryTest
 $conf['mail']['envelope'] = 'info@acme.ps-webforge.com';

@@ -24,7 +24,6 @@ interface Project {
    */
   public function getConfiguration();
 
-
   // i18n
   /**
    * @return array

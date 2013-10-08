@@ -14,9 +14,13 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
     parent::setUp();
 
     $this->container = new Container();
-    $this->container->getHostConfiguration()->set(array('production'), FALSE);
-    $this->container->getHostConfiguration()->set(array('development'), NULL);
-    $this->container->getHostConfiguration()->set(array('host'), 'testhost');
+    $this->container->getHostConfiguration()
+      ->set(array('production'), FALSE)
+      ->set(array('development'), NULL)
+      ->set(array('host'), 'testhost')
+      ->set(array('defaults', 'db-secret'), 'host-db-secret')
+      ->set(array('defaults', 'mail', 'from'), 'host@ps-webforge.com')
+    ;
     $this->factory = $this->container->getProjectsFactory();
 
     $this->projectPackage = $this->factory->fromPackage($this->configPackage); // ACMESuperBlog
@@ -48,6 +52,14 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
 
   public function testProjectReturnsEmptyConfigurationForNonFoundConfig() {
     $this->assertInstanceOf('Webforge\Configuration\Configuration', $configuration = $this->projectPackageWithoutConfig->getConfiguration());
+  }
+
+  public function testProjectGetsValuesInheritedFromHostConfigIntoProjectConfig() {
+    $this->assertEquals('host-db-secret', $this->projectPackage->getConfiguration()->req(array('db-secret')));
+  }
+
+  public function testProjectCanOverridedInheritedValuesWithOwnConfig() {
+    $this->assertEquals('info@acme.ps-webforge.com', $this->projectPackage->getConfiguration()->req(array('mail', 'from')));
   }
 
   public function testLowerProjectNameIsEquivalentToPackageSlug() {

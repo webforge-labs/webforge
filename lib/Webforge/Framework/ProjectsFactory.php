@@ -62,12 +62,14 @@ class ProjectsFactory implements ContainerAware {
     $reader = new ConfigurationReader();
     $reader->setScope(array('package'=>$package, 'project'=>$projectPackage));
 
-    if ($configFile = $this->getConfigurationFile($package)) {
-      $config = $reader->fromPHPFile($configFile);
-    } else {
-      $config = $reader->fromArray(array());
-    }
+    $config = $reader->fromArray(
+      $this->container->getHostConfiguration()->get(array('defaults'))
+    );
 
+    if ($configFile = $this->getConfigurationFile($package)) {
+      $config->merge($reader->fromPHPFile($configFile));
+    }
+    
     $projectPackage->setConfiguration($config);
 
     return $config;
