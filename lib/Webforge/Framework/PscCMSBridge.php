@@ -5,7 +5,7 @@ namespace Webforge\Framework;
 use Webforge\Framework\Package\Package;
 use Psc\CMS\Project AS PscProject;
 use Psc\PSC;
-use Psc\CMS\ProjectsFactory;
+use Psc\CMS\ProjectsFactory AS PscProjectsFactory;
 use Webforge\Common\System\File;
 use Webforge\Common\Preg;
 use Psc\CMS\Configuration as PscConfiguration;
@@ -113,12 +113,12 @@ class PscCMSBridge {
   
   public function getProjectsFactory() {
     if (!isset($this->projectsFactory)) {
-      $this->projectsFactory = new ProjectsFactory($this->getHostConfig());
+      $this->projectsFactory = new PscProjectsFactory($this->getHostConfig());
     }
     return $this->projectsFactory;
   }
   
-  public function getHostConfig(\Psc\CMS\ProjectsFactory $projectsFactory = NULL) {
+  public function getHostConfig(PscProjectsFactory $projectsFactory = NULL) {
     if (!isset($this->hostConfig)) {
       $projectsFactory = $projectsFactory ?: $this->getPscProjectsFactory();
       if (isset($projectsFactory)) {

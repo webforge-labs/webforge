@@ -57,6 +57,19 @@ class SimplePackageTest extends \Webforge\Code\Test\Base {
 
     $this->simplePackage->getDirectory('notdefined');
   }
+
+
+  public function testgetDirectoryOutputChangesIFRootChanges() {
+    $tests = $this->simplePackage->getDirectory(SimplePackage::TESTS);
+
+    $this->simplePackage->setRootDirectory($otherRoot = $this->getTestDirectory()->sub('packages/ACMELibrary/'));
+
+    $this->assertNotEquals(
+      (string) $tests, 
+      (string) $this->simplePackage->getDirectory(SimplePackage::TESTS),
+      'Root was changed so should getDirectory for tests'
+    );
+  }
   
   public function testGetNamespaceReturnsANamespacedNamedFromPackageSlug_byConvention_whenAutoloadInfoIsEmpty() {
     $this->simplePackage->setAutoLoadInfo(new AutoLoadInfo(array()));
@@ -109,4 +122,3 @@ class SimplePackageTest extends \Webforge\Code\Test\Base {
     );
   }
 }
-?>

@@ -37,4 +37,5 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->projectPackage->setStaging(FALSE);
     $this->assertFalse($this->projectPackage->isStaging());
   }
+
 }

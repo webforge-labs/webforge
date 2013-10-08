@@ -41,6 +41,14 @@ interface Project {
    */
   public function getRootDirectory();
 
+  /**
+   * Returns a specific directory for the project
+   * 
+   * @param string $directoryIdentifier might be something like "test-files" or "resources" or "templates", "cache", whatever your project supports
+   * @return Webforge\Common\System\Dir
+   */
+  public function dir($identifier);
+
   // project status and env
   /**
    * Returns the slug-name of the host the project is running on

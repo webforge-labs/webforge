@@ -7,6 +7,7 @@ use Webforge\Setup\AutoLoadInfo;
 use Webforge\Setup\NoAutoLoadPrefixException;
 use Webforge\Framework\Inflector;
 use InvalidArgumentException;
+use Webforge\Framework\DirectoryLocations;
 
 class SimplePackage implements Package {
   
@@ -44,11 +45,12 @@ class SimplePackage implements Package {
    */
   protected $namespaceDirectory;
   
-  public function __construct($slug, $vendor, Dir $root, AutoLoadInfo $info = NULL) {
+  public function __construct($slug, $vendor, Dir $root, AutoLoadInfo $info = NULL, DirectoryLocations $dl = NULL) {
     $this->slug = $slug;
     $this->vendor = $vendor;
     $this->rootDirectory = $root;
     $this->autoLoadInfo = $info;
+    $this->directoryLocations = $dl ?: DirectoryLocations::createFromPackage($this);
   }
   
   /**
@@ -90,15 +92,7 @@ class SimplePackage implements Package {
    * @return Webforge\Common\System\Dir (cloned)
    */
   public function getDirectory($type = self::ROOT) {
-    if ($type === self::ROOT) {
-      return $this->getRootDirectory()->sub('/');
-    } elseif ($type === self::TESTS) {
-      return $this->getRootDirectory()->sub('tests/');
-    } elseif ($type === self::VENDOR) {
-      return $this->getRootDirectory()->sub('vendor/');
-    }
-
-    throw new InvalidArgumentException(sprintf('the type %s is not known.', $type));
+    return $this->directoryLocations->get($type);
   }
   
   /**
@@ -158,17 +152,18 @@ class SimplePackage implements Package {
     $this->autoLoadInfo = $info;
     return $this;
   }
-  
-  // @codeCoverageIgnoreStart
+
   /**
    * @param Webforge\Common\System\Dir $rootDirectory
    * @chainable
    */
   public function setRootDirectory(Dir $rootDirectory) {
+    $this->directoryLocations->setRoot($rootDirectory);
     $this->rootDirectory = $rootDirectory;
     return $this;
   }
-
+  
+  // @codeCoverageIgnoreStart
   /**
    * @param string $slug
    * @chainable

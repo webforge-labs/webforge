@@ -18,6 +18,9 @@ interface Package {
   const ROOT = 'root';
   const TESTS = 'tests';
   const VENDOR = 'vendor';
+  const BIN = 'bin';
+  const CACHE = 'cache';
+  const TEST_FILES = 'test-files';
   
   /**
    * A full identifier for the package

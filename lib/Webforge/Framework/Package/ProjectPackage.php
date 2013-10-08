@@ -156,6 +156,16 @@ class ProjectPackage implements \Webforge\Framework\Project {
     return $this->package->getRootDirectory();
   }
 
+  /**
+   * Returns a semantic directory for the project
+   * 
+   * avaible: test-files|cache|bin (for more see ProjectPackageTest)
+   * @return Webforge\Common\System\Dir
+   */
+  public function dir($identifier) {
+    return $this->package->getDirectory($identifier);
+  }
+
   public function setStaging($to = TRUE) {
     if ($to) {
       $this->mode |= self::STAGING;
