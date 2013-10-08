@@ -8,7 +8,6 @@ use Psc\PSC;
 use Psc\CMS\ProjectsFactory AS PscProjectsFactory;
 use Webforge\Common\System\File;
 use Webforge\Common\Preg;
-use Psc\CMS\Configuration as PscConfiguration;
 use Webforge\Configuration\Configuration;
 use Psc\Exception AS BridgeException;
 use RuntimeException;
@@ -136,7 +135,7 @@ class PscCMSBridge {
   }
 
   protected function convertToPscConfig($config) {
-    return new \Psc\CMS\Configuration($config->toArray());
+    return new Configuration($config->toArray());
   }
   
   protected function getLocalConfig(PscProject $project) {
