@@ -8,6 +8,13 @@ interface Project {
   public function getName();
 
   /**
+   * Returns the (main) Autoload Namespace for the Project
+   * 
+   * should be in 90% the getName()
+   */
+  public function getNamespace();
+
+  /**
    * Gets a slug lower name for the project
    * 
    * this is not a title and is alphanumeric with - 

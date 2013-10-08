@@ -76,6 +76,13 @@ class ProjectPackage implements \Webforge\Framework\Project {
   }
 
   /**
+   * @return string
+   */
+  public function getNamespace() {
+    return $this->package->getNamespace();
+  }
+
+  /**
    * @return Webforge\Setup\Configuraton
    */
   public function getConfiguration() {
