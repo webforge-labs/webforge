@@ -498,4 +498,8 @@ class Container {
   }
 
   // @codeCoverageIgnoreEnd
+
+  public function setHostConfiguration($config) {
+    $this->hostConfiguration = $config;
+  }
 }

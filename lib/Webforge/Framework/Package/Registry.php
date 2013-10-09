@@ -88,9 +88,19 @@ class Registry {
       sprintf(
         "Multiple Packages found for '%s'. This cannot be solved, yet.\nFound:\n%s\nResults:%s",
         $fqn, 
-        A::implode($packages, "\n", function ($package) { return $package->getIdentifier().' '.$package->getRootDirectory(); }),
+        $this->dumpPackages($packages),
         $log
       )
+    );
+  }
+
+  protected function dumpPackages($packages) {
+    return A::implode(
+      $packages, 
+      "\n", 
+      function ($package) { 
+        return $package->getIdentifier().' '.$package->getRootDirectory(); 
+      }
     );
   }
 
@@ -107,7 +117,14 @@ class Registry {
       return current($packagesWithPrimaryNamespace);
     }
 
-    throw new NotResolvedException(sprintf('%d Packages match with the primary namespace to the fqn: %s', count($packagesWithPrimaryNamespace), $fqn));
+    throw new NotResolvedException(
+      sprintf(
+        "%d Packages match with the primary namespace to the fqn: %s. Packages:\n%s", 
+        count($packagesWithPrimaryNamespace), 
+        $fqn,
+        $this->dumpPackages($packagesWithPrimaryNamespace)
+      )
+    );
   }
   
   /**

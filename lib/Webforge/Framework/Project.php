@@ -64,6 +64,11 @@ interface Project {
   public function getHost();
 
   /**
+   * @return string
+   */
+  public function getHostUrl($type);
+
+  /**
    * @return bool
    */
   public function isStaging();

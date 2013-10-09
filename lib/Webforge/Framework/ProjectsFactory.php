@@ -4,6 +4,7 @@ namespace Webforge\Framework;
 
 use Webforge\Framework\Package\Package;
 use Webforge\Framework\Package\ProjectPackage;
+use Webforge\Framework\Package\ProjectUrls;
 use Webforge\Configuration\ConfigurationReader;
 
 class ProjectsFactory implements ContainerAware {
@@ -15,8 +16,11 @@ class ProjectsFactory implements ContainerAware {
 
   protected $host;
 
+  protected $hostConfig;
+
   public function __construct(Container $container) {
     $this->container = $container;
+    $this->hostConfig = $this->container->getHostConfiguration();
   }
 
   /**
@@ -25,10 +29,10 @@ class ProjectsFactory implements ContainerAware {
   public function fromPackage(Package $package) {
     $flags = 0;
 
-    if (!is_bool($isDevel = $this->container->getHostConfiguration()->get('development'))) {
+    if (!is_bool($isDevel = $this->hostConfig->get('development'))) {
 
       // note: this is legacy and is wrong for so many times: production is the other way round
-      $isDevel = $this->container->getHostConfiguration()->get('production');
+      $isDevel = $this->hostConfig->get('production');
     }
     
     if ($isDevel) {
@@ -41,7 +45,7 @@ class ProjectsFactory implements ContainerAware {
     $name = $bridge->getProjectName($package);
     $lowerName = $package->getSlug();
 
-    $projectPackage = new ProjectPackage($package, $name, $lowerName, $flags, $this->getHost());
+    $projectPackage = new ProjectPackage($package, $name, $lowerName, $flags, $this->getHost(), new ProjectUrls($this->hostConfig));
     $this->readConfiguration($package, $projectPackage);
 
     return $projectPackage;
@@ -49,7 +53,7 @@ class ProjectsFactory implements ContainerAware {
 
   protected function getHost() {
     if (!isset($this->host)) {
-      $this->host = $this->container->getHostConfiguration()->get(
+      $this->host = $this->hostConfig->get(
         'host', 
         isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n')
       );
@@ -63,7 +67,7 @@ class ProjectsFactory implements ContainerAware {
     $reader->setScope(array('package'=>$package, 'project'=>$projectPackage));
 
     $config = $reader->fromArray(
-      $this->container->getHostConfiguration()->get(array('defaults'))
+      $this->hostConfig->get(array('defaults'), array())
     );
 
     if ($configFile = $this->getConfigurationFile($package)) {

@@ -48,12 +48,13 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   protected $languages;
 
-  public function __construct(Package $package, $name, $lowerName, $mode = 0x000000, $host) {
+  public function __construct(Package $package, $name, $lowerName, $mode = 0x000000, $host, ProjectURLs $urls) {
     $this->name = $name;
     $this->lowerName = $lowerName;
     $this->package = $package;
     $this->mode = $mode;
     $this->host = $host;
+    $this->urls = $urls;
   }
 
   /**
@@ -106,6 +107,15 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function getHost() {
     return $this->host;
+  }
+
+  /**
+   * Returns an URL for the given type
+   * 
+   * urls associated with the project might be public url or a api url, something like that
+   */
+  public function getHostUrl($type) {
+    return $this->urls->get($type, $this);
   }
 
   /**

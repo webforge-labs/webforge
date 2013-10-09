@@ -3,6 +3,7 @@
 namespace Webforge\Framework\Package;
 
 use Webforge\Framework\Package\Registry;
+use Webforge\Framework\Container;
 
 class PackagesTestCase extends \Webforge\Code\Test\Base {
 
@@ -19,5 +20,12 @@ class PackagesTestCase extends \Webforge\Code\Test\Base {
     $this->camelCasePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/CoMun/Umsetzung/base/src/'));
     $this->underscorePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/serien-loader/'));
     $this->configPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMESuperBlog/'));
+  }
+
+  protected function injectRegistry() {
+    $container = new Container();
+    $container->setPackageRegistry($this->registry);
+
+    return $container;
   }
 }
