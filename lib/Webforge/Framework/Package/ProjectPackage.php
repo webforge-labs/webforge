@@ -115,7 +115,7 @@ class ProjectPackage implements \Webforge\Framework\Project {
    * 
    * urls associated with the project might be public url or a api url, something like that
    */
-  public function getHostUrl($type) {
+  public function getHostUrl($type = 'base') {
     return $this->urls->get($type, $this);
   }
 
