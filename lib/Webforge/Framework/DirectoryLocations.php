@@ -46,7 +46,9 @@ class DirectoryLocations {
         'tests'=>'tests/',
         'cms-uploads'=>'files/uploads/',
         'cms-images'=>'files/images/',
-        'cms-tpl'=>'resources/tpl/' // dont use this anymore
+        'cms-tpl'=>'resources/tpl/', // dont use this anymore
+        'www'=>'www/',
+        'cms-www'=>'www/cms/'
       )
     );
   }

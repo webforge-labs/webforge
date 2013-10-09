@@ -24,4 +24,3 @@ class PscJSBoilerplatePart extends Part {
     $installer->copy($jsTemplates->getFile('html5.js'), $js->getFile('html5-ie-fix.js'), Installer::IF_NOT_EXISTS);
   }
 }
-?>
