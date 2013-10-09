@@ -21,7 +21,7 @@ class BoostrapAcceptanceInnerTest extends \Webforge\Code\Test\Base {
   }
   
   public function testPSCProjectIsSetToGlobalPSC() {
-    $this->assertInstanceOf('Psc\CMS\Project', \Psc\PSC::getProject(), 'PSC::getProject() should be an instance fo Psc\CMS\Project');
+    $this->assertInstanceOf('Webforge\Framework\Project', \Psc\PSC::getProject(), 'PSC::getProject() should be an Project instance');
   }
   
   public function testProjectHasTheDirectorySrcOnSrc() {
@@ -60,4 +60,3 @@ class BoostrapAcceptanceInnerTest extends \Webforge\Code\Test\Base {
     );
   }
 }
-?>

@@ -14,5 +14,3 @@ $bootLoader = new BootLoader(__DIR__);
 $bootLoader->loadComposer();
 $bootLoader->registerCMSContainer();
 //$bootLoader->registerPackageRoot();
-
-?>

@@ -250,4 +250,3 @@ PHP;
     return $bin;
   }
 }
-?>
