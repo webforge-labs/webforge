@@ -48,6 +48,7 @@ class DirectoryLocations {
         'cms-images'=>'files/images/',
         'resources'=>'resources/',
         'cms-tpl'=>'resources/tpl/', // dont use this anymore
+        'tpl'=>'resources/tpl/',
         'www'=>'www/',
         'cms-www'=>'www/cms/'
       )
