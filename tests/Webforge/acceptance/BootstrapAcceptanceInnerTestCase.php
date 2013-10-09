@@ -8,10 +8,10 @@ use Webforge\Common\System\File;
 
 class BoostrapAcceptanceInnerTest extends \Webforge\Code\Test\Base {
 
-  protected $src;
+  protected $root;
 
   public function setUp() {
-    $this->src = new Dir(__DIR__.DIRECTORY_SEPARATOR);
+    $this->root = new Dir(__DIR__.DIRECTORY_SEPARATOR);
     
     try {
       $this->project = PSC::getProject();
@@ -24,11 +24,11 @@ class BoostrapAcceptanceInnerTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Webforge\Framework\Project', \Psc\PSC::getProject(), 'PSC::getProject() should be an Project instance');
   }
   
-  public function testProjectHasTheDirectorySrcOnSrc() {
+  public function testProjectHasTheDirectoryRootOnSrc() {
     $this->assertEquals(
-      (string) $this->src,
-      (string) $this->project->getSrc(),
-      'src should be set correctly in project'
+      (string) $this->root,
+      (string) $this->project->dir('root'),
+      'root should be set correctly in project'
     );
   }
   
