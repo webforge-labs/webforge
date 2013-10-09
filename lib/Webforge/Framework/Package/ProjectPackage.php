@@ -4,6 +4,7 @@ namespace Webforge\Framework\Package;
 
 use Webforge\Setup\MissingConfigVariableException;
 use Webforge\Configuration\Configuration;
+use Webforge\Common\System\Dir;
 
 class ProjectPackage implements \Webforge\Framework\Project {
 
@@ -171,6 +172,13 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function getRootDirectory() {
     return $this->package->getRootDirectory();
+  }
+
+  /**
+   * @return Webforge\Common\System\Dir
+   */
+  public function setRootDirectory(Dir $root) {
+    return $this->package->setRootDirectory($root);
   }
 
   /**

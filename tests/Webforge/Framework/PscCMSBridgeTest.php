@@ -40,7 +40,7 @@ class PscCMSBridgeTest extends \Webforge\Framework\Package\PackagesTestCase {
     
     $this->bridge->initLocalConfigurationFor($project);
     
-    $this->assertInstanceOf('Psc\CMS\Configuration', $project->getConfiguration());
+    $this->assertInstanceOf('Webforge\Configuration\Configuration', $project->getConfiguration());
   }
   
   public function testBridgeInitsAConfigEvenIfThereIsNoEnvironmentVariableForPscCMSSet() {
@@ -49,7 +49,7 @@ class PscCMSBridgeTest extends \Webforge\Framework\Package\PackagesTestCase {
 
     $project = $this->bridge->createProjectFromPackage($this->package);
     $this->bridge->initLocalConfigurationFor($project);
-    $this->assertInstanceOf('Psc\CMS\Configuration', $project->getConfiguration());
+    $this->assertInstanceOf('Webforge\Configuration\Configuration', $project->getConfiguration());
     
     putenv('PSC_CMS="'.$env.'"');
   }
@@ -70,7 +70,7 @@ class PscCMSBridgeTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->bridge->initLocalConfigurationFor($project);
     
     $config = $project->getConfiguration();
-    $this->assertInstanceOf('Psc\CMS\Configuration', $project->getConfiguration());
+    $this->assertInstanceOf('Webforge\Configuration\Configuration', $project->getConfiguration());
     
     // one item from project/app config
     $this->assertEquals('appKeyValue', $config->get('appKey'));
@@ -83,13 +83,13 @@ class PscCMSBridgeTest extends \Webforge\Framework\Package\PackagesTestCase {
   }
   
   public function testGetHostConfiguration_isLoadedFromPscProjectsFactoryWhenInjected() {
-    $this->assertInstanceOf('Psc\CMS\Configuration', $this->bridge->getHostConfig($this->rollbackFactory));
+    $this->assertInstanceOf('Webforge\Configuration\Configuration', $this->bridge->getHostConfig($this->rollbackFactory));
   }
 
   public function testGetHostConfiguration_isLoadedFromPscRootDirectory() {
     try {
       $this->assertFileExists(PSC::getRoot()->getFile('host-config.php'), 'PSC::getRoot() must not throw exception for this test. host-config.php should exist');
-      $this->assertInstanceOf('Psc\CMS\Configuration', $this->bridge->getHostConfig());
+      $this->assertInstanceOf('Webforge\Configuration\Configuration', $this->bridge->getHostConfig());
     } catch (\Psc\MissingEnvironmentVariableException $e) {
       $this->markTestSkipped('this is a stupid test with legacy code with static dependencies. And this test is skipped because host-config is not defined on this host');
     }

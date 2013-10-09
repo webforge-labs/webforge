@@ -4,6 +4,7 @@ namespace Webforge\Framework\Package;
 
 use Webforge\Configuration\Configuration;
 use Webforge\Setup\MissingConfigVariableException;
+use Webforge\Common\System\Dir;
 
 class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
@@ -13,7 +14,8 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->chainClass = 'Webforge\\Framework\\Package\\ProjectPackage';
     parent::setUp();
 
-    $this->projectPackage = new ProjectPackage($this->configPackage, 'ACMESuperBlog', 'super-blog', 0, 'psc');
+    $hostConfig = new Configuration(array());
+    $this->projectPackage = new ProjectPackage($this->configPackage, 'ACMESuperBlog', 'super-blog', 0, 'psc', new ProjectUrls($hostConfig));
   }
 
   public function testCreatedNonFactoryProjectPackagesDoNotHaveAconfiguration() {
@@ -38,4 +40,10 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->assertFalse($this->projectPackage->isStaging());
   }
 
+  public function testSetRootDirectory() {
+    $this->projectPackage->setRootDirectory($dir = Dir::factoryTS(__DIR__));
+
+    $this->assertEquals($dir, $this->projectPackage->dir('root'));
+    $this->assertEquals($dir, $this->projectPackage->getRootDirectory());
+  }
 }
