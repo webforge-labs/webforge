@@ -20,13 +20,14 @@ use Webforge\Common\Exception\MessageException;
 use Webforge\Console\InteractionHelper;
 use Webforge\Configuration\ConfigurationReader;
 use Webforge\Common\System\Container as SystemContainer;
+use Webforge\Common\System\ContainerConfiguration as SystemContainerConfiguration;
 
 /**
  * This container includes the base classes for the framework
  *
  * its related to the webforge core-project
  */
-class Container {
+class Container implements SystemContainerConfiguration {
   
   /**
    * @var string
@@ -270,6 +271,15 @@ class Container {
     
     return $this->localProject;
   }
+
+  /**
+   * Returns a "global" Configuration
+   * 
+   * for example executables are defined here
+   */
+  public function getConfiguration() {
+    return $this->getLocalProject()->getConfiguration();
+  }
   
   /**
    * @chainable
@@ -395,11 +405,22 @@ class Container {
    */
   public function getSystemContainer() {
     if (!isset($this->systemContainer)) {
-      $this->systemContainer = new SystemContainer();
+      $this->systemContainer = new SystemContainer($this);
     }
     return $this->systemContainer;
   }
+
+  /**
+   * Returns the configuration for the ExecutableFinder in System
+   * 
+   * implemented from Common\System\ContainerConfiguration
+   * @return array
+   */
+  public function forExecutableFinder() {
+    return $this->getConfiguration()->get(array('executables'), array());
+  }
   
+  // @codeCoverageIgnoreStart
   /**
    * @param Webforge\Common\System\Container $systemContainer
    * @chainable
@@ -409,7 +430,6 @@ class Container {
     return $this;
   }
   
-  // @codeCoverageIgnoreStart
   /**
    * @param Webforge\Framework\Inflector inflector
    * @chainable
