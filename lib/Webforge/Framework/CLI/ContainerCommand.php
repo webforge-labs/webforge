@@ -36,6 +36,8 @@ abstract class ContainerCommand {
    */
   abstract public function defineArguments(Array $api);
 
+  abstract public function getDescription();
+
   abstract public function executeCLI(CommandInput $input, CommandOutput $output, CommandInteraction $interact);
 
   /**

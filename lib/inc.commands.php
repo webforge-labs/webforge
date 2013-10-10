@@ -25,42 +25,6 @@ use Webforge\Console\SymfonyCommandOutputAdapter;
  * $opt = function($name, $short = NULL, $withValue = TRUE, $description = NULL) // default: mit value required
  * $flag = function($name, $short = NULL, $description) // ohne value
  */
-$createCommand('create-test',
-  array(
-    $arg('fqn', 'The full qualified name of the class under test'),
-    $flag('overwrite', NULL, 'If set the test will be created, regardless if the file already exists')
-  ),
-  function ($input, $output, $command) use ($container) {
-    $creater = new ClassCreater($container->getClassFileMapper(),
-                                $container->getClassWriter(),
-                                $container->getClassElevator()
-                               );
-    
-    $gClass = new GClass($input->getArgument('fqn'));
-    $testClass = new GClass($gClass->getFQN().'Test');
-    $testClass->setParent(
-      new GClass('Webforge\Code\Test\Base')
-    );
-    
-    $testClass->createMethod(
-      'setUp',
-      array(),
-      GFunctionBody::create(
-        array(
-          '$this->chainClass = __NAMESPACE__\'\\'.$gClass->getName().'\';',
-          'parent::setUp();'
-        )
-      )
-    );
-    
-    $file = $creater->create($testClass, $input->getOption('overwrite') ? ClassCreater::OVERWRITE : FALSE);
-    
-    $command->info('wrote Test '.$gClass.' to file: '.$file);
-    return 0;
-  },
-  'Creates a new empty Unit-Test stub'
-);
-
 $createCommand('install:part',
   array(
     $arg('part', 'the name of the part. You can see a list of part names in install:list-parts', FALSE),
