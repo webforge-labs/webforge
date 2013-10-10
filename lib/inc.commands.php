@@ -25,37 +25,6 @@ use Webforge\Console\SymfonyCommandOutputAdapter;
  * $opt = function($name, $short = NULL, $withValue = TRUE, $description = NULL) // default: mit value required
  * $flag = function($name, $short = NULL, $description) // ohne value
  */
-$createCommand('install:part',
-  array(
-    $arg('part', 'the name of the part. You can see a list of part names in install:list-parts', FALSE),
-    $arg('location', 'the path to the location of the product (relatives are resolved relative to current work directory). If not set the current work directory is used', FALSE)
-  ),
-  function ($input, $output, $command) use ($container) {
-    $partName = $input->getArgument('part');
-    $location = $command->validateDirectory($input->getArgument('location') ?: '.');
-
-    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), new SymfonyCommandOutput($output));
-
-    if (empty($partName)) {
-      $command->info('parts avaible:');
-      foreach ($partsInstaller->getParts() as $part) {
-        $command->info('  '.$part->getName());
-      }
-
-      $partName = $command->ask('Which part do you want to install?');
-
-      if (empty($partName)) {
-        return 1;
-      }
-    }
-
-    $part = $partsInstaller->getPart($partName);
-    $command->out('installing '.$part->getName());
-    
-    $partsInstaller->install($part, $location);
-  },
-  'Installs a part in the current project. Parts are a small snippet without many options. Mostly it just copies a template to the project'
-);
 
 $createCommand('install:list-parts',
   array(),
