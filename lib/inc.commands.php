@@ -47,7 +47,7 @@ $createCommand('create-test',
       array(),
       GFunctionBody::create(
         array(
-          '$this->chainClass = \''.$gClass->getFQN().'\';',
+          '$this->chainClass = __NAMESPACE__\'\\'.$gClass->getName().'\';',
           'parent::setUp();'
         )
       )
