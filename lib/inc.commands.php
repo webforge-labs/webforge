@@ -12,7 +12,7 @@ use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
 use Webforge\Common\String;
 use Webforge\Common\CLassUtil;
-use Webforge\Console\SymfonyCommandOutput;
+use Webforge\Console\SymfonyCommandOutputAdapter;
 
 /**
  *
@@ -96,7 +96,7 @@ $createCommand('install:part',
 $createCommand('install:list-parts',
   array(),
   function ($input, $output, $command) use ($container) {
-    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), new SymfonyCommandOutput($output));
+    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), new SymfonyCommandOutputAdapter($output));
     
     $command->info('parts avaible:');
     

@@ -57,4 +57,11 @@ abstract class ContainerCommand {
     $this->interact = $interact;
     $this->system = $system;
   }
+
+  /**
+   * @return Webforge\Framework\Container
+   */
+  public function getContainer() {
+    return $this->container;
+  }
 }

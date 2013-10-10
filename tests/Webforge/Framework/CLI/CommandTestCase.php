@@ -23,7 +23,7 @@ class CommandTestCase extends \Webforge\Code\Test\Base {
     $this->input = m::mock('Webforge\Console\CommandInput');
     $this->interactionHelper = m::mock('Webforge\Console\InteractionHelper');
 
-    $this->system = m::mock('Webforge\Common\System\ExecutionSystem');
+    $this->system = m::mock('Webforge\Common\System\System');
 
     $this->testos = \Webforge\Common\System\ExecutionSystem::UNIX;
     $this->system->shouldReceive('getOperatingSystem')->andReturn($this->testOs);

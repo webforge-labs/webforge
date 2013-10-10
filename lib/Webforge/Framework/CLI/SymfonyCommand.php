@@ -16,7 +16,7 @@ class SymfonyCommand extends \Webforge\Console\Command {
   protected $cliCommand;
 
   public function __construct($cliName, ContainerCommand $cliCommand) {
-    parent::__construct($cliName);
+    parent::__construct($cliName, $cliCommand->getContainer()->getSystemContainer()->getSystem());
     $this->cliCommand = $cliCommand;
   }
 
