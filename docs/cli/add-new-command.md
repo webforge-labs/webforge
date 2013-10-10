@@ -51,7 +51,7 @@ Test system commands like this:
 
 ```php
 protected function execute() {
-  $this->initOI($this->myCommand);
+  $this->initIO($this->myCommand);
 
   return $this->myCommand->execute($this->parsedArgument1);
 }
