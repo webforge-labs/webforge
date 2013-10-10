@@ -7,10 +7,10 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 use Webforge\Common\System\Dir;
 
-class SymfonyCommandInputTest extends \Webforge\Code\Test\Base {
+class SymfonyCommandInputAdapterTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
-    $this->chainClass = 'Webforge\\Console\\SymfonyCommandInput';
+    $this->chainClass = 'Webforge\\Console\\SymfonyCommandInputAdapter';
     parent::setUp();
 
     $this->inputDefinition = new InputDefinition(
@@ -27,7 +27,7 @@ class SymfonyCommandInputTest extends \Webforge\Code\Test\Base {
   }
 
   protected function createInput(array $arguments) {
-    return new SymfonyCommandInput(
+    return new SymfonyCommandInputAdapter(
       new ArrayInput(
         $arguments,
         $this->inputDefinition
@@ -49,7 +49,7 @@ class SymfonyCommandInputTest extends \Webforge\Code\Test\Base {
 
     $input = $this->createInput(array('location'=>__DIR__.DIRECTORY_SEPARATOR.'doesnotexists'.DIRECTORY_SEPARATOR));
 
-    $input->getDirectory('location', SymfonyCommandInput::MUST_EXIST);
+    $input->getDirectory('location', SymfonyCommandInputAdapter::MUST_EXIST);
   }
 
   public function testHasGetEnumValidatesValuesFromArrayPositive() {

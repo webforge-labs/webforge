@@ -11,7 +11,7 @@ use InvalidArgumentException;
  * 
  * this adapter does validate a lot of inputs
  */
-class SymfonyCommandInput implements CommandInput {
+class SymfonyCommandInputAdapter implements CommandInput {
 
   protected $consoleInput;
 

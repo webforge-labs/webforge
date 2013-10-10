@@ -4,14 +4,13 @@ namespace Webforge\Console;
 
 use Symfony\Component\Console\Output\StreamOutput;
 
-class SymfonyCommandOutputTest extends \Webforge\Code\Test\Base {
+class SymfonyCommandAdapterOutputTest extends \Webforge\Code\Test\Base {
   
   public function setUp() {
-    $this->chainClass = 'Webforge\\Console\\SymfonyCommandOutput';
+    $this->chainClass = 'Webforge\\Console\\SymfonyCommandOutputAdapter';
     parent::setUp();
 
-    // maybe mock it?
-    $this->output = new SymfonyCommandOutput($this->stream = new StreamOutput(fopen('php://memory', 'r+')));
+    $this->output = new SymfonyCommandOutputAdapter($this->stream = new StreamOutput(fopen('php://memory', 'r+')));
   }
 
   public function testHasOKMethod() {

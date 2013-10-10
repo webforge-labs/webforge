@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Adapter for Symfony Output to the Weboforge\Console\CommandOutput Interface
  */
-class SymfonyCommandOutput implements CommandOutput {
+class SymfonyCommandOutputAdapter implements CommandOutput {
 
   protected $consoleOutput;
 
