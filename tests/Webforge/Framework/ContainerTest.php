@@ -44,6 +44,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('hostConfiguration', 'Webforge\Configuration\Configuration');
     $prop('projectsFactory', 'Webforge\Framework\ProjectsFactory');
     $prop('inflector', 'Webforge\Framework\Inflector');
+    $prop('systemContainer', 'Webforge\Common\System\Container');
     
     return $props;
   }

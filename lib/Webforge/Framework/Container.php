@@ -19,6 +19,7 @@ use Webforge\Common\CommandOutput;
 use Webforge\Common\Exception\MessageException;
 use Webforge\Console\InteractionHelper;
 use Webforge\Configuration\ConfigurationReader;
+use Webforge\Common\System\Container as SystemContainer;
 
 /**
  * This container includes the base classes for the framework
@@ -56,7 +57,12 @@ class Container {
    * @var Webforge\Code\GlobalClassFileMapper
    */
   protected $classFileMapper;
-
+  
+  /**
+   * @var Webforge\Common\System\Container
+   */
+  protected $systemContainer;
+  
   /**
    * A Registry for Packages installed on the host (e.g.)
    * 
@@ -382,6 +388,25 @@ class Container {
       $this->projectsFactory = new ProjectsFactory($this);
     }
     return $this->projectsFactory;
+  }
+
+  /**
+   * @return Webforge\Common\System\Container
+   */
+  public function getSystemContainer() {
+    if (!isset($this->systemContainer)) {
+      $this->systemContainer = new SystemContainer();
+    }
+    return $this->systemContainer;
+  }
+  
+  /**
+   * @param Webforge\Common\System\Container $systemContainer
+   * @chainable
+   */
+  public function setSystemContainer(Container $systemContainer) {
+    $this->systemContainer = $systemContainer;
+    return $this;
   }
   
   // @codeCoverageIgnoreStart
