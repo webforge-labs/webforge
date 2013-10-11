@@ -13,7 +13,7 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Frame
    */
   protected $package;
 
-  protected $testplateVersion = '>=1.3';
+  protected $testplateVersion = '1.*';
   
   protected $installPHPUnitLocally = FALSE;
 
