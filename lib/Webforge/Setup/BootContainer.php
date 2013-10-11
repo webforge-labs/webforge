@@ -34,6 +34,20 @@ class BootContainer {
   }
 
   /**
+   * Returns the package of the current bootet rootDirectory
+   * 
+   * @return Webforge\Framework\Package\Package
+   */
+  public function getPackage() {
+    if (!isset($this->package)) {
+      $this->initLocalWebforgePackage();
+      $this->package = $this->webforge->getLocalPackage();
+    }
+    
+    return $this->package;
+  }
+
+  /**
    * Tries to init the package with webforge automatically
    *
    * this can fail in some cases:
@@ -43,7 +57,7 @@ class BootContainer {
    *
    * after this is called the local package should be registered in webforge container (getLocalPackage() / getLocalProject())
    */
-  public function initLocalWebforgePackage() {
+  protected function initLocalWebforgePackage() {
     try {
       $this->webforge->initLocalPackageFromDirectory($this->rootDirectory);
     } catch (LocalPackageInitException $e) {

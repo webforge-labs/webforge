@@ -22,10 +22,8 @@ class BootContainerTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Webforge\Framework\Container', $this->container->getWebforge());
   }
 
-  public function testInitsTheLocalPackageFromContainer() {
-    $this->container->initLocalWebforgePackage();
-
-    $this->assertInstanceOf('Webforge\Framework\Package\Package', $package = $this->container->getWebforge()->getLocalPackage());
+  public function testGetsTheLocalPackageFromContainer() {
+    $this->assertInstanceOf('Webforge\Framework\Package\Package', $package = $this->container->getPackage());
     $this->assertEquals('webforge/webforge', $package->getIdentifier());
   }
 
