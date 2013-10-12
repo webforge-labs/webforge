@@ -3,7 +3,7 @@
   
   1. create a new Test for the class extending Webforge\Framework\CLI\CommandTestCase
     - refer to the section below for specific tests
-  1. create a new Class: `Webforge\Framework\CLI\<yourCommand>` extends `Webforge\Framework\CLI\ContainerCommand`
+  1. `webforge create-class Webforge\Framework\CLI\<yourCommand> Webforge\Framework\CLI\ContainerCommand`
     - you can overwrite setup() to instantiate some helper classes, or init
     - implement `getDescription` which returns a string describing the command
     - implement `defineArguments(array $api)`. start with `extract($api)` and then use the CommandsIncluder - API to create arguments and options
