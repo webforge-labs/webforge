@@ -1,6 +1,8 @@
 # Add a new Command to the Webforge CLI
 
   
+  1. create a new Test for the class extending Webforge\Framework\CLI\CommandTestCase
+    - refer to the section below for specific tests
   1. create a new Class: `Webforge\Framework\CLI\<yourCommand>` extends `Webforge\Framework\CLI\ContainerCommand`
     - you can overwrite setup() to instantiate some helper classes, or init
     - implement `getDescription` which returns a string describing the command
@@ -9,8 +11,7 @@
     - call your own execute function with the parsed arguments (for example parse a dir string into an actual Webforge\Common\System\Dir)
     - use `$this->interact` (Webforge\Console\CommandInteraction) and `$this->output` (Webforge\Console\CommandOutput) and `$this->system` (Webforge\Common\System\ExecutionSystem) to ask questions, display messages or execute commands.
     - use `$this->container` to get access to the webforge container (to create classes, etc ...)
-  1. create a new Test for the class extending Webforge\Framework\CLI\CommandTestCase
-    - refer to the section below for specific tests
+  2. add your command to the AplicationTest.
   2. add your command to the `Webforge\Framework\CLI\Application`
 
 
@@ -66,7 +67,7 @@ namespace Webforge\Framework\CLI;
 class {{MyCommand}}Test extends CommandTestCase {
   
   public function setUp() {
-    $this->chainClass = 'Webforge\\Framework\\CLI\\{{MyCommand}}';
+    $this->chainClass = __NAMESPACE__.'\\{{MyCommand}}';
     parent::setUp();
 
     $this->cmd = new {{MyCommand}}($this->container);
