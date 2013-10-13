@@ -4,11 +4,12 @@ namespace Webforge\Setup\ConfigurationTester;
 
 use Webforge\Common\ArrayUtil as A;
 use Webforge\Common\Preg;
+use InvalidArgumentException;
 
 /**
  * 
  */
-class ConfigurationTester extends \Webforge\Common\BaseObject {
+class ConfigurationTester {
   
   /**
    * Die Extension dessen IniValues nicht gecheckt werden sollen
@@ -119,7 +120,7 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
         return $one < $other;
       
       default:
-        throw $this->invalidArgument(1, $operator, 'String', __FUNCTION__); // ==|!=|equal|>|<|<=|>=
+        throw new InvalidArgumentException('operatory is expected to be a string of type ==|!=|equal|>|<|<=|>=');
     }
   }
   
@@ -205,4 +206,3 @@ class ConfigurationTester extends \Webforge\Common\BaseObject {
   }
   // @codeCoverageIgnoreEnd
 }
-?>

@@ -11,7 +11,7 @@ use Webforge\Common\JS\JSONParsingException;
  * @TODO refactor to use guzzle instead of RequestDispatcher
  * (add Guzzle RequestDispatcher)
  */
-class RemoteConfigurationRetriever extends \Webforge\Common\BaseObject implements ConfigurationRetriever {
+class RemoteConfigurationRetriever implements ConfigurationRetriever {
   
   /**
    * @var Webforge\URL\RequestDispatcher

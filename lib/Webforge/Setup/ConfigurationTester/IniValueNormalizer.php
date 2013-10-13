@@ -4,7 +4,7 @@ namespace Webforge\Setup\ConfigurationTester;
 
 use Webforge\Common\Preg;
 
-class IniValueNormalizer extends \Webforge\Common\BaseObject {
+class IniValueNormalizer {
   
   public function normalize($iniValue, $iniName) {
     if ($iniName === 'error_reporting') {

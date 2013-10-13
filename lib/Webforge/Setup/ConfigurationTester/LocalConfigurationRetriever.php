@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-class LocalConfigurationRetriever extends \Webforge\Common\BaseObject implements ConfigurationRetriever {
+class LocalConfigurationRetriever implements ConfigurationRetriever {
   
   /**
    * Gibt die ini der lokalen Installation zurück
