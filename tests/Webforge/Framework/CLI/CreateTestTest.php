@@ -8,7 +8,7 @@ class CreateTestTest extends CommandTestCase {
     $this->chainClass = __NAMESPACE__ . '\\CreateTest';
     parent::setUp();
 
-    $this->package = $this->createVirtualPackage('ACMESuperBlog');
+    $this->package = $this->injectVirtualPackage('ACMESuperBlog');
     $this->cmd = new CreateTest($this->container);
   }
 

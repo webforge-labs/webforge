@@ -97,9 +97,9 @@ class {{MyCommand}}Test extends CommandTestCase {
   }
 
   protected function execute() {
-    $this->initOI($this->cmd);
+    $this->initIO($this->cmd);
 
-    return $this->cmd->execute($this->parsedArgument1);
+    return $this->executeCLI($this->cmd);
   }
 }
 ```

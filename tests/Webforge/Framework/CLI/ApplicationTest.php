@@ -34,6 +34,8 @@ class ApplicationTest extends \Webforge\Code\Test\Base {
     $test('install:part');
     $test('install:list-parts');
 
+    $test('release');
+
     return $tests;
   }
 

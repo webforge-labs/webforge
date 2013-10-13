@@ -9,7 +9,7 @@ class InstallPartTest extends CommandTestCase {
   public function setUp() {
     parent::setUp();
 
-    $this->container->setLocalPackage($this->package = $this->createVirtualPackage('ACMESuperBlog'));
+    $this->package = $this->injectVirtualPackage('ACMESuperBlog');
     $this->partsInstaller = m::mock('Webforge\Setup\Installer\PartsInstaller');  
     $this->container->setPartsInstaller($this->partsInstaller);
 

@@ -8,7 +8,7 @@ class CreateClassTest extends CommandTestCase {
     $this->chainClass = 'Webforge\\Framework\\CLI\\CreateClass';
     parent::setUp();
 
-    $this->container->setLocalPackage($this->package = $this->createVirtualPackage('ACMESuperBlog'));
+    $this->package = $this->injectVirtualPackage('ACMESuperBlog');
 
     $this->cmd = new CreateClass($this->container);
   }

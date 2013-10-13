@@ -128,4 +128,10 @@ class CommandTestCase extends \Webforge\Code\Test\Base {
 
     return $vpackage;
   }
+
+  protected function injectVirtualPackage($packageNameInPackages) {
+    $this->container->setLocalPackage($vpackage = $this->createVirtualPackage($packageNameInPackages));
+
+    return $vpackage;
+  }
 }
