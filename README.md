@@ -11,7 +11,7 @@ Use [Composer](http://getcomposer.org) to install the framework.
 composer create-project -v --prefer-source --stability=dev webforge/webforge webforge dev-master
 ```
 
-link ``bin\webforge`` to a global binary ``webforge``
+link `bin\webforge` to a global avaible binary `webforge`
 
 to run the tests use:
 ```
@@ -24,15 +24,12 @@ http://wiki.ps-webforge.com/psc-cms:dokumentation:core
 
 It's optional to configure the host-config, but recommended.
 
-## roadmap
-  - implement pretty printing for the GClass
-  - replace events in Setup\Installer\Command with Symfony Event
-  - Decouple `Webforge\Code\Generator\*` from Psc - Classes
-  - write better and english documentation for these modules
-  - [Refactor a lot](http://wiki.ps-webforge.com/psc-cms:start#refactoring-roadmap)
-  - search for contributors and people with interest
+## usage
+
+  - [console: Release](docs/console.md) Release versions of your component/library/project automatically
+  - [configuration-tester](docs/configuration-tester.md) API for Testing your php.ini configuration with PHP
+
 
 ##resources
   - [Psc - CMS - Documentation in german / half english](http://wiki.ps-webforge.com/psc-cms:start)
-  - For module documentation see the README files in namespace directories in ``lib/``
-  - [read more about ps-webforge](http://www.ps-webforge.com)
+  - [read more about our company: webforge](http://www.ps-webforge.com)
