@@ -17,6 +17,8 @@ class ReleaseTest extends CommandTestCase {
     );
     $this->rmt->shouldReceive('run')->byDefault()->andReturn(0);
 
+    $this->expectInputValue('do', 'release')->byDefault();
+
     $this->cmd = new Release($this->container);
   }
 
@@ -34,6 +36,22 @@ class ReleaseTest extends CommandTestCase {
     $config = json_decode($rmt->getContents());
     $this->assertObjectHasAttribute('version-generator', $config, 'version-generator should be defined in config');
     $this->assertObjectHasAttribute('version-persister', $config, 'version-persister should be defined in config');
+  }
+
+  public function testReleaseCurrentDoesOnlyDisplay() {
+    $this->fakeInstall();
+
+    $this->expectInputValue('do', 'current');
+
+    $this->rmt
+      ->shouldReceive('run')
+      ->once()
+      ->with(m::on(function ($input) {
+        return $input->getParameterOption('command') === 'current';
+      }))
+      ->andReturn(0);
+
+    $this->execute();
   }
 
   public function testIfNotInstalledJustExits() {
@@ -56,20 +74,24 @@ class ReleaseTest extends CommandTestCase {
   }
 
   protected function expectComposerInstall($exitCode = 0) {
-    $package = $this->package;
-    $rmtFake = $this->getTestDirectory()->sub('packages/RMT/');
+    $test = $this;
 
     return $this->system->shouldReceive('passthru')
       ->with('/composer require --dev liip\/rmt/i')
       ->once()
-      ->andReturnUsing(function () use ($exitCode, $package, $rmtFake) {
+      ->andReturnUsing(function () use ($exitCode, $test) {
         if ($exitCode === 0) {
-          $target = $package->getDirectory('vendor')->sub('liip/rmt')->create();
-          $rmtFake->copy($target);
+          $test->fakeInstall();
         }
 
         return $exitCode;
       });
+  }
+
+  public function fakeInstall() {
+    $rmtFake = $this->getTestDirectory()->sub('packages/RMT/');
+    $target = $this->package->getDirectory('vendor')->sub('liip/rmt')->create();
+    $rmtFake->copy($target);
   }
 
   protected function execute() {

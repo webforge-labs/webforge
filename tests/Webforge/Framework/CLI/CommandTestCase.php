@@ -89,13 +89,13 @@ class CommandTestCase extends \Webforge\Framework\Package\PackagesTestCase {
   }
 
   protected function expectInputValue($name, $value) {
-    $this->input->shouldReceive('getValue')
+    return $this->input->shouldReceive('getValue')
       ->with($name)
       ->andReturn($value);
   }
 
   protected function expectInputFlag($name, $bool) {
-    $this->input->shouldReceive('getFlag')
+    return $this->input->shouldReceive('getFlag')
       ->with($name)
       ->andReturn($bool);
   }

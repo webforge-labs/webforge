@@ -15,6 +15,7 @@ class Release extends ContainerCommand {
     extract($api);
 
     return array(
+      $arg('do')
     );
   }
   
@@ -24,11 +25,16 @@ class Release extends ContainerCommand {
   
   public function executeCLI(CommandInput $input, CommandOutput $output, CommandInteraction $interact) {
     $package = $this->container->getLocalPackage();
+    $do = $input->getValue('do');
 
     try {
       $rmt = $this->container->getVendorPackage('liip/rmt');
 
-      return $this->runRelease($rmt);
+      if ($do === 'current') {
+        return $this->runCurrent();
+      } else {
+        return $this->runRelease();
+      }
 
     } catch (VendorPackageInitException $e) {
       if ($interact->confirm('liip/rmt (composer package) is not installed for this project. Do you want to install RMT now?', TRUE)) {
@@ -45,8 +51,13 @@ class Release extends ContainerCommand {
     return 1;
   }
 
-  protected function runRelease($rmt) {
-    return $this->container->getReleaseManager()->run();
+  protected function runRelease() {
+    return $this->container->getReleaseManager()->run(); // runs release per default
+  }
+
+  protected function runCurrent() {
+    $input = new \Symfony\Component\Console\Input\ArrayInput(array('command'=>'current'));
+    return $this->container->getReleaseManager()->run($input);
   }
 
   protected function installRMT($package, $interact) {
