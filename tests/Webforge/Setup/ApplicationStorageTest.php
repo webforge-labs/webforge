@@ -11,6 +11,10 @@ class ApplicationStorageTest extends \Webforge\Code\Test\Base {
   public function setUp() {
     $this->storage = new ApplicationStorage('webforge-test');
   }
+
+  public function testImmplementsFileStorage() {
+    $this->assertInstanceOf('Webforge\Common\System\FileStorage', $this->storage);
+  }
   
   public function testApplicationStorageMaintainsADirectoryToReadAndWriteTo() {
     $dir = $this->storage->getDirectory();
@@ -55,4 +59,3 @@ class ApplicationStorageTest extends \Webforge\Code\Test\Base {
     );
   }
 }
-?>

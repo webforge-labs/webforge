@@ -6,9 +6,8 @@ use Webforge\Common\System\Dir;
 use Webforge\Common\Preg;
 use InvalidArgumentException;
 use Webforge\Common\System\File;
-use RuntimeException;
 
-class ApplicationStorage {
+class ApplicationStorage implements \Webforge\Common\System\FileStorage {
   
   const PATTERN_NAME = '/^[a-zA-Z0-9-_]+$/';
   
@@ -67,7 +66,7 @@ class ApplicationStorage {
     $home = Dir::factoryTS($home);
     
     if (!$home->exists()) {
-      throw new RuntimeException(
+      throw new StorageException(
         sprintf("Cannot find your existing storage Path ('%2\$s') in HOME for %1\$s.\n".
                 "On Windows %%APPDATA%% should be existing.\n".
                 "On Unix/Windows you can set \$HOME to your home path.\n".
@@ -105,7 +104,7 @@ class ApplicationStorage {
    * @return File
    */
   public function getFile($url) {
-    return File::createFromURL($url, $this->getDirectory());
+    return $this->getDirectory()->getFile($url);
   }
 
   /**

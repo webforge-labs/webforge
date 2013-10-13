@@ -125,21 +125,29 @@ class Container implements SystemContainerConfiguration {
   }
   
   protected function initPackageRegistry(PackageRegistry $registry) {
-    if (($packagesFile = $this->getApplicationStorage()->getFile('packages.json')) && $packagesFile->exists()) {
-      $json = JSONConverter::create()->parseFile($packagesFile);
+    try {
+      $packagesFile = $this->getApplicationStorage()->getFile('packages.json');
+
+      if ($packagesFile->exists()) {
+        $json = JSONConverter::create()->parseFile($packagesFile);
       
-      foreach ($json as $package => $info) {
-        if (is_string($info)) {
-          $info = (object) array('path'=>$info);
-        }
+        foreach ($json as $package => $info) {
+          if (is_string($info)) {
+            $info = (object) array('path'=>$info);
+          }
         
-        try {
-          $registry->addComposerPackageFromDirectory(Dir::factoryTS($info->path));
-        } catch (MessageException $e) {
-          $e->prependMessage(sprintf("Failed to load package '%s' from '%s'.", $package, $packagesFile));
-          throw $e;
+          try {
+            $registry->addComposerPackageFromDirectory(Dir::factoryTS($info->path));
+          } catch (MessageException $e) {
+            $e->prependMessage(sprintf("Failed to load package '%s' from '%s'.", $package, $packagesFile));
+            throw $e;
+          }
         }
-      }
+      } //else: packages not loaded
+
+    } catch (\Webforge\Setup\StorageException $e) {
+      // home directory not set, etc: 
+      // make a notice? store temporary? hint developer?
     }
     
     if ($registry->findByIdentifier('webforge/webforge') === NULL) {
@@ -278,6 +286,15 @@ class Container implements SystemContainerConfiguration {
    * for example executables are defined here
    */
   public function getConfiguration() {
+    if ($this->getLocalPackage() === NULL) {
+      $reader = new ConfigurationReader();
+
+      // see ProjectsFactory
+      return $reader->fromArray(
+        $this->getHostConfiguration()->get(array('defaults'), array())
+      );
+    }
+    
     return $this->getLocalProject()->getConfiguration();
   }
   

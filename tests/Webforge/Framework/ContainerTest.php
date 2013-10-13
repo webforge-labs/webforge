@@ -4,8 +4,10 @@ namespace Webforge\Framework;
 
 use Webforge\Framework\Package\SimplePackage;
 use Webforge\Common\System\Dir;
+use Webforge\Common\System\File;
 use Webforge\Framework\Package\Package;
 use Webforge\Console\InteractionHelper;
+use mockery as m;
 
 class ContainerTest extends \Webforge\Code\Test\Base {
   
@@ -152,8 +154,29 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $this->assertInstanceOf('Webforge\Framework\Project', $project = $this->container->getLocalProject());
   }
   
-  public function testThatAErroneousPackageFromPackagesJSONDoesRemoveThePackageOrDoesSomethingUsefulWithIt() {
-    $this->markTestIncomplete('resolve dependency for local storage and move the init package registry to some other place than container?');
+  public function testThatAnErroneousPackageFromPackagesJSON_IsRemovedOrSomethingUsefulIsDoneWithIt() {
+    $this->container->setApplicationStorage(
+      $applicationStorage = m::mock('Webforge\Setup\ApplicationStorage')
+    );
+
+    $applicationStorage
+      ->shouldReceive('getFile')
+      ->with('packages.json')
+      ->andReturn(new File('does-not-exist'));
+
+    $this->assertInstanceOf('Webforge\Framework\Package\Registry', $this->container->getPackageRegistry());
+  }
+
+  public function testAFailingApplicationStorageDoesNotStopWebforgeFromWorking() {
+    $this->container->setApplicationStorage(
+      $applicationStorage = m::mock('Webforge\Setup\ApplicationStorage')
+    );
+
+    $applicationStorage
+      ->shouldReceive('getFile')
+      ->andThrow('Webforge\Setup\StorageException', 'Cannot find your home directory');
+
+    $this->assertInstanceOf('Webforge\Framework\Package\Registry', $this->container->getPackageRegistry());
   }
 
   public function testContainerThrowsAnExceptionIfVendorPackageisNotInstalled() {
@@ -175,5 +198,9 @@ class ContainerTest extends \Webforge\Code\Test\Base {
       (string) $this->container->getLocalPackage()->getDirectory(Package::VENDOR)->sub('webforge/common/'),
       (string) $commonPackage->getRootDirectory()
     );
+  }
+
+  public function testSystemContainerReturnsASystemWithoutHavingALocalPackageInit() {
+    $this->assertInstanceOf('Webforge\Common\System\System', $this->container->getSystemContainer()->getSystem());
   }
 }
