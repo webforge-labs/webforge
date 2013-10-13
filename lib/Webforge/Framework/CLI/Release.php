@@ -35,7 +35,8 @@ class Release extends ContainerCommand {
         $output->msg('Installing liip/rmt with composer (might take a while)');
 
         if ($this->installRMT($package, $interact)) {
-          return $this->runRelease($this->container->getVendorPackage('liip/rmt'));
+          $output->msg('Commit the composer.json and then run webforge release again');
+          return 0;
         }
       }
     }
