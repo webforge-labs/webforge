@@ -32,14 +32,14 @@ class Release extends ContainerCommand {
     try {
       $rmt = $this->container->getVendorPackage('liip/rmt');
 
-      return $this->executeRelease($rmt);
+      return $this->runRelease($rmt);
 
     } catch (VendorPackageInitException $e) {
       if ($interact->confirm('liip/rmt (composer package) is not installed for this project. Do you want to install RMT now?', TRUE)) {
         $output->msg('Installing liip/rmt with composer (might take a while)');
 
         if ($this->installRMT($package, $interact)) {
-          return $this->executeRelease($this->container->getVendorPackage('liip/rmt'));
+          return $this->runRelease($this->container->getVendorPackage('liip/rmt'));
         }
       }
     }
@@ -48,15 +48,15 @@ class Release extends ContainerCommand {
     return 1;
   }
 
-  protected function executeRelease($rmt) {
-    return require $rmt->getRootDirectory()->getFile('command.php');
+  protected function runRelease($rmt) {
+    return $this->container->getReleaseManager()->run();
   }
 
   protected function installRMT($package, $interact) {
     $ret = $this->system->passthru('composer require --dev liip/rmt 0.9.*');
 
     if ($ret === 0) {
-      $config = (object) array(
+      $rmtConfig = (object) array(
         "vcs"=>"git",
 
         "version-generator"=>"semantic",

@@ -47,6 +47,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('projectsFactory', 'Webforge\Framework\ProjectsFactory');
     $prop('inflector', 'Webforge\Framework\Inflector');
     $prop('systemContainer', 'Webforge\Common\System\Container');
+    $prop('releaseManager', 'Liip\RMT\Application');
     
     return $props;
   }

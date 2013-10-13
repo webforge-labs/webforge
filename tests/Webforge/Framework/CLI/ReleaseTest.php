@@ -2,6 +2,8 @@
 
 namespace Webforge\Framework\CLI;
 
+use Mockery as m;
+
 class ReleaseTest extends CommandTestCase {
   
   public function setUp() {
@@ -9,6 +11,11 @@ class ReleaseTest extends CommandTestCase {
     parent::setUp();
 
     $this->package = $this->injectVirtualPackage('ACMESuperBlog');
+
+    $this->container->setReleaseManager(
+      $this->rmt = m::mock('Liip\RMT\Application')
+    );
+    $this->rmt->shouldReceive('run')->byDefault()->andReturn(0);
 
     $this->cmd = new Release($this->container);
   }
@@ -23,7 +30,8 @@ class ReleaseTest extends CommandTestCase {
 
     $this->execute();
 
-    $this->assertFileExists((string) $this->package->getRootDirectory('rmt.json'));
+    $this->assertFileExists((string) $rmt = $this->package->getRootDirectory()->getFile('rmt.json'));
+    $this->assertNotEmpty(json_decode($rmt->getContents()));
   }
 
   public function testIfNotInstalledJustExits() {

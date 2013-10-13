@@ -21,6 +21,7 @@ use Webforge\Console\InteractionHelper;
 use Webforge\Configuration\ConfigurationReader;
 use Webforge\Common\System\Container as SystemContainer;
 use Webforge\Common\System\ContainerConfiguration as SystemContainerConfiguration;
+use Liip\RMT\Application as ReleaseManager;
 
 /**
  * This container includes the base classes for the framework
@@ -63,6 +64,11 @@ class Container implements SystemContainerConfiguration {
    * @var Webforge\Common\System\Container
    */
   protected $systemContainer;
+    
+  /**
+   * @var Liip\RMT\Application
+   */
+  protected $releaseManager;  
   
   /**
    * A Registry for Packages installed on the host (e.g.)
@@ -435,6 +441,25 @@ class Container implements SystemContainerConfiguration {
    */
   public function forExecutableFinder() {
     return $this->getConfiguration()->get(array('executables'), array());
+  }
+
+  /**
+   * @return Liip\RMT\Application
+   */
+  public function getReleaseManager() {
+    if (!isset($this->releaseManager)) {
+      $this->releaseManager = new ReleaseManager();
+    }
+    return $this->releaseManager;
+  }
+  
+  /**
+   * @param Liip\RMT\Application $releaseManager
+   * @chainable
+   */
+  public function setReleaseManager(ReleaseManager $releaseManager) {
+    $this->releaseManager = $releaseManager;
+    return $this;
   }
   
   // @codeCoverageIgnoreStart
