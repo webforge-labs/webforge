@@ -22,6 +22,8 @@ class ReleaseTest extends CommandTestCase {
     $this->expectComposerInstall(0);
 
     $this->execute();
+
+    $this->assertFileExists((string) $this->package->getRootDirectory('rmt.json'));
   }
 
   public function testIfNotInstalledJustExits() {

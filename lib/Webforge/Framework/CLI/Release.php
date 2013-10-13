@@ -7,6 +7,7 @@ use Webforge\Console\CommandOutput;
 use Webforge\Console\CommandInteraction;
 use Webforge\Common\System\Dir;
 use Webforge\Framework\VendorPackageInitException;
+use Webforge\Common\JS\JSONConverter;
 
 class Release extends ContainerCommand {
   
@@ -37,9 +38,7 @@ class Release extends ContainerCommand {
       if ($interact->confirm('liip/rmt (composer package) is not installed for this project. Do you want to install RMT now?', TRUE)) {
         $output->msg('Installing liip/rmt with composer (might take a while)');
 
-        $ret = $this->system->passthru('composer require --dev liip/rmt 0.9.*');
-
-        if ($ret === 0) {
+        if ($this->installRMT($package, $interact)) {
           return $this->executeRelease($this->container->getVendorPackage('liip/rmt'));
         }
       }
@@ -51,5 +50,32 @@ class Release extends ContainerCommand {
 
   protected function executeRelease($rmt) {
     return require $rmt->getRootDirectory()->getFile('command.php');
+  }
+
+  protected function installRMT($package, $interact) {
+    $ret = $this->system->passthru('composer require --dev liip/rmt 0.9.*');
+
+    if ($ret === 0) {
+      $config = (object) array(
+        "vcs"=>"git",
+
+        "version-generator"=>"semantic",
+        "version-persister"=>"vcs-tag",
+
+        "prerequisites"=>array("working-copy-check", "display-last-changes"),
+        "post-release-actions"=>array("composer-update", "vcs-publish")
+      );
+
+      $config = $package->getRootDirectory()->getFile('rmt.json');
+      if (!$config->exists()) {
+        $config->writeContents(
+          JSONConverter::create()->stringify($config, JSONConverter::PRETTY_PRINT)
+        );
+      }
+
+      return TRUE;
+    }
+
+    return FALSE;
   }
 }
