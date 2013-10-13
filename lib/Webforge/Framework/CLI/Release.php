@@ -25,10 +25,6 @@ class Release extends ContainerCommand {
   public function executeCLI(CommandInput $input, CommandOutput $output, CommandInteraction $interact) {
     $package = $this->container->getLocalPackage();
 
-    if (!defined('RMT_ROOT_DIR')) {
-      define('RMT_ROOT_DIR', $package->getRootDirectory()->getPath(Dir::WITHOUT_TRAILINGSLASH));
-    }
-
     try {
       $rmt = $this->container->getVendorPackage('liip/rmt');
 
@@ -69,7 +65,7 @@ class Release extends ContainerCommand {
       $config = $package->getRootDirectory()->getFile('rmt.json');
       if (!$config->exists()) {
         $config->writeContents(
-          JSONConverter::create()->stringify($config, JSONConverter::PRETTY_PRINT)
+          JSONConverter::create()->stringify($rmtConfig, JSONConverter::PRETTY_PRINT)
         );
       }
 

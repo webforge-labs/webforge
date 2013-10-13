@@ -10,12 +10,14 @@ class RegisterPackageTest extends CommandTestCase {
     $this->chainClass = 'Webforge\\Framework\\CLI\\RegisterPackage';
     parent::setUp();
 
-    $this->serienLoaderRoot = $this->getTestDirectory('packages/serien-loader');
-    $this->serienLoaderPackage = $this->container->getPackageRegistry()->addComposerPackageFromDirectory($this->serienLoaderRoot);
+    $this->serienLoaderPackage = $this->underscorePackage;
+    $this->serienLoaderRoot = $this->serienLoaderPackage->getRootDirectory();
+
+    $this->registry = $this->mockContainerPackageRegistry(); // overwrite registry with mock
   }
 
   public function testWritesTheGivenDirectoryPackageWithSlugToThePackagesJsonFileInApplicationDir() {
-    $this->addsSerienLoaderToRegistry();
+    $this->expectSerienLoaderAddedToRegistry();
     $applicationStorage = $this->mockApplicationStorage();
 
     $this->execute((string) $this->serienLoaderRoot);
@@ -27,7 +29,7 @@ class RegisterPackageTest extends CommandTestCase {
   }
 
   public function testWritesIntoExistingJsonFileAndDoesNotOverride() {
-    $this->addsSerienLoaderToRegistry();
+    $this->expectSerienLoaderAddedToRegistry();
     $applicationStorage = $this->mockApplicationStorage();
 
     $applicationStorage
@@ -52,19 +54,16 @@ class RegisterPackageTest extends CommandTestCase {
     $this->execute('.', 'npm');
   }
 
-  protected function addsSerienLoaderToRegistry() {
-    $packageRegistry = $this->mockContainerPackageRegistry();
+  protected function expectSerienLoaderAddedToRegistry() {
     $root = $this->serienLoaderRoot;
 
-    $packageRegistry
+    $this->registry
       ->expects($this->once())
       ->method('addComposerPackageFromDirectory')
       ->with($this->callback(function ($dir) use ($root) {
         return $dir->equals($root);
       }))
       ->will($this->returnValue($this->serienLoaderPackage));
-
-    return $packageRegistry;
   }
 
   protected function execute($location, $type = 'composer') {

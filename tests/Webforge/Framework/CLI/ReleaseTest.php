@@ -31,7 +31,9 @@ class ReleaseTest extends CommandTestCase {
     $this->execute();
 
     $this->assertFileExists((string) $rmt = $this->package->getRootDirectory()->getFile('rmt.json'));
-    $this->assertNotEmpty(json_decode($rmt->getContents()));
+    $config = json_decode($rmt->getContents());
+    $this->assertObjectHasAttribute('version-generator', $config, 'version-generator should be defined in config');
+    $this->assertObjectHasAttribute('version-persister', $config, 'version-persister should be defined in config');
   }
 
   public function testIfNotInstalledJustExits() {

@@ -8,8 +8,11 @@ use Webforge\Common\System\File;
 use Webforge\Framework\Package\Package;
 use Webforge\Console\InteractionHelper;
 use mockery as m;
+use Webforge\Framework\Package\Registry;
 
-class ContainerTest extends \Webforge\Code\Test\Base {
+class ContainerTest extends \Webforge\Framework\Package\PackagesTestCase {
+
+  const WITH_LOCAL_PACKAGE = 0x000001;
   
   protected $container;
   
@@ -23,15 +26,19 @@ class ContainerTest extends \Webforge\Code\Test\Base {
   /**
    * @dataProvider props
    */
-  public function testInstanceOfProperty($propertyName, $fqn) {
+  public function testInstanceOfProperty($propertyName, $fqn, $flags) {
+    if ($flags & self::WITH_LOCAL_PACKAGE) {
+      $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
+    }
+
     $getter = 'get'.ucfirst($propertyName);
     $this->assertInstanceOf($fqn, $this->container->$getter(), $propertyName.' has the wrong instance');
   }
   
   public static function props() {
     $props = array();
-    $prop = function ($propertyName, $classFQN) use (&$props) {
-      $props[] = array($propertyName, $classFQN);
+    $prop = function ($propertyName, $classFQN, $flags = 0) use (&$props) {
+      $props[] = array($propertyName, $classFQN, $flags);
     };
     
     $prop('applicationStorage', 'Webforge\Setup\ApplicationStorage');
@@ -47,7 +54,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     $prop('projectsFactory', 'Webforge\Framework\ProjectsFactory');
     $prop('inflector', 'Webforge\Framework\Inflector');
     $prop('systemContainer', 'Webforge\Common\System\Container');
-    $prop('releaseManager', 'Liip\RMT\Application');
+    $prop('releaseManager', 'Liip\RMT\Application', self::WITH_LOCAL_PACKAGE);
     
     return $props;
   }
@@ -138,7 +145,7 @@ class ContainerTest extends \Webforge\Code\Test\Base {
     
     $this->container->initLocalPackageFromDirectory(Dir::factoryTS(__DIR__));
     
-    $this->testInstanceOfProperty('localPackage', 'Webforge\Framework\Package\Package');
+    $this->testInstanceOfProperty('localPackage', 'Webforge\Framework\Package\Package', 0);
   }
   
   public function testLocalPackageInitFromDirectory_throwsExceptionWhenPackageIsNotFound() {

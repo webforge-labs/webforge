@@ -10,14 +10,14 @@ use Webforge\Common\System\Dir;
 use Symfony\Component\Console\Tester\CommandTester;
 use Mockery as m;
 
-class CommandTestCase extends \Webforge\Code\Test\Base {
+class CommandTestCase extends \Webforge\Framework\Package\PackagesTestCase {
 
   protected $container, $registry;
 
   public $testOs;
 
   public function setUp() {
-    $this->container = new Container();
+    parent::setUp();
 
     $this->output = $this->getMockForAbstractClass('Webforge\Console\CommandOutput');
     $this->input = m::mock('Webforge\Console\CommandInput');
@@ -29,7 +29,7 @@ class CommandTestCase extends \Webforge\Code\Test\Base {
     $this->system->shouldReceive('getOperatingSystem')->andReturn($this->testOs);
     
     $this->application = new Application($this->getPackageDir('/'), $this->container);
-    parent::setUp();
+    $this->injectRegistry($this->registry = new Registry());
   }
 
   protected function mockContainerPackageRegistry($methods = array()) {
@@ -88,14 +88,6 @@ class CommandTestCase extends \Webforge\Code\Test\Base {
     return new Dir(vfsStream::url($name).'/');
   }
 
-  protected function getVirtualDirectoryFromPhysical($name, Dir $physicalDirectory, $maxFileSize = 2048) {
-    $dir = vfsStream::setup($name);
-
-    vfsStream::copyFromFileSystem((string) $physicalDirectory, $dir, $maxFileSize);
-
-    return new Dir(vfsStream::url($name).'/');
-  }
-
   protected function expectInputValue($name, $value) {
     $this->input->shouldReceive('getValue')
       ->with($name)
@@ -114,24 +106,5 @@ class CommandTestCase extends \Webforge\Code\Test\Base {
 
   protected function executeCLI($command) {
     return $command->executeCLI($this->input, $this->output, $this->interactionHelper, $this->system);
-  }
-
-  protected function createVirtualPackage($packageNameInPackages) {
-    $this->container->setPackageRegistry($this->registry = new Registry());
-
-    $virtualDirectory = $this->getVirtualDirectoryFromPhysical(
-      $packageNameInPackages, 
-      $this->getTestDirectory()->sub('packages/'.$packageNameInPackages.'/')
-    );
-
-    $vpackage = $this->registry->addComposerPackageFromDirectory($virtualDirectory);
-
-    return $vpackage;
-  }
-
-  protected function injectVirtualPackage($packageNameInPackages) {
-    $this->container->setLocalPackage($vpackage = $this->createVirtualPackage($packageNameInPackages));
-
-    return $vpackage;
   }
 }

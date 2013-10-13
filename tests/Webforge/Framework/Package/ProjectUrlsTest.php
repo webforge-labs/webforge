@@ -11,11 +11,9 @@ class ProjectUrlsTest extends \Webforge\Framework\Package\PackagesTestCase {
     parent::setUp();
 
     $this->hostConfig = new Configuration(array());
+    $this->container->setHostConfiguration($this->hostConfig);
 
-    $container = $this->injectRegistry();
-    $container->setHostConfiguration($this->hostConfig);
-
-    $this->projectPackage = $container->getProjectsFactory()->fromPackage($this->configPackage);
+    $this->projectPackage = $this->container->getProjectsFactory()->fromPackage($this->configPackage);
     //$this->projectPackage = new ProjectPackage($this->configPackage, 'ACMESuperBlog', 'super-blog', 0, 'psc', $this->urls);
   }
 
