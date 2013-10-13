@@ -1,3 +1,13 @@
 {
-  
+  "vcs":"git",
+  "version-generator":"semantic",
+  "version-persister":"vcs-tag",
+  "prerequisites":[
+    "working-copy-check",
+    "display-last-changes"
+  ],
+  "post-release-actions":[
+    "composer-update",
+    "vcs-publish"
+  ]
 }
