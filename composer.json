@@ -1,7 +1,7 @@
 {
   "name": "webforge/webforge",
-  "type": "library",
   "description": "a content management framework for easy to build and individual content management systems",
+  "version": "1.5.1",
   "keywords": ["cmf", "framework", "cms"],
   "homepage": "http://github.com/pscheit/webforge",
   "license": "LGPL-3.0",
