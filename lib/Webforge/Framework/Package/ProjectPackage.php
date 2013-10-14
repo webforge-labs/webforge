@@ -199,4 +199,8 @@ class ProjectPackage implements \Webforge\Framework\Project {
     }
     return $this;
   }
+
+  public function __clone() {
+    $this->package = clone $this->package;
+  }
 }
