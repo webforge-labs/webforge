@@ -53,6 +53,8 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->projectPackage->setRootDirectory($dir = Dir::factoryTS(__DIR__));
 
     $this->assertEquals((string) $dir, (string) $this->projectPackage->getRootDirectory());
+    
     $this->assertNotEquals((string) $dir, (string) $clonedPackage->getRootDirectory(), 'cloned directory should not change!');
+    $this->assertNotEquals((string) $dir, (string) $clonedPackage->dir('root'), 'cloned directory root retrieved with dir() should not change!');
   }
 }

@@ -173,6 +173,11 @@ class SimplePackage implements Package {
     return $this;
   }
 
+  public function __clone() {
+    $this->rootDirectory = clone $this->rootDirectory;
+    $this->directoryLocations = clone $this->directoryLocations;
+  }
+
   public function __toString() {
     return $this->getSlug();
   }
