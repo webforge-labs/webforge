@@ -22,6 +22,7 @@ use Webforge\Configuration\ConfigurationReader;
 use Webforge\Common\System\Container as SystemContainer;
 use Webforge\Common\System\ContainerConfiguration as SystemContainerConfiguration;
 use Liip\RMT\Application as ReleaseManager;
+use Webforge\Framework\Package\ProjectPackage;
 
 /**
  * This container includes the base classes for the framework
@@ -280,7 +281,24 @@ class Container implements SystemContainerConfiguration {
    */
   public function getLocalProject() {
     if (!isset($this->localProject))  {
-      $this->localProject = $this->getProjectsFactory()->fromPackage($this->getLocalPackage());
+      $package = $this->getLocalPackage();
+      $flags = 0;
+
+      $deployInfoFile = $package->getRootDirectory()->getFile('deploy-info.json');
+
+      if ($deployInfoFile->exists()) {
+        $deployInfo = JSONConverter::create()->parseFile($deployInfoFile);
+
+        if (isset($deployInfo->isStaging) && $deployInfo->isStaging) {
+          $flags |= ProjectPackage::STAGING;
+        }
+
+        if (isset($deployInfo->isDevelopment) && $deployInfo->isDevelopment) {
+          $flags |= ProjectPackage::DEVELOPMENT;
+        }
+      }
+
+      $this->localProject = $this->getProjectsFactory()->fromPackage($package, $flags);
     }
     
     return $this->localProject;

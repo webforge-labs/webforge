@@ -213,4 +213,20 @@ class ContainerTest extends \Webforge\Framework\Package\PackagesTestCase {
   public function testSystemContainerReturnsASystemWithoutHavingALocalPackageInit() {
     $this->assertInstanceOf('Webforge\Common\System\System', $this->container->getSystemContainer()->getSystem());
   }
+
+  public function testGetLocalPackagehasADirtyStagingHack() {
+    $package = $this->createVirtualPackage('serien-loader');
+
+    $package->getRootDirectory()->getFile('deploy-info.json')->writeContents(<<<'JSON'
+{
+  "isStaging": true
+}
+JSON
+    );
+    $this->container->setLocalPackage($package);
+    
+    $project = $this->container->getLocalProject();
+
+    $this->assertTrue($project->isStaging(), 'Project is set to staging');
+  }
 }

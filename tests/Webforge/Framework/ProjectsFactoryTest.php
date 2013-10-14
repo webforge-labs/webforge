@@ -2,6 +2,8 @@
 
 namespace Webforge\Framework;
 
+use Webforge\Framework\Package\ProjectPackage;
+
 /**
  * depends Webforge\Framework\ContainerTest, Webforge\Framework\PackageTest
  */
@@ -107,5 +109,11 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->assertInstanceOf('Webforge\Configuration\Configuration', $configuration = $this->oldStyleProjectPackage->getConfiguration());
 
     $this->assertEquals(TRUE, $configuration->get(array('PscOldStyleProject', 'loaded')));
+  }
+
+  public function testWhenFlagIsProvidedThenStagingIsSetOnPackage() {
+    $package = $this->factory->fromPackage($this->configPackage, ProjectPackage::STAGING);
+
+    $this->assertTrue($package->isStaging(), 'package should be staging');
   }
 }

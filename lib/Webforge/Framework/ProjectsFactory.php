@@ -26,9 +26,8 @@ class ProjectsFactory implements ContainerAware {
   /**
    * @return Webforge\Framework\Project
    */
-  public function fromPackage(Package $package) {
-    $flags = 0;
-
+  public function fromPackage(Package $package, $flags = 0) {
+    
     if (!is_bool($isDevel = $this->hostConfig->get('development'))) {
 
       // note: this is legacy and is wrong for so many times: production is the other way round

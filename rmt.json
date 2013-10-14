@@ -6,8 +6,10 @@
     "working-copy-check",
     "display-last-changes"
   ],
+  "pre-release-actions":[
+    "composer-update"
+  ],
   "post-release-actions":[
-    "composer-update",
     "vcs-publish"
   ]
 }
