@@ -29,7 +29,9 @@
     "mikey179/vfsStream": "1.3.*@dev",
     "mockery/mockery": "dev-master",
     "webforge/testplate": "1.3.*@dev",
-    "liip/rmt": "0.9.*"
+
+    "liip/rmt": "0.9.*",
+    "symfony/event-dispatcher": "2.3@stable"
   },
   "autoload": {
     "psr-0": {
