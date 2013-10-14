@@ -12,13 +12,14 @@
     "php": ">=5.3.2",
     "ext-mbstring": "*",
     
-    "symfony/console": "2.1.*@stable",
     "nikic/php-parser": "0.9.*",
     "doctrine/orm": "2.3.*@stable",
     
     "pscheit/psc-cms": "1.5.*@dev",
     "pscheit/psc-cms-boot": "2.*",
+
     "webforge/common": "1.4.*@dev",
+    "webforge/console": "1.0.*@stable",
     "webforge/config": "1.0.*@stable",
     "sebastian/diff": "1.0.*"
   },

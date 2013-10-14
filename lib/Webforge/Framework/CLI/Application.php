@@ -11,7 +11,6 @@ use Webforge\Common\ClassUtil;
 class Application extends \Webforge\Console\Application {
 
   public function __construct(Dir $root, Container $container = NULL) {
-
     $this->container = $container;
 
     if (!isset($this->container)) {
@@ -39,7 +38,7 @@ class Application extends \Webforge\Console\Application {
       $fqn = ClassUtil::expandNamespace($commandName, __NAMESPACE__);
       $cliCommand = new $fqn($this->container);
 
-      $consoleCommand = new SymfonyCommand($cliCommand->getCLIName(), $cliCommand);
+      $consoleCommand = new WebforgeCommandAdapter($cliCommand->getCLIName(), $cliCommand);
       $consoleCommand->setDefinition($cliCommand->defineArguments($api));
       $consoleCommand->setDescription($cliCommand->getDescription());
 
