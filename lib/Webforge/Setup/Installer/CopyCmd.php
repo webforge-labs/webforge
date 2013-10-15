@@ -7,6 +7,8 @@ use Webforge\Common\System\File;
 use InvalidArgumentException;
 
 class CopyCmd extends Command {
+
+  const CREATE_DESTINATION = 0x000010;
   
   /**
    * @var Webforge\Common\System\Dir|Webforge\Common\System\File
@@ -34,6 +36,14 @@ class CopyCmd extends Command {
         $this->warn('will not overwrite (per request): '.$this->destination);
         
         return $this;
+      }
+    }
+
+    if ($this->flags & self::CREATE_DESTINATION) {
+      if ($this->destination instanceof File) {
+        $this->destination->getDirectory()->create();
+      } else {
+        $this->destination->create();
       }
     }
     
