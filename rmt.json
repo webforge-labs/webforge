@@ -7,7 +7,8 @@
     "display-last-changes"
   ],
   "pre-release-actions":[
-    "composer-update"
+    "composer-update",
+    "vcs-commit"
   ],
   "post-release-actions":[
     "vcs-publish"
