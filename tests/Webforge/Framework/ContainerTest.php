@@ -236,6 +236,10 @@ JSON
     $this->assertObjectHasAttribute('isStaging', $info);
     $this->assertObjectHasAttribute('isDevelopment', $info);
     $this->assertObjectHasAttribute('isBuilt', $info);
+
+    $this->assertNull($info->isStaging);
+    $this->assertNull($info->isDevelopment);
+    $this->assertNull($info->isBuilt);
   }
 
   public function testReturnsTheDeployInfoForAnPackageWithDeployInfoFile() {
@@ -245,8 +249,8 @@ JSON
     $this->assertObjectHasAttribute('isDevelopment', $info);
     $this->assertObjectHasAttribute('isBuilt', $info);
 
-    $this->assertFalse($info->isStaging);
-    $this->assertTrue($info->isDevelopment);
-    $this->assertFalse($info->isBuilt);
+    $this->assertTrue($info->isStaging);
+    $this->assertNull($info->isDevelopment);
+    $this->assertTrue($info->isBuilt);
   }
 }

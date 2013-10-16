@@ -281,27 +281,20 @@ class Container implements SystemContainerConfiguration {
    */
   public function getLocalProject() {
     if (!isset($this->localProject))  {
-      $package = $this->getLocalPackage();
-      $flags = 0;
-
-      $deployInfo = $this->getDeployInfo($package);
-
-      if ($deployInfo->isStaging) {
-        $flags |= ProjectPackage::STAGING;
-      }
-
-      if ($deployInfo->isDevelopment) {
-        $flags |= ProjectPackage::DEVELOPMENT;
-      }
-
-      $this->localProject = $this->getProjectsFactory()->fromPackage($package, $flags);
+      $this->localProject = $this->getProjectsFactory()->fromPackage($this->getLocalPackage());
     }
     
     return $this->localProject;
   }
 
   /**
-   * @return object .isStaging, isDevelopment, isBuilt
+   * Returns the deploy info written as a file in directory root
+   * 
+   * notice: the properties:
+   *  .isStaging, .isDevelopment, .isBuilt
+   * are ALWAYS set but they can be: NULL|FALSE|TRUE
+   * meaning NULL that it was not set in json (or invalid)
+   * @return object 
    */
   public function getDeployInfo($package) {
     $deployInfoFile = $package->getRootDirectory()->getFile('deploy-info.json');
@@ -312,15 +305,15 @@ class Container implements SystemContainerConfiguration {
     }
 
     if (!isset($deployInfo->isStaging)) {
-      $deployInfo->isStaging = FALSE;
+      $deployInfo->isStaging = NULL;
     }
 
     if (!isset($deployInfo->isDevelopment)) {
-      $deployInfo->isDevelopment = FALSE;
+      $deployInfo->isDevelopment = NULL;
     }
 
     if (!isset($deployInfo->isBuilt)) {
-      $deployInfo->isBuilt = FALSE;
+      $deployInfo->isBuilt = NULL;
     }
 
     return $deployInfo;

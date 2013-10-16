@@ -57,4 +57,14 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->assertNotEquals((string) $dir, (string) $clonedPackage->getRootDirectory(), 'cloned directory should not change!');
     $this->assertNotEquals((string) $dir, (string) $clonedPackage->dir('root'), 'cloned directory root retrieved with dir() should not change!');
   }
+
+  public function testIsBuiltAndsetBuilt() {
+    $this->assertFalse($this->projectPackage->isBuilt());
+
+    $this->projectPackage->setBuilt(TRUE);
+    $this->assertTrue($this->projectPackage->isBuilt());
+
+    $this->projectPackage->setBuilt(FALSE);
+    $this->assertFalse($this->projectPackage->isBuilt());
+  }
 }

@@ -26,19 +26,21 @@ class ProjectsFactory implements ContainerAware {
   /**
    * @return Webforge\Framework\Project
    */
-  public function fromPackage(Package $package, $flags = 0) {
-    
-    if (!is_bool($isDevel = $this->hostConfig->get('development'))) {
+  public function fromPackage(Package $package) {
+    $flags = 0;
+    $deployInfo = $this->container->getDeployInfo($package);
 
-      // note: this is legacy and is wrong for so many times: production is the other way round
-      $isDevel = $this->hostConfig->get('production');
+    if ($this->decideStaging($package, $deployInfo)) {
+      $flags |= ProjectPackage::STAGING;
     }
-    
-    if ($isDevel) {
+
+    if ($this->decideDevelopment($package, $deployInfo)) {
       $flags |= ProjectPackage::DEVELOPMENT;
     }
 
-    // how to determine other staging? in extra config from composer? as a file? (in root) in config?
+    if ($this->decideBuilt($package, $deployInfo)) {
+      $flags |= ProjectPackage::BUILT;
+    }
 
     $bridge = $this->container->getCMSBridge();
     $name = $bridge->getProjectName($package);
@@ -48,6 +50,28 @@ class ProjectsFactory implements ContainerAware {
     $this->readConfiguration($package, $projectPackage);
 
     return $projectPackage;
+  }
+
+  protected function decideStaging($package, $deployInfo) {
+    return $deployInfo->isStaging !== NULL ? $deployInfo->isStaging : FALSE;
+  }
+
+  protected function decideBuilt($package, $deployInfo) {
+    return $deployInfo->isBuilt !== NULL ? $deployInfo->isBuilt : FALSE;
+  }
+
+  protected function decideDevelopment($package, $deployInfo) {
+    return $deployInfo->isDevelopment !== NULL ? $deployInfo->isDevelopment: $this->isHostDevelopment();
+  }
+
+  protected function isHostDevelopment() {
+    if (!is_bool($isDevel = $this->hostConfig->get('development'))) {
+
+      // note: this is legacy and is wrong for so many times: production is the other way round
+      $isDevel = $this->hostConfig->get('production');
+    }
+
+    return $isDevel;
   }
 
   protected function getHost() {

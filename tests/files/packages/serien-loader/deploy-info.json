@@ -1,4 +1,4 @@
 {
-  "isStaging": false,
-  "isDevelopment": true
+  "isStaging": true,
+  "isBuilt": true
 }

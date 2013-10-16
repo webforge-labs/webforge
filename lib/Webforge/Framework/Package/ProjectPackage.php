@@ -10,6 +10,7 @@ class ProjectPackage implements \Webforge\Framework\Project {
 
   const STAGING = 0x000001;
   const DEVELOPMENT   = 0x000010;
+  const BUILT   = 0x000020;
 
   /**
    * @var Webforge\Framework\Package\Package
@@ -129,6 +130,13 @@ class ProjectPackage implements \Webforge\Framework\Project {
   /**
    * @return bool
    */
+  public function isBuilt() {
+    return (bool) ($this->mode & self::BUILT);
+  }
+
+  /**
+   * @return bool
+   */
   public function isDevelopment() {
     return (bool) ($this->mode & self::DEVELOPMENT);
   }
@@ -196,6 +204,15 @@ class ProjectPackage implements \Webforge\Framework\Project {
       $this->mode |= self::STAGING;
     } else {
       $this->mode &= ~self::STAGING;
+    }
+    return $this;
+  }
+
+  public function setBuilt($to = TRUE) {
+    if ($to) {
+      $this->mode |= self::BUILT;
+    } else {
+      $this->mode &= ~self::BUILT;
     }
     return $this;
   }

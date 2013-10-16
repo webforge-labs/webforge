@@ -36,6 +36,16 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
 
     $this->container->getHostConfiguration()->set(array('host'), NULL);
     $this->projectPackageWithoutConfig = $this->factory->fromPackage($this->package);
+
+    $this->projectBuiltPackage = $this->deployInfoPackage;
+    $this->projectBuilt = $this->factory->fromPackage($this->deployInfoPackage);
+  }
+
+  public function testPreConditions() {
+    $deployInfo = $this->container->getDeployInfo($this->projectBuiltPackage);
+    $this->assertTrue($deployInfo->isStaging);
+    $this->assertTrue($deployInfo->isBuilt);
+    $this->assertNull($deployInfo->isDevelopment); // means just undefined
   }
 
   public function testProjectHasNamesAndConfigurationFromEtcConfig() {
@@ -111,9 +121,12 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->assertEquals(TRUE, $configuration->get(array('PscOldStyleProject', 'loaded')));
   }
 
-  public function testWhenFlagIsProvidedThenStagingIsSetOnPackage() {
-    $package = $this->factory->fromPackage($this->configPackage, ProjectPackage::STAGING);
+  public function testProjectsFactoryReadsSettingsFromDeployInfoForpackage_AndOverwritesEverythingIfSet() {
+    $this->assertTrue($this->projectBuilt->isStaging(), 'isStaging should be set because of deployInfo');
+    $this->assertTrue($this->projectBuilt->isBuilt(), 'isBuilt should be set because of deployinfo');
+  }
 
-    $this->assertTrue($package->isStaging(), 'package should be staging');
+  public function testHostDevelopmentConfigurationIsUsedWhenDevelopmentInfoIsNull() {
+    $this->assertTrue($this->projectBuilt->isDevelopment(), 'isDevelopment should be set because of host config');
   }
 }
