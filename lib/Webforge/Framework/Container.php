@@ -284,24 +284,46 @@ class Container implements SystemContainerConfiguration {
       $package = $this->getLocalPackage();
       $flags = 0;
 
-      $deployInfoFile = $package->getRootDirectory()->getFile('deploy-info.json');
+      $deployInfo = $this->getDeployInfo($package);
 
-      if ($deployInfoFile->exists()) {
-        $deployInfo = JSONConverter::create()->parseFile($deployInfoFile);
+      if ($deployInfo->isStaging) {
+        $flags |= ProjectPackage::STAGING;
+      }
 
-        if (isset($deployInfo->isStaging) && $deployInfo->isStaging) {
-          $flags |= ProjectPackage::STAGING;
-        }
-
-        if (isset($deployInfo->isDevelopment) && $deployInfo->isDevelopment) {
-          $flags |= ProjectPackage::DEVELOPMENT;
-        }
+      if ($deployInfo->isDevelopment) {
+        $flags |= ProjectPackage::DEVELOPMENT;
       }
 
       $this->localProject = $this->getProjectsFactory()->fromPackage($package, $flags);
     }
     
     return $this->localProject;
+  }
+
+  /**
+   * @return object .isStaging, isDevelopment, isBuilt
+   */
+  public function getDeployInfo($package) {
+    $deployInfoFile = $package->getRootDirectory()->getFile('deploy-info.json');
+
+    $deployInfo = new \stdClass;
+    if ($deployInfoFile->exists()) {
+      $deployInfo = JSONConverter::create()->parseFile($deployInfoFile);
+    }
+
+    if (!isset($deployInfo->isStaging)) {
+      $deployInfo->isStaging = FALSE;
+    }
+
+    if (!isset($deployInfo->isDevelopment)) {
+      $deployInfo->isDevelopment = FALSE;
+    }
+
+    if (!isset($deployInfo->isBuilt)) {
+      $deployInfo->isBuilt = FALSE;
+    }
+
+    return $deployInfo;
   }
 
   /**

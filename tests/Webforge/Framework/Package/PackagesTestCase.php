@@ -9,7 +9,7 @@ use Webforge\Common\System\Dir;
 
 class PackagesTestCase extends \Webforge\Code\Test\Base {
 
-  protected $package, $appPackage, $withoutAutoLoadPackage, $oldStylePackage, $camelCasePackage, $underscorePackage, $configPackage;
+  protected $package, $appPackage, $withoutAutoLoadPackage, $oldStylePackage, $camelCasePackage, $underscorePackage, $configPackage, $deployInfoPackage;
 
   protected $container, $registry;
 
@@ -23,7 +23,7 @@ class PackagesTestCase extends \Webforge\Code\Test\Base {
     $this->appPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
     $this->oldStylePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/PscOldStyleProject/Umsetzung/base/src/'));
     $this->camelCasePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/CoMun/Umsetzung/base/src/'));
-    $this->underscorePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/serien-loader/'));
+    $this->deployInfoPackage = $this->underscorePackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/serien-loader/'));
     $this->configPackage = $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMESuperBlog/'));
   }
 

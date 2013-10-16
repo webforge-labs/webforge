@@ -229,4 +229,24 @@ JSON
 
     $this->assertTrue($project->isStaging(), 'Project is set to staging');
   }
+
+  public function testReturnsTheDeployInfoForAnPackageWithNoDeployInfoFile() {
+    $info = $this->container->getDeployInfo($this->package);
+
+    $this->assertObjectHasAttribute('isStaging', $info);
+    $this->assertObjectHasAttribute('isDevelopment', $info);
+    $this->assertObjectHasAttribute('isBuilt', $info);
+  }
+
+  public function testReturnsTheDeployInfoForAnPackageWithDeployInfoFile() {
+    $info = $this->container->getDeployInfo($this->deployInfoPackage);
+
+    $this->assertObjectHasAttribute('isStaging', $info);
+    $this->assertObjectHasAttribute('isDevelopment', $info);
+    $this->assertObjectHasAttribute('isBuilt', $info);
+
+    $this->assertFalse($info->isStaging);
+    $this->assertTrue($info->isDevelopment);
+    $this->assertFalse($info->isBuilt);
+  }
 }
