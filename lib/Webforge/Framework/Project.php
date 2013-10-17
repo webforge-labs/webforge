@@ -76,6 +76,11 @@ interface Project {
   /**
    * @return bool
    */
+  public function isBuilt();
+
+  /**
+   * @return bool
+   */
   public function isDevelopment();
 
   /**
