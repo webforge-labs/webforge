@@ -1,7 +1,7 @@
 # Webforge
 a content management framework for easy to build and individual content management systems.
 
-[![Build Status](https://secure.travis-ci.org/pscheit/webforge.png)](http://travis-ci.org/pscheit/webforge)
+[![Build Status](https://secure.travis-ci.org/webforge-labs/webforge.png)](http://travis-ci.org/pscheit/webforge)
 
 Webforge aims to be a framework for consumers and developers at the same time. It helps developers to build their own individual cms for the needs of their customers. The customer gains all benefits of a ready-to-use cms without losing the opportunity to create new features.
 
