@@ -2,7 +2,7 @@
 
 namespace Webforge\Framework\CLI;
 
-use Psc\System\Console\CommandsIncluder;
+use Webforge\Console\CommandsIncluder;
 use Webforge\Common\System\Dir;
 use Webforge\Framework\Container;
 use Webforge\Framework\LocalPackageInitException;
