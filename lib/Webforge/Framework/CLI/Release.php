@@ -71,7 +71,8 @@ class Release extends ContainerCommand {
         "version-persister"=>"vcs-tag",
 
         "prerequisites"=>array("working-copy-check", "display-last-changes"),
-        "post-release-actions"=>array("composer-update", "vcs-publish")
+        "pre-release-actions"=>array("composer-update", "vcs-commit"),
+        "post-release-actions"=>array("vcs-publish")
       );
 
       $config = $package->getRootDirectory()->getFile('rmt.json');
