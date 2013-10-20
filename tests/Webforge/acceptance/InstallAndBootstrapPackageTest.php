@@ -227,7 +227,7 @@ PHP;
     return $ret;
   }
   
-  protected function assertRun(Process $process, $returnCode, $message = '') {
+  protected function assertRun($process, $returnCode, $message = '') {
     $this->assertEquals($returnCode, $process->run(), $message.": cmd:\n".$process->getCommandLine()."\n\n".$process->getOutput()."\n\n".$process->getErrorOutput());
   }
   
