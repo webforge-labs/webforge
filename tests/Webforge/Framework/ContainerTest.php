@@ -49,7 +49,6 @@ class ContainerTest extends \Webforge\Framework\Package\PackagesTestCase {
     $prop('packageRegistry', 'Webforge\Framework\Package\Registry');
     $prop('composerPackageReader', 'Webforge\Framework\Package\ComposerPackageReader');
     $prop('resourceDirectory', 'Webforge\Common\System\Dir');
-    $prop('cmsBridge', 'Webforge\Framework\PscCMSBridge');
     $prop('hostConfiguration', 'Webforge\Configuration\Configuration');
     $prop('projectsFactory', 'Webforge\Framework\ProjectsFactory');
     $prop('inflector', 'Webforge\Framework\Inflector');
