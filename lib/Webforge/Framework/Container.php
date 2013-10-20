@@ -84,11 +84,6 @@ class Container implements SystemContainerConfiguration {
   protected $projectsFactory;
 
   /**
-   * @var Webforge\Framework\PscCMSBridge
-   */
-  protected $cmsBridge;
-  
-  /**
    * @var Webforge\Framework\Inflector
    */
   protected $inflector;
@@ -396,17 +391,6 @@ class Container implements SystemContainerConfiguration {
     return $this->getPackageRegistry()->findByIdentifier('webforge/webforge');
   }
   
-  /**
-   * @return Webforge\Framework\PscCMSBridge
-   */
-  public function getCMSBridge() {
-    if (!isset($this->cmsBridge)) {
-      $this->cmsBridge = new PscCMSBridge();    
-    }
-
-    return $this->cmsBridge;
-  }
-
   /**
    * @return Webforge\Configuration\Configuration
    */
