@@ -2,21 +2,18 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-use Psc\URL\RequestDispatcher;
 use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\JS\JSONParsingException;
+use Guzzle\Http\Client as GuzzleClient;
 
 /**
- * 
- * @TODO refactor to use guzzle instead of RequestDispatcher
- * (add Guzzle RequestDispatcher)
  */
 class RemoteConfigurationRetriever implements ConfigurationRetriever {
   
   /**
-   * @var Webforge\URL\RequestDispatcher
+   * @var Guzzle\Http\Client
    */
-  protected $dispatcher;
+  protected $client;
   
   /**
    * @var array
@@ -41,10 +38,11 @@ class RemoteConfigurationRetriever implements ConfigurationRetriever {
    * print json_encode(ini_get_all());
    * ?>
    */
-  public function __construct($url, RequestDispatcher $dispatcher = NULL, JSONConverter $jsonConverter = NULL) {
+  public function __construct($url, GuzzleClient $client, JSONConverter $jsonConverter = NULL) {
     $this->url = $url;
-    $this->dispatcher = $dispatcher ?: new RequestDispatcher();
+    $this->client = $client;
     $this->jsonConverter = $jsonConverter ?: new JSONConverter();
+    $this->inis = NULL;
   }
   
   /**
@@ -59,16 +57,18 @@ class RemoteConfigurationRetriever implements ConfigurationRetriever {
   }
   
   public function retrieveInis() {
-    $response = $this->dispatcher->dispatch(
-      $this->dispatcher->createRequest('GET', $this->url)
-    );
-    
+    $request = $this->client->get($this->url);
+    $jsonString = (string) $request->send()->getBody();
+
     try {
-      $json = $this->jsonConverter->parse($response->getRaw());
+      $json = $this->jsonConverter->parse($jsonString);
+
     } catch (JSONParsingException $e) {
       throw new \RuntimeException(
-        sprintf("RemoteConfigurationRetrieving failed. The returned JSON from URL %s was not valid:\n%s\n",
-                $this->url, $response->getRaw()),
+        sprintf(
+          "RemoteConfigurationRetrieving failed. The returned JSON from URL %s was not valid:\n%s\n",
+          $this->url, $jsonString
+        ),
         0,
         $e
       );
@@ -107,19 +107,11 @@ class RemoteConfigurationRetriever implements ConfigurationRetriever {
    * @param string $password
    */
   public function setAuthentication($user, $password) {
-    $this->getDispatcher()->setAuthentication($user, $password);
+    $this->client->setDefaultOption('auth', array($user, $password));
     return $this;
-  }
-  
-  /**
-   * @return Psc\URL\RequestDispatcher
-   */
-  public function getDispatcher() {
-    return $this->dispatcher;
   }
   
   public function __toString() {
     return 'Remote Configuration ('.$this->url.')';
   }
 }
-?>

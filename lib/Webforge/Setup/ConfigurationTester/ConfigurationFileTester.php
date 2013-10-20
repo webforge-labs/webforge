@@ -4,6 +4,7 @@ namespace Webforge\Setup\ConfigurationTester;
 
 use Webforge\Common\System\File;
 use Webforge\Common\JS\JSONConverter;
+use Guzzle\Http\Client as GuzzleClient;
 
 /**
  * Reads the INI-Configuration out of a file and tests this values
@@ -63,7 +64,7 @@ class ConfigurationFileTester {
         throw new \InvalidArgumentException('if type is remote, it is expected to give the remoteUrl to create as #3 argument');
       }
       
-      $retriever = new RemoteConfigurationRetriever($remoteUrl);
+      $retriever = new RemoteConfigurationRetriever($remoteUrl, new GuzzleClient());
     } else {
       $retriever = new LocalConfigurationRetriever();
     }

@@ -68,7 +68,7 @@ class ConfigurationFileTesterTest extends \Webforge\Code\Test\Base {
   }
 
   public function testAuthenticationSetting() {
-    $retriever = $this->getMock('RemoteConfigurationRetriever', array('setAuthentication'), array('/fake/url'));
+    $retriever = $this->getMock('RemoteConfigurationRetriever', array('setAuthentication'), array('/fake/url', new \Guzzle\Http\Client));
     
     $retriever->expects($this->once())->method('setAuthentication')
               ->with($this->equalTo('theuser'), $this->equalTo('asecret'))->will($this->returnSelf());
