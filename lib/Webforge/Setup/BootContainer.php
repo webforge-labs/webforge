@@ -77,7 +77,7 @@ class BootContainer {
    * @return Webforge\Configuration\Configuration
    */
   public function getHostConfiguration() {
-    return $this->webforge->getCMSBridge()->getHostConfig();
+    return $this->webforge->getHostConfiguration();
   }
 
   /**

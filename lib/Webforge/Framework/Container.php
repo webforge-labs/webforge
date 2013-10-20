@@ -420,6 +420,12 @@ class Container implements SystemContainerConfiguration {
           $hostConfigFile = \Psc\PSC::getRoot()->getFile('host-config.php');
 
           $this->hostConfiguration = $reader->fromPHPFile($hostConfigFile);
+        } else {
+          $root = getenv('PSC_CMS');
+
+          if (!empty($root)) {
+            $this->hostConfiguration = $reader->fromPHPFile($root->getFile('host-config.php'));
+          }
         }
 
       } catch (\Psc\MissingEnvironmentVariableException $e) {

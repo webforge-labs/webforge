@@ -129,4 +129,36 @@ class ProjectsFactoryTest extends \Webforge\Framework\Package\PackagesTestCase {
   public function testHostDevelopmentConfigurationIsUsedWhenDevelopmentInfoIsNull() {
     $this->assertTrue($this->projectBuilt->isDevelopment(), 'isDevelopment should be set because of host config');
   }
+
+  public function testProjectWillHaveNamespaceInCamelCase_whenSlugEqualsLowerCasedCamelcaseNamespace() {
+    $project = $this->factory->fromPackage($this->camelCasePackage);
+    
+    $this->assertEquals(
+      'CoMun',
+      $project->getNamespace(),
+      'Namespace should be CamelCased'
+    );
+
+    $this->assertEquals(
+      'CoMun',
+      $project->getName(),
+      'Name should be also CamelCased'
+    );
+  }
+
+  public function testProjectWillHaveNamespaceInCamelCase_whenSluggedUnderscoresReplacedToCamelCaseEqualNamespace() {
+    $project = $this->factory->FromPackage($this->underscorePackage);
+    
+    $this->assertEquals(
+      'SerienLoader',
+      $project->getName(),
+      'Name should be CamelCased'
+    );
+    
+    $this->assertEquals(
+      'SerienLoader',
+      $project->getNamespace(),
+      'Namespace should be CamelCased'
+    );
+  }
 }

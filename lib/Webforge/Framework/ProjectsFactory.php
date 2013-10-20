@@ -6,6 +6,7 @@ use Webforge\Framework\Package\Package;
 use Webforge\Framework\Package\ProjectPackage;
 use Webforge\Framework\Package\ProjectUrls;
 use Webforge\Configuration\ConfigurationReader;
+use Webforge\Common\String as S;
 
 class ProjectsFactory implements ContainerAware {
 
@@ -42,8 +43,7 @@ class ProjectsFactory implements ContainerAware {
       $flags |= ProjectPackage::BUILT;
     }
 
-    $bridge = $this->container->getCMSBridge();
-    $name = $bridge->getProjectName($package);
+    $name = $this->getProjectName($package);
     $lowerName = $package->getSlug();
 
     $projectPackage = new ProjectPackage($package, $name, $lowerName, $flags, $this->getHost(), new ProjectUrls($this->hostConfig));
@@ -134,5 +134,26 @@ class ProjectsFactory implements ContainerAware {
   public function setContainer(Container $container) {
     $this->container = $container;
     return $this;
+  }
+
+  protected function getProjectName(Package $package) {
+    $namespace = $package->getNamespace();
+    $slug = $package->getSlug();
+
+    if ($namespace !== $slug) {
+      
+      // use namespace if namespace is camel cased package slug
+      if (mb_strtolower($namespace) === mb_strtolower($slug)) {
+        return $namespace;
+      }
+
+      $ccSlug = $this->container->getInflector()->namespaceify($slug);
+
+      if (S::endsWith($namespace, $ccSlug)) {
+        return $ccSlug;
+      }
+    }
+    
+    return $slug;
   }
 }

@@ -139,37 +139,5 @@ class PscCMSBridgeTest extends \Webforge\Framework\Package\PackagesTestCase {
       (string) $project->getClassPath(),
       'the project created from package does not have autoload info so it should just return lib/ per default'
     );
-  }
-  
-  public function testProjectWillHaveNamespaceInCamelCase_whenSlugEqualsLowerCasedCamelcaseNamespace() {
-    $project = $this->bridge->createProjectFromPackage($this->camelCasePackage);
-    
-    $this->assertEquals(
-      'CoMun',
-      $project->getNamespace(),
-      'Namespace should be CamelCased'
-    );
-
-    $this->assertEquals(
-      'CoMun',
-      $project->getName(),
-      'Name should be also CamelCased'
-    );
-  }
-
-  public function testProjectWillHaveNamespaceInCamelCase_whenSluggedUnderscoresReplacedToCamelCaseEqualNamespace() {
-    $project = $this->bridge->createProjectFromPackage($this->underscorePackage);
-    
-    $this->assertEquals(
-      'SerienLoader',
-      $project->getName(),
-      'Name should be CamelCased'
-    );
-    
-    $this->assertEquals(
-      'SerienLoader',
-      $project->getNamespace(),
-      'Namespace should be CamelCased'
-    );
-  }
+  }  
 }
