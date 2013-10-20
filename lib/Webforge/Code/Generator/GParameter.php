@@ -7,6 +7,7 @@ use Webforge\Types\MixedType;
 use Webforge\Types\ObjectType;
 use Webforge\Types\ArrayType;
 use Webforge\Types\ParameterHintedType;
+use Webforge\Common\ClassInterface;
 
 /**
  * Models a GParameter for a GFunction / GMethod
@@ -65,7 +66,7 @@ class GParameter extends GObject {
   public static function create($name, $type = NULL, $defaultValue = self::UNDEFINED, $reference = FALSE) {
     if (isset($type)) {
       if ($type instanceof GClass) {
-        $type = new ObjectType(new \Psc\Code\Generate\GClass($type->getFQN())); // unfortunately for backward compability
+        $type = new ObjectType(new GClass($type->getFQN())); // unfortunately for backward compability
       } elseif (!($type instanceof Type)) {
         $type = Type::create($type);
       }
@@ -101,7 +102,7 @@ class GParameter extends GObject {
    * @return Webforge\Code\Generator\GClass|NULL
    */
   public function getHintImport() {
-    if ($this->hasHint() && ($import = $this->type->getParameterHintImport()) instanceof \Psc\Code\Generate\GClass) {
+    if ($this->hasHint() && ($import = $this->type->getParameterHintImport()) instanceof ClassInterface) {
       return new GClass($import->getFQN());
     }
     
@@ -199,4 +200,3 @@ class GParameter extends GObject {
     return !($this->type instanceof MixedType);
   }
 }
-?>

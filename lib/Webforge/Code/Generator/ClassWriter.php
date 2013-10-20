@@ -5,7 +5,8 @@ namespace Webforge\Code\Generator;
 use Webforge\Common\System\File;
 use Webforge\Common\String as S;
 use Webforge\Common\ArrayUtil as A;
-use Psc\Code\Generate\CodeWriter;
+use Webforge\Common\CodeWriter;
+use RuntimeException;
 
 /**
  * Writes a Class in Code (PHP)
@@ -25,7 +26,7 @@ class ClassWriter {
   protected $imports;
   
   /**
-   * @var Psc\Code\Generate\CodeWriter
+   * @var Webforge\Common\CodeWriter
    */
   protected $codeWriter;
   
@@ -293,7 +294,7 @@ class ClassWriter {
     } else {
       try {
         return $this->getCodeWriter()->exportBaseTypeValue($value);
-      } catch (\Psc\Code\Generate\BadExportTypeException $e) {
+      } catch (RuntimeException $e) {
         throw new \RuntimeException('In Argumenten oder Properties können nur Skalare DefaultValues stehen. Die value muss im Constructor stehen.', 0, $e);
       }
     }

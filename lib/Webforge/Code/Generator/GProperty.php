@@ -65,7 +65,7 @@ class GProperty extends GModifiersObject {
   public static function create($name, $type = NULL, $defaultValue = self::UNDEFINED, $modifiers = self::MODIFIER_PROTECTED) {
     if (isset($type)) {
       if ($type instanceof GClass) {
-        $type = new ObjectType(new \Psc\Code\Generate\GClass($type->getFQN())); // bc compability, unfortunately
+        $type = new ObjectType(new GClass($type->getFQN()));
       } elseif (!($type instanceof Type)) {
         $type = Type::create($type);
       }

@@ -186,7 +186,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
       
       return NULL;
     } elseif ($type instanceof PHPParser_Node_Name_FullyQualified) {
-      return new ObjectType(new \Psc\Code\Generate\GClass($type->toString()));
+      return new ObjectType(new GClass($type->toString()));
     } elseif ($type == 'array') {
       return new ArrayType();
     }

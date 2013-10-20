@@ -161,7 +161,7 @@ class ConfigurationTester {
    * @TODO refactor to a configurationTester <-> String Object
    */
   public function __toString() {
-    $string = "webforge Setup - ConfigurationTester by Psc.\n";
+    $string = "webforge Setup - ConfigurationTester by pscheit.\n";
     $string .= (string) $this->retriever."\n";
     $string .= "\n";
     if (count($this->defects) === 0) {

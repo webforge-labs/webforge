@@ -25,7 +25,7 @@ class ProjectUrls {
   }
 
   /**
-   * @return Psc\URL\SimpleURL
+   * @return Webforge\Common\URL
    */
   protected function getBaseUrl(Project $project) {
     if (!isset($this->urls['base'])) {
