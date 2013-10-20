@@ -40,7 +40,7 @@ class GClassPropertiesTest extends \Webforge\Code\Test\Base {
     $this->gClass->createProperty('x', new GClass('PointValue'));
     
     $this->assertTrue($this->gClass->hasProperty('x'));
-    $this->assertInstanceOf('Psc\Data\Type\ObjectType', $this->gClass->getProperty('x')->getType());
+    $this->assertInstanceOf('Webforge\Types\ObjectType', $this->gClass->getProperty('x')->getType());
   }
   
   public function testAfterRemovingAnPropertyTheClassHasThePropertyAnymore() {

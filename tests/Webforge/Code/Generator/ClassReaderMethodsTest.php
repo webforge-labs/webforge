@@ -22,10 +22,10 @@ class ClassReaderMethodsTest extends ClassReaderBaseTest {
       ->hasMethod('setCoordinates', array('x', 'y'))
         ->get()->getParameters();
     
-    $this->assertInstanceOf('Psc\Data\Type\ObjectType', $type = $x->getType());
+    $this->assertInstanceOf('Webforge\Types\ObjectType', $type = $x->getType());
     $this->assertEquals('PointValue', $type->getClassFQN());
     $this->assertEquals(GParameter::UNDEFINED, $x->getDefault());
-    $this->assertInstanceOf('Psc\Data\Type\ObjectType', $type = $y->getType());
+    $this->assertInstanceOf('Webforge\Types\ObjectType', $type = $y->getType());
     $this->assertEquals('PointValue', $type->getClassFQN());
   }
 
@@ -38,7 +38,7 @@ class ClassReaderMethodsTest extends ClassReaderBaseTest {
       ->hasMethod('createPoint',array('coords'))
         ->get()->getParameter('coords');
         
-    $this->assertInstanceOf('Psc\Data\Type\ArrayType', $coords->getType());
+    $this->assertInstanceOf('Webforge\Types\ArrayType', $coords->getType());
     $this->assertEquals(array(0,0), $coords->getDefault());
   }
   
@@ -52,7 +52,7 @@ class ClassReaderMethodsTest extends ClassReaderBaseTest {
         ->get()->getParameter('name');
     
     $this->assertEquals('unknown', $name->getDefault());
-    $this->assertInstanceOf('Psc\Data\Type\StringType', $name->getType());
+    $this->assertInstanceOf('Webforge\Types\StringType', $name->getType());
   }
 
   public function testDefaultValueAsStdClass() {
@@ -65,7 +65,7 @@ class ClassReaderMethodsTest extends ClassReaderBaseTest {
         ->get()->getParameter('o');
     
     $this->assertEquals(NULL, $o->getDefault());
-    $this->assertInstanceOf('Psc\Data\Type\ObjectType', $o->getType());
+    $this->assertInstanceOf('Webforge\Types\ObjectType', $o->getType());
   }
   
   public function testDefaultValueAsClassConstant() {

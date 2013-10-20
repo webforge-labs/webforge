@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\Data\Type\Type;
+use Webforge\Types\Type;
 
 class GPropertyTest extends \Webforge\Code\Test\Base {
   
@@ -21,7 +21,7 @@ class GPropertyTest extends \Webforge\Code\Test\Base {
   }
   
   public function testDefaultTypeIsMixed() {
-    $this->assertInstanceOf('Psc\Data\Type\MixedType', $this->defaultProperty->getType());
+    $this->assertInstanceOf('Webforge\Types\MixedType', $this->defaultProperty->getType());
   }
   
   public function testItCanBeTestedIfThePropertyTypeIsExplicitOrNot() {
@@ -58,19 +58,19 @@ class GPropertyTest extends \Webforge\Code\Test\Base {
     $property = GProperty::create('x', Type::create('Integer'));
     
     $this->assertInstanceOf('Webforge\Code\Generator\GProperty', $property);
-    $this->assertInstanceOf('Psc\Data\Type\IntegerType', $property->getType());
+    $this->assertInstanceOf('Webforge\Types\IntegerType', $property->getType());
   }
 
   public function testCreateCreatesApropertyWithTypeAsGClassToobjectType() {
     $property = GProperty::create('x', new GClass('PointValue'));
     
     $this->assertInstanceOf('Webforge\Code\Generator\GProperty', $property);
-    $this->assertInstanceOf('Psc\Data\Type\ObjectType', $property->getType());
+    $this->assertInstanceOf('Webforge\Types\ObjectType', $property->getType());
     $this->assertEquals('PointValue', $property->getType()->getClassFQN());
   }
   
   public function testCreateCreatesApropertyArrayType() {
     $property = GProperty::create('coordinates', 'Array');
-    $this->assertInstanceOf('Psc\Data\Type\ArrayType', $property->getType());
+    $this->assertInstanceOf('Webforge\Types\ArrayType', $property->getType());
   }
 }

@@ -4,10 +4,11 @@ namespace Webforge\Code\Generator;
 
 use Webforge\Common\String as S;
 use ReflectionClass;
-use Psc\Data\Type\ObjectType;
+use Webforge\Types\ObjectType;
 use InvalidArgumentException;
+use Webforge\Common\ClassUtil;
 
-class GClass extends GModifiersObject {
+class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface {
   
   const WITHOUT_CONSTRUCTOR = TRUE;
   const END = GObjectCollection::END;
@@ -96,23 +97,15 @@ class GClass extends GModifiersObject {
   }
 
   /**
-   * @return Object<{$this->getFQN()}>
+   * @return Object<{$class}>
    */
   public static function newClassInstance($class, Array $params = array()) {
     if ($class instanceof GClass) {
       return $class->newInstance($params);
       
-    } elseif ($class instanceof ReflectionClass) {
-      $refl = $class;
-
-    } elseif (is_string($class)) {
-      $refl = new ReflectionClass($class);
-      
     } else {
-      throw new InvalidArgumentException('class kann nur string,gclass oder reflectionclass sein');
+      return ClassUtil::newClassInstance($class, $params);
     }
-    
-    return $refl->newInstanceArgs($params);
   }
   
   /**

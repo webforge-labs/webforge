@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\Data\Type\Type;
+use Webforge\Types\Type;
 
 /**
  *

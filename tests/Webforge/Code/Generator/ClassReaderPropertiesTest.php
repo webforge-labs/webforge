@@ -38,7 +38,7 @@ PHP
         ->isProtected()
         ->get();
         
-    $this->assertInstanceOf('Psc\Data\Type\ArrayType', $property->getType());
+    $this->assertInstanceOf('Webforge\Types\ArrayType', $property->getType());
     $this->assertEquals(array(0=>'zero', 1=>'duo', array('nested')), $property->getDefaultValue());
   }
 
@@ -76,7 +76,7 @@ PHP
 
     $property = $this->assertThatGClass($this->read())
       ->hasProperty('x')
-        ->isType('Psc\Data\Type\IntegerType')
+        ->isType('Webforge\Types\IntegerType')
         ->get();
   }
 

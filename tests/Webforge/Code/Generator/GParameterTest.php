@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\Data\Type\Type;
+use Webforge\Types\Type;
 
 class GParameterTest extends \Webforge\Code\Test\Base {
   
@@ -15,7 +15,7 @@ class GParameterTest extends \Webforge\Code\Test\Base {
   
   public function testHintCanBeStringArrayForCreate() {
     $arrayParam = GParameter::create('coordinates', 'array');
-    $this->assertInstanceOf('Psc\Data\Type\ArrayType', $arrayParam->getType());
+    $this->assertInstanceOf('Webforge\Types\ArrayType', $arrayParam->getType());
     $this->assertEquals('array', mb_strtolower($arrayParam->getHint()));
   }
   
@@ -90,14 +90,14 @@ class GParameterTest extends \Webforge\Code\Test\Base {
     $param = GParameter::create('xValue', $this->getType('Integer'));
     
     $this->assertInstanceOf('Webforge\Code\Generator\GParameter', $param);
-    $this->assertInstanceOf('Psc\Data\Type\IntegerType', $param->getType());
+    $this->assertInstanceOf('Webforge\Types\IntegerType', $param->getType());
   }
 
   public function testCreateCreatesApropertyWithTypeAsGClassToobjectType() {
     $param = GParameter::create('xValue', new GClass('PointValue'));
     
     $this->assertInstanceOf('Webforge\Code\Generator\GParameter', $param);
-    $this->assertInstanceOf('Psc\Data\Type\ObjectType', $param->getType());
+    $this->assertInstanceOf('Webforge\Types\ObjectType', $param->getType());
     $this->assertEquals('PointValue', $param->getType()->getClassFQN());
   }
 

@@ -2,9 +2,9 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\Data\Type\Type;
-use Psc\Data\Type\MixedType;
-use Psc\Data\Type\ObjectType;
+use Webforge\Types\Type;
+use Webforge\Types\MixedType;
+use Webforge\Types\ObjectType;
 
 /**
  * a GProperty models a property of a GClass
@@ -36,7 +36,7 @@ class GProperty extends GModifiersObject {
   /**
    * The type of the property
    * 
-   * @var Psc\Data\Type\Type
+   * @var Webforge\Types\Type
    */
   protected $type;
 
@@ -47,7 +47,7 @@ class GProperty extends GModifiersObject {
   
   /**
    *
-   * if you don't know the type you it will be set to Psc\Data\Type\Mixed aka unknown type
+   * if you don't know the type you it will be set to Webforge\Types\Mixed aka unknown type
    * @param bitmap $modifiers
    */
   public function __construct($name, Type $type = NULL, $defaultValue = self::UNDEFINED, $modifiers = self::MODIFIER_PROTECTED) {
@@ -78,7 +78,7 @@ class GProperty extends GModifiersObject {
    * Returns (always) the type of the Property
    *
    * the type might be implicit (aka: MixedType)
-   * @return Psc\Data\Type\Type
+   * @return Webforge\Types\Type
    */
   public function getType() {
     return $this->type;

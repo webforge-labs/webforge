@@ -2,11 +2,11 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\Data\Type\Type;
-use Psc\Data\Type\MixedType;
-use Psc\Data\Type\ObjectType;
-use Psc\Data\Type\ArrayType;
-use Psc\Data\Type\ParameterHintedType;
+use Webforge\Types\Type;
+use Webforge\Types\MixedType;
+use Webforge\Types\ObjectType;
+use Webforge\Types\ArrayType;
+use Webforge\Types\ParameterHintedType;
 
 /**
  * Models a GParameter for a GFunction / GMethod
@@ -31,7 +31,7 @@ class GParameter extends GObject {
   /**
    * The type of the parameter
    *
-   * @var Psc\Data\Type\Type
+   * @var Webforge\Types\Type
    */
   protected $type;
   
@@ -44,8 +44,8 @@ class GParameter extends GObject {
   /**
    * Creates a Parameter for a Method or a Function
    * 
-   * if you don't know the type you it will be set to Psc\Data\Type\Mixed aka unknown type
-   * @param Psc\Data\Type $type
+   * if you don't know the type you it will be set to Webforge\Types\Mixed aka unknown type
+   * @param Webforge\Types $type
    */
   public function __construct($name, Type $type = NULL, $default = self::UNDEFINED, $reference = FALSE) {
     $this->name = $name;
@@ -75,7 +75,7 @@ class GParameter extends GObject {
   }
 
   /**
-   * @param Psc\Data\Type\Type $type
+   * @param Webforge\Types\Type $type
    * @chainable
    */
   public function setType(Type $type = NULL) {
@@ -186,7 +186,7 @@ class GParameter extends GObject {
   }
   
   /**
-   * @return Psc\Data\Type\Type
+   * @return Webforge\Types\Type
    */
   public function getType() {
     return $this->type;

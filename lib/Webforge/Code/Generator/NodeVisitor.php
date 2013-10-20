@@ -19,10 +19,10 @@ use PHPParser_Node_Stmt_Property;
 use PHPParser_Node_Stmt_ClassConst;
 use PHPParser_Comment_Doc;
 
-use Psc\Data\Type\ObjectType;
-use Psc\Data\Type\ArrayType;
-use Psc\Data\Type\StringType;
-use Psc\Data\Type\Type;
+use Webforge\Types\ObjectType;
+use Webforge\Types\ArrayType;
+use Webforge\Types\StringType;
+use Webforge\Types\Type;
 
 class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
   

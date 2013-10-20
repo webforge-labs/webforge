@@ -149,7 +149,7 @@ $createCommand('sublime:new-project',
     );
 
     $converter = new JSONConverter();
-    $dest = $package->getRootDirectory()->getFile($package->getSlug().'.sublime-project')
+    $dest = $package->getRootDirectory()->getFile(sprintf('%s-%s.sublime-project', $package->getVendor(), $package->getSlug()))
       ->writeContents($converter->stringify($project));
     
     $command->info('written '.$dest);
