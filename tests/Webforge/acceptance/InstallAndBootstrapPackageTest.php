@@ -5,6 +5,8 @@ namespace Webforge;
 use Webforge\Common\System\Dir;
 use Webforge\Common\System\File;
 use Psc\System\Console\Process;
+use Webforge\Process\ProcessBuilder;
+
 use Webforge\Common\System\Util as SystemUtil;
 
 /**
@@ -187,13 +189,14 @@ PHP;
   public function testPHPUnitInnerTestIsSuccessful() {
     $unitTest = $this->copyPHPUnitTest();
     
-    $process = Process::build($this->which('phpunit'))
-                  ->addOption('no-configuration')
-                  ->addOption('stop-on-failure')
-                  ->addOption('no-globals-backup') // because this would destroy our "same same" acceptance tests
-                  ->addOption('bootstrap', $this->src->getFile('bootstrap.php'))
-                  ->addArgument((string) $unitTest)
-                  ->end();
+    $process = ProcessBuilder::create()
+                  ->add($this->which('phpunit'))
+                  ->add('--no-configuration')
+                  ->add('--stop-on-failure')
+                  ->add('--no-globals-backup') // because this would destroy our "same same" acceptance tests
+                  ->add('--bootstrap='.$this->src->getFile('bootstrap.php'))
+                  ->add((string) $unitTest)
+                  ->getProcess();
                   
     $this->assertRun($process, 0, 'PHPUnit Inner Test was not successful');
   }
@@ -210,11 +213,11 @@ PHP;
   
 
   protected function createBootstrapWithWebforge(Dir $composerDir) {
-    $process = Process::build($this->which('webforge'))
-                ->addArgument('install:part')
-                ->addArgument('CreateBootstrap')
+    $process = ProcessBuilder::create()->add($this->which('webforge'))
+                ->add('install:part')
+                ->add('CreateBootstrap')
                 ->setWorkingDirectory($composerDir)
-                ->end();
+                ->getProcess();
     
     $this->assertRun($process, 0);
   }
