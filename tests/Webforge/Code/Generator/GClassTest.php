@@ -146,10 +146,10 @@ class GClassTest extends \Webforge\Code\Test\Base {
   }
 
   public function testNewInstance() {
-    $gClass = new GClass('Psc\Exception');
+    $gClass = new GClass('Webforge\Common\Exception');
     $exception = $gClass->newInstance(array('just a test error'));
     
-    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertInstanceOf('Webforge\Common\Exception', $exception);
     $this->assertEquals('just a test error', $exception->getMessage());
   }
   
@@ -167,16 +167,16 @@ class GClassTest extends \Webforge\Code\Test\Base {
   }
 
   public function testNewClassInstance() {
-    $exception = GClass::newClassInstance('Psc\Exception', array('just a test error'));
-    $this->assertInstanceOf('Psc\Exception', $exception);
+    $exception = GClass::newClassInstance('Webforge\Common\Exception', array('just a test error'));
+    $this->assertInstanceOf('Webforge\Common\Exception', $exception);
     $this->assertEquals('just a test error', $exception->getMessage());
 
-    $exception = GClass::newClassInstance($gClass = new GClass('Psc\Exception'), array('just a test error'));
-    $this->assertInstanceOf('Psc\Exception', $exception);
+    $exception = GClass::newClassInstance($gClass = new GClass('Webforge\Common\Exception'), array('just a test error'));
+    $this->assertInstanceOf('Webforge\Common\Exception', $exception);
     $this->assertEquals('just a test error', $exception->getMessage());
 
     $exception = GClass::newClassInstance($gClass->getReflection(), array('just a test error'));
-    $this->assertInstanceOf('Psc\Exception', $exception);
+    $this->assertInstanceOf('Webforge\Common\Exception', $exception);
     $this->assertEquals('just a test error', $exception->getMessage());
   }
   
@@ -191,7 +191,7 @@ class MyConstructorThrowsExceptionClass {
   public $checkProperty = TRUE;
   
   public function __construct() {
-    throw new \Psc\Exception('this should not be called');
+    throw new \Webforge\Common\Exception('this should not be called');
   }
 }
 ?>

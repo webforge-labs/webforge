@@ -36,9 +36,9 @@ class RemoteConfigurationRetrieverTest extends \Webforge\Code\Test\Base {
   public function testJSONEncodingFailureThrowsBetterException() {
     $this->guzzleMocker->addResponse('ini-response');
 
-    $this->jsonConverter = $this->getMock('Psc\JS\JSONConverter', array('parse'));
+    $this->jsonConverter = $this->getMock('Webforge\Common\JS\JSONConverter', array('parse'));
     $this->jsonConverter->expects($this->once())->method('parse')
-                        ->will($this->throwException(new \Psc\JS\JSONParsingException('cannot parse JSON its mailformed')));
+                        ->will($this->throwException(new \Webforge\Common\JS\JSONParsingException('cannot parse JSON its mailformed')));
     
     $this->createRetriever();
     

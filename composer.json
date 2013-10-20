@@ -15,7 +15,6 @@
     "nikic/php-parser": "0.9.*@stable",
     "doctrine/orm": "2.3.*@stable",
     
-    "pscheit/psc-cms": "1.6.*@dev",
     "pscheit/psc-cms-boot": "2.*@stable",
 
     "webforge/common": "1.4.*@dev",

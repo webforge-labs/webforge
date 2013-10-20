@@ -2,10 +2,7 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-/**
- * @group class:Webforge\Setup\LocalConfigurationRetriever
- */
-class LocalConfigurationRetrieverTest extends \Psc\Code\Test\Base {
+class LocalConfigurationRetrieverTest extends \Webforge\Code\Test\Base {
   
   protected $localConfigurationRetriever;
   
@@ -24,4 +21,3 @@ class LocalConfigurationRetrieverTest extends \Psc\Code\Test\Base {
     $this->assertNotEmpty((string) $this->localConfigurationRetriever);
   }
 }
-?>

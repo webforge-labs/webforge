@@ -2,10 +2,7 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-/**
- * @group class:Webforge\Setup\IniValueNormalizer
- */
-class IniValueNormalizerTest extends \Psc\Code\Test\Base {
+class IniValueNormalizerTest extends \Webforge\Code\Test\Base {
   
   protected $iniValueNormalizer;
   
@@ -53,4 +50,3 @@ class IniValueNormalizerTest extends \Psc\Code\Test\Base {
     $this->iniValueNormalizer->normalize('E_ALL | "blubb"', 'error_reporting');
   }
 }
-?>

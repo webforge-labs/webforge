@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Psc\A;
+use Webforge\Common\ArrayUtil as A;
 
 class GFunctionBodyTest extends \Webforge\Code\Test\Base {
   

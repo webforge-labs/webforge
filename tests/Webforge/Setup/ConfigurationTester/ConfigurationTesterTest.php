@@ -2,12 +2,9 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-use Psc\A;
+use Webforge\Common\ArrayUtil as A;
 
-/**
- * @group class:Webforge\Setup\ConfigurationTester
- */
-class ConfigurationTesterTest extends \Psc\Code\Test\Base {
+class ConfigurationTesterTest extends \Webforge\Code\Test\Base {
   
   protected $t, $retriever;
   

@@ -2,7 +2,7 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-use Psc\A;
+use Webforge\Common\ArrayUtil as A;
 
 /**
  * @group class:Webforge\Setup\ConfigurationTester\ConfigurationFileTester

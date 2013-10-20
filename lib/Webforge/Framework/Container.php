@@ -104,7 +104,7 @@ class Container implements SystemContainerConfiguration {
   /**
    * The local project to the local package (legacy)
    * 
-   * @var Psc\CMS\Project
+   * @var Webforge\Framework\Project
    */
   protected $localProject;
   
@@ -408,6 +408,7 @@ class Container implements SystemContainerConfiguration {
           $root = getenv('PSC_CMS');
 
           if (!empty($root)) {
+            $root = Dir::factoryTS($root);
             $this->hostConfiguration = $reader->fromPHPFile($root->getFile('host-config.php'));
           }
         }

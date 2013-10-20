@@ -4,7 +4,7 @@ namespace Webforge\CMS\Navigation;
 
 /**
  */
-class NestedSetConverterTest extends \Psc\Code\Test\Base {
+class NestedSetConverterTest extends \Webforge\Code\Test\Base {
   
   protected $nestedSetConverter, $food;
   

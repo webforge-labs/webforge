@@ -2,10 +2,7 @@
 
 namespace Webforge\Setup\ConfigurationTester;
 
-/**
- * @group class:Webforge\Setup\IniConfigurationDefect
- */
-class IniConfigurationDefectTest extends \Psc\Code\Test\Base {
+class IniConfigurationDefectTest extends \Webforge\Code\Test\Base {
   
   protected $iniConfigurationDefect;
   
@@ -28,4 +25,3 @@ class IniConfigurationDefectTest extends \Psc\Code\Test\Base {
     $this->assertContains('2M', $msg);
   }
 }
-?>

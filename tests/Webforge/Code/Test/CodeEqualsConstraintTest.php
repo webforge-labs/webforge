@@ -4,7 +4,7 @@ namespace Webforge\Code\Test;
 
 use Webforge\Common\String as S;
 
-class CodeEqualsConstraintTest extends \Psc\Code\Test\Base {
+class CodeEqualsConstraintTest extends \Webforge\Code\Test\Base {
 
   /**
    * @dataProvider provideMatches

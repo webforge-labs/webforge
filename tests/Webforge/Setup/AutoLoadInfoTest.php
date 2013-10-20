@@ -4,7 +4,7 @@ namespace Webforge\Setup;
 
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
-use Psc\A;
+use Webforge\Common\ArrayUtil as A;
 
 class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
   
