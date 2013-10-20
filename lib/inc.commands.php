@@ -13,6 +13,7 @@ use Webforge\Common\System\Dir;
 use Webforge\Common\String;
 use Webforge\Common\CLassUtil;
 use Webforge\Console\SymfonyCommandOutputAdapter;
+use Webforge\Console\InteractionHelper;
 
 /**
  *
@@ -29,12 +30,13 @@ use Webforge\Console\SymfonyCommandOutputAdapter;
 $createCommand('install:list-parts',
   array(),
   function ($input, $output, $command) use ($container) {
-    $partsInstaller = $container->getPartsInstaller($command->getInteractionHelper(), new SymfonyCommandOutputAdapter($output));
+    $interact = new InteractionHelper($command->getHelper('dialog'), $output);
+    $partsInstaller = $container->getPartsInstaller($interact, new SymfonyCommandOutputAdapter($output));
     
-    $command->info('parts avaible:');
+    $output->writeln('<info>parts avaible:</info>');
     
     foreach ($partsInstaller->getParts() as $part) {
-      $command->info('  '.$part->getName());
+      $output->writeln('<info>  '.$part->getName());
     }
     
     return 0;
@@ -69,8 +71,8 @@ $createCommand('install:create-part',
        })
       ->write($input->getOption('overwrite'));
     
-    $command->info('wrote Part '.$partName.' to file: '.$cmd->getFile());
-    $command->comment('you need to add '.$cmd->getGClass()->getFQN().' to Webforge\Framework\Container::getPartsInstaller() !');
+    $output->writeln('<info>wrote Part '.$partName.' to file: '.$cmd->getFile());
+    $output->writeln('<comment>you need to add '.$cmd->getGClass()->getFQN().' to Webforge\Framework\Container::getPartsInstaller() !</comment>');
     
     return 0;
   },
@@ -91,7 +93,7 @@ $createCommand('composer',
     
     system($composer.' --working-dir="'.$vendorDir->getQuotedString().'" '.implode(' ',$args));
     
-    $command->info('written '.$source);
+    $output->writeln('<info>written '.$source.'</info>');
   },
   "Calls composer for the current package (in the right directory)"
 );
@@ -102,13 +104,13 @@ $createCommand('windows:batch-link',
     $arg('destination', 'the name of the bin you want to link to. (with extension)')
   ),
   function ($input, $output, $command) use ($container) {
-    $destination = $command->validateFile($input->getArgument('destination'));
-    $source = $command->validateFile($input->getArgument('source'), 0);
+    $destination = new File($input->getArgument('destination'));
+    $source = new File($input->getArgument('source'));
     
     if ($source->exists()) {
-      throw $command->exitException('Source: '.$source.' does exist. Will not overwride..', 1);
+      $output->writeln('<warn>Source: '.$source.' does exist. Will not overwride..</warn>', 1);
+      return 1;
     }
-    
     
     try {
       $relativeDestination = clone $destination->getDirectory();
@@ -127,7 +129,7 @@ $createCommand('windows:batch-link',
       $path.$destination->getName()." %*\r\n"
     );
     
-    $command->info('written '.$source);
+    $output->writeln('<info>written '.$source);
   },
   "Creates a link to another batch/binary file from source to destination"
 );
@@ -152,7 +154,7 @@ $createCommand('sublime:new-project',
     $dest = $package->getRootDirectory()->getFile(sprintf('%s-%s.sublime-project', $package->getVendor(), $package->getSlug()))
       ->writeContents($converter->stringify($project));
     
-    $command->info('written '.$dest);
+    $output->writeln('<info>written '.$dest.'</info>');
   },
   "Creates an very basic sublime project file"
 );
@@ -163,10 +165,12 @@ $createCommand('sublime:create-use-completion',
   function ($input, $output, $command) use ($container) {
     $folder = new Dir('C:\Users\Philipp Scheit\Dropbox\work\sublime\Packages\Webforge\\');
 
+    $dialog = $command->getHelper('dialog');
+
     // @TODO if this is asked, then save into a .webforge/settings.json file
     // like: askGlobalConfigurationSetting(sublime.use-complections-directory)
     if (!$folder->exists()) {
-      $folder = $command->askAndValidate('In welches Verzeichnis soll die complection file geschrieben werden? (muss existieren)', function ($dir) {
+        $folder = $dialog->askAndValidate($output, 'In welches Verzeichnis soll die complection file geschrieben werden? (muss existieren)', function ($dir) {
         $dir = Dir::factoryTS($dir);
 
         if (!$dir->exists()) {
@@ -187,17 +191,16 @@ $createCommand('sublime:create-use-completion',
       $use = (object) array(
         "scope"=> "text.html.basic",
         "completions"=> array(
-
         )
       );
     }
 
-    $fqn = $command->ask('Wie ist der FQN?');
+    $fqn = $dialog->ask($output, 'Wie ist der FQN?');
     $fqn = ltrim($fqn, '\\');
 
-    $alias = $command->ask('Wie ist der Alias ? (optional) ');
+    $alias = $dialog->ask($output, 'Wie ist der Alias ? (optional) ');
 
-    $trigger = $command->askDefault('Der Name des Triggers ohne "use " davor', ClassUtil::getClassName($fqn));
+    $trigger = $dialog->ask($output, 'Der Name des Triggers ohne "use " davor', ClassUtil::getClassName($fqn));
 
     // add
     $use->completions[] = (object) array(
@@ -208,8 +211,8 @@ $createCommand('sublime:create-use-completion',
     );
     
     $useFile->writeContents($converter->stringify($use, JSONConverter::PRETTY_PRINT));
-    $command->info('written '.$useFile);
-    $command->out('Die Completion kann jetzt mite use '.$trigger.'<tab> benutzt werden');
+    $output->writeln('<info>written '.$useFile.'</info>');
+    $output->writeln('Die Completion kann jetzt mite use '.$trigger.'<tab> benutzt werden');
   },
   "Creates an new PHP use completion for sublime"
 );
