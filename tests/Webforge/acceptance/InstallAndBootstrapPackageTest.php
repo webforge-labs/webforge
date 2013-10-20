@@ -4,7 +4,6 @@ namespace Webforge;
 
 use Webforge\Common\System\Dir;
 use Webforge\Common\System\File;
-use Psc\System\Console\Process;
 use Webforge\Process\ProcessBuilder;
 
 use Webforge\Common\System\Util as SystemUtil;
@@ -135,7 +134,6 @@ PHP;
 
 print json_encode(array('ok', 0, 'everything okay', NULL));
 return 0;
-?>
 PHP;
     
     $file->writeContents($php);
@@ -240,7 +238,7 @@ PHP;
       return new File($file);
     }
     
-    if (\Psc\PSC::isTravis() && $cmd === 'webforge') {
+    if (getenv('TRAVIS') === 'true' && $cmd === 'webforge') {
       return Dir::factoryTS(__DIR__)->getFile('../../../bin/webforge');
     }
     
