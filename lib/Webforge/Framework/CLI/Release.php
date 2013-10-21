@@ -15,7 +15,7 @@ class Release extends ContainerCommand {
     extract($api);
 
     return array(
-      $arg('do')
+      $arg('do', 'What to do default: release can be current to show the release', $required = FALSE)
     );
   }
   
