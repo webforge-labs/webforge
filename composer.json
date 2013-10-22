@@ -27,6 +27,7 @@
     "guzzle/guzzle": "3.7.4@stable"
   },
   "require-dev": {
+    "webforge/testdata-repository": "*@alpha",
     "mikey179/vfsStream": "1.3.*@dev",
     "mockery/mockery": "dev-master",
     "webforge/testplate": "1.4.*@stable",
