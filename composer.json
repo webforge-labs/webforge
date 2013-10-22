@@ -33,6 +33,9 @@
 
     "symfony/event-dispatcher": "2.3@stable"
   },
+  "suggest": {
+    "webforge/doctrine": "To persist the navigation tree generated from NestedSetConverter"
+  },
   "autoload": {
     "psr-0": {
       "Webforge": ["lib/", "tests/"]
