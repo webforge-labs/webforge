@@ -16,7 +16,7 @@ before_install:
 before_script:
   - chmod u+x bin/webforge
 
-script: phpunit -c tests/phpunit.travis.xml
+script: phpunit -c tests/phpunit.travis.xml --coverage-clover build/logs/clover.xml
 
 notifications:
   hipchat: 1fbdbbbaa517c485f935a6d72f1110@ps-webforge

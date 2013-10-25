@@ -27,11 +27,8 @@
     </groups>
 
     <filter>
-      <whitelist addUncoveredFilesFromWhitelist="true">
+      <whitelist>
         <directory suffix=".php">lib</directory>
-        <exclude>
-          <!--<file>class\Psc\PHP\Parser.php</file>-->
-        </exclude>
       </whitelist>
     </filter>
 </phpunit>
