@@ -18,6 +18,9 @@ before_script:
 
 script: phpunit -c tests/phpunit.travis.xml --coverage-clover build/logs/clover.xml
 
+after_script:
+  - php vendor/bin/coveralls -v
+
 notifications:
   hipchat: 1fbdbbbaa517c485f935a6d72f1110@ps-webforge
   mail: p.scheit@ps-webforge.com

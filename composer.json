@@ -32,7 +32,8 @@
     "mockery/mockery": "dev-master",
     "webforge/testplate": "1.4.*@stable",
 
-    "symfony/event-dispatcher": "2.3@stable"
+    "symfony/event-dispatcher": "2.3@stable",
+    "satooshi/php-coveralls": "dev-master"
   },
   "suggest": {
     "webforge/doctrine": "To persist the navigation tree generated from NestedSetConverter"
