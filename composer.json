@@ -18,7 +18,7 @@
     
     "pscheit/psc-cms-boot": "2.*@stable",
 
-    "webforge/common": "1.5.*@dev",
+    "webforge/common": "1.6.*@dev",
     "webforge/types": "1.0.*@stable",
     "webforge/console": "1.0.*@stable",
     "webforge/config": "1.0.*@stable",
@@ -31,7 +31,6 @@
     "mikey179/vfsStream": "1.3.*@dev",
     "mockery/mockery": "dev-master",
     "webforge/testplate": "1.4.*@stable",
-
     "symfony/event-dispatcher": "2.3@stable",
     "satooshi/php-coveralls": "dev-master"
   },

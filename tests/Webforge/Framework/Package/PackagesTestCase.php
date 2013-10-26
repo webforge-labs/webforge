@@ -13,7 +13,7 @@ class PackagesTestCase extends \Webforge\Code\Test\Base {
 
   protected $container, $registry;
 
-  public function setUp() {
+  public function setUp() {    
     parent::setUp();
     $this->container = new Container();
     $this->registry = new Registry();

@@ -178,15 +178,14 @@ class Registry {
     return $this->composerPackageReader;
   }
 
-  // @codeCoverageIgnoreStart
-
   /**
    * @return Packages[]
    */
   public function getPackages() {
     return $this->packages;
   }
-  
+
+  // @codeCoverageIgnoreStart
   public function getPrefixes() {
     return $this->prefixes;
   }

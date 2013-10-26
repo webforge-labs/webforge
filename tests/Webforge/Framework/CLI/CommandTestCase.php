@@ -13,6 +13,7 @@ use Mockery as m;
 class CommandTestCase extends \Webforge\Framework\Package\PackagesTestCase {
 
   protected $container, $registry;
+  protected $useNewRegistry = TRUE;
 
   public $testOs;
 
@@ -29,7 +30,7 @@ class CommandTestCase extends \Webforge\Framework\Package\PackagesTestCase {
     $this->system->shouldReceive('getOperatingSystem')->andReturn($this->testOs);
     
     $this->application = new Application($this->getPackageDir('/'), $this->container);
-    $this->injectRegistry($this->registry = new Registry());
+    $this->injectRegistry($this->useNewRegistry ? $this->registry = new Registry() : NULL);
   }
 
   protected function mockContainerPackageRegistry($methods = array()) {
