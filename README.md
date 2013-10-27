@@ -5,26 +5,24 @@ a content management framework for easy to build and individual content manageme
 [![Coverage Status](https://coveralls.io/repos/webforge-labs/webforge/badge.png?branch=master)](https://coveralls.io/r/webforge-labs/webforge?branch=master)  
 [![Latest Stable Version](https://poser.pugx.org/webforge/webforge/version.png)](https://packagist.org/packages/webforge/webforge)
 
-Webforge aims to be a framework for consumers and developers at the same time. It helps developers to build their own individual cms for the needs of their customers. The customer gains all benefits of a ready-to-use cms without losing the opportunity to create new features.
+Webforge aims to be a framework for consumers and developers at the same time. It helps developers to build their own individual application for the needs of their customers. The customer gains all benefits of a ready-to-use framework without losing the opportunity to create new features, extend and recreate.
+Whatever you're planning to develop, webforge will help you.
 
 ## installation (quick)
-Use [Composer](http://getcomposer.org) to install the framework.
+
+use [webforge/devtool](https://github.com/webforge-labs/webforge-devtool) to install webforge globally on your system. After you have installed devtool successfully you can run all commands in your package directory with:
 ```
-composer create-project -v --prefer-source --stability=dev webforge/webforge webforge dev-master
+webforge <yourCommand>
 ```
-
-link `bin\webforge` to a global avaible binary `webforge`
-
-to run the tests use:
+use
 ```
-phpunit
+webforge
 ```
+to get started with commands are avaible.
 
-## installation
+## getting started
 
-http://wiki.ps-webforge.com/psc-cms:dokumentation:core
-
-It's optional to configure the host-config, but recommended.
+(go to the documentation to get started)[docs/getting-started.md]
 
 ## usage
 

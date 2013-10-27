@@ -1,6 +1,6 @@
 # Package
 
-Namespace for Package management.
+Namespace for the concept of a Package.
 
 ## Package
 
@@ -41,9 +41,9 @@ dont commit these directories. put into your ignore file for source control
 ### Where to put
 
 * classes: into lib
-* templates: resources/templates or into your application directory
+* templates: resources/tpl or into your application directory
 * fixtures and other: into tests/files/ try to use generic directories not test-centric directories (global test data)
 * configuration of every kind: put into etc! everything! apache, php, js, whatever
 * files related to frontend: put into www if access needs to be public. But everything else in lib or application. If nothing matches use resources
 * vendor: never put something here, leave it to composer to manage this dir
-* files for continous integration, composer, phpunit etc, put into root if single file. Put into resources/build if more complicated
+* files for continous integration, composer, phpunit, manifests etc, put into root if single file. Put into resources/build if more complicated
