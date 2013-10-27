@@ -22,7 +22,7 @@ to get started with commands are avaible.
 
 ## getting started
 
-(go to the documentation to get started)[docs/getting-started.md]
+(go to the documentation to get started)[docs/toc.md]
 
 ## usage
 

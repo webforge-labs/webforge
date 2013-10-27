@@ -28,18 +28,6 @@ $bootLoader->registerRootDirectory()
 ```
 in the bootstrap.php to set `$GLOBALS['env']['root']` to this directory. If you have [webforge-common](https://github.com/webforge/common) loaded this will be automatically a `Webforge\Common\System\Dir`.
 
-## bootstrap for tests
+## what's next
 
-As you will be writing tests, registering the rootDirectory will allow [webforge-testplate](https://github.com/webforge/testplate) you to provide you a little helper to get your fixture-files in `tests\files` without a hassle.
-```php
-class MyTest extends \Webforge\Code\Test\Base {
-  
-  public function setUp() {
-    parent::setUp();
-
-    $this->testDir = $this->getTestDirectory('my-test-data/'); // returns a Webforge\Common\System\Dir pointing to `%root%/tests7files/my-test-data/`
-  }
-}
-
-```
-To install testplate use `webforge install:part`. It creates a `phpunit.dist.xml` for you, that will use your bootstrap.php.
+As you are going to write some tests [install a testsuite](testsuite.md).
