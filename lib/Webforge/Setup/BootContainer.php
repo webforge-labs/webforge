@@ -5,6 +5,7 @@ namespace Webforge\Setup;
 use Webforge\Framework\Container as WebforgeContainer;
 use Webforge\Framework\LocalPackageInitException;
 use Webforge\Common\System\Dir;
+use Webforge\Framework\Project;
 
 class BootContainer {
 
@@ -12,8 +13,12 @@ class BootContainer {
 
   protected $rootDirectory;
 
-  public function __construct($rootDirectory) {
-    $this->webforge = new WebforgeContainer();
+  protected $project;
+
+  protected $package;
+
+  public function __construct($rootDirectory, WebforgeContainer $webforge = NULL) {
+    $this->webforge = $webforge ?: new WebforgeContainer();
     $this->initRootDirectory($rootDirectory);
   }
 
@@ -31,6 +36,19 @@ class BootContainer {
     } else {
       $this->rootDirectory = Dir::factoryTS($rootDirectory);
     }
+  }
+
+  public function getProject() {
+    if (!isset($this->project)) {
+      $this->initLocalWebforgePackage();
+      $this->project = $this->webforge->getLocalProject();
+      $this->initProject($this->project);
+    }
+    
+    return $this->project;
+  }
+
+  protected function initProject(Project $project) {
   }
 
   /**
