@@ -44,42 +44,6 @@ $createCommand('install:list-parts',
   'Lists all avaible parts to install'
 );
 
-$createCommand('install:create-part',
-  array(
-    $arg('partName', 'the name of the part (without \'Part\' as suffix)'),
-    $flag('overwrite', NULL, 'If set the part will be created, regardless if the file already exists')
-  ),
-  function ($input, $output, $command) use ($container) {
-    $partName = $input->getArgument('partName');
-    
-    if (String::endsWith($partName, 'Part')) {
-      $partName = mb_substr($partName, 0, -4);
-    }
-    
-    $cmd = CreateClassCommand::fromContainer($container)
-      ->fqn('Webforge\Setup\Installer\\'.$partName.'Part')
-      ->parent('Webforge\Setup\Installer\Part')
-      ->withGClass(
-        function ($gClass) use($partName) {
-          $gClass->createMethod(
-            '__construct',
-            array(),
-            GFunctionBody::create(
-              sprintf("    parent::__construct('%s');\n", $partName)
-            )
-          );
-       })
-      ->write($input->getOption('overwrite'));
-    
-    $output->writeln('<info>wrote Part '.$partName.' to file: '.$cmd->getFile());
-    $output->writeln('<comment>you need to add '.$cmd->getGClass()->getFQN().' to Webforge\Framework\Container::getPartsInstaller() !</comment>');
-    
-    return 0;
-  },
-  'Creates a new part in the Installer'
-);
-
-
 $createCommand('composer',
   array(
     $arg('composerArguments', 'all parameters passed to composer without --working-dir', $required = TRUE, $multiple = TRUE)
