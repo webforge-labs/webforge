@@ -5,6 +5,7 @@ namespace Webforge\Setup\Installer;
 use Webforge\Common\System\Dir;
 use Webforge\Framework\Package\Package;
 use RuntimeException;
+use Webforge\Framework\VendorPackageInitException;
 
 class CreateBootstrapPart extends ContainerAwarePart {
   
@@ -35,7 +36,14 @@ class CreateBootstrapPart extends ContainerAwarePart {
   }
   
   protected function getWebforgeVendorPackageDirectory($packageIdentifier) {
-    return $this->container->getVendorPackage($packageIdentifier, $this->container->getWebforgePackage())
-      ->getRootDirectory();
+
+    try {
+      return $this->container->getVendorPackage($packageIdentifier, $this->container->getWebforgePackage())
+        ->getRootDirectory();
+
+    } catch (VendorPackageInitException $e) {
+      return $this->container->getVendorPackage($packageIdentifier, $this->container->getLocalPackage())
+        ->getRootDirectory();
+    }
   }
 }
