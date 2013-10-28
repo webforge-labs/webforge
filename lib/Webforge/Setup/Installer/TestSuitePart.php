@@ -6,7 +6,7 @@ use Webforge\Common\System\Dir;
 use Webforge\Common\String as S;
 use Webforge\Framework\Package\Package;
 
-class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Framework\Package\PackageAware {
+class TestSuitePart extends ContainerAwarePart implements \Webforge\Framework\Package\PackageAware {
 
   /**
    * @var Webforge\Framework\Package\Package
@@ -18,7 +18,7 @@ class InstallTestSuitePart extends ContainerAwarePart implements \Webforge\Frame
   protected $installPHPUnitLocally = FALSE;
 
   public function __construct() {
-    parent::__construct('InstallTestSuite');
+    parent::__construct('TestSuite');
     $this->installPHPUnitLocally = FALSE;
   }
   

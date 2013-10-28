@@ -49,6 +49,7 @@ class ApplicationTest extends \Webforge\Code\Test\Base {
     $this->assertContains('CreateCLI', $out);
     $this->assertContains('CreateBootstrap', $out);
     $this->assertContains('InitConfiguration', $out);
+    $this->assertContains('TestSuite', $out);
   }
 
   protected function runCommand($name, Array $args = array()) {

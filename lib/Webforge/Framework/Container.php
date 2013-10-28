@@ -245,7 +245,7 @@ class Container implements SystemContainerConfiguration {
             new \Webforge\Setup\Installer\CreateCLIPart(),
             new \Webforge\Setup\Installer\CreateBootstrapPart(),
             new \Webforge\Setup\Installer\ApacheConfigurationPart(),
-            new \Webforge\Setup\Installer\InstallTestSuitePart(),
+            new \Webforge\Setup\Installer\TestSuitePart(),
             new \Webforge\Setup\Installer\TravisCIPart(),
             new \Webforge\Setup\Installer\WriteHtaccessPart(),
             new \Webforge\Setup\Installer\PscJSBoilerplatePart(),

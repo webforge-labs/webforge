@@ -2,13 +2,13 @@
 
 namespace Webforge\Setup\Installer;
 
-class InstallTestsuitePartTest extends \Webforge\Code\Test\InstallerPartTestCase {
+class TestSuitePartTest extends \Webforge\Code\Test\InstallerPartTestCase {
   
   public function setUp() {
-    $this->chainClass = 'Webforge\\Setup\\Installer\\InstallTestsuitePart';
+    $this->chainClass = 'Webforge\\Setup\\Installer\\TestSuitePart';
     parent::setUp();
 
-    $this->part = new InstallTestsuitePart();
+    $this->part = new TestSuitePart();
   }
   
   public function testPartWritesConfigurationAndChangelog() {
@@ -17,4 +17,3 @@ class InstallTestsuitePartTest extends \Webforge\Code\Test\InstallerPartTestCase
     $this->assertArrayEquals(array('/phpunit.xml.dist'), $this->getWrittenFiles($this->macro));
   }
 }
-?>
