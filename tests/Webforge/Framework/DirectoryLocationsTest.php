@@ -16,6 +16,12 @@ class DirectoryLocationsTest extends \Webforge\Framework\Package\PackagesTestCas
     $this->otherRoot = new Dir(__DIR__.DIRECTORY_SEPARATOR);
 
     $this->packageLocations = DirectoryLocations::createFromPackage($this->package);
+    $this->packageLocations->addMultiple(
+      array(
+        'doctrine-entities'=>'lib/ACME/SuperBlog/Entities/',
+        'doctrine-proxies'=>'files/cache/doctrine/proxies/' // normally recursive?
+      )
+    );
   }
 
   public function testNotAvaibleLocationIdentifiersThrowAnException() {
@@ -59,6 +65,13 @@ class DirectoryLocationsTest extends \Webforge\Framework\Package\PackagesTestCas
     $test('cms-uploads', 'files/uploads/');
     $test('cms-images', 'files/images/');
     $test('www', 'www/');
+    $test('resources', 'resources/');
+    $test('assets', 'resources/assets/');
+    $test('tpl', 'resources/tpl/');
+    $test('prototypes', 'resources/prototypes/');
+
+    $test('doctrine-entities', 'lib/ACME/SuperBlog/Entities/');
+    $test('doctrine-proxies', 'files/cache/doctrine/proxies/');
   
     return $tests;
   }

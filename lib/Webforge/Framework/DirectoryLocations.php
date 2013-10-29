@@ -5,6 +5,7 @@ namespace Webforge\Framework;
 use Webforge\Framework\Package\Package;
 use Webforge\Common\System\Dir;
 use InvalidArgumentException;
+use Webforge\Common\String as S;
 
 class DirectoryLocations {
 
@@ -47,6 +48,8 @@ class DirectoryLocations {
         'cms-uploads'=>'files/uploads/',
         'cms-images'=>'files/images/',
         'resources'=>'resources/',
+        'assets'=>'resources/assets/',
+        'prototypes'=>'resources/prototypes/',
         'cms-tpl'=>'resources/tpl/', // dont use this anymore
         'tpl'=>'resources/tpl/',
         'www'=>'www/',
@@ -61,5 +64,39 @@ class DirectoryLocations {
     }
 
     throw new InvalidArgumentException(sprintf("The identifier '%s' for a directory location is not known. Avaible are: %s", $identifier, implode(', ', array_keys($this->locations))));
+  }
+
+  /**
+   * @return bool
+   */
+  public function has($identifier) {
+    return array_key_exists($identifier, $this->locations);
+  }
+
+  /**
+   * @param string $alias (without slashes) only dashes and alpha numeric (lowercased)
+   * @param string $sub path from root to dir with / at the end
+   */
+  public function add($alias, $sub) {
+    $this->locations[$alias] = S::expand($sub, '/');
+    return $this;
+  }
+
+  /**
+   * @param string $alias (without slashes) only dashes and alpha numeric (lowercased)
+   * @param string $sub path from root to dir with / at the end
+   */
+  public function set($alias, $sub) {
+    return $this->add($alias, $sub);
+  }
+
+  /**
+   * @param array $Locations key = alias value = subpath from root
+   */
+  public function addMultiple(Array $locations) {
+    foreach ($locations as $alias => $sub) {
+      $this->add($alias, $sub);
+    }
+    return $this;
   }
 }
