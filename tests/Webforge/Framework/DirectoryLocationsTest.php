@@ -41,6 +41,11 @@ class DirectoryLocationsTest extends \Webforge\Framework\Package\PackagesTestCas
     $this->assertEquals((string) $this->otherRoot, (string) $this->packageLocations->get('root'));
   }
 
+  public function testSetChangesSpecificLocation() {
+    $this->packageLocations->set('cache', 'tmp/cache/');
+    $this->assertEquals((string) $this->package->getRootDirectory()->sub('tmp/cache/'), $this->packageLocations->get('cache'));
+  }
+
   /**
    * @dataProvider provideSemanticPackageLocations
    */
