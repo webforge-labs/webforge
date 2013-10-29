@@ -16,4 +16,3 @@ class WriteHtaccessPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
     $this->assertArrayEquals(array('/www/.htaccess'), $this->getCopiedFiles($this->macro));
   }
 }
-?>

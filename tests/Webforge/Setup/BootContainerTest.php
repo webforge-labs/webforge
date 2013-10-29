@@ -12,7 +12,7 @@ class BootContainerTest extends \Webforge\Code\Test\Base {
     $this->chainClass = __NAMESPACE__ . '\\BootContainer';
     parent::setUp();
 
-    require_once $this->getPackageDir('vendor/pscheit/psc-cms-boot/lib/')->getFile('package.boot.php');
+    require_once $this->getPackageDir('lib/')->getFile('package.boot.php');
     $this->boot = new BootLoader((string) $GLOBALS['env']['root'], $this->chainClass);
 
     $this->container = $this->boot->getContainer();
