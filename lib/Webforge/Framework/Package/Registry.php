@@ -31,7 +31,7 @@ class Registry {
     $fqn = $gClass->getFQN();
     
     foreach ($this->prefixes as $prefix => $packages) {
-      if (mb_strpos($fqn, $prefix) === 0) {
+      if (mb_strpos($fqn, $prefix.'\\') === 0) {
         return $this->resolveToOne($packages, $fqn);
       }
     }

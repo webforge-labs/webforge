@@ -12,7 +12,7 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $this->registerPackage('ACME');
   }
   
-  public function testFindACMEByFQN() {
+  public function testFindByFQNReturnsThePackageWithTheNamespace() {
     $acmePackage = $this->registry->findByFQN('ACME\IntranetApplication\Main');
     
     $this->assertInstanceOf('Webforge\Framework\Package\Package', $acmePackage);
@@ -23,21 +23,30 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $this->assertNull($this->registry->findByIdentifier('is-not-defined/package'));
   }
 
-  public function testNonFindablePrefixFQNThrowsException() {
-    $this->setExpectedException('Webforge\Framework\Package\PackageNotFoundException');
+  public function testfindByFQNDoesNotMatchNamespacesThatJustBeginWithTheSearch() {
+    $registry = new Registry();
+
+    // namespace is just Webforge\ but this should not find WebforgeOtherNamespace\
+    $this->registerPackage('Webforge');
+
+    $this->expectPackageNotFound();
+    $this->registry->findByFQN('WebforgeOtherNamespace\ShouldNotBeFound');
+  }
+
+  public function testNonFindablePrefixFQNCannotBeFound() {
+    $this->expectPackageNotFound();
     $this->registry->findByFQN('IsNotDefinedPrefix');
   }
   
-  public function testFindACMEWithConflictingPackagesThrowsANotResolvedException() {
-    $this->registerPackage('ACME');
+  public function testFindACMEWithConflictingPackagesCannotBeResolved() {
     $acmePackage = $this->registry->findByIdentifier('acme/intranet-application');
 
     $acmePackage2 = clone $acmePackage;
     $acmePackage2->setSlug('intranet-application-clone');
 
     $this->registry->addPackage($acmePackage2);
-
-    $this->setExpectedException('Webforge\Framework\Package\NotResolvedException');
+    
+    $this->expectPackageNotResolved();
     $this->registry->findByFQN('ACME\IntranetApplication\Main');
   }
 
@@ -59,7 +68,7 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $acmeLibPackage = $registry->findByFQN('ACME\Common\Util');
     $this->assertEquals('acme/library', $acmeLibPackage->getIdentifier());
   }
-  
+
 
   public function testFindACMEWithConflictingPackagesByFQN_whichCaneBeResolvedWithQueryingTheMainNamespace() {
     $registry = new Registry();
@@ -75,7 +84,6 @@ class RegistryTest extends \Webforge\Code\Test\Base {
   }
   
   public function testFindByIdentifier() {
-
     $this->registerPackage('Webforge');
     $this->registerPackage('ACMELibrary');
     
@@ -103,5 +111,13 @@ class RegistryTest extends \Webforge\Code\Test\Base {
   protected function registerPackage($name, $registry = NULL) {
     $registry = $registry ?: $this->registry;
     $registry->addComposerPackageFromDirectory($this->getPackageRoot($name));
+  }
+
+  protected function expectPackageNotFound() {
+    $this->setExpectedException('Webforge\Framework\Package\PackageNotFoundException');
+  }
+
+  protected function expectPackageNotResolved() {
+    $this->setExpectedException('Webforge\Framework\Package\NotResolvedException');
   }
 }
