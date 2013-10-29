@@ -20,16 +20,13 @@ webforge
 ```
 to get started with commands are avaible.
 
-## getting started
+## documentation
 
-(go to the documentation to get started)[docs/toc.md]
-
-## usage
-
-  - [console: Release](docs/console.md) Release versions of your component/library/project automatically
-  - [configuration-tester](docs/configuration-tester.md) API for Testing your php.ini configuration with PHP
+[go to the documentation to get started](docs/toc.md)
 
 
 ##resources
-  - [Psc - CMS - Documentation in german / half english](http://wiki.ps-webforge.com/psc-cms:start)
-  - [read more about our company: webforge](http://www.ps-webforge.com)
+  
+  - [read more about our company: webforge](http://www.ps-webforge.com/en)
+  - [documentation](docs/toc.md)
+  - [Psc - CMS - **outdated** Documentation in german / half english](http://wiki.ps-webforge.com/psc-cms:start)
