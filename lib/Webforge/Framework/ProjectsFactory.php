@@ -46,7 +46,14 @@ class ProjectsFactory implements ContainerAware {
     $name = $this->getProjectName($package);
     $lowerName = $package->getSlug();
 
-    $projectPackage = new ProjectPackage($package, $name, $lowerName, $flags, $this->getHost(), new ProjectUrls($this->hostConfig));
+    $projectPackage = new ProjectPackage(
+      $package, $name, $lowerName,
+      $flags,
+      $this->getHost(),
+      new ProjectUrls($this->hostConfig),
+      new DirectoryLocations($package->getRootDirectory(), array())
+    );
+
     $this->readConfiguration($package, $projectPackage);
 
     return $projectPackage;
