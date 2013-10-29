@@ -9,7 +9,7 @@ class RegistryTest extends \Webforge\Code\Test\Base {
   public function setUp() {
     $this->registry = new Registry();
     
-    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
+    $this->registerPackage('ACME');
   }
   
   public function testFindACMEByFQN() {
@@ -29,7 +29,7 @@ class RegistryTest extends \Webforge\Code\Test\Base {
   }
   
   public function testFindACMEWithConflictingPackagesThrowsANotResolvedException() {
-    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
+    $this->registerPackage('ACME');
     $acmePackage = $this->registry->findByIdentifier('acme/intranet-application');
 
     $acmePackage2 = clone $acmePackage;
@@ -46,11 +46,11 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     
     // this is a project from ACME which is for the root autoloading namespace ACME\*
     // this is a libray for common things
-    $registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+    $this->registerPackage('ACMELibrary', $registry);
     
     // the other Package (the naming is not very nice, i know..) is for the intranet-application and has
     // the autloading root namespace ACME\IntranetApplication
-    $registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACME/'));
+    $this->registerPackage('ACME', $registry);
     
     // the library is added here first, because it would devour the namespace from ACME\IntranetApplication if not sorted
     $acmeIntranetPackage = $registry->findByFQN('ACME\IntranetApplication\Main');
@@ -65,18 +65,19 @@ class RegistryTest extends \Webforge\Code\Test\Base {
     $registry = new Registry();
     
     // this is a project from ACME which is for the root autoloading namespace ACME\Common\*
-    $registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+    $this->registerPackage('ACMELibrary', $registry);
     
     // the other Package does have its own namespace (ACME\Conflicting) but it references the ACME\Common Namespace in autoload as well
-    $registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMEConflicting/'));
+    $this->registerPackage('ACMEConflicting', $registry);
     
     $this->assertEquals('acme/library', $registry->findByFQN('ACME\Common\Util')->getIdentifier());
     $this->assertEquals('acme/conflicting', $registry->findByFQN('ACME\Conflicting\Util')->getIdentifier());
   }
   
   public function testFindByIdentifier() {
-    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/Webforge/'));
-    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+
+    $this->registerPackage('Webforge');
+    $this->registerPackage('ACMELibrary');
     
     $this->assertSame(
       $this->registry->findByFQN('ACME\Common\Util'),
@@ -86,13 +87,21 @@ class RegistryTest extends \Webforge\Code\Test\Base {
   }
   
   public function testRegistryFindsProjectFromDirectoryWhichIsChildOfAprojectDirectory() {
-    $this->registry->addComposerPackageFromDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/'));
+    $this->registerPackage('ACMELibrary');
     
     $this->assertSame(
-      $this->registry->findByDirectory($this->getTestDirectory()->sub('packages/ACMELibrary/tests/ACME')),
+      $this->registry->findByDirectory($this->getPackageRoot('ACMELibrary')->sub('tests/ACME')),
       $this->registry->findByIdentifier('acme/library'),
       'acme library package is expected to be returned, when find by path'
     );
   }
+
+  public function getPackageRoot($name) {
+    return $this->getTestDirectory()->sub('packages/'.$name.'/');
+  }
+
+  protected function registerPackage($name, $registry = NULL) {
+    $registry = $registry ?: $this->registry;
+    $registry->addComposerPackageFromDirectory($this->getPackageRoot($name));
+  }
 }
-?>
