@@ -32,3 +32,6 @@ $conf['doctrine']['types'] = array();
 // mail
 $conf['mail']['from'] = 'info@acme.ps-webforge.com'; // used in ProjectsFactoryTest
 $conf['mail']['envelope'] = 'info@acme.ps-webforge.com';
+
+
+$conf['directory-locations']['doctrine-entities'] = 'files/cache/php/doctrine-proxies/'; // used in ProjectPackageTest

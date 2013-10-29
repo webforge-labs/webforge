@@ -91,10 +91,23 @@ class SimplePackage implements Package {
   /**
    * @return Webforge\Common\System\Dir (cloned)
    */
-  public function getDirectory($type = self::ROOT) {
-    return $this->directoryLocations->get($type);
+  public function getDirectory($alias = self::ROOT) {
+    return $this->directoryLocations->get($alias);
   }
-  
+
+  /**
+   * Defines a semantic location for a directory
+   * 
+   * @param string $type a name for the location lowercase only dashes and a-z 0-9
+   * @param string $location the path to the location from root (with trailing slash)
+   * @chainable
+   */
+  public function defineDirectory($alias, $location) {
+    $this->directoryLocations->add($alias, $location);
+    return $this;
+  }
+
+
   /**
    * @return Webforge\Setup\AutoLoadInfo
    */

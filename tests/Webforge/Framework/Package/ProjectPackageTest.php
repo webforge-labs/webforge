@@ -5,6 +5,7 @@ namespace Webforge\Framework\Package;
 use Webforge\Configuration\Configuration;
 use Webforge\Setup\MissingConfigVariableException;
 use Webforge\Common\System\Dir;
+use Webforge\Framework\DirectoryLocations;
 
 class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
@@ -15,7 +16,15 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
     parent::setUp();
 
     $hostConfig = new Configuration(array());
-    $this->projectPackage = new ProjectPackage($this->configPackage, 'ACMESuperBlog', 'super-blog', 0, 'psc', new ProjectUrls($hostConfig));
+    $this->projectPackage = new ProjectPackage(
+      $this->configPackage, 
+      'ACMESuperBlog', 
+      'super-blog', 
+      $mode = 0, 
+      $host = 'psc', 
+      new ProjectUrls($hostConfig), 
+      new DirectoryLocations($this->configPackage->getRootDirectory(), array())
+    );
   }
 
   public function testCreatedNonFactoryProjectPackagesDoNotHaveAconfiguration() {
@@ -43,8 +52,8 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
   public function testSetRootDirectory() {
     $this->projectPackage->setRootDirectory($dir = Dir::factoryTS(__DIR__));
 
-    $this->assertEquals($dir, $this->projectPackage->dir('root'));
-    $this->assertEquals($dir, $this->projectPackage->getRootDirectory());
+    $this->assertEquals((string) $dir, (string) $this->projectPackage->dir('root'));
+    $this->assertEquals((string) $dir, (string) $this->projectPackage->getRootDirectory());
   }
 
   public function testCloneIsNotSensibleToRootDirectoryChanges() {
@@ -66,5 +75,38 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
     $this->projectPackage->setBuilt(FALSE);
     $this->assertFalse($this->projectPackage->isBuilt());
+  }
+
+  public function testReturnsDirectorySetInDirectoryLocationsFromConfig() {
+    $this->projectPackage->setConfiguration(
+      new Configuration(array('directory-locations'=>array('doctrine-entities'=>'lib/ACME/Entities/')))
+    );
+    $this->projectPackage->getConfiguration()->set(array('directory-locations', 'doctrine-proxies'), 'files/cache/php/doctrine-proxies');
+    $this->projectPackage->configurationUpdate();
+
+    $this->assertEquals(
+      (string) $this->projectPackage->getRootDirectory()->sub('lib/ACME/Entities/'),
+      (string) $this->projectPackage->dir('doctrine-entities')
+    );
+
+    $this->assertEquals(
+      (string) $this->projectPackage->getRootDirectory()->sub('files/cache/php/doctrine-proxies/'),
+      (string) $this->projectPackage->dir('doctrine-proxies')
+    );
+
+  }
+
+  public function testThrowsInvalidArgumentExceptionForNonDefinedPaths() {
+    $this->setExpectedException('InvalidArgumentException');
+    $this->projectPackage->dir('something-is-not-defined-here');
+  }
+
+  public function testCloneIsNotSensibleToDIrectoryLocationsChanges() {
+    $clonedPackage = clone $this->projectPackage;
+
+    $this->projectPackage->updateDirectoryLocations(array('new-and-prev-not-defined'=>$dir = Dir::factoryTS(__DIR__)));
+
+    $this->setExpectedException('InvalidArgumentException');
+    $clonedPackage->dir('new-and-prev-not-defined');
   }
 }

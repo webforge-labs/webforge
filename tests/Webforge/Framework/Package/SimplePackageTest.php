@@ -121,4 +121,17 @@ class SimplePackageTest extends \Webforge\Code\Test\Base {
       'namespace should be changed, because new autoloadInfo was set'
     );
   }
+
+  public function testGetDirectoryReturnsDirectoryFromSemanticLocation() {
+    $this->assertInstanceOf('Webforge\Common\System\Dir', $this->simplePackage->getDirectory('lib'));
+  }
+
+  public function testDefineDirectorySetsTheSemanticLocationForADirectory() {
+    $this->simplePackage->defineDirectory('my-custom-location', 'file/location/custom/');
+
+    $this->assertEquals(
+      (string) $this->simplePackage->getRootDirectory()->sub('file/location/custom/'),
+      $this->simplePackage->getDirectory('my-custom-location')
+    );
+  }
 }

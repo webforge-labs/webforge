@@ -5,6 +5,7 @@ namespace Webforge\Framework\Package;
 use Webforge\Setup\MissingConfigVariableException;
 use Webforge\Configuration\Configuration;
 use Webforge\Common\System\Dir;
+use Webforge\Framework\DirectoryLocations;
 
 class ProjectPackage implements \Webforge\Framework\Project {
 
@@ -50,13 +51,25 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   protected $languages;
 
-  public function __construct(Package $package, $name, $lowerName, $mode = 0x000000, $host, ProjectURLs $urls) {
+  /**
+   * The locations specific to the project (they do overwrite the ones from package)
+   * 
+   * @see dir()
+   * @var Webforge\Framework\DirectoryLocations
+   */
+  protected $directoryLocations;
+
+  /**
+   * Upgrades a package to a new project
+   */
+  public function __construct(Package $package, $name, $lowerName, $mode = 0x000000, $host, ProjectURLs $urls, DirectoryLocations $directoryLocations) {
     $this->name = $name;
     $this->lowerName = $lowerName;
     $this->package = $package;
     $this->mode = $mode;
     $this->host = $host;
     $this->urls = $urls;
+    $this->directoryLocations = $directoryLocations;
   }
 
   /**
@@ -101,7 +114,34 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function setConfiguration(Configuration $config) {
     $this->configuration = $config;
+    $this->configurationUpdate();
     return $this;
+  }
+
+  /**
+   * Should be called if configuration is changed
+   * 
+   * changed related paths are:
+   *   .directory-locations
+   */
+  public function configurationUpdate() {
+    $this->updateDirectoryLocations($this->configuration->get(array('directory-locations'), array()));
+    return $this;
+  }
+
+  /**
+   * Set new Locations for dir() from array
+   */
+  public function updateDirectoryLocations(Array $locations) {
+    $this->directoryLocations->addMultiple($locations);
+    return $this;
+  }
+
+  /**
+   * @inherit-doc
+   */
+  public function defineDirectory($alias, $location) {
+    $this->directoryLocations->set($alias, $location);
   }
 
   /**
@@ -196,7 +236,13 @@ class ProjectPackage implements \Webforge\Framework\Project {
    * @return Webforge\Common\System\Dir
    */
   public function dir($identifier) {
-    return $this->package->getDirectory($identifier);
+    if ($identifier === 'root') {
+      return $this->getRootDirectory();
+    } elseif ($this->directoryLocations->has($identifier)) {
+      return $this->directoryLocations->get($identifier);
+    } else {
+      return $this->package->getDirectory($identifier);
+    }
   }
 
   public function setStaging($to = TRUE) {
@@ -219,5 +265,6 @@ class ProjectPackage implements \Webforge\Framework\Project {
 
   public function __clone() {
     $this->package = clone $this->package;
+    $this->directoryLocations = clone $this->directoryLocations;
   }
 }
