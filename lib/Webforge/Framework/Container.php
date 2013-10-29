@@ -348,7 +348,7 @@ class Container implements SystemContainerConfiguration {
   }
 
   /**
-   * Gets an package which is installed as vendor in the (current *locale*) package
+   * Gets an package which is installed as vendor in the (current *local*) package
    * 
    * @param Package $searchIn if it is provided it uses this package. otherwise the local package
    * @return Package

@@ -126,4 +126,11 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
     $this->assertNotSame($this->projectPackage->getConfiguration(), $clonedPackage->getConfiguration(), 'clone should duplicate configuration');
   }
+
+  public function testImplementsGetNamespaceDIrectory() {
+    $this->assertEquals(
+      (string) $this->configPackage->getNamespaceDirectory(),
+      (string) $this->projectPackage->getNamespaceDirectory()
+    );
+  }
 }

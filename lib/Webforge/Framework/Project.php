@@ -15,6 +15,14 @@ interface Project {
   public function getNamespace();
 
   /**
+   * Returns the directory of the (main-)Namespace of the package
+   *
+   * for example: if the namespace is "Webforge" this is %root%/lib/Webforge
+   * @return Webforge\Common\System\Dir
+   */
+  public function getNamespaceDirectory();
+
+  /**
    * Gets a slug lower name for the project
    * 
    * this is not a title and is alphanumeric with - 
@@ -106,4 +114,5 @@ interface Project {
    * @return string
    */
   public function getStatus();
+
 }

@@ -142,6 +142,7 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function defineDirectory($alias, $location) {
     $this->directoryLocations->set($alias, $location);
+    return $this;
   }
 
   /**
@@ -220,6 +221,14 @@ class ProjectPackage implements \Webforge\Framework\Project {
    */
   public function getRootDirectory() {
     return $this->package->getRootDirectory();
+  }
+
+
+  /**
+   * @return Webforge\Common\System\Dir
+   */
+  public function getNamespaceDirectory() {
+    return $this->package->getNamespaceDirectory();
   }
 
   /**
