@@ -6,7 +6,9 @@ use Webforge\Code\Generator\ClassFileMapper;
 use Webforge\Framework\Package\Package;
 use Webforge\Framework\Package\PackageNotFoundException;
 use Webforge\Framework\Package\SimplePackage;
+use Webforge\Framework\Package\Registry;
 use Webforge\Setup\AutoLoadInfo;
+use Webforge\Common\System\File;
 
 /**
  * tests the getFile() function from the GlobalClassFileMapper
@@ -20,6 +22,11 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
     $this->mapper = new GlobalClassFileMapper();
     $this->mapper->setPackageRegistry($this->registry);
   }
+
+  public function testGetClassIsNotImplemented() {
+    $this->setExpectedException('Webforge\Common\Exception\NotImplementedException');
+    $this->mapper->getClass(new File(__FILE__));
+  }
   
   public function testThatNonsenseFqnsCantGetFound() {
     $this->expectRegistryFindsNothing();
@@ -31,8 +38,54 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
   public function testGlobalClassFileMapperDoesNotNeedNeessearlyARegistry() {
     $this->setExpectedException('Webforge\Code\ClassFileNotFoundException');
     
-    $this->mapper = new GlobalClassFileMapper();
-    $this->mapper->getFile('ths\class\as\anonsense\name');
+    $mapper = new GlobalClassFileMapper();
+    $mapper->getFile('ths\class\as\anonsense\name');
+  }
+
+  public function testFindWithPackageWithoutAutoloadIsNotPossible() {
+    $woAutoLoad = new SimplePackage('without-autoload', 'webforge', $this->getPackageRoot('WithoutAutoLoad'));
+
+    $this->setExpectedException('Webforge\Code\ClassNotFoundException');
+
+    try {
+      $this->mapper->findWithPackage('DoesNotMatter\Classname', $woAutoLoad);
+    } catch (ClassNotFoundException $e) {
+      $this->assertContains('AutoLoading from package: '.$woAutoLoad.' is not defined', $e->getMessage());
+      throw $e;
+    }
+  }
+
+  public function testFindWithPackageWithoutFilesIsNotPossible() {
+    $registry = new Registry();
+    $emptyAutoLoad = $registry->addComposerPackageFromDirectory($this->getPackageRoot('EmptyAutoLoad'));
+
+    $this->setExpectedException('Webforge\Code\ClassNotFoundException');
+
+    try {
+      $this->mapper->findWithPackage('EmptyAutoLoad\Something', $emptyAutoLoad);
+    } catch (ClassNotFoundException $e) {
+      $this->assertContains('0 files found', $e->getMessage());
+      throw $e;
+    }
+  }
+
+  public function testFindWithPackageWithTooManyFilesIsNotPossible() {
+    $conflictPackage = new SimplePackage('without-autoload', 'webforge', $this->getPackageRoot('WithoutAutoLoad'), $autoload = $this->getMock('Webforge\Setup\AutoLoadInfo'));
+    $autoload->expects($this->once())->method('getFiles')->will(
+      $this->returnValue(array(
+        new File(__FILE__),
+        new File(__FILE__),
+        new File(__FILE__)
+      ))
+    );
+
+    $this->setExpectedException('Webforge\Code\ClassNotFoundException');
+    try {
+      $this->mapper->findWithPackage('Something', $conflictPackage);
+    } catch (ClassNotFoundException $e) {
+       $this->assertContains('Too many Files were found', $e->getMessage());
+       throw $e;
+    }
   }
   
   public function testEmptyFQNsAreBad() {
@@ -90,7 +143,7 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
     list($vendor, $slug) = explode('/', $slug, 2);
     $package = new SimplePackage($slug,
                                  $vendor,
-                                 $this->getFPackageDir($dirName),
+                                 $this->getPackageRoot($dirName),
                                  new AutoLoadInfo(
                                   $autoLoadInfoSpec ?: 
                                     Array(
@@ -106,9 +159,8 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
   protected function getFixtureFile($package, $path, $fileName) {
     return $this->getTestDirectory('packages/'.$package.'/'.implode('/',$path).'/')->getFile($fileName);
   }
-  
-  protected function getFPackageDir($dirName) {
+
+  protected function getPackageRoot($dirName) {
     return $this->getTestDirectory('packages/'.$dirName.'/');
   }
 }
-?>
