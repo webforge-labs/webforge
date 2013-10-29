@@ -16,8 +16,6 @@
     
     "nikic/php-parser": "0.9.*@stable",
     
-    "pscheit/psc-cms-boot": "2.*@stable",
-
     "webforge/common": "1.6.*@dev",
     "webforge/types": "1.0.*@stable",
     "webforge/console": "1.0.*@stable",
