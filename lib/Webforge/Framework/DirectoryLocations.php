@@ -29,7 +29,7 @@ class DirectoryLocations {
   }
 
   public function setRoot(Dir $root) {
-    // remember to refresh cache, when cached
+    // remember to refresh cache, when cached someday
     $this->root = $root;
     return $this;
   }
@@ -38,22 +38,32 @@ class DirectoryLocations {
     return new static(
       $package->getRootDirectory(),
       array(
+        'lib'=>'lib/',
+        'tests'=>'tests/',
         'test-files'=>'tests/files/',
-        'cache'=>'files/cache/',
         'bin'=>'bin/',
         'etc'=>'etc/',
-        'lib'=>'lib/',
+        'cache'=>'files/cache/',
+        'tpl'=>'resources/tpl/',
+        'docs'=>'docs/',
         'vendor'=>'vendor/',
-        'tests'=>'tests/',
+        'build'=>'build/',
+
+        'test-files'=>'tests/files/',
+        
+        'www'=>'www/',
+        'cms-www'=>'www/cms/',
         'cms-uploads'=>'files/uploads/',
         'cms-images'=>'files/images/',
+
         'resources'=>'resources/',
-        'assets'=>'resources/assets/',
         'prototypes'=>'resources/prototypes/',
+        'assets-src'=>'resources/assets/',
+        'assets-built'=>'www/assets/',
+
         'cms-tpl'=>'resources/tpl/', // dont use this anymore
-        'tpl'=>'resources/tpl/',
-        'www'=>'www/',
-        'cms-www'=>'www/cms/'
+
+        'doctrine-proxies'=>'files/cache/doctrine-proxies/'
       )
     );
   }

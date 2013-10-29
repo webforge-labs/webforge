@@ -23,27 +23,103 @@ use:
 
 ### Directory Layout conventions
 
-* lib the main directory for your core classes of your package. lib is the psr-0 directory for auto loading from classes
-* tests the main directory for your tests for your core classes of your package. tests is the psr-0 directory for auto loaded the tests
-  * files put all your resources for your tests here
-* etc everything related to configuration
-* bin put your executables here. If you have a command line, link cli in root to some executable here for your command interface
-* examples code snippets for usage, etc
-* resources every file that does not belong to a test, is needed by your application. gives more information, etc.
-* application if your package is mainly a library and lives in lib. but you still need a way to seperate a sample application from it, use this directory
-* www the document root for your webserver of the project
+have a look at [directory locations of a package/project](directory-locations.md) for alias definitions.
 
 dont commit these directories. put into your ignore file for source control
 * vendor: leave this directory for [composer](http://www.getcomposer.org)!. 
 * build: leave this directory for build artifacts
 * dist: leave this directory for github to provide distributed resources
 
-### Where to put
+#### Where to put
 
 * classes: into lib
 * templates: resources/tpl or into your application directory
 * fixtures and other: into tests/files/ try to use generic directories not test-centric directories (global test data)
 * configuration of every kind: put into etc! everything! apache, php, js, whatever
-* files related to frontend: put into www if access needs to be public. But everything else in lib or application. If nothing matches use resources
+* files related to frontend: put into assets if access needs to be public. If nothing matches perfectly put it in resources
 * vendor: never put something here, leave it to composer to manage this dir
 * files for continous integration, composer, phpunit, manifests etc, put into root if single file. Put into resources/build if more complicated
+
+#### Example
+
+this are the paths which are stored as hardcoded defaults for webforge packages:
+
+```
+/.gitignore
+/bin
+/bin/cli.php
+/bin/cli.sh
+/bin/cli.bat
+/etc/config.php
+/etc/db-config.php
+/etc/routes.yml
+/etc/apache2/psc.conf
+/etc/apache2/cdilger.conf
+/etc/auth/public (htpasswd file)
+/etc/auth/admin
+/docs/get-started.md
+/docs/writing-tests.md
+
+/lib/ACME/SuperBlog/Main.php
+/lib/ACME/SuperBlog/Container.php
+/lib/package.boot.php
+
+/tests/ACME/SuperBlog/MainTest.php
+/tests/ACME/SuperBlog/ContainerTest.php
+/tests/acceptance/BlogWebAcceptanceTest.php
+/tests/files/img/transparent.gif
+/tests/files/responses/api-get.guzzle-response
+/tests/files/requests/api-get.guzzle-request
+
+/files/uploads/business-report.pdf
+/files/images/0/8.png
+/files/images/0/00f43b7d3a48ea051bef7037ccfa0443a82a7a33.png
+/files/images/0/011f6811d50cb9d31da565242b9f99ef7aa4f6c1.png
+/files/images/1/10d1e4a6364786d028340d8cf95cb03c0a5d36ff.png
+/files/images/1/17916871384af3b4a515531a93846644dd6cf710.png
+/files/images/1/189193fb6507c9aeccd7fd48245170caa8cfc43a.png
+
+/files/cache/mustache/mustache-07c9aeccd7fd48245170caa8cfc43a.php
+/files/cache/mustache/mustache-07c9aeccd7fd48245170caa8cfc43a.php
+/files/cache/doctrine-proxies/blog-entry-proxy.php
+/files/cache/doctrine-proxies/category-proxy.php
+/files/cache/tmp/grunt/build.txt
+
+/resources/tpl/start.twig
+/resources/tpl/layout/sidebar.mustache
+/resources/tpl/layout/footer.mustache
+/resources/tpl/a-partial.mustache
+/resources/assets/js/require.js
+/resources/assets/js/boot.js
+/resources/assets/img/logo.gif
+/resources/assets/css/my-layout.css
+/resources/db/001_create_dbs.sql
+/resources/db/002_create_users.sql
+/resources/screens/working-copy.psd
+/resources/translations/acme-superblog.de.php
+/resources/translations/acme-superblog.en.php
+
+/www/.htaccess
+/www/index.php
+/www/assets/js/require.min.js
+/www/assets/js/app.min.js
+/www/assets/img/logo.optimized.gif
+/www/assets/css/my-layout.min.css
+
+/bootstrap.php
+/.travis.yml
+/phpunit.dist.xml
+/composer.json
+/composer.lock
+/package.json
+/Gruntfile.js
+/migrate.2.5.txt
+/deploy-info.json
+/acme-superblog.sublime-project
+
+/vendor/autoload.php
+/node_modules/shimney-jquery
+```
+
+the assets in www are aliased as: `assets-built`
+the assets in resources are alias as: `assets-src`
