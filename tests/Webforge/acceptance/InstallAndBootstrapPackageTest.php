@@ -213,7 +213,7 @@ PHP;
   protected function createBootstrapWithWebforge(Dir $composerDir) {
     $process = ProcessBuilder::create()->add($this->which('webforge'))
                 ->add('install:part')
-                ->add('CreateBootstrap')
+                ->add('Bootstrap')
                 ->setWorkingDirectory($composerDir)
                 ->getProcess();
     

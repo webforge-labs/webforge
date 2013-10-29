@@ -47,7 +47,7 @@ class ApplicationTest extends \Webforge\Code\Test\Base {
 
     // samples
     $this->assertContains('CreateCLI', $out);
-    $this->assertContains('CreateBootstrap', $out);
+    $this->assertContains('Bootstrap', $out);
     $this->assertContains('InitConfiguration', $out);
     $this->assertContains('TestSuite', $out);
   }

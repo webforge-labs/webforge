@@ -5,7 +5,6 @@ namespace Webforge\Setup\Installer;
 class PscJSBoilerplatePartTest extends \Webforge\Code\Test\InstallerPartTestCase {
   
   public function setUp() {
-    $this->chainClass = 'Webforge\\Setup\\Installer\\CreateBootstrapPart';
     parent::setUp();
 
     $this->part = new PscJSBoilerplatePart();

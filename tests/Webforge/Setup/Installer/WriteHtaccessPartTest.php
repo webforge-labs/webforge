@@ -5,7 +5,6 @@ namespace Webforge\Setup\Installer;
 class WriteHtaccessPartTest extends \Webforge\Code\Test\InstallerPartTestCase {
   
   public function setUp() {
-    $this->chainClass = 'Webforge\\Setup\\Installer\\CreateBootstrapPart';
     parent::setUp();
 
     $this->part = new WriteHtaccessPart();
