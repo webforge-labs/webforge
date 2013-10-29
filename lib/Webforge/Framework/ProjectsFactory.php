@@ -134,15 +134,6 @@ class ProjectsFactory implements ContainerAware {
     return NULL;
   }
 
-  /**
-   * @param Webforge\Framework\Container container
-   * @chainable
-   */
-  public function setContainer(Container $container) {
-    $this->container = $container;
-    return $this;
-  }
-
   protected function getProjectName(Package $package) {
     $namespace = $package->getNamespace();
     $slug = $package->getSlug();
