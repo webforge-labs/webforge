@@ -95,7 +95,15 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
       (string) $this->projectPackage->getRootDirectory()->sub('files/cache/php/doctrine-proxies/'),
       (string) $this->projectPackage->dir('doctrine-proxies')
     );
+  }
 
+  public function testCanDefineADirectory() {
+    $this->projectPackage->defineDirectory('doctrine-prox', 'files/cache/php/doctrine-proxies/');
+
+    $this->assertEquals(
+      (string) $this->projectPackage->getRootDirectory()->sub('files/cache/php/doctrine-proxies/'),
+      (string) $this->projectPackage->dir('doctrine-prox')
+    );
   }
 
   public function testThrowsInvalidArgumentExceptionForNonDefinedPaths() {
