@@ -9,7 +9,7 @@ use RuntimeException;
 class CreateBootstrapPart extends ContainerAwarePart {
   
   public function __construct() {
-    parent::__construct('CreateBootstrap');
+    parent::__construct('Bootstrap');
   }
   
   public function installTo(Dir $target, Installer $installer) {
