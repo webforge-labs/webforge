@@ -8,7 +8,7 @@ use Webforge\Framework\Package\ProjectUrls;
 use Webforge\Configuration\ConfigurationReader;
 use Webforge\Common\String as S;
 
-class ProjectsFactory implements ContainerAware {
+class ProjectsFactory {
 
   /**
    * @var Webforge\Framework\Container
