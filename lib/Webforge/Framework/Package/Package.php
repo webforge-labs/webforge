@@ -64,9 +64,20 @@ interface Package {
   public function setRootDirectory(Dir $directory);
   
   /**
+   * Returns a semantic location for a directory
+   * 
    * @return Dir
    */
-  public function getDirectory($type = self::ROOT);
+  public function getDirectory($alias = self::ROOT);
+
+  /**
+   * Sets a semantic location for a directory
+   * 
+   * @param string $type a name for the location lowercase only dashes and a-z 0-9
+   * @param string $location the path to the location from root (with trailing slash)
+   * @chainable
+   */
+  public function defineDirectory($alias, $location);
 
   /**
    * Gives Information for the Paths the Projects loads it classes from

@@ -31,6 +31,11 @@ interface Project {
    */
   public function getConfiguration();
 
+  /**
+   * Should be called if configuration was changed and the object should sync the new values
+   */
+  public function configurationUpdate();
+
   // i18n
   /**
    * @return array
@@ -54,6 +59,20 @@ interface Project {
    * @return Webforge\Common\System\Dir
    */
   public function dir($identifier);
+
+  /**
+   * Set new Locations for dir() from array
+   */
+  public function updateDirectoryLocations(Array $locations);
+
+  /**
+   * Sets a semantic location for a directory
+   * 
+   * @param string $type a name for the location lowercase only dashes and a-z 0-9
+   * @param string $location the path to the location from root (with trailing slash)
+   * @chainable
+   */
+  public function defineDirectory($alias, $location);
 
   // project status and env
   /**
