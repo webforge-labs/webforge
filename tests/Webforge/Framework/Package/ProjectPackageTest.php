@@ -25,6 +25,8 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
       new ProjectUrls($hostConfig), 
       new DirectoryLocations($this->configPackage->getRootDirectory(), array())
     );
+
+    $this->configuration = new Configuration(array('project', array('title'=>'its nice')));
   }
 
   public function testCreatedNonFactoryProjectPackagesDoNotHaveAconfiguration() {
@@ -108,5 +110,12 @@ class ProjectPackageTest extends \Webforge\Framework\Package\PackagesTestCase {
 
     $this->setExpectedException('InvalidArgumentException');
     $clonedPackage->dir('new-and-prev-not-defined');
+  }
+
+  public function testCloneIsNotSensibleForConfiguration() {
+    $this->projectPackage->setConfiguration($this->configuration);
+    $clonedPackage = clone $this->projectPackage;
+
+    $this->assertNotSame($this->projectPackage->getConfiguration(), $clonedPackage->getConfiguration(), 'clone should duplicate configuration');
   }
 }

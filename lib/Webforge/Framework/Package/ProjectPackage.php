@@ -266,5 +266,8 @@ class ProjectPackage implements \Webforge\Framework\Project {
   public function __clone() {
     $this->package = clone $this->package;
     $this->directoryLocations = clone $this->directoryLocations;
+
+    if (isset($this->configuration))
+      $this->configuration = clone $this->configuration;
   }
 }
