@@ -71,7 +71,8 @@ class DirectoryLocationsTest extends \Webforge\Framework\Package\PackagesTestCas
     $test('cms-images', 'files/images/');
     $test('www', 'www/');
     $test('resources', 'resources/');
-    $test('assets', 'resources/assets/');
+    $test('assets-src', 'resources/assets/');
+    $test('assets-built', 'www/assets/');
     $test('tpl', 'resources/tpl/');
     $test('prototypes', 'resources/prototypes/');
 
