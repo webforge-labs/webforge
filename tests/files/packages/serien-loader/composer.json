@@ -1,5 +1,12 @@
 {
     "name": "pscheit/serien-loader",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "p.scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ],
     "require": {
         "pscheit/psc-cms": "dev-master"
     },
@@ -8,11 +15,9 @@
     "autoload": {
         "psr-0": { "SerienLoader": ["lib/"] }
     },
-    "minimum-stability": "dev",
-    "authors": [
-        {
-            "name": "p.scheit",
-            "email": "p.scheit@ps-webforge.com"
+    "extra": {
+        "directory-locations": {
+            "etc": "application/config/"
         }
-    ]
+    }
 }

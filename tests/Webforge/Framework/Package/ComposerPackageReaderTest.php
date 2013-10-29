@@ -11,7 +11,7 @@ class ComposerPackageReaderTest extends \Webforge\Code\Test\Base {
   }
 
   public function testFromDirectoryReturnsAnPackageWithInfosFromTheComposerJSON() {
-    $package = $this->reader->fromDirectory($dir = $this->getTestDirectory()->sub('packages/ACME/'));
+    $package = $this->reader->fromDirectory($dir = $this->getPackageRoot('ACME'));
     
     $this->assertInstanceOf('Webforge\Framework\Package\Package', $package);
     $this->assertEquals('acme/intranet-application', $package->getIdentifier());
@@ -19,7 +19,7 @@ class ComposerPackageReaderTest extends \Webforge\Code\Test\Base {
   }
   
   public function testFromDirectoryPackageAutoLoadInfoIsPreFilledFromACME() {
-    $package = $this->reader->fromDirectory($dir = $this->getTestDirectory()->sub('packages/ACME/'));
+    $package = $this->reader->fromDirectory($dir = $this->getPackageRoot('ACME'));
     
     $this->assertInstanceOf('Webforge\Framework\Package\Package', $package);
     $this->assertInstanceOf('Webforge\Setup\AutoLoadInfo', $autoLoad = $package->getAutoLoadInfo());
@@ -32,7 +32,19 @@ class ComposerPackageReaderTest extends \Webforge\Code\Test\Base {
   
   public function testFromDirectoryWithoutJSONFileFails() {
     $this->setExpectedException('Webforge\Common\Exception');
-    $this->reader->fromDirectory($this->getTestDirectory('sub/packages/Blank'));
+    $this->reader->fromDirectory($this->getPackageRoot('Blank'));
+  }
+
+  public function testReaderSetsDirectoryLocationsFromComposerJson() {
+    $package = $this->reader->fromDirectory($root = $this->getPackageRoot('serien-loader'));
+
+    $this->assertEquals(
+      (string) $root->sub('application/config/'),
+      (string) $package->getDirectory('etc')
+    );
+  }
+
+  protected function getPackageRoot($name) {
+    return $this->getTestDirectory('packages/'.$name.'/');
   }
 }
-?>

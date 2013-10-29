@@ -1,0 +1,5 @@
+<?php
+
+$conf = array();
+
+?>
