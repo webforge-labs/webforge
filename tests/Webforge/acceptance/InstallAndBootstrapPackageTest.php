@@ -63,7 +63,7 @@ class InstallAndBootstrapPackageTest extends \Webforge\Code\Test\Base {
   
   protected function composerInstall(Dir $dir) {
     if ($this->realAcceptance) {
-      $this->execute('cd '.$dir.' && composer install --prefer-dist --dev');
+      $this->execute('cd '.$dir.' && composer install --dev');
     } else {
       $this->execute('cd '.$dir.' && composer update');
     }
