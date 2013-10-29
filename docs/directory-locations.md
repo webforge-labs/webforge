@@ -65,6 +65,7 @@ For a current set of ALL locations, have a look into: `Webforge\Framework\Direct
   - **bin**: the place for executables or cli php files
   - **etc**: a location to store your configuration in. possible subs are: apache2 and auth (htpasswd files)
   - **cache**: location to store caches and temporary files (should never be checked into your vcs or deployed). Always use a sub directory of this
+    - subs: tmp, mustache, doctrine
   - **tpl**: all the templates of your project (webforge/view will use this)
   - **docs**: the place to store (developer)-documentation.
   - **vendor**: the vendor directory from composer (never put something there manually). Should not be checked in vcs
