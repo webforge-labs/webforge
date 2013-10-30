@@ -43,7 +43,7 @@ class ApplicationTest extends \Webforge\Code\Test\Base {
   public function testListPartsCommand() {
     $out = $this->runCommand('install:list-parts');
 
-    $this->assertContains("parts avaible:", $out);
+    $this->assertContains("parts available:", $out);
 
     // samples
     $this->assertContains('CreateCLI', $out);
