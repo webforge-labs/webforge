@@ -33,7 +33,7 @@ $createCommand('install:list-parts',
     $interact = new InteractionHelper($command->getHelper('dialog'), $output);
     $partsInstaller = $container->getPartsInstaller($interact, new SymfonyCommandOutputAdapter($output));
     
-    $output->writeln('<info>parts avaible:</info>');
+    $output->writeln('<info>parts available:</info>');
     
     foreach ($partsInstaller->getParts() as $part) {
       $output->writeln('<info>  '.$part->getName());
@@ -41,7 +41,7 @@ $createCommand('install:list-parts',
     
     return 0;
   },
-  'Lists all avaible parts to install'
+  'Lists all available parts to install'
 );
 
 $createCommand('composer',
