@@ -1,8 +1,8 @@
 # How to install a TestSuite
 
-Its assumend that you have webforge-devtool installed, your package registered with webforge and created a bootstrap.
+Assuming, webforge-devtool is already installed, your package registered with webforge and a bootstrap has been created.
 
-I recommend to start of with the [webforge-testplate](https://github.com/webforge/testplate). Allthough if you have no clue how to write tests, this is a very good start to get everything integrated. 
+I recommend to start of with the [webforge-testplate](https://github.com/webforge/testplate). Although if you have no clue how to write tests, this is a very good start to get everything integrated. 
 
 ## installation
 
