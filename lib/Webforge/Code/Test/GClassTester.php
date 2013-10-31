@@ -67,7 +67,7 @@ class GClassTester {
     $this->test->assertTrue(
       $this->gClass->hasProperty($name),
       $this->msg(
-        "hasProperty '%s'. Properties avaible are:\n%s",
+        "hasProperty '%s'. Properties available are:\n%s",
         $name, $this->debugProperties()
       )
     );
@@ -93,7 +93,7 @@ class GClassTester {
     $this->test->assertTrue(
       $this->gClass->hasConstant($name),
       $this->msg(
-        "hasConstant '%s'. Constants avaible are:\n%s",
+        "hasConstant '%s'. Constants available are:\n%s",
         $name, $this->debugConstants()
       )
     );
@@ -242,4 +242,3 @@ class GClassTester {
     return vsprintf($msg, $args);
   }
 }
-?>

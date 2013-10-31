@@ -73,7 +73,7 @@ class DirectoryLocations {
       return $this->root->sub($this->locations[$identifier]);
     }
 
-    throw new InvalidArgumentException(sprintf("The identifier '%s' for a directory location is not known. Avaible are: %s", $identifier, implode(', ', array_keys($this->locations))));
+    throw new InvalidArgumentException(sprintf("The identifier '%s' for a directory location is not known. available are: %s", $identifier, implode(', ', array_keys($this->locations))));
   }
 
   /**

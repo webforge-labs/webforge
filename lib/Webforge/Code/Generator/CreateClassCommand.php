@@ -24,13 +24,13 @@ class CreateClassCommand {
   protected $classFileMapper;
   
   /**
-   * is avaible after fqn()
+   * is available after fqn()
    * @var Webforge\Code\Generator\GClass
    */
   protected $gClass;
   
   /**
-   * is avaible after write()
+   * is available after write()
    * @var Webforge\Common\System\File
    */
   protected $file;

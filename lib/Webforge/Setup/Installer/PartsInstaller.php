@@ -224,7 +224,7 @@ class PartsInstaller implements Installer {
     }
     
     throw new \RuntimeException(
-      sprintf("Part with name '%s' does not exist. Avaible parts are: %s", $name, implode(', ', $names))
+      sprintf("Part with name '%s' does not exist. available parts are: %s", $name, implode(', ', $names))
     );
   }
   

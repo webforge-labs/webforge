@@ -241,7 +241,7 @@ class ProjectPackage implements \Webforge\Framework\Project {
   /**
    * Returns a semantic directory for the project
    * 
-   * avaible: test-files|cache|bin (for more see ProjectPackageTest)
+   * available: test-files|cache|bin (for more see ProjectPackageTest)
    * @return Webforge\Common\System\Dir
    */
   public function dir($identifier) {

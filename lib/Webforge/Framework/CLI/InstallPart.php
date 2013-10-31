@@ -41,7 +41,7 @@ class InstallPart extends ContainerCommand {
     $partsInstaller = $this->container->getPartsInstaller($interact, $output);
 
     if (empty($partName)) {
-      $output->msg('parts avaible:');
+      $output->msg('parts available:');
       foreach ($partsInstaller->getParts() as $part) {
         $output->msg('  '.$part->getName());
       }
