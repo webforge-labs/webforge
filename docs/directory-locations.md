@@ -71,6 +71,7 @@ For a current set of ALL locations, have a look into: `Webforge\Framework\Direct
   - **vendor**: the vendor directory from composer (never put something there manually). Should not be checked in vcs
   - **build**: a temporary directory for your output of the php/application layer (not build assets). Should never be checked in vcs.
     - subs: **coverage** for phpunit coverage reports
+  - **logs**: store your application / apache - logs here (should never be checked in)
 
   - **www**: the location for your application document root (apache could point to that)
   - **cms-www**: the location for your admin panel document root

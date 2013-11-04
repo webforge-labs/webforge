@@ -78,6 +78,7 @@ this are the paths which are stored as hardcoded defaults for webforge packages:
 /files/images/1/10d1e4a6364786d028340d8cf95cb03c0a5d36ff.png
 /files/images/1/17916871384af3b4a515531a93846644dd6cf710.png
 /files/images/1/189193fb6507c9aeccd7fd48245170caa8cfc43a.png
+/files/logs/symfony-logs/229384xxss.log
 
 /files/cache/mustache/mustache-07c9aeccd7fd48245170caa8cfc43a.php
 /files/cache/mustache/mustache-07c9aeccd7fd48245170caa8cfc43a.php
