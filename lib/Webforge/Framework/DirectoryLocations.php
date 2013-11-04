@@ -48,6 +48,7 @@ class DirectoryLocations {
         'docs'=>'docs/',
         'vendor'=>'vendor/',
         'build'=>'build/',
+        'logs'=>'files/logs/',
 
         'test-files'=>'tests/files/',
         
