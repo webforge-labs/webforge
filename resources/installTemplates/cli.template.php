@@ -1,11 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-use Webforge\Console\PackageConsole;
-use Psc\System\Dir;
+use Webforge\Console\Application;
 
-require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'bootstrap.php';
+$container = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'bootstrap.php';
 
-$console = new PackageConsole();
+$console = new Application($container);
 $console->run();
-?>

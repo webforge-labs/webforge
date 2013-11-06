@@ -83,10 +83,7 @@ class ProjectsFactory {
 
   protected function getHost() {
     if (!isset($this->host)) {
-      $this->host = $this->hostConfig->get(
-        'host', 
-        isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n')
-      );
+      $this->host = $this->hostConfig->req('host');
     }
 
     return $this->host;

@@ -10,7 +10,7 @@ class ProjectUrlsTest extends \Webforge\Framework\Package\PackagesTestCase {
     $this->chainClass = 'Webforge\\Framework\\ProjectURLs';
     parent::setUp();
 
-    $this->hostConfig = new Configuration(array());
+    $this->hostConfig = new Configuration(array('host'=>'testhost'));
     $this->container->setHostConfiguration($this->hostConfig);
 
     $this->projectPackage = $this->container->getProjectsFactory()->fromPackage($this->configPackage);

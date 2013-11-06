@@ -13,12 +13,13 @@ use Webforge\Framework\Package\ComposerPackageReader;
 use Webforge\Framework\Package\Package;
 use Webforge\Framework\Inflector;
 use Webforge\Setup\Installer\PartsInstaller;
+use Webforge\Setup\HostConfigurationReader;
+use Webforge\Configuration\ConfigurationReader;
 use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\Dir;
 use Webforge\Common\CommandOutput;
 use Webforge\Common\Exception\MessageException;
 use Webforge\Console\InteractionHelper;
-use Webforge\Configuration\ConfigurationReader;
 use Webforge\Common\System\Container as SystemContainer;
 use Webforge\Common\System\ContainerConfiguration as SystemContainerConfiguration;
 use Liip\RMT\Application as ReleaseManager;
@@ -318,6 +319,7 @@ class Container implements SystemContainerConfiguration {
    * Returns a "global" Configuration
    * 
    * for example executables are defined here
+   * uses the host configuration if no project (local package) is defined
    */
   public function getConfiguration() {
     if ($this->getLocalPackage() === NULL) {
@@ -396,35 +398,14 @@ class Container implements SystemContainerConfiguration {
    */
   public function getHostConfiguration() {
     if (!isset($this->hostConfiguration)) {
-      // @TODO refactor this into a host-configuration-reader
-      $reader = new ConfigurationReader();
-
-      try {
-        if (class_exists('Psc\PSC')) {
-          $hostConfigFile = \Psc\PSC::getRoot()->getFile('host-config.php');
-
-          $this->hostConfiguration = $reader->fromPHPFile($hostConfigFile);
-        } else {
-          $root = getenv('PSC_CMS');
-
-          if (!empty($root)) {
-            $root = Dir::factoryTS($root);
-            $this->hostConfiguration = $reader->fromPHPFile($root->getFile('host-config.php'));
-          }
-        }
-
-      } catch (\Psc\MissingEnvironmentVariableException $e) {
-      }
-
-      if (!isset($this->hostConfiguration)) {
-        $this->hostConfiguration = $reader->fromArray(array(
-          'host'=>isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n'),
-          'development'=>FALSE
-        ));
-      }
+      $this->hostConfiguration = $this->getHostConfigurationReader()->read();
     }
 
     return $this->hostConfiguration;
+  }
+
+  protected function getHostConfigurationReader() {
+    return new HostConfigurationReader(new ConfigurationReader(), $this->getApplicationStorage());
   }
   
   /**
