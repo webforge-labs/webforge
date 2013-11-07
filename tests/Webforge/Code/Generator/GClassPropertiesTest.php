@@ -97,5 +97,26 @@ class GClassPropertiesTest extends \Webforge\Code\Test\Base {
     $this->assertGCollectionEquals(array('x','y'), $this->gClass->getAllProperties(GClass::WITH_OWN));
     $this->assertGCollectionEquals(array('info','scale'), $this->gClass->getAllProperties(GClass::WITH_PARENTS));
   }
+
+  public function testCreateAPropertyWithModifiersAndDefaultValue() {
+    $parent = new GClass('Geometric\Base');
+    $parent->createProperty('info', $type = NULL, $default = 'some-value', GProperty::MODIFIER_PUBLIC);
+
+    $property = $parent->getProperty('info');
+
+    $this->assertEquals('info', $property->getName());
+    $this->assertEquals(GProperty::MODIFIER_PUBLIC, $property->getModifiers(), 'modifiers are not set correctly');
+    $this->assertEquals('some-value', $property->getDefaultValue());
+  }
+
+  public function testCreateAConstantWithModifiersAndDefaultValue() {
+    $parent = new GClass('Geometric\Base');
+    $parent->createConstant('info', $type = NULL, $default = 'some-value', GProperty::MODIFIER_PUBLIC);
+
+    $constant = $parent->getConstant('info');
+
+    $this->assertEquals('info', $constant->getName());
+    $this->assertEquals(GConstant::MODIFIER_PUBLIC, $constant->getModifiers(), 'modifiers are not set correctly');
+    $this->assertEquals('some-value', $constant->getDefaultValue());
+  }
 }
-?>

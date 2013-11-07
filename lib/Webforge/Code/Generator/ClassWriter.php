@@ -313,7 +313,7 @@ class ClassWriter {
     $php .= str_repeat(' ', $baseIndent);
     
     $php .= $this->writeModifiers($property->getModifiers());
-    
+
     $php .= '$'.$property->getName();
     
     if ($property->hasDefaultValue() && $property->getDefaultValue() !== NULL) {

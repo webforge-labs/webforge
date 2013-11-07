@@ -138,8 +138,8 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
    * notice: this is not chainable, you can leave the chain with getGClass()
    * @return GProperty
    */
-  public function createProperty($name, $type = NULL, $modifiers = GProperty::MODIFIER_PROTECTED, $default = self::UNDEFINED) {
-    $gProperty = GProperty::create($name, $type, $modifiers, $default);
+  public function createProperty($name, $type = NULL, $default = self::UNDEFINED, $modifiers = GProperty::MODIFIER_PROTECTED) {
+    $gProperty = GProperty::create($name, $type, $default,  $modifiers);
     
     $this->addProperty($gProperty);
     return $gProperty;
@@ -151,8 +151,8 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
    * notice: this is not chainable, you can leave the chain with getGClass()
    * @return Gconstant
    */
-  public function createConstant($name, $type = NULL, $modifiers = GConstant::MODIFIER_PROTECTED, $default = self::UNDEFINED) {
-    $gConstant = GConstant::create($name, $type, $modifiers, $default);
+  public function createConstant($name, $type = NULL, $default = self::UNDEFINED, $modifiers = GConstant::MODIFIER_PROTECTED) {
+    $gConstant = GConstant::create($name, $type, $default, $modifiers);
     
     $this->addConstant($gConstant);
     return $gConstant;
