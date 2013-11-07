@@ -18,6 +18,11 @@ class GClassTester {
     $this->test = $testCase;
     $this->gClass = $gClass;
   }
+
+  public function hasNamespace($namespace) {
+    $this->test->assertEquals($namespace, $this->gClass->getNamespace(), $this->msg("hasNamespace '%s'", $namespace));
+    return $this;
+  }
   
   public function hasMethod($name, array $parameters = NULL) {
     $this->test->assertTrue($this->gClass->hasMethod($name),$this->msg("hasMethod '%s'", $name));
@@ -82,13 +87,6 @@ class GClassTester {
     return $this;
   }
 
-  public function hasNotOwnProperty($name) {
-    $this->test->assertFalse(
-                             $this->gClass->hasOwnProperty($name),$this->msg("hasNotOwnProperty '%s'", $name)
-                             );
-    return $this;
-  }
-
   public function hasConstant($name) {
     $this->test->assertTrue(
       $this->gClass->hasConstant($name),
@@ -133,10 +131,19 @@ class GClassTester {
 
   public function hasOwnProperty($name) {
     $this->test->assertTrue(
-                             $this->gClass->hasOwnProperty($name),$this->msg("hasOwnProperty '%s'", $name)
-                             );
+      // hasOwn === has in webforge
+      $this->gClass->hasProperty($name), $this->msg("hasOwnProperty '%s'", $name)
+    );
     return $this;
   }
+
+  public function hasNotOwnProperty($name) {
+    $this->test->assertFalse(
+      $this->gClass->hasProperty($name), $this->msg("hasNotOwnProperty '%s'", $name)
+    );
+    return $this;
+  }
+
 
   public function hasInterface($gClass) {
     if (!($gClass instanceof GClass)) {

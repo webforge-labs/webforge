@@ -68,4 +68,3 @@ class ClassElevator {
     return $this->mapper;
   }
 }
-?>

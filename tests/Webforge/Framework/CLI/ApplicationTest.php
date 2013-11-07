@@ -31,7 +31,8 @@ class ApplicationTest extends \Webforge\Code\Test\Base {
     $test('create-test');
     $test('register-package');
     $test('git:sync-packages');
-
+    $test('info');
+    
     $test('install:part');
     $test('install:list-parts');
 

@@ -1,17 +1,12 @@
 <?php
 
 /**
- * This file is part of the Configuration for Psc CMS (vendor/psc-cms.phar.gz)
+ * This file is part of the Configuration for webforge (http://github.com/webforge-labs/webforge)
  *
- * put this file somewhere on your local machine as host-config.php
- * set the environment variable PSC_CMS to the directory including this file (dont forget the trailing slash)
+ * put this file into your .webforge directory in home (or your defined directory in env: WEBFORGE)
  *
- * for example:
- * set PSC_CMS=/var/local/psc-cms-bin/
- *
- * /var/local/psc-cms-bin/host-config.php
  */
- 
+
 /* General */
 $conf['host'] = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : php_uname('n');
 $conf['development'] = FALSE;
