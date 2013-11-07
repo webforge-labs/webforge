@@ -90,24 +90,29 @@ class AutoLoadInfo {
 
   
   /**
-   * @param Dir $rootDir die relativen Pfade (wenn es welche gibt) werden auf dieses Verzeichnis bezogen
-   * @return Files[]|array()
+   * Returns all matching files that can have $fqn as a name
+   * 
+   * @param Dir $rootDir relative paths are resolved with $rootDir
+   * @return FileInfo[]|array()  fileInfo: File .file, string .prefix
    */
-  public function getFiles($fqn, Dir $rootDir) {
+  public function getFilesInfos($fqn, Dir $rootDir) {
     $gClass = new GClass($fqn);
     $fqn = $gClass->getFQN();
     
-    $files = array();
+    $infos = array();
     foreach ($this->prefixes as $prefix => $paths) {
       if (mb_strpos($fqn, $prefix) === 0) {
         foreach ($paths as $path) {
           $dir = $path instanceof Dir ? $path : $rootDir->sub($path);
         
-          $files[] = $dir->sub(str_replace('\\', '/', $gClass->getNamespace()).'/')->getFile($gClass->getName().'.php');
+          $infos[] = (object) array(
+            'file'=>$dir->sub(str_replace('\\', '/', $gClass->getNamespace()).'/')->getFile($gClass->getName().'.php'),
+            'prefix'=>$prefix
+          );
         }
       }
     }
     
-    return $files;
+    return $infos;
   }
 }

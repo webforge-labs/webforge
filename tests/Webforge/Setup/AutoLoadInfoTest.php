@@ -27,14 +27,15 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
   public function testGetFileMapsAFQNToAFileRegardlessIfItExists() {
     $root = $this->getTestDirectory();
     
-    $mappedFiles = $this->info->getFiles('Webforge\Setup\Something', $root);
+    $mappedFiles = $this->info->getFilesInfos('Webforge\Setup\Something', $root);
     $this->assertCount(1, $mappedFiles);
-    $mappedFile = $mappedFiles[0];
-    $this->assertInstanceOf('Webforge\Common\System\File', $mappedFile);
+    $mappedFileInfo = $mappedFiles[0];
+    $this->assertInstanceOf('Webforge\Common\System\File', $mappedFileInfo->file);
+    $this->assertEquals('Webforge', $mappedFileInfo->prefix, 'prefix from fileinfo');
     
     $this->assertEquals(
       (string) $root->sub('lib/Webforge/Setup/')->getFile('Something.php'),
-      (string) $mappedFile,
+      (string) $mappedFileInfo->file,
       'relative autoloading path is wrong'
     );
   }
@@ -42,14 +43,14 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
   public function testGetFileMapsABSPaths() {
     $resolveRelativesTo = $this->getTestDirectory();
     
-    $mappedFiles = $this->absoluteInfo->getFiles('Webforge\Setup\Something', $resolveRelativesTo);
+    $mappedFiles = $this->absoluteInfo->getFilesInfos('Webforge\Setup\Something', $resolveRelativesTo);
     $this->assertCount(1, $mappedFiles);
-    $mappedFile = $mappedFiles[0];
-    $this->assertInstanceOf('Webforge\Common\System\File', $mappedFile);
+    $mappedFileInfo = $mappedFiles[0];
+    $this->assertInstanceOf('Webforge\Common\System\File', $mappedFileInfo->file);
 
     $this->assertEquals(
       (string) $this->absoluteLibraryLocation->sub('Webforge/Setup/')->getFile('Something.php'),
-      (string) $mappedFile,
+      (string) $mappedFileInfo->file,
       'absolute autoloading path is wrong'
     );
   }
@@ -70,18 +71,22 @@ class AutoLoadInfoTest extends \Webforge\Code\Test\Base {
   }
   
   public function testAmbInfoReturnsAllFiles() {
-    $mappedFiles = $this->ambiguousInfo->getFiles('Webforge\Setup\Something', $root = $this->getTestDirectory());
+    $mappedFileInfos = $this->ambiguousInfo->getFilesInfos('Webforge\Setup\Something', $root = $this->getTestDirectory());
 
-    $this->assertCount(2, $mappedFiles);
+    $this->assertCount(2, $mappedFileInfos);
+
+    $mappedFiles= array();
+    foreach ($mappedFileInfos as $fileInfo) {
+      $mappedFiles[] = (string) $fileInfo->file;
+    }
     
     $this->assertArrayEquals(
-      A::stringify($mappedFiles),
-      A::stringify(Array(
-        $root->sub('tests/Webforge/Setup/')->getFile('Something.php'),
-        $root->sub('lib/Webforge/Setup/')->getFile('Something.php')
-      )),
+      $mappedFiles,
+      Array(
+        (string) $root->sub('tests/Webforge/Setup/')->getFile('Something.php'),
+        (string) $root->sub('lib/Webforge/Setup/')->getFile('Something.php')
+      ),
       $mappedFiles
     );
   }
 }
-?>
