@@ -71,11 +71,11 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
 
   public function testFindWithPackageWithTooManyFilesIsNotPossible() {
     $conflictPackage = new SimplePackage('without-autoload', 'webforge', $this->getPackageRoot('WithoutAutoLoad'), $autoload = $this->getMock('Webforge\Setup\AutoLoadInfo'));
-    $autoload->expects($this->once())->method('getFiles')->will(
+    $autoload->expects($this->once())->method('getFilesInfos')->will(
       $this->returnValue(array(
-        new File(__FILE__),
-        new File(__FILE__),
-        new File(__FILE__)
+        (object) array('file'=>new File(__FILE__), 'prefix'=>'Something'),
+        (object) array('file'=>new File(__FILE__), 'prefix'=>'Something\Tests'),
+        (object) array('file'=>new File(__FILE__), 'prefix'=>'Something\Found'),
       ))
     );
 
@@ -86,6 +86,24 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
        $this->assertContains('Too many Files were found', $e->getMessage());
        throw $e;
     }
+  }
+
+  public function testFindWithMultipeFilesIsResolvedByLongestFQN() {
+    $conflictPackage = new SimplePackage('without-autoload', 'webforge', $this->getPackageRoot('WithoutAutoLoad'), $autoload = $this->getMock('Webforge\Setup\AutoLoadInfo'));
+
+    $phpFile1 = new File(__FILE__.'1.php');
+    $phpFile2 = new File(__FILE__.'2.php');
+
+    // both prefixes have matched here, but the FQN is cleary for the second
+    $autoload->expects($this->once())->method('getFilesInfos')->will(
+      $this->returnValue(array(
+        (object) array('file'=>$phpFile1, 'prefix'=>'Webforge'),
+        (object) array('file'=>$phpFile2, 'prefix'=>'Webforge\Doctrine\Compiler'),
+      ))
+    );
+
+    $foundFile = $this->mapper->findWithPackage('Webforge\Doctrine\Compiler\Inflector', $conflictPackage);
+    $this->assertEquals((string) $phpFile2, (string) $foundFile, 'should resolve to only the second file');
   }
   
   public function testEmptyFQNsAreBad() {

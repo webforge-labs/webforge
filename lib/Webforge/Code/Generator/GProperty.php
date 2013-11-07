@@ -135,6 +135,13 @@ class GProperty extends GModifiersObject {
     $this->defaultValue = self::UNDEFINED;
     return $this;
   }
+
+  /**
+   * @return string
+   */
+  public function getName() {
+    return $this->name;
+  }
   
   // @codeCoverageIgnoreStart
   /**
@@ -146,13 +153,6 @@ class GProperty extends GModifiersObject {
     return $this;
   }
 
-  /**
-   * @return string
-   */
-  public function getName() {
-    return $this->name;
-  }
-  
   /**
    * @return string
    */

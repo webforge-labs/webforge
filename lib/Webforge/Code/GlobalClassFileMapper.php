@@ -10,7 +10,7 @@ use Webforge\Code\ClassNotFoundException;
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
 use Webforge\Common\String as S;
-use ComposerAutoloaderInit;
+use Webforge\Common\ArrayUtil as A;
 use Webforge\Framework\Package\PackageNotFoundException;
 use Webforge\Common\Exception\NotImplementedException;
 
@@ -88,41 +88,75 @@ class GlobalClassFileMapper implements ClassFileMapper {
       throw $e;
     }
     
-    $files = $autoLoad->getFiles($fqn, $package->getRootDirectory());
+    $filesInfos = $autoLoad->getFilesInfos($fqn, $package->getRootDirectory());
   
-    if (count($files) === 0) {
+    if (count($filesInfos) === 0) {
       $e = ClassNotFoundException::fromFQN($fqn);
       $e->appendMessage(sprintf(". AutoLoading from package: %s failed. 0 files found.", $package));
       throw $e;
     }
 
-    $file = $this->resolveConflictingFiles($files, $fqn, $package);
+    $file = $this->resolveConflictingFiles($filesInfos, $fqn, $package);
 
     return $this->validateFile($file, self::WITH_RESOLVING);
   }
 
-  protected function resolveConflictingFiles(Array $files, $fqn, Package $package) {
-    if (count($files) === 1) return current($files);
+  protected function resolveConflictingFiles(Array $filesInfos, $fqn, Package $package) {
+    if (count($filesInfos) > 1) {
 
-    $testsDir = $package->getDirectory(Package::TESTS);
-    $testFiles = array_filter(
-      $files,
-      function ($file) use ($testsDir) {
-        return $file->getDirectory()->isSubdirectoryOf($testsDir);
+      $testsDir = $package->getDirectory(Package::TESTS);
+      $testFilesInfos = array_filter(
+        $filesInfos,
+        function ($fileInfo) use ($testsDir) {
+          return $fileInfo->file->getDirectory()->isSubdirectoryOf($testsDir);
+        }
+        );
+
+      if (S::endsWith($fqn, 'Test') && count($testFilesInfos) === 1) {
+        return current($testFilesInfos)->file;
       }
-    );
+    
+      $filesInfos = array_udiff($filesInfos, $testFilesInfos, function($a, $b) {
+        $fileA = (string) $a->file;
+        $fileB = (string) $b->file;
 
-    if (S::endsWith($fqn, 'Test') && count($testFiles) === 1) {
-      return current($testFiles);
+        return strcmp($fileA, $fileB);
+      });
+
+      if (count($filesInfos) > 1) {
+        // we know that $fqn starts with $fileInfo->prefix for every $fileInfo in $filesInfos
+        // we just find the longest prefix and resolve for that
+
+        $byPrefix = array();
+        foreach ($filesInfos as $fileInfo) {
+          $fileInfo->length = mb_strlen($fileInfo->prefix);
+          $byPrefix[$fileInfo->prefix] = $fileInfo;
+        }
+
+        usort($byPrefix, function($a, $b) {
+          if ($a->length === $b->length) return 0;
+
+          return $a->length > $b->length ? -1 : 1; // inverse
+        });
+
+        $longest = $byPrefix[0]->length;
+        $filesInfos = array_filter(
+          $byPrefix, 
+          function($fileInfo) use ($longest) {
+            return $fileInfo->length == $longest;
+          }
+        );
+    
+        // not further reduction possible
+        if (count($filesInfos) > 1) {
+          $e = ClassNotFoundException::fromFQN($fqn);
+          $e->appendMessage(sprintf(". AutoLoading from package: %s failed. Too many Files were found:\n%s", $package, implode("\n", A::pluck($filesInfos, 'file'))));
+          throw $e;
+        }
+      }
     }
-    
-    $files = array_diff($files, $testFiles);
-    
-    if (count($files) === 1) return current($files);
-    
-    $e = ClassNotFoundException::fromFQN($fqn);
-    $e->appendMessage(sprintf(". AutoLoading from package: %s failed. Too many Files were found:\n%s", $package, implode("\n", $files)));
-    throw $e;
+
+    return current($filesInfos)->file;
   }
   
   protected function validateFile(File $file, $flags = 0x0000) {
@@ -159,4 +193,3 @@ class GlobalClassFileMapper implements ClassFileMapper {
     return $this->packageRegistry;
   }
 }
-?>
