@@ -59,6 +59,10 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
   
   protected function visitClass(PHPParser_Node_Stmt_Class $class) {
     $this->gClass->setFQN($class->namespacedName);
+
+    if ($class->extends) {
+      $this->gClass->setParent(new GClass($class->extends->toString()));
+    }
   }
   
   protected function visitUse(PHPParser_Node_Stmt_Use $useNode) {
@@ -234,4 +238,3 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
     return $this->gClass;
   }
 }
-?>

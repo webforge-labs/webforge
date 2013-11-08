@@ -3,10 +3,11 @@
 namespace Webforge\Code\Generator;
 
 use Webforge\Common\String as S;
+use Webforge\Common\ClassUtil;
+use Webforge\Common\System\File;
 use ReflectionClass;
 use Webforge\Types\ObjectType;
 use InvalidArgumentException;
-use Webforge\Common\ClassUtil;
 
 class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface {
   
@@ -130,6 +131,15 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
    */
   public function getReflection() {
     return new ReflectionClass($this->getFQN());
+  }
+
+  /**
+   * Returns the file where the GClass is defined
+   * 
+   * but this works only if the GClass is existing and written
+   */
+  public function getFile() {
+    return new File($this->getReflection()->getFileName());
   }
 
   /**
@@ -705,4 +715,3 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
     return class_exists($this->getFQN(), $autoload);
   }
 }
-?>

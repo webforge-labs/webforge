@@ -23,6 +23,18 @@ class GClassTester {
     $this->test->assertEquals($namespace, $this->gClass->getNamespace(), $this->msg("hasNamespace '%s'", $namespace));
     return $this;
   }
+
+  /**
+   * @param string|GClass $fqn
+   */
+  public function hasParent($class) {
+    if ($class instanceof GClass) {
+      $class = $class->getFQN();
+    }
+
+    $this->test->assertNotNull($this->gClass->getParent(), $this->msg("hasParent '%s'", $class));
+    $this->test->assertEquals($class, $this->gClass->getParent()->getFQN(), $this->msg("hasParent '%s'", $class));
+  }
   
   public function hasMethod($name, array $parameters = NULL) {
     $this->test->assertTrue($this->gClass->hasMethod($name),$this->msg("hasMethod '%s'", $name));
