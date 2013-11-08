@@ -63,6 +63,10 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
     if ($class->extends) {
       $this->gClass->setParent(new GClass($class->extends->toString()));
     }
+
+    if ($class->getDocComment()) {
+      $this->gClass->setDocBlock(new DocBlock($class->getDocComment()->getText()));
+    }
   }
   
   protected function visitUse(PHPParser_Node_Stmt_Use $useNode) {

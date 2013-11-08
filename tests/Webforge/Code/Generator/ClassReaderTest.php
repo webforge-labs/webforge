@@ -61,6 +61,27 @@ PHP
     $this->assertThatGClass($gClass)->hasParent('Webforge\Console\Application');
   }
 
+  public function testReadsTheDocBlockOfClass() {
+    $this->expectFileHasContents(<<<'PHP'
+<?php
+namespace ACME;
+
+/**
+ * The docblock
+ */
+class Console extends \Webforge\Console\Application {
+  
+}
+
+PHP
+    );
+
+    $gClass = $this->read();
+
+    $this->assertThatGClass($gClass)->hasDocBlock();
+    $this->assertContains('The docblock', $gClass->getDocBlock()->toString());
+  }
+
   public function testReadIntoReturnsTheSameClassFromArgument() {
     $php = $this->inClass('public function export() {}');
     $this->expectFileHasContents($php);
