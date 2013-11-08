@@ -13,6 +13,8 @@ class GClassTester {
   protected $test;
   
   protected $gClass;
+
+  protected $lastGet;
   
   public function __construct(GClass $gClass, \Webforge\Code\Test\Base $testCase) {
     $this->test = $testCase;
@@ -34,6 +36,7 @@ class GClassTester {
 
     $this->test->assertNotNull($this->gClass->getParent(), $this->msg("hasParent '%s'", $class));
     $this->test->assertEquals($class, $this->gClass->getParent()->getFQN(), $this->msg("hasParent '%s'", $class));
+    return $this;
   }
   
   public function hasMethod($name, array $parameters = NULL) {
@@ -51,6 +54,11 @@ class GClassTester {
   
   public function getMethod($name) {
     return $this->gClass->getMethod($name);  
+  }
+
+  public function hasDocBlock() {
+    $this->test->assertTrue($this->gClass->hasDocBlock(), $this->msg("hasDocBlock"));
+    return $this;
   }
   
   /**
