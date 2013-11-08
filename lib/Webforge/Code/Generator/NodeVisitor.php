@@ -32,12 +32,6 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
     $this->gClass = $gClass ?: new GClass;
   }
   
-  //public function enterNode(PHPParser_Node $node) {
-    //if ($node instanceof PHPParser_Comment_Doc) {
-      
-    //}
-  //}
-  
   public function leaveNode(PHPParser_Node $node) {
     if ($node instanceof PHPParser_Node_Stmt_Namespace) {
       //$this->gClass->setNamespace($node->name->toString());
@@ -67,6 +61,8 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
     if ($class->getDocComment()) {
       $this->gClass->setDocBlock(new DocBlock($class->getDocComment()->getText()));
     }
+
+    $this->gClass->setModifiers($this->createModifiers($class));
   }
   
   protected function visitUse(PHPParser_Node_Stmt_Use $useNode) {

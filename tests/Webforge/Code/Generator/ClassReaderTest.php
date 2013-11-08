@@ -82,6 +82,18 @@ PHP
     $this->assertContains('The docblock', $gClass->getDocBlock()->toString());
   }
 
+  public function testReadsTheClassAsAbstract() {
+    $this->expectFileHasContents(<<<'PHP'
+<?php
+
+abstract class AbstractConsole {}
+
+PHP
+    );
+
+    $this->assertThatGClass($this->read())->isAbstract();
+  }
+
   public function testReadIntoReturnsTheSameClassFromArgument() {
     $php = $this->inClass('public function export() {}');
     $this->expectFileHasContents($php);
