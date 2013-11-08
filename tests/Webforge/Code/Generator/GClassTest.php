@@ -184,6 +184,15 @@ class GClassTest extends \Webforge\Code\Test\Base {
     $this->setExpectedException('InvalidArgumentException');
     GClass::newClassInstance(function() {}, array());
   }
+
+  public function testIfClassExistsGetFileReturnsTheDefiningFile() {
+    $gClass = new GClass(__CLASS__);
+
+    $this->assertEquals(
+      __FILE__,
+      (string) $gClass->getFile()
+    );
+  }
 }
 
 class MyConstructorThrowsExceptionClass {
