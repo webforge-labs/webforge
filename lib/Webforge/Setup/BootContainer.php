@@ -17,6 +17,8 @@ class BootContainer {
 
   protected $package;
 
+  protected $autoLoader;
+
   public function __construct($rootDirectory, WebforgeContainer $webforge = NULL) {
     $this->webforge = $webforge ?: new WebforgeContainer();
     $this->initRootDirectory($rootDirectory);
@@ -103,5 +105,21 @@ class BootContainer {
    */
   public function getHostConfig() {
     return $this->getHostConfiguration();
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getAutoLoader() {
+    return $this->autoLoader;
+  }
+  
+  /**
+   * @param mixed autoLoader
+   * @chainable
+   */
+  public function setAutoLoader($autoLoader) {
+    $this->autoLoader = $autoLoader;
+    return $this;
   }
 }
