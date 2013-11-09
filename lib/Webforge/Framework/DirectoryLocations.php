@@ -45,6 +45,7 @@ class DirectoryLocations {
         'etc'=>'etc/',
         'cache'=>'files/cache/',
         'tpl'=>'resources/tpl/',
+        'tpl-cache'=>'cache/tpl/',
         'docs'=>'docs/',
         'vendor'=>'vendor/',
         'build'=>'build/',
