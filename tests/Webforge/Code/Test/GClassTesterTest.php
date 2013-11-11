@@ -105,6 +105,17 @@ class GClassTesterTest extends Base {
     $this->assertThatGClass($this->class2)->hasMethod('undefined');
   }
 
+  public function testNegativeHasNotMethod() {
+    $this->expectFail();
+    $this->assertThatGClass($this->class2)->hasNotMethod('getName');
+  }
+
+  public function testPositiveHasNotMethod() {
+    $this->assertChainable(
+      $this->assertThatGClass($this->class2)->hasNotMethod('undefined')
+    );
+  }
+
 
   public function testFailingStatic() {
     $this->expectFail();

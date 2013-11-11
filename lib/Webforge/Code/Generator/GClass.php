@@ -8,6 +8,7 @@ use Webforge\Common\System\File;
 use ReflectionClass;
 use Webforge\Types\ObjectType;
 use InvalidArgumentException;
+use Webforge\Common\ClassInterface;
 
 class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface {
   
@@ -256,6 +257,17 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
   public function getNamespace() {
     // i think its faster to compute the FQN with concatenation add the trailingslash in the setter and remove the trailslash here
     return isset($this->namespace) ? rtrim($this->namespace, '\\') : NULL;
+  }
+
+  /**
+   * Tests if the namespace of the class is a subnamespace of the given
+   * 
+   */
+  public function isInNamespace($namespace) {
+    if ($namespace === NULL) return TRUE;
+    if ($this->getNamespace() == NULL) return FALSE;
+
+    return mb_strpos($this->namespace, $namespace) === 0;
   }
 
   /**
@@ -616,7 +628,7 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
    * @throws Exception when the alias (implicit or explicit) is already used (see Imports::add())
    * @param string $alias if not given the name of the class is used
    */
-  public function addImport(GClass $gClass, $alias = NULL) {
+  public function addImport(ClassInterface $gClass, $alias = NULL) {
     $this->ownImports->add($gClass, $alias);
     return $this;
   }
@@ -704,7 +716,7 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
   /**
    * @return bool
    */
-  public function equals(GClass $otherClass) {
+  public function equals(ClassInterface $otherClass) {
     return $this->getFQN() === $otherClass->getFQN();
   }
   
@@ -713,5 +725,13 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
    */
   public function exists($autoload = TRUE) {
     return class_exists($this->getFQN(), $autoload);
+  }
+
+  public function __clone() {
+    $this->methods = clone $this->methods;
+    $this->properties = clone $this->properties;
+    $this->ownImports = clone $this->ownImports;
+    $this->constants = clone $this->constants;
+    $this->interfaces = clone $this->interfaces;
   }
 }

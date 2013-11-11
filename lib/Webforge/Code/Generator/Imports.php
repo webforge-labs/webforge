@@ -6,6 +6,7 @@ use IteratorAggregate;
 use ArrayIterator;
 use Countable;
 use LogicException;
+use Webforge\Common\ClassInterface;
 
 class Imports implements IteratorAggregate, Countable {
   
@@ -56,7 +57,7 @@ class Imports implements IteratorAggregate, Countable {
    * You have to remove the alias first
    * @param string $alias sets an explicit alias. (the implicit is always the classname)
    */
-  public function add(GClass $import, $alias = NULL) {
+  public function add(ClassInterface $import, $alias = NULL) {
     if (empty($alias)) $alias = $import->getName();
     if (empty($alias)) {
       throw new \InvalidArgumentException('GClass: '.$import.' must have a FQN.');
@@ -82,7 +83,7 @@ class Imports implements IteratorAggregate, Countable {
    * @chainable
    */
   public function remove($aliasOrGClass) {
-    if ($aliasOrGClass instanceof GClass) {
+    if ($aliasOrGClass instanceof ClassInterface) {
       $gClass = $aliasOrGClass;
       $alias = $aliasOrGClass->getName();
     } else {
@@ -110,14 +111,14 @@ class Imports implements IteratorAggregate, Countable {
    * @return bool
    */
   public function have($aliasOrGClass) {
-    $alias = $aliasOrGClass instanceof GClass ? $aliasOrGClass->getName() : $aliasOrGClass;
+    $alias = $aliasOrGClass instanceof ClassInterface ? $aliasOrGClass->getName() : $aliasOrGClass;
     return array_key_exists(mb_strtolower($alias), $this->aliases);
   }
   
   /**
    * @return string|NULL
    */
-  public function getAlias(GClass $gClass) {
+  public function getAlias(ClassInterface $gClass) {
     foreach ($this->classes as $alias => $aliasedGClass) {
       if ($aliasedGClass->equals($gClass)) {
         return $alias;
@@ -143,7 +144,7 @@ class Imports implements IteratorAggregate, Countable {
    *
    * @chainable
    */
-  public function mergeFromClass(GClass $gClass) {
+  public function mergeFromClass(ClassInterface $gClass) {
     foreach ($gClass->getImports()->toArray() as $alias => $import) {
       $this->add($import, $alias);
     }

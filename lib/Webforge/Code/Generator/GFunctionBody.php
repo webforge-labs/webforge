@@ -15,7 +15,7 @@ class GFunctionBody {
    * @var array
    */
   protected $stmts;
-  
+
   public function __construct(Array $stmts = array()) {
     $this->stmts = $stmts;
   }
