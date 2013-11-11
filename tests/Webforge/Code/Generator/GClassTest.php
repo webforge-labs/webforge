@@ -193,6 +193,32 @@ class GClassTest extends \Webforge\Code\Test\Base {
       (string) $gClass->getFile()
     );
   }
+
+    /**
+     * @dataProvider provideIsInNamespace
+     */
+    public function testIsInNamespace($fqn, $namespace, $result) {
+      $gClass = new GClass($fqn);
+      $this->assertEquals($result, $gClass->isInNamespace($namespace), sprintf("'%s' is in namespace '%s'", $fqn, $namespace));
+    }
+    
+    public static function provideIsInNamespace() {
+      $tests = array();
+    
+      $test = function() use (&$tests) {
+        $tests[] = func_get_args();
+      };
+    
+      $test('Webforge\Doctrine\Container', 'Webforge', TRUE);
+      $test('Webforge\Doctrine\Container', 'Webforge\Doctrine', TRUE);
+      $test('Webforge\Doctrine\Container', 'Webforge\Doctrine\Container', FALSE);
+      $test('Webforge\Doctrine\Container', NULL, TRUE);
+
+      $test('Container', NULL, TRUE);
+      $test('Container', 'Webforge', FALSE);
+
+      return $tests;
+    }
 }
 
 class MyConstructorThrowsExceptionClass {
@@ -203,4 +229,3 @@ class MyConstructorThrowsExceptionClass {
     throw new \Webforge\Common\Exception('this should not be called');
   }
 }
-?>

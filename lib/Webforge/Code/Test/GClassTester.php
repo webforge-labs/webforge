@@ -7,6 +7,7 @@ use Webforge\Code\Generator\GProperty;
 use Webforge\Code\Generator\GMethod;
 use Webforge\Code\Generator\GModifiersObject;
 use Webforge\Common\Exception\NotImplementedException;
+use Webforge\Common\ArrayUtil as A;
 
 class GClassTester {
   
@@ -40,7 +41,13 @@ class GClassTester {
   }
   
   public function hasMethod($name, array $parameters = NULL) {
-    $this->test->assertTrue($this->gClass->hasMethod($name),$this->msg("hasMethod '%s'", $name));
+    $this->test->assertTrue(
+      $this->gClass->hasMethod($name),
+      $this->msg("hasMethod '%s'. Methods avaible: [%s]", 
+        $name, implode(", ", A::pluck($this->gClass->getMethods(), 'name'))
+      )
+    );
+
     $method = $this->gClass->getMethod($name);    
     
     if (isset($parameters)) {
@@ -51,13 +58,27 @@ class GClassTester {
     
     return $this;
   }
+
+  public function hasNotMethod($name, array $parameters = NULL) {
+    $this->test->assertFalse(
+      $this->gClass->hasMethod($name),
+      $this->msg("hasNotMethod '%s'", $name)
+    );
+
+    return $this;
+  }
   
   public function getMethod($name) {
     return $this->gClass->getMethod($name);  
   }
 
   public function hasDocBlock() {
-    $this->test->assertTrue($this->gClass->hasDocBlock(), $this->msg("hasDocBlock"));
+    if ($this->lastGet) {
+      $this->test->assertTrue($this->lastGet->hasDocBlock(), $this->msg("hasDocBlock"));
+    } else {
+      $this->test->assertTrue($this->gClass->hasDocBlock(), $this->msg("hasDocBlock"));
+    }
+    
     return $this;
   }
   
