@@ -16,7 +16,7 @@
     
     "nikic/php-parser": "0.9.*@stable",
     
-    "webforge/common": "1.6.*@dev",
+    "webforge/common": "1.7.*@dev",
     "webforge/types": "1.0.*@stable",
     "webforge/console": "1.0.*@stable",
     "webforge/config": "1.0.*@stable",
