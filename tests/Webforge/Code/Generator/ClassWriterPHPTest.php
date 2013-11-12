@@ -82,9 +82,9 @@ PHP;
     $method = GMethod::create(
       '__construct',
       array(),
-      GFunctionBody::create(
+      GFunctionBody::create(array(
         sprintf("parent::__construct('%s');\n", 'TheName')
-      )
+      ))
     );
     
     $phpCode = <<<'PHP'

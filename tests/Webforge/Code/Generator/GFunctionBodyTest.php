@@ -56,5 +56,17 @@ class GFunctionBodyTest extends \Webforge\Code\Test\Base {
     
     return $tests;
   }
+
+  public function testInsertBodyShiftsCodeLines() {
+    $body = GFunctionBody::create(array('echo "hello";', 'return $this;'));
+    $body->insertBody(array('echo "world!";'), 1);
+
+    $this->assertCodeEquals(
+      "echo 'hello';\n".
+      "echo 'world!';\n".
+      "return \$this;\n",
+      
+      $body->php(0, "\n")
+    );
+  }
 }
-?>
