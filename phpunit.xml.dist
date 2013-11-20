@@ -20,12 +20,6 @@
       <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
     </listeners>
     
-    <groups>
-      <exclude>
-        <group>acceptance</group>
-      </exclude>
-    </groups>
-
     <filter>
       <whitelist>
         <directory suffix=".php">lib</directory>

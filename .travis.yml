@@ -16,7 +16,7 @@ before_install:
 before_script:
   - chmod u+x bin/webforge
 
-script: phpunit -c tests/phpunit.travis.xml --coverage-clover build/logs/clover.xml
+script: phpunit --coverage-clover build/logs/clover.xml
 
 after_script:
   - php vendor/bin/coveralls -v
