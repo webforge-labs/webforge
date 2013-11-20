@@ -19,3 +19,11 @@ Webforge can tell you where to find your host configuration (or where to put it)
 ```
 webforge info
 ```
+
+### host-configuration url basepattern
+
+if you add:
+```php
+$conf['url']['hostPattern'] = '%s.my-local-domain';
+```
+to your host-configuration.php, your projects urls will be expanded to: `%lower-project-name%.my-local-domain`. This is useful for local machines or staging servers.

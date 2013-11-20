@@ -14,6 +14,10 @@ if (!file_exists($vendor.'autoload.php')) {
   $vendor = __DIR__ . '/../../';
 }
 
-require $vendor.'autoload.php';
+$composerAutoLoader = require $vendor.'autoload.php';
 
-return $GLOBALS['env']['root'] = new \Webforge\Common\System\Dir(__DIR__.DIRECTORY_SEPARATOR);
+$GLOBALS['env']['root'] = $root = new \Webforge\Common\System\Dir(__DIR__.DIRECTORY_SEPARATOR);
+$GLOBALS['env']['container'] = $container = new Webforge\Setup\BootContainer($GLOBALS['env']['root']);
+$container->setAutoLoader($composerAutoLoader);
+
+return $root;

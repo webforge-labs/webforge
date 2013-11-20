@@ -7,6 +7,7 @@ use ArrayIterator;
 use Countable;
 use LogicException;
 use Webforge\Common\ClassInterface;
+use InvalidArgumentException;
 
 class Imports implements IteratorAggregate, Countable {
   
@@ -58,9 +59,12 @@ class Imports implements IteratorAggregate, Countable {
    * @param string $alias sets an explicit alias. (the implicit is always the classname)
    */
   public function add(ClassInterface $import, $alias = NULL) {
-    if (empty($alias)) $alias = $import->getName();
     if (empty($alias)) {
-      throw new \InvalidArgumentException('GClass: '.$import.' must have a FQN.');
+      $alias = $import->getName();
+    }
+
+    if (empty($alias)) {
+      throw new InvalidArgumentException('GClass: '.$import.' must have a valid FQN: '.$import->getFQN());
     }
     
     if (array_key_exists($lowerAlias = mb_strtolower($alias), $this->aliases)) {
@@ -144,9 +148,14 @@ class Imports implements IteratorAggregate, Countable {
    *
    * @chainable
    */
-  public function mergeFromClass(ClassInterface $gClass) {
-    foreach ($gClass->getImports()->toArray() as $alias => $import) {
-      $this->add($import, $alias);
+  public function mergeFromClass(GClass $gClass) {
+    try {
+      foreach ($gClass->getImports()->toArray() as $alias => $import) {
+        $this->add($import, $alias);
+      }
+    } catch (InvalidArgumentException $e) {
+      \Doctrine\Common\Util\Debug::dump($gClass->getImports()->toArray());
+      throw new InvalidArgumentException('Cannot add all imports from '.$gClass->getFQN().' into imports.', 0, $e);
     }
     
     return $this;
