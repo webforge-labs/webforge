@@ -29,4 +29,3 @@ interface ClassFileMapper {
   */
   public function getClass(File $file);
 }
-?>

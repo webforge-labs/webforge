@@ -663,15 +663,15 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
     
     // props
     foreach ($this->getProperties() as $property) {
-      if ($property->getType() instanceof ObjectType) {
-        $imports->add(new GClass($property->getType()->getClassFQN())); // translate back
+      if ($property->getType() instanceof ObjectType && $property->getType()->hasClass()) {
+        $imports->add(new GClass($property->getType()->getClassFQN())); // translate back to GClass (because this can be a simple ClassInterface - class)
       }
     }
     
     // methods
     foreach ($this->getMethods() as $method) {
       foreach ($method->getParameters() as $parameter) {
-        if ($parameter->getType() instanceof ObjectType) {
+        if ($parameter->getType() instanceof ObjectType && $property->getType()->hasClass()) {
           $imports->add(new GClass($parameter->getType()->getClassFQN())); // translate back
         }
       }
