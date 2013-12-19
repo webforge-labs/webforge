@@ -4,7 +4,7 @@ namespace Webforge\Code\Test;
 
 use PHPUnit_Framework_Constraint;
 use Webforge\Common\System\File;
-use SebastianBergmann\Diff;
+use SebastianBergmann\Diff\Differ;
 use Webforge\Common\String as S;
 
 class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
@@ -159,7 +159,7 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
     
     if (isset($this->normalizedCode)) {
       $string .= "\n";
-      $diffUtil = new Diff("--- expected\n+++ actual\n");
+      $diffUtil = new Differ("--- expected\n+++ actual\n");
       $string .= $diffUtil->diff(
         $this->normalizedCode,
         $this->normalizedOtherCode
@@ -169,4 +169,3 @@ class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
     return $string;
   }
 }
-?>

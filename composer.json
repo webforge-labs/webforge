@@ -20,7 +20,7 @@
     "webforge/types": "1.0.*@stable",
     "webforge/console": "1.0.*@dev",
     "webforge/config": "1.0.*@stable",
-    "sebastian/diff": "1.0.*@stable",
+    "sebastian/diff": "1.1.*@stable",
     "liip/rmt": "0.9.*@stable",
     "guzzle/guzzle": "3.7.4@stable"
   },
@@ -28,7 +28,7 @@
     "webforge/testdata-repository": "*@alpha",
     "mikey179/vfsStream": "1.3.*@dev",
     "mockery/mockery": "dev-master",
-    "webforge/testplate": "1.4.*@stable",
+    "webforge/testplate": "1.5.*@stable",
     "symfony/event-dispatcher": "2.3@stable",
     "satooshi/php-coveralls": "dev-master"
   },
