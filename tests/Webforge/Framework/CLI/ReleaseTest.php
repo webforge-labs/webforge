@@ -27,8 +27,8 @@ class ReleaseTest extends CommandTestCase {
   }
 
   public function testReleaseInstallsRMTWhenExecutedAndRMTIsNotInstalled() {
+    $this->expectRMTConfigNotDefined();
     $this->expectAskForRMTInstall(TRUE);
-    $this->expectComposerInstall(0);
 
     $this->execute();
 
@@ -36,6 +36,10 @@ class ReleaseTest extends CommandTestCase {
     $config = json_decode($rmt->getContents());
     $this->assertObjectHasAttribute('version-generator', $config, 'version-generator should be defined in config');
     $this->assertObjectHasAttribute('version-persister', $config, 'version-persister should be defined in config');
+  }
+
+  protected function expectRMTConfigNotDefined() {
+    $this->rmt->shouldReceive('find')->with('release')->andThrow(new \InvalidArgumentException('release is not defined'));
   }
 
   public function testReleaseCurrentDoesOnlyDisplay() {
@@ -54,15 +58,9 @@ class ReleaseTest extends CommandTestCase {
     $this->execute();
   }
 
-  public function testIfNotInstalledJustExits() {
+  public function testIfNotInstalledAndShouldNotBeInstalledItJustExits() {
+    $this->expectRMTConfigNotDefined();
     $this->expectAskForRMTInstall(FALSE);
-
-    $this->assertSame(1, $this->execute());
-  }
-
-  public function testIfComposerFailsJustExits() {
-    $this->expectAskForRMTInstall(TRUE);
-    $this->expectComposerInstall(255);
 
     $this->assertSame(1, $this->execute());
   }
@@ -74,6 +72,7 @@ class ReleaseTest extends CommandTestCase {
   }
 
   protected function expectComposerInstall($exitCode = 0) {
+    // not used because we do not install composer locally
     $test = $this;
 
     return $this->system->shouldReceive('passthru')
@@ -92,6 +91,8 @@ class ReleaseTest extends CommandTestCase {
     $rmtFake = $this->getTestDirectory()->sub('packages/RMT/');
     $target = $this->package->getDirectory('vendor')->sub('liip/rmt')->create();
     $rmtFake->copy($target);
+
+    $this->rmt->shouldReceive('find')->with('release')->andReturn(new \stdClass);
   }
 
   protected function execute() {

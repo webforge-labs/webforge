@@ -453,7 +453,7 @@ class Container implements SystemContainerConfiguration {
    */
   public function getReleaseManager() {
     if (!isset($this->releaseManager)) {
-      if (!defined('RMT_ROOT_DIR')) {        
+      if (!defined('RMT_ROOT_DIR')) {
         define('RMT_ROOT_DIR', $this->getLocalPackage()->getRootDirectory()->getPath(Dir::WITHOUT_TRAILINGSLASH));
       }
 

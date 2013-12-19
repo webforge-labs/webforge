@@ -8,6 +8,7 @@ use Webforge\Console\CommandInteraction;
 use Webforge\Common\System\Dir;
 use Webforge\Framework\VendorPackageInitException;
 use Webforge\Common\JS\JSONConverter;
+use InvalidArgumentException;
 
 class Release extends ContainerCommand {
   
@@ -27,64 +28,60 @@ class Release extends ContainerCommand {
     $package = $this->container->getLocalPackage();
     $do = $input->getValue('do');
 
+    $releaseManager = $this->container->getReleaseManager();
+
+    // rmt does not expose release as command if rmt is not initialized (json does not exist)
     try {
-      $rmt = $this->container->getVendorPackage('liip/rmt');
+      $releaseCommand = $releaseManager->find('release');
+    } catch (InvalidArgumentException $e) {
 
-      if ($do === 'current') {
-        return $this->runCurrent();
-      } else {
-        return $this->runRelease();
-      }
-
-    } catch (VendorPackageInitException $e) {
-      if ($interact->confirm('liip/rmt (composer package) is not installed for this project. Do you want to install RMT now?', TRUE)) {
-        $output->msg('Installing liip/rmt with composer (might take a while)');
+      if ($interact->confirm('liip/rmt config file is not found for this project. Do you want to install RMT now?', TRUE)) {
 
         if ($this->installRMT($package, $interact)) {
-          $output->msg('Commit the composer.json and then run webforge release again');
+          $output->msg('Wrote a default rmt.json. Add and commit it and then run webforge release again');
           return 0;
         }
       }
+
+      $output->warn('Cannot continue without RMT installed.');
+      return 1;
     }
 
-    $output->warn('Cannot continue without RMT installed.');
-    return 1;
+    if ($do === 'current') {
+      return $this->runCurrent($releaseManager);
+    } else {
+      return $this->runRelease($releaseManager);
+    }
   }
 
-  protected function runRelease() {
-    return $this->container->getReleaseManager()->run(); // runs release per default
+  protected function runRelease($releaseManager) {
+    return $releaseManager->run(); // runs release per default
   }
 
-  protected function runCurrent() {
+  protected function runCurrent($releaseManager) {
     $input = new \Symfony\Component\Console\Input\ArrayInput(array('command'=>'current'));
-    return $this->container->getReleaseManager()->run($input);
+    return $releaseManager->run($input);
   }
 
   protected function installRMT($package, $interact) {
-    $ret = $this->system->passthru('composer require --dev liip/rmt 0.9.*');
+    $rmtConfig = (object) array(
+      "vcs"=>"git",
 
-    if ($ret === 0) {
-      $rmtConfig = (object) array(
-        "vcs"=>"git",
+      "version-generator"=>"semantic",
+      "version-persister"=>"vcs-tag",
 
-        "version-generator"=>"semantic",
-        "version-persister"=>"vcs-tag",
+      "prerequisites"=>array("working-copy-check", "display-last-changes"),
+      "pre-release-actions"=>array("composer-update", "vcs-commit"),
+      "post-release-actions"=>array("vcs-publish")
+    );
 
-        "prerequisites"=>array("working-copy-check", "display-last-changes"),
-        "pre-release-actions"=>array("composer-update", "vcs-commit"),
-        "post-release-actions"=>array("vcs-publish")
+    $config = $package->getRootDirectory()->getFile('rmt.json');
+    if (!$config->exists()) {
+      $config->writeContents(
+        JSONConverter::create()->stringify($rmtConfig, JSONConverter::PRETTY_PRINT)
       );
-
-      $config = $package->getRootDirectory()->getFile('rmt.json');
-      if (!$config->exists()) {
-        $config->writeContents(
-          JSONConverter::create()->stringify($rmtConfig, JSONConverter::PRETTY_PRINT)
-        );
-      }
-
-      return TRUE;
     }
 
-    return FALSE;
+    return TRUE;
   }
 }
