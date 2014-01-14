@@ -28,7 +28,7 @@ class GClassTester {
   }
 
   public function isInNamespace($namespace) {
-    $this->test->assertStringStartsWith(rtrim($namespace,'\\').'\\', $this->gClass->getNamespace(), $this->msg("isInNamespace '%s'", $namespace));
+    $this->test->assertStringStartsWith(rtrim($namespace,'\\').'\\', $this->gClass->getFQN(), $this->msg("isInNamespace '%s'", $namespace));
     return $this;
   }
 

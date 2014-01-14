@@ -35,6 +35,10 @@ class GClassTesterTest extends Base {
     $this->assertChainable($this->assertThatGClass($this->class3)->isInNamespace('Namespaced'));
   }
 
+  public function testPositiveIsInNamespace_sameNamespace() {
+    $this->assertChainable($this->assertThatGClass($this->class3)->isInNamespace('Namespaced\One'));
+  }
+
   public function testNegativeIsInNamespace() {
     $this->expectFail();
     $this->assertChainable($this->assertThatGClass($this->class3)->isInNamespace('Namesp'));
