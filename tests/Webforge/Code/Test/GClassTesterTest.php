@@ -22,11 +22,22 @@ class GClassTesterTest extends Base {
     $this->class2 = new GClass('SomethingChild');
     $this->class2->setParent($this->class1);
     $this->class2->createMethod('getName', array(), new GFunctionBody(array()));
+
+    $this->class3 = new GClass('Namespaced\One\Something');
   }
 
   public function testFailingHasNamespace() {
     $this->expectFail();
     $this->assertThatGClass($this->class1)->hasNamespace('Other');
+  }
+
+  public function testPositiveIsInNamespace() {
+    $this->assertChainable($this->assertThatGClass($this->class3)->isInNamespace('Namespaced'));
+  }
+
+  public function testNegativeIsInNamespace() {
+    $this->expectFail();
+    $this->assertChainable($this->assertThatGClass($this->class3)->isInNamespace('Namesp'));
   }
 
   public function testEmptyHasNamespace() {
