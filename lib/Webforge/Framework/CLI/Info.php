@@ -5,6 +5,7 @@ namespace Webforge\Framework\CLI;
 use Webforge\Console\CommandInput;
 use Webforge\Console\CommandOutput;
 use Webforge\Console\CommandInteraction;
+use Webforge\Common\System\Dir;
 
 class Info extends ContainerCommand {
   
@@ -22,6 +23,11 @@ class Info extends ContainerCommand {
 
     $output->ok('Webforge info:');
     $output->msg('');
+
+    if ($GLOBALS['env']['root']) {
+      $output->msg('webforge is loaded from: '.$GLOBALS['env']['root']->wtsPath());
+      $output->msg('');
+    }
 
     if ($hostConfig->exists()) {
       $hostCfg = $this->container->getHostConfiguration();

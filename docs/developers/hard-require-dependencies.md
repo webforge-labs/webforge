@@ -16,4 +16,6 @@ webforge/common requires seld/jsonlint (latest stable)
 
 webforge/collections requires doctrine/collections (latest something)
 
+webforge/doctrine-compiler requires webforge/webforge and needs webforge/types from webforge
+
 psc-cms requires webforge/webforge and builds a circly with the require-dev from webforge/webforge

@@ -20,6 +20,7 @@ class InfoTest extends CommandTestCase {
     $this->execute();
 
     $this->assertNotEmpty($infos = $this->output->toString());
+    $this->assertContains('webforge is loaded from:', $infos);
   }
 
   protected function execute() {
