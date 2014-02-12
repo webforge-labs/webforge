@@ -61,4 +61,3 @@ class InflectorTest extends \Webforge\Code\Test\Base {
     return $tests;
   }
 }
-?>
