@@ -1,7 +1,6 @@
 {
   "name": "webforge/webforge",
   "description": "a content management framework for easy to build and individual content management systems",
-  "version": "1.8.0",
   "keywords": ["cmf", "framework", "cms"],
   "homepage": "http://github.com/pscheit/webforge",
   "license": "LGPL-3.0",
@@ -18,7 +17,7 @@
     
     "webforge/common": "1.7.*@dev",
     "webforge/types": "1.1.*@stable",
-    "webforge/console": "1.0.*@dev",
+    "webforge/console": "1.1.*@dev",
     "webforge/config": "1.0.*@stable",
     "sebastian/diff": "1.1.*@stable",
     "liip/rmt": "0.9.*@stable",
