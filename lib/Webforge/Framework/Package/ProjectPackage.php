@@ -137,17 +137,11 @@ class ProjectPackage implements \Webforge\Framework\Project {
     return $this;
   }
 
-  /**
-   * @inherit-doc
-   */
   public function defineDirectory($alias, $location) {
     $this->directoryLocations->set($alias, $location);
     return $this;
   }
 
-  /**
-   * @inherit-doc
-   */
   public function getHost() {
     return $this->host;
   }
