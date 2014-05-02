@@ -86,19 +86,19 @@ this are the paths which are stored as hardcoded defaults for webforge packages:
 /files/cache/doctrine-proxies/category-proxy.php
 /files/cache/tmp/grunt/build.txt
 
-/resources/tpl/start.twig
-/resources/tpl/layout/sidebar.mustache
-/resources/tpl/layout/footer.mustache
-/resources/tpl/a-partial.mustache
-/resources/assets/js/require.js
-/resources/assets/js/boot.js
-/resources/assets/img/logo.gif
-/resources/assets/css/my-layout.css
-/resources/db/001_create_dbs.sql
-/resources/db/002_create_users.sql
-/resources/screens/working-copy.psd
-/resources/translations/acme-superblog.de.php
-/resources/translations/acme-superblog.en.php
+/Resources/tpl/start.twig
+/Resources/tpl/layout/sidebar.mustache
+/Resources/tpl/layout/footer.mustache
+/Resources/tpl/a-partial.mustache
+/Resources/assets/js/require.js
+/Resources/assets/js/boot.js
+/Resources/assets/img/logo.gif
+/Resources/assets/css/my-layout.css
+/Resources/db/001_create_dbs.sql
+/Resources/db/002_create_users.sql
+/Resources/screens/working-copy.psd
+/Resources/translations/acme-superblog.de.php
+/Resources/translations/acme-superblog.en.php
 
 /www/.htaccess
 /www/index.php
