@@ -17,7 +17,7 @@
     
     "webforge/common": "1.7.*@dev",
     "webforge/types": "1.1.*@stable",
-    "webforge/console": "1.1.*",
+    "webforge/console": "1.2.*",
     "webforge/config": "1.0.*@stable",
     "sebastian/diff": "1.1.*@stable",
     "liip/rmt": "0.9.*@stable",
