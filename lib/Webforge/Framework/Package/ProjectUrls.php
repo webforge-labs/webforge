@@ -48,7 +48,7 @@ class ProjectUrls {
         $this->urls['base'] = new Url($url);
 
       } catch (\Exception $e) {
-        throw new DefaultException('Project-Configuration: cannot configure baseUrl. set url.base in projectPackage config or url.hostPattern in host-config', 0);
+        throw new DefaultException('Project-Configuration: cannot configure baseUrl. set url.base in projectPackage config or url.hostPattern in host-config: '.$e->getMessage(), 0, $e);
       }
     }
 

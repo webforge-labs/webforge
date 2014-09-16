@@ -20,8 +20,7 @@
     "webforge/console": "1.2.*",
     "webforge/config": "1.0.*@stable",
     "sebastian/diff": "1.1.*@stable",
-    "liip/rmt": "0.9.*@stable",
-    "guzzle/guzzle": "3.7.4@stable"
+    "liip/rmt": "0.9.*@stable"
   },
   "require-dev": {
     "webforge/testdata-repository": "*@alpha",
@@ -32,7 +31,8 @@
     "satooshi/php-coveralls": "dev-master"
   },
   "suggest": {
-    "webforge/doctrine": "To persist the navigation tree generated from NestedSetConverter"
+    "webforge/doctrine": "To persist the navigation tree generated from NestedSetConverter",
+    "webforge/configuration-tester": "To test your php configuration"
   },
   "autoload": {
     "psr-0": {
