@@ -145,9 +145,9 @@ class Init extends ContainerCommand {
     if ($this->interact->confirm('Do you want to init autoload information (psr-0)?', TRUE)) {
       $namespace = $this->inflector->namespaceify($vendor).'\\'.$this->inflector->namespaceify($packageSlug);
 
-      $lib = $this->interact->askDefault('Where is your library path (relative to '.$this->root.')', 'lib/');
+      $lib = $this->interact->askDefault('Where is your library path (relative to '.$this->root.')', 'src/php/');
       $namespace = $this->interact->askDefault('What is your Namespace?', $namespace);
-      $tests = $this->interact->askDefault('Where is your tests path (relative to '.$this->root.')', 'tests/');
+      $tests = $this->interact->askDefault('Where is your tests path (relative to '.$this->root.')', 'tests/php/');
 
       return array($namespace, $lib, $tests);
     }

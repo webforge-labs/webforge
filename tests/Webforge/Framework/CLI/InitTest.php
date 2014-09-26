@@ -128,11 +128,11 @@ MARKDOWN
         ->andReturn('ACME\SuperBlog');
 
       $this->expectQuestion()
-        ->with('/library[-\s]path/i', 'lib/')
+        ->with('/library[-\s]path/i', 'src/php/')
         ->andReturn('src/');
 
       $this->expectQuestion()
-        ->with('/tests[-\s]path/i', 'tests/')
+        ->with('/tests[-\s]path/i', 'tests/php/')
         ->andReturn('tests/');
     }
   }
