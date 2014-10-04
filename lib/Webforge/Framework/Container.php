@@ -251,9 +251,7 @@ class Container implements SystemContainerConfiguration {
             new \Webforge\Setup\Installer\WriteHtaccessPart(),
             new \Webforge\Setup\Installer\PscJSBoilerplatePart(),
             new \Webforge\Setup\Installer\InitConfigurationPart(),
-            new \Webforge\Setup\Installer\InitDoctrinePart(),
-            new \Webforge\Setup\Installer\CMSContainerPart(),
-            new \Webforge\Setup\Installer\CMSCompilerPart()
+            new \Webforge\Setup\Installer\InitDoctrinePart()
           ),
           $this,
           $interaction,
