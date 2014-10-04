@@ -13,7 +13,7 @@ use Webforge\Common\System\File;
 /**
  * tests the getFile() function from the GlobalClassFileMapper
  */
-class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
+class GlobalClassFileMapperTest extends \Webforge\Code\Test\Base {
   
   protected $mapper;
   
@@ -171,6 +171,7 @@ class GlobalClassFileMapperGetFileTest extends \Webforge\Code\Test\Base {
                                     )
                                   )
                                 );
+    $package->defineDirectory(Package::TESTS, 'tests/');
     return $package;
   }
   

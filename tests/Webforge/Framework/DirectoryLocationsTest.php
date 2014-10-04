@@ -18,8 +18,8 @@ class DirectoryLocationsTest extends \Webforge\Framework\Package\PackagesTestCas
     $this->packageLocations = DirectoryLocations::createFromPackage($this->package);
     $this->packageLocations->addMultiple(
       array(
-        'doctrine-entities'=>'lib/ACME/SuperBlog/Entities/',
-        'doctrine-proxies'=>'files/cache/doctrine/proxies/' // normally recursive?
+        'doctrine-proxies'=>'files/cache/doctrine/proxies/', // @TODO recursive definition for cache?
+        'alice'=>'tests/files/alice/'
       )
     );
   }
@@ -70,14 +70,15 @@ class DirectoryLocationsTest extends \Webforge\Framework\Package\PackagesTestCas
     $test('cms-uploads', 'files/uploads/');
     $test('cms-images', 'files/images/');
     $test('www', 'www/');
-    $test('resources', 'resources/');
-    $test('assets-src', 'resources/assets/');
+    $test('resources', 'Resources/');
+    $test('assets-src', 'Resources/assets/');
     $test('assets-built', 'www/assets/');
-    $test('tpl', 'resources/tpl/');
-    $test('prototypes', 'resources/prototypes/');
+    $test('tpl', 'Resources/tpl/');
+    $test('prototypes', 'Resources/prototypes/');
 
-    $test('doctrine-entities', 'lib/ACME/SuperBlog/Entities/');
+    $test('doctrine-entities', 'src/php/ACME/SuperBlog/Entities/');
     $test('doctrine-proxies', 'files/cache/doctrine/proxies/');
+    $test('alice', 'tests/files/alice/');
   
     return $tests;
   }

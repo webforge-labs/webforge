@@ -23,7 +23,7 @@ class CreateClassTest extends CommandTestCase {
       //'parent'=>'ACME\SuperBlog\Entities\Entity'
     ));
 
-    $this->assertFileExists((string) $this->package->getRootDirectory()->sub('lib/ACME\SuperBlog\Entities\Post.php'));
+    $this->assertFileExists((string) $this->package->getRootDirectory()->sub('src/php/ACME/SuperBlog/Entities/Post.php'));
   }
 
   protected function executeTest(Array $args) {

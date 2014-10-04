@@ -13,7 +13,7 @@
     "require-dev": {
     },
     "autoload": {
-        "psr-0": { "SerienLoader": ["lib/"] }
+        "psr-0": { "SerienLoader": ["src/php/"] }
     },
     "extra": {
         "directory-locations": {

@@ -38,34 +38,33 @@ class DirectoryLocations {
     return new static(
       $package->getRootDirectory(),
       array(
-        'lib'=>'lib/',
-        'tests'=>'tests/',
+        'lib'=>'src/php/',
+        'tests'=>'tests/php/',
         'test-files'=>'tests/files/',
         'bin'=>'bin/',
         'etc'=>'etc/',
         'cache'=>'files/cache/',
-        'tpl'=>'resources/tpl/',
-        'tpl-cache'=>'cache/tpl/',
+        'tpl'=>'Resources/tpl/',
+        'tpl-cache'=>'files/cache/tpl/',
         'docs'=>'docs/',
         'vendor'=>'vendor/',
         'build'=>'build/',
         'logs'=>'files/logs/',
 
-        'test-files'=>'tests/files/',
-        
         'www'=>'www/',
         'cms-www'=>'www/cms/',
         'cms-uploads'=>'files/uploads/',
         'cms-images'=>'files/images/',
 
-        'resources'=>'resources/',
-        'prototypes'=>'resources/prototypes/',
-        'assets-src'=>'resources/assets/',
+        'resources'=>'Resources/',
+        'prototypes'=>'Resources/prototypes/',
+        'assets-src'=>'Resources/assets/',
         'assets-built'=>'www/assets/',
 
-        'cms-tpl'=>'resources/tpl/', // dont use this anymore
+        'cms-tpl'=>'Resources/tpl/', // dont use this anymore
 
-        'doctrine-proxies'=>'files/cache/doctrine-proxies/'
+        'doctrine-proxies'=>'files/cache/doctrine-proxies/',
+        'doctrine-entities'=>'src/php/'.$package->getNamespace().'/Entities'
       )
     );
   }

@@ -11,6 +11,6 @@
 
     },
     "autoload": {
-        "psr-0": {"ACME\\SuperBlog": ["lib", "tests"]}
+        "psr-0": {"ACME\\SuperBlog": ["src/php", "tests/php/"]}
     }
 }

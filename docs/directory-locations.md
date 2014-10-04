@@ -10,7 +10,7 @@ Have a look at this (reduced) composer.json
   "name":"acme/blog",
   "autoload":{
     "psr-0":{
-      "ACME\Blog":["lib/", "tests/"]
+      "ACME\Blog":["src/php/", "tests/php/"]
     }
   },
   "extra":{
@@ -21,7 +21,7 @@ Have a look at this (reduced) composer.json
     "directory-locations": {
       "etc": "etc/",
       "tests": "tests/",
-      "assets": "resources/assets/",
+      "assets": "Resources/assets/",
       "cache": "files/cache/"
     }
   }

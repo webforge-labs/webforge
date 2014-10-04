@@ -60,13 +60,20 @@ this are the paths which are stored as hardcoded defaults for webforge packages:
 /docs/get-started.md
 /docs/writing-tests.md
 
-/lib/ACME/SuperBlog/Main.php
-/lib/ACME/SuperBlog/Container.php
-/lib/package.boot.php
+/src/php/ACME/SuperBlog/Main.php
+/src/php/ACME/SuperBlog/Container.php
+/src/php/package.boot.php
 
-/tests/ACME/SuperBlog/MainTest.php
-/tests/ACME/SuperBlog/ContainerTest.php
-/tests/acceptance/BlogWebAcceptanceTest.php
+/src/js/lib/some-module.js
+/src/js/config.js
+/src/js/ACME/SuperBlog/Main.js
+/src/js/ACME/SuperBlog/Entities/Blog.js
+
+/tests/php/ACME/SuperBlog/MainTest.php
+/tests/php/ACME/SuperBlog/ContainerTest.php
+/tests/php/acceptance/BlogWebAcceptanceTest.php
+/tests/js/cucumber/bootstrap.js
+/tests/js/cucumber/ui-step-definitions.js
 /tests/files/img/transparent.gif
 /tests/files/responses/api-get.guzzle-response
 /tests/files/requests/api-get.guzzle-request
@@ -86,12 +93,11 @@ this are the paths which are stored as hardcoded defaults for webforge packages:
 /files/cache/doctrine-proxies/category-proxy.php
 /files/cache/tmp/grunt/build.txt
 
-/Resources/tpl/start.twig
-/Resources/tpl/layout/sidebar.mustache
-/Resources/tpl/layout/footer.mustache
-/Resources/tpl/a-partial.mustache
-/Resources/assets/js/require.js
-/Resources/assets/js/boot.js
+/Resources/tpl/start.html.twig
+/Resources/tpl/layout/sidebar.html.mustache
+/Resources/tpl/layout/footer.html.mustache
+/Resources/tpl/a-partial.html.mustache
+/Resources/tpl/welcome-email.text.mustache
 /Resources/assets/img/logo.gif
 /Resources/assets/css/my-layout.css
 /Resources/db/001_create_dbs.sql
@@ -124,3 +130,10 @@ this are the paths which are stored as hardcoded defaults for webforge packages:
 
 the assets in www are aliased as: `assets-built`
 the assets in resources are alias as: `assets-src`
+
+**In version 1.10.x the following locations have changed**:
+```
+lib => src/php/
+tests => tests/php/
+resources => Resources
+```

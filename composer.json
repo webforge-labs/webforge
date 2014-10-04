@@ -42,6 +42,14 @@
   "extra": {
     "branch-alias": {
       "dev-master": "1.10.x-dev"
+    },
+
+    "directory-locations": {
+      "lib": "lib/",
+      "tpl": "resources/tpl/",
+      "resources": "resources",
+      "prototypes": "resources/prototypes/",
+      "assets-src": "resources/assets/"
     }
   }
 }

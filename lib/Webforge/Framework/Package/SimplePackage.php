@@ -121,20 +121,28 @@ class SimplePackage implements Package {
    */
   public function getNamespace(Inflector $inflector = NULL) {
     if (!isset($this->namespace)) {
-      try {
-        list ($mainPrefix, $dir) = $this->autoLoadInfo->getMainPrefixAndPath($this->rootDirectory);
-        
-        $this->namespace = $mainPrefix;
-        
-      } catch (NoAutoLoadPrefixException $e) {
-        $inflector = $inflector ?: new Inflector();
-        
-        // it might be possible that these package has no autoLoad defined for a main path
-        $this->namespace = $inflector->namespaceify($this->slug);
+
+      if (isset($this->autoLoadInfo)) {
+        try {
+          list ($mainPrefix, $dir) = $this->autoLoadInfo->getMainPrefixAndPath($this->rootDirectory);
+
+          $this->namespace = $mainPrefix;
+
+        } catch (NoAutoLoadPrefixException $e) {
+          $this->namespace = $this->inflectNamespaceWithoutAutoLoadingInfo($inflector);
+        }
+      } else {
+        $this->namespace = $this->inflectNamespaceWithoutAutoLoadingInfo($inflector);
       }
     }
     
     return $this->namespace;
+  }
+
+  protected function inflectNamespaceWithoutAutoLoadingInfo(Inflector $inflector = NULL) {
+    // it might be possible that these package has no autoLoad defined for a main path
+    $inflector = $inflector ?: new Inflector();
+    return $inflector->namespaceify($this->slug);
   }
 
   /**

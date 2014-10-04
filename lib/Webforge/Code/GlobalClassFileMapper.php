@@ -110,7 +110,7 @@ class GlobalClassFileMapper implements ClassFileMapper {
         function ($fileInfo) use ($testsDir) {
           return $fileInfo->file->getDirectory()->isSubdirectoryOf($testsDir);
         }
-        );
+      );
 
       if (S::endsWith($fqn, 'Test') && count($testFilesInfos) === 1) {
         return current($testFilesInfos)->file;

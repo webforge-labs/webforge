@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-0": {
-            "ACME\\Conflicting": ["lib"],
+            "ACME\\Conflicting": ["src/php/"],
             "ACME": ["/reference/to/ACME/IntranetApplication"]
         }
     }

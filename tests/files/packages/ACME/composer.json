@@ -11,6 +11,6 @@
 
     },
     "autoload": {
-        "psr-0": {"ACME\\IntranetApplication": ["lib"]}
+        "psr-0": {"ACME\\IntranetApplication": ["src/php"]}
     }
 }
