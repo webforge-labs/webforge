@@ -62,7 +62,7 @@ class ContainerTest extends \Webforge\Framework\Package\PackagesTestCase {
 
   protected function getInteractionHelper() {
     return new InteractionHelper(
-      $this->getMock('Symfony\Component\Console\Helper\DialogHelper'),
+      $this->getMock('Symfony\Component\Console\Helper\DialogHelper', array(), array(false)), // fix deprecation warning
       $this->getMock('Symfony\Component\Console\Output\OutputInterface')
     );
   }

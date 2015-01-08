@@ -30,7 +30,7 @@ use Webforge\Console\InteractionHelper;
 $createCommand('install:list-parts',
   array(),
   function ($input, $output, $command) use ($container) {
-    $interact = new InteractionHelper($command->getHelper('dialog'), $output);
+    $interact = new InteractionHelper(new \Symfony\Component\Console\Helper\DialogHelper($warnDeprecation = FALSE), $output);
     $partsInstaller = $container->getPartsInstaller($interact, new SymfonyCommandOutputAdapter($output));
     
     $output->writeln('<info>parts available:</info>');
