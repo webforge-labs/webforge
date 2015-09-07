@@ -7,6 +7,7 @@
   "extra": {
     "directory-locations": {
       "lib": "lib/",
+      "tests": "tests/",
       "cms-tpl": "resources/tpl/",
       "tpl": "resources/tpl/",
       "resources": "resources",
