@@ -11,6 +11,7 @@ use PHPParser_Node_Param;
 use PHPParser_Node_Name_FullyQualified;
 use PHPParser_Node_Expr_Array;
 use PHPParser_Node_Scalar_String;
+use PHPParser_Node_Scalar_DNumber;
 use PHPParser_Node_Scalar_LNumber;
 use PHPParser_Node_Expr_ConstFetch;
 use PHPParser_Node_Expr_ClassConstFetch;
@@ -128,6 +129,8 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract {
     } elseif ($node instanceof PHPParser_Node_Scalar_String) {
       return $node->value;
     } elseif ($node instanceof PHPParser_Node_Scalar_LNumber) {
+      return $node->value;
+    } elseif ($node instanceof PHPParser_Node_Scalar_DNumber) {
       return $node->value;
     } elseif ($node instanceof PHPParser_Node_Expr_ConstFetch) {
       // @TODO wie setzen wir das hier?
