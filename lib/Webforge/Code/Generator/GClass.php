@@ -521,7 +521,7 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
     return $this;
   }
 
-    /**
+  /**
    * @chainable
    */
   public function addMethod(GMethod $method, $position = self::END) {
@@ -560,6 +560,14 @@ class GClass extends GModifiersObject implements \Webforge\Common\ClassInterface
   public function setMethodOrder($method, $position) {
     $this->methods->setOrder($method, $position);
     return $this;
+  }
+
+  /**
+   * Returns the position of the method in the class (if available)
+   * @return integer|false
+   */
+  public function getMethodOrder($method) {
+    return $this->methods->getOrder($method);
   }
   
   /**

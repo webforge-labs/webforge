@@ -101,6 +101,21 @@ class GObjectCollectionTest extends \Webforge\Code\Test\Base {
     $this->c->setOrder($this->o2, GObjectCollection::END);
     $this->assertContent(array($this->o1, $this->o2));
   }
+
+  public function testGetOrderReturnsTheIndexOfPostionInCollection() {
+    $this->c->add($this->o2);
+    $this->c->add($this->o3);
+    $this->c->add($this->o9);
+
+    $this->assertEquals(0, $this->c->getOrder($this->o1));
+    $this->assertEquals(1, $this->c->getOrder($this->o2));
+    $this->assertEquals(2, $this->c->getOrder('object 3'));
+    
+    $this->c->setOrder($this->o9, 0);
+
+    $this->assertEquals(0, $this->c->getOrder('object 9'));
+    $this->assertEquals(1, $this->c->getOrder($this->o1));
+  }
   
   protected function assertContent(Array $array) {
     $collection = $this->c->toArray();

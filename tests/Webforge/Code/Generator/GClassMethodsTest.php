@@ -92,6 +92,7 @@ class GClassMethodsTest extends \Webforge\Code\Test\Base {
     $gClass->setMethodOrder($cons, 0);
     
     $this->assertEquals(array($cons, $this->getX), $gClass->getMethods());
+    $this->assertEquals(0, $gClass->getMethodOrder($cons));
   }
 
   public function testSetMethods() {

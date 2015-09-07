@@ -93,6 +93,16 @@ class GObjectCollection {
     
     return $this;
   }
+
+  /**
+   * Returns the position of the object in the collection
+   * @param  string|GObject $objectOrKey
+   * @return integer|FALSE
+   */
+  public function getOrder($objectOrKey) {
+    $key = $objectOrKey instanceof GObject ? $objectOrKey->getKey() : $objectOrKey;
+    return array_search($key, $this->order);
+  }
   
   /**
    * @chainable
