@@ -316,8 +316,12 @@ class ClassWriter {
 
     $php .= '$'.$property->getName();
     
-    if ($property->hasDefaultValue() && $property->getDefaultValue() !== NULL) {
-      $php .= ' = '.$this->writePropertyValue($property->getDefaultValue());
+    if ($property->hasDefaultValue()) {
+      if ($property->hasLiteralDefaultValue()) {
+        $php .= ' = '.((string) $property->getDefaultValue());
+      } else if ($property->getDefaultValue() !== NULL) {
+        $php .= ' = '.$this->writePropertyValue($property->getDefaultValue());
+      }
     }
 
     return $php;

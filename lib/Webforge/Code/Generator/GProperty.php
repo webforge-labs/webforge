@@ -32,6 +32,8 @@ class GProperty extends GModifiersObject {
    * @var mixed
    */
   protected $defaultValue;
+
+  protected $defaultValueIsLiteral = FALSE;
   
   /**
    * The type of the property
@@ -124,6 +126,20 @@ class GProperty extends GModifiersObject {
   public function setDefaultValue($default) {
     $this->defaultValue = $default;
     return $this;
+  }
+
+  /**
+   * When this is called, the value in $defaultValue will be treated as literal php code
+   */
+  public function interpretDefaultValueLiterally() {
+    $this->defaultValueIsLiteral = TRUE;
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasLiteralDefaultValue() {
+    return $this->defaultValueIsLiteral;
   }
   
   /**

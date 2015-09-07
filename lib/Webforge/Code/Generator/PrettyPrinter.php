@@ -43,6 +43,4 @@ class PrettyPrinter extends \PHPParser_PrettyPrinter_Zend {
       . (!empty($node->uses) ? ' use (' . $this->pCommaSeparated($node->uses) . ')': '')
       . ' {' . "\n" . $this->pStmts($node->stmts) . "\n" . '}';
   }
-
 }
-?>

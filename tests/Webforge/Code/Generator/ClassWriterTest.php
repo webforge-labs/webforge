@@ -2,9 +2,6 @@
 
 namespace Webforge\Code\Generator;
 
-/**
- *
- */
 class ClassWriterTest extends \Webforge\Code\Test\Base {
   
   protected $classWriter;
@@ -62,6 +59,18 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
     
     $this->classWriter->write($this->classWithImports, $this->file);
   }
+
+  public function testPropertiesCanHaveLiteralDefaultValuesThatGetWrittnByTheWritterLiterally() {
+    $gProperty = new GProperty(
+      'propWithDefault',
+      \Webforge\Types\Type::create('Float'),
+      '0.5'
+    );
+    $gProperty->interpretDefaultValueLiterally();
+
+    $php = $this->classWriter->writeProperty($gProperty, 0);
+    $this->assertContains('$propWithDefault = 0.5', $php);
+  }
   
   protected function expectThatWrittenCode($constraint, $times = NULL) {
     $this->expectFileExists(FALSE);
@@ -72,6 +81,5 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
   protected function expectFileExists($bool = FALSE, $times = NULL) {
     $this->file->expects($times ?: $this->once())->method('exists')
               ->will($this->returnValue($bool));
-
   }
 }
