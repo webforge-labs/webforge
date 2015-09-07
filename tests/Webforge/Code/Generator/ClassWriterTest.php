@@ -71,6 +71,18 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
     $php = $this->classWriter->writeProperty($gProperty, 0);
     $this->assertContains('$propWithDefault = 0.5', $php);
   }
+
+  public function testArgumentsCanHaveLiteralDefaultValuesThatGetWrittnByTheWritterLiterally() {
+    $param = new GParameter(
+      'argWithDefault',
+      \Webforge\Types\Type::create('Integer'),
+      '\\ACME\\Blog\\ParameterType::SOMETHING'
+    );
+    $param->interpretDefaultValueLiterally();
+
+    $php = $this->classWriter->writeParameter($param, 'ACME\\Blog\\Entities');
+    $this->assertContains('$argWithDefault = \\ACME\\Blog\\ParameterType::SOMETHING', $php);
+  }
   
   protected function expectThatWrittenCode($constraint, $times = NULL) {
     $this->expectFileExists(FALSE);

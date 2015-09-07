@@ -247,12 +247,16 @@ class ClassWriter {
     // optional (default)
     if ($parameter->hasDefault()) {
       $php .= ' = ';
-      
-      $default = $parameter->getDefault();
-      if (is_array($this) && count($this) == 0) {
-        $php .= 'array()';
+
+      if ($parameter->hasLiteralDefaultValue()) {
+        $php .= (string) $parameter->getDefault();
       } else {
-        $php .= $this->writeArgumentValue($default); // das sieht scheise aus
+        $default = $parameter->getDefault();
+        if (is_array($default) && count($default) == 0) {
+          $php .= 'array()';
+        } else {
+          $php .= $this->writeArgumentValue($default); // das sieht scheise aus
+        }
       }
     }
     

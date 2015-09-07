@@ -41,7 +41,9 @@ class GParameter extends GObject {
    * @var mixed
    */
   protected $default = self::UNDEFINED;
-  
+
+  protected $defaultValueIsLiteral = FALSE;
+
   /**
    * Creates a Parameter for a Method or a Function
    * 
@@ -149,6 +151,20 @@ class GParameter extends GObject {
   public function setDefault($default) {
     $this->default = $default;
     return $this;
+  }
+
+  /**
+   * When this is called, the value in $defaultValue will be treated as literal php code
+   */
+  public function interpretDefaultValueLiterally() {
+    $this->defaultValueIsLiteral = TRUE;
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasLiteralDefaultValue() {
+    return $this->defaultValueIsLiteral;
   }
   
   public function setName($name) {

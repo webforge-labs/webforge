@@ -133,6 +133,7 @@ class GProperty extends GModifiersObject {
    */
   public function interpretDefaultValueLiterally() {
     $this->defaultValueIsLiteral = TRUE;
+    return $this;
   }
 
   /**
