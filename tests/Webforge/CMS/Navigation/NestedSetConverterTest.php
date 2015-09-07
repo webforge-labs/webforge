@@ -99,7 +99,61 @@ class NestedSetConverterTest extends \Webforge\Code\Test\Base {
       $this->nestedSetConverter->toHTMLList(array())
     );
   }
-  
+
+  public function testForIndentFailureInToHTML() {
+    $nodes = Array(
+      array(
+        'title' => 'Apercu',
+        'parent'=> NULL,
+        'depth' => 0
+      ),
+      array(
+        'title' => 'Maroc',
+        'parent'=> 'Apercu',
+        'depth' => 1
+      ),
+      array(
+        'title' => 'Forum Regional',
+        'parent' => NULL,
+        'depth' => 0
+      ),
+      array(
+        'title' => 'Themes',
+        'parent' => 'Forum Regional',
+        'depth' => 1,
+      ),
+      array(
+        'title' => 'Demokratie',
+        'parent' => 'Themes',
+        'depth' => 2,
+      ),
+      array(
+        'title' => 'Baladiya',
+        'parent' => 'Demokratie',
+        'depth' => 3
+      ),
+      array(
+        'title' => 'CEFEB',
+        'parent' => 'Demokratie',
+        'depth' => 3
+      ),
+
+      array(
+        'title' => 'Prochains evenements',
+        'parent' => NULL,
+        'depth' => 0
+      ),
+      array(
+        'title' => 'Calendrier',
+        'parent' => 'Prochains evenements',
+        'depth' => 1
+      )
+    );
+
+    $sets = $this->nestedSetConverter->fromParentPointer($this->wrap($nodes));
+
+    $this->nestedSetConverter->toHTMLList($sets);
+  }
   
   /**
    * Converts the array nodes from the fixture into a node of the interface
@@ -130,4 +184,3 @@ class NestedSetConverterTest extends \Webforge\Code\Test\Base {
     }, $objectNodes);
   }
 }
-?>
