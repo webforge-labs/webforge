@@ -83,6 +83,17 @@ class ClassWriterTest extends \Webforge\Code\Test\Base {
     $php = $this->classWriter->writeParameter($param, 'ACME\\Blog\\Entities');
     $this->assertContains('$argWithDefault = \\ACME\\Blog\\ParameterType::SOMETHING', $php);
   }
+
+  public function testParametersWithTypeHintsWillGetNamespaceStrippedIfClassWasWImported() {
+    $this->classWriter->addImport(new \Webforge\Common\PHPClass('Doctrine\\Common\\Collections\\Collection'));
+    $param = new GParameter(
+      'entities',
+      new \Webforge\Types\PersistentCollectionType(new \Webforge\Common\PHPClass('ACME\Blog\Post'))
+    );
+
+    $php = $this->classWriter->writeParameter($param, 'ACME\\Blog\\Entities');
+    $this->assertStringStartsWith('Collection $entities', $php);
+  }
   
   protected function expectThatWrittenCode($constraint, $times = NULL) {
     $this->expectFileExists(FALSE);

@@ -6,6 +6,7 @@ use Webforge\Common\System\File;
 use Webforge\Common\String as S;
 use Webforge\Common\ArrayUtil as A;
 use Webforge\Common\CodeWriter;
+use Webforge\Common\ClassInterface;
 use RuntimeException;
 
 /**
@@ -269,8 +270,8 @@ class ClassWriter {
   protected function writeParameterTypeHint(GParameter $parameter, $namespace) {
     if ($parameter->hasHint()) {
       
-      if (($import = $parameter->getHintImport()) instanceof GClass) {
-        
+      if (($import = $parameter->getHintImport()) instanceof ClassInterface) {
+
         if (isset($this->classImports) && $this->classImports->have($import)) {
           $useFQN = FALSE;
         } elseif ($this->imports->have($import)) {
@@ -367,7 +368,7 @@ class ClassWriter {
    * Adds an Import, that should be added to every written file
    * 
    */
-  public function addImport(GClass $gClass, $alias = NULL) {
+  public function addImport(ClassInterface $gClass, $alias = NULL) {
     $this->imports->add($gClass, $alias);
     return $this;
   }
