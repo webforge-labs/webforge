@@ -10,7 +10,7 @@
   "bin": ["bin/webforge"],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=5.3.2",
+    "php": ">=5.6.0",
     "ext-mbstring": "*",
     
     "nikic/php-parser": "0.9.*@stable",
