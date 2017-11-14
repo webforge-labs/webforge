@@ -27,8 +27,7 @@
     "mikey179/vfsStream": "1.3.*@dev",
     "mockery/mockery": "~0.9@stable",
     "webforge/testplate": "~1.6.0@stable",
-    "symfony/event-dispatcher": "2.3@stable",
-    "satooshi/php-coveralls": "dev-master"
+    "symfony/event-dispatcher": "2.3@stable"
   },
   "suggest": {
     "webforge/doctrine": "To persist the navigation tree generated from NestedSetConverter",
