@@ -3,7 +3,7 @@
 namespace Webforge\Framework;
 
 use Webforge\Common\Preg;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 
 class Inflector {
 

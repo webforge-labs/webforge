@@ -3,7 +3,7 @@
 namespace Webforge\Code\Generator;
 
 use Webforge\Common\System\File;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Common\ArrayUtil as A;
 use Webforge\Common\CodeWriter;
 use Webforge\Common\ClassInterface;

@@ -33,7 +33,7 @@ class PartsInstallerTest extends \Webforge\Code\Test\Base {
   }
 
   public function testPartsInstallerAssignsPackageofLocalProjectForPartsThatArePackageAware() {
-    $part = $this->getMockBuilder('PackageAwareTestPart')
+    $part = $this->getMockBuilder(PackageAwareTestPart::class)
               ->setConstructorArgs(array('packageTestPart'))
               ->setMethods(array('setPackage','getPackage','installTo'))
               ->getMock();

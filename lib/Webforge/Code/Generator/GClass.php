@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Generator;
 
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Common\ClassUtil;
 use Webforge\Common\System\File;
 use ReflectionClass;

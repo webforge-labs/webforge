@@ -3,7 +3,7 @@
 namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
-use Webforge\Common\String AS S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Framework\Package\PackageAware;
 
 class InitConfigurationPart extends Part implements PackageAware {

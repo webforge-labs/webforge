@@ -3,7 +3,7 @@
 namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\File;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 
 class WriteTemplateCmd extends Command {
 

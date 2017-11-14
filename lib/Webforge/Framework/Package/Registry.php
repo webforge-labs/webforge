@@ -5,7 +5,7 @@ namespace Webforge\Framework\Package;
 use Webforge\Common\System\Dir;
 use Webforge\Common\ArrayUtil as A;
 use Webforge\Code\Generator\GClass;
-use Webforge\Common\String;
+use Webforge\Common\StringUtil as S;
 use Webforge\Common\ClassUtil;
 
 class Registry {
@@ -48,7 +48,7 @@ class Registry {
    */
   public function findByIdentifier($identifier) {
     foreach ($this->packages as $package) {
-      if (String::startsWith($package->getIdentifier(), $identifier)) {
+      if (S::startsWith($package->getIdentifier(), $identifier)) {
         return $package;
       }
     }

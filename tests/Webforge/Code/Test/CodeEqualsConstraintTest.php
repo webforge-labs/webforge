@@ -2,7 +2,7 @@
 
 namespace Webforge\Code\Test;
 
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 
 class CodeEqualsConstraintTest extends \Webforge\Code\Test\Base {
 

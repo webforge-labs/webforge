@@ -27,7 +27,7 @@ PHP
 namespace ACME;
 
 use Webforge\Common\System\File;
-use Webforge\Common\String AS S;
+use Webforge\Common\StringUtil as S;
 
 class Console {
   
@@ -41,7 +41,7 @@ PHP
     $this->assertCount(2, $imports = $gClass->getImports());
     $this->assertTrue($imports->have(new GClass('Webforge\Common\System\File')), 'imports do not have Webforge\Common\System\File');
     $this->assertTrue($imports->have('S'), 'imports do not have S as Alias. Parsed are: '.implode(',', array_keys($imports->toArray())));
-    $this->assertEquals('Webforge\Common\String', $imports->get('S')->getFQN());
+    $this->assertEquals('Webforge\Common\StringUtil', $imports->get('S')->getFQN());
   }
 
   public function testSetsParentInClassWhenClassExtendsSomething() {

@@ -5,7 +5,7 @@ namespace Webforge\Code\Test;
 use PHPUnit_Framework_Constraint;
 use Webforge\Common\System\File;
 use SebastianBergmann\Diff\Differ;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 
 class CodeEqualsConstraint extends PHPUnit_Framework_Constraint {
   

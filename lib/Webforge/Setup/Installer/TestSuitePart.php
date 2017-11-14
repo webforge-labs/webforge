@@ -3,7 +3,7 @@
 namespace Webforge\Setup\Installer;
 
 use Webforge\Common\System\Dir;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Framework\Package\Package;
 
 class TestSuitePart extends ContainerAwarePart implements \Webforge\Framework\Package\PackageAware {

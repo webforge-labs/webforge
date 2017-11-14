@@ -6,7 +6,7 @@ use PHPParser_Node_Stmt_Switch;
 use PHPParser_Node_Stmt_Case;
 use PHPParser_Node_Expr_ClosureUse;
 use PHPParser_Node_Expr_Closure;
-use Webforge\Common\String AS S;
+use Webforge\Common\StringUtil as S;
 
 class PrettyPrinter extends \PHPParser_PrettyPrinter_Zend {
   

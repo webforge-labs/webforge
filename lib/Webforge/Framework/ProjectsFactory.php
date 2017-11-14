@@ -6,7 +6,7 @@ use Webforge\Framework\Package\Package;
 use Webforge\Framework\Package\ProjectPackage;
 use Webforge\Framework\Package\ProjectUrls;
 use Webforge\Configuration\ConfigurationReader;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 
 class ProjectsFactory {
 

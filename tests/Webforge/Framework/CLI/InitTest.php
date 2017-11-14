@@ -4,7 +4,7 @@ namespace Webforge\Framework\CLI;
 
 use Mockery as m;
 use Webforge\Common\System\Util as SystemUtil;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Common\JS\JSONConverter;
 
 class InitTest extends CommandTestCase {

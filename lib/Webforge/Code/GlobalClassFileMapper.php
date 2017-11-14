@@ -9,7 +9,7 @@ use Webforge\Framework\Package\Package;
 use Webforge\Code\ClassNotFoundException;
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Common\ArrayUtil as A;
 use Webforge\Framework\Package\PackageNotFoundException;
 use Webforge\Common\Exception\NotImplementedException;

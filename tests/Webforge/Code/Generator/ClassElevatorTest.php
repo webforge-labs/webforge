@@ -9,9 +9,9 @@ use Webforge\Common\System\Dir;
 class ClassElevatorTest extends \Webforge\Code\Test\Base {
 
   public function setUp() {
-    $this->classReader = $this->getMockBuilder('ClassReader')->disableArgumentCloning()->getMock();
+    $this->classReader = $this->getMockBuilder(ClassReader::class)->disableArgumentCloning()->getMock();
 
-    $this->classFileMapper = $this->getMockBuilder('ClassFileMapper')->disableArgumentCloning()->getMock();
+    $this->classFileMapper = $this->getMockBuilder(ClassFileMapper::class)->disableArgumentCloning()->getMock();
     
     
     /*

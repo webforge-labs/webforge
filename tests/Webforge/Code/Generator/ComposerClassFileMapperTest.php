@@ -17,7 +17,7 @@ class ComposerClassFileMapperTest extends \Webforge\Code\Test\Base {
 
     $this->assertEquals(
       __FILE__,
-      (string) $file
+      (string) realpath($file)
     );
   }
 

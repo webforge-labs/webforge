@@ -10,7 +10,7 @@ use Webforge\Framework\Package\Package;
 use Webforge\Common\JS\JSONConverter;
 use Webforge\Common\System\File;
 use Webforge\Common\System\Dir;
-use Webforge\Common\String;
+use Webforge\Common\StringUtil;
 use Webforge\Common\CLassUtil;
 use Webforge\Console\SymfonyCommandOutputAdapter;
 use Webforge\Console\InteractionHelper;

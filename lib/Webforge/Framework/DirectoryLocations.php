@@ -5,7 +5,7 @@ namespace Webforge\Framework;
 use Webforge\Framework\Package\Package;
 use Webforge\Common\System\Dir;
 use InvalidArgumentException;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 
 class DirectoryLocations {
 

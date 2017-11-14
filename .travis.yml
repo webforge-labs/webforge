@@ -4,6 +4,7 @@ sudo: false
 php:
   - 5.4
   - 5.5
+  - 7.1
 
 branches:
   only:

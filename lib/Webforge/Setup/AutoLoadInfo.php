@@ -3,7 +3,7 @@
 namespace Webforge\Setup;
 
 use stdClass;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Common\System\Dir;
 use Webforge\Code\Generator\GClass;
 use RuntimeException;
