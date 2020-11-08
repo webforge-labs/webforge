@@ -16,7 +16,7 @@ use Webforge\Types\ObjectType;
  * it's declared by one class (only one) and this class is optional
  */
 class GProperty extends GModifiersObject {
-  
+
   /**
    * The name of the property
    * 
@@ -38,7 +38,7 @@ class GProperty extends GModifiersObject {
   /**
    * The type of the property
    * 
-   * @var Webforge\Types\Type
+   * @var \Webforge\Types\Type
    */
   protected $type;
 

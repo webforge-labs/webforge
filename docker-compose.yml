@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  php:
+    image: webforgelabs/php-nodejs:php7.3-node8
+
+    working_dir: /app
+    volumes:
+      - ./:/app
